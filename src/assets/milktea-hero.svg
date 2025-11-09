@@ -1,0 +1,43 @@
+<svg width="320" height="420" viewBox="0 0 320 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cupGradient" x1="160" y1="90" x2="160" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFE8B0" />
+      <stop offset="0.55" stop-color="#F7C76B" />
+      <stop offset="1" stop-color="#E4A54A" />
+    </linearGradient>
+    <linearGradient id="lidGradient" x1="160" y1="60" x2="160" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.95" />
+      <stop offset="1" stop-color="#FFE9C4" stop-opacity="0.7" />
+    </linearGradient>
+    <linearGradient id="strawGradient" x1="210" y1="0" x2="210" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6BA7FF" />
+      <stop offset="1" stop-color="#B9DCFF" />
+    </linearGradient>
+    <filter id="shadow" x="0" y="180" width="320" height="240" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="20" result="blur" />
+      <feOffset dy="35" />
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2" />
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <g filter="url(#shadow)">
+    <path d="M175 20C175 13.3726 180.373 8 187 8H200C206.627 8 212 13.3726 212 20V182H175V20Z" fill="url(#strawGradient)"/>
+    <path d="M70 110C70 98.9543 78.9543 90 90 90H230C241.046 90 250 98.9543 250 110V126C250 132.627 244.627 138 238 138H82C75.3726 138 70 132.627 70 126V110Z" fill="url(#lidGradient)"/>
+    <rect x="92" y="122" width="136" height="198" rx="48" fill="url(#cupGradient)" />
+    <path d="M88 126H232L220 320C218.028 350.534 192.904 374 162.292 374H157.708C127.096 374 101.972 350.534 100 320L88 126Z" fill="#F3C27A" fill-opacity="0.45" />
+    <ellipse cx="160" cy="322" rx="78" ry="36" fill="#2B1C16" fill-opacity="0.65" />
+    <ellipse cx="122" cy="306" rx="20" ry="12" fill="#352116" fill-opacity="0.7" />
+    <ellipse cx="196" cy="314" rx="18" ry="11" fill="#2F1B12" fill-opacity="0.7" />
+    <ellipse cx="162" cy="330" rx="16" ry="10" fill="#392015" fill-opacity="0.7" />
+  </g>
+  <g opacity="0.25">
+    <circle cx="72" cy="86" r="26" fill="#BEE4FF" />
+    <circle cx="272" cy="68" r="18" fill="#FFE5B9" />
+    <circle cx="300" cy="120" r="12" fill="#FCDDB1" />
+  </g>
+</svg>
