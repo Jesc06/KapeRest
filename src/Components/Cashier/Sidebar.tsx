@@ -18,11 +18,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
       )}
 
       {/* Sidebar */}
-      <aside className={`fixed left-0 top-0 h-screen flex flex-col border-r border-neutral-900/20 bg-gradient-to-b from-white/95 to-stone-50/90 backdrop-blur-xl transition-all duration-300 dark:border-neutral-800/60 dark:from-neutral-900/90 dark:to-neutral-900/80 overflow-y-auto shadow-lg z-30 ${
+      <aside className={`fixed left-0 top-0 h-screen flex flex-col border-r border-neutral-900/20 bg-gradient-to-b from-white/95 to-stone-50/90 backdrop-blur-xl transition-[width] duration-500 ease-in-out dark:border-neutral-800/60 dark:from-neutral-900/90 dark:to-neutral-900/80 overflow-y-auto shadow-lg z-30 ${
         !isOpen ? '-translate-x-full' : 'translate-x-0'
       } lg:translate-x-0 ${isExpanded ? 'w-64' : 'w-20'}`}>
       {/* Header with Branding */}
-      <div className="sticky top-0 flex items-center justify-between gap-3 border-b border-neutral-900/15 bg-white/90 backdrop-blur-lg px-4 py-5 dark:border-neutral-800/60 dark:bg-neutral-900/90 transition-all duration-300">
+      <div className="sticky top-0 flex items-center justify-between gap-3 border-b border-neutral-900/15 bg-white/90 backdrop-blur-lg px-4 py-5 dark:border-neutral-800/60 dark:bg-neutral-900/90 transition-[padding,justify-content] duration-500 ease-in-out">
         {isExpanded && (
           <>
             <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-md">
@@ -42,7 +42,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
       </div>
 
       {/* Navigation Links */}
-      <nav className={`flex-1 space-y-2 ${isExpanded ? 'px-4' : 'px-2'} py-8 transition-all duration-300`}>
+      <nav className={`flex-1 space-y-2 ${isExpanded ? 'px-4' : 'px-2'} py-8 transition-[padding] duration-500 ease-in-out overflow-y-auto scroll-smooth`}>
         {/* Sales Link */}
         <Link
           to="#sales"
