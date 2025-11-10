@@ -172,7 +172,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
                     className="group cursor-pointer rounded-xl border-2 border-orange-300/60 dark:border-orange-700/40 bg-stone-100/80 dark:bg-stone-800/50 transition-all duration-300 hover:border-orange-400/80 hover:shadow-lg hover:-translate-y-1.5 active:scale-95 dark:hover:border-orange-400/60 dark:hover:shadow-orange-500/20 overflow-hidden flex flex-col"
                   >
                     {/* Product Image */}
-                    <div className="relative w-full aspect-square overflow-hidden bg-gradient-to-br from-stone-200 to-stone-100 dark:from-stone-800 dark:to-stone-900">
+                    <div className="relative w-full aspect-video overflow-hidden bg-gradient-to-br from-stone-200 to-stone-100 dark:from-stone-800 dark:to-stone-900">
                       {product.image ? (
                         <img
                           src={product.image}
@@ -181,7 +181,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-100 to-orange-50 dark:from-orange-900/20 dark:to-orange-950/30 group-hover:from-orange-200 group-hover:to-orange-100 dark:group-hover:from-orange-900/30 dark:group-hover:to-orange-950/40 transition-all duration-300">
-                          <FontAwesomeIcon icon={faCoffee} className="h-10 w-10 text-orange-400 dark:text-orange-600 opacity-70 group-hover:opacity-100 transition-opacity" />
+                          <FontAwesomeIcon icon={faCoffee} className="h-8 w-8 text-orange-400 dark:text-orange-600 opacity-70 group-hover:opacity-100 transition-opacity" />
                         </div>
                       )}
                       {/* Overlay on Hover */}
