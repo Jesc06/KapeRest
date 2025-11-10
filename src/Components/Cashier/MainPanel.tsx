@@ -156,8 +156,8 @@ const MainPanel: React.FC<MainPanelProps> = ({
                 onClick={() => onCategoryChange(category)}
                 className={`rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold transition-all duration-200 border ${
                   selectedCategory === category
-                    ? 'border-orange-400 bg-orange-50 text-orange-700 shadow-md hover:shadow-lg hover:scale-105 dark:border-orange-400/60 dark:bg-orange-500/15 dark:text-orange-300'
-                    : 'border-neutral-300/80 bg-neutral-50/80 text-neutral-700 hover:border-neutral-400 hover:bg-neutral-100 hover:shadow-sm dark:border-neutral-700/60 dark:bg-neutral-900/40 dark:text-neutral-300 dark:hover:border-neutral-600 dark:hover:bg-neutral-800/50'
+                    ? 'border-orange-400/80 bg-orange-50 text-orange-700 shadow-md hover:shadow-lg hover:scale-105 dark:border-orange-400/60 dark:bg-orange-500/15 dark:text-orange-300'
+                    : 'border-neutral-300/80 bg-white dark:bg-neutral-900/40 text-neutral-700 dark:text-neutral-300 hover:border-neutral-400 hover:bg-neutral-50 hover:shadow-sm dark:hover:border-neutral-600 dark:hover:bg-neutral-900/60'
                 }`}
               >
                 {category}
@@ -177,9 +177,9 @@ const MainPanel: React.FC<MainPanelProps> = ({
           />
           
           {/* Dropdown Menu */}
-          <div className="fixed top-[calc(4.5rem+0.5rem)] right-4 sm:right-5 md:right-6 w-56 rounded-lg border border-neutral-300/80 bg-white shadow-2xl dark:border-neutral-700/70 dark:bg-neutral-900/95 backdrop-blur-sm z-[1000]">
+          <div className="fixed top-[calc(4.5rem+0.5rem)] right-4 sm:right-5 md:right-6 w-56 rounded-lg border border-neutral-300/80 dark:border-neutral-700/70 bg-white dark:bg-neutral-900/95 shadow-lg dark:shadow-xl backdrop-blur-sm z-[1000]">
             {/* Header */}
-            <div className="px-4 py-3 border-b border-neutral-300/60 dark:border-neutral-700/60">
+            <div className="px-4 py-3 border-b border-neutral-300/70 dark:border-neutral-700/60">
               <p className="text-xs font-semibold uppercase tracking-widest text-neutral-500 dark:text-neutral-400">Cashier</p>
               <p className="text-sm font-bold text-neutral-900 dark:text-neutral-50 mt-1">Main Counter</p>
             </div>
@@ -220,9 +220,9 @@ const MainPanel: React.FC<MainPanelProps> = ({
       {/* Main Content Area */}
       <div className="flex flex-1 overflow-hidden gap-4 sm:gap-5 p-4 sm:p-5 md:p-6">
         {/* Products Section (Scrollable) */}
-        <div className="flex-1 flex flex-col rounded-2xl border border-neutral-300/80 dark:border-neutral-700/80 bg-gradient-to-br from-white via-stone-50/50 to-white/90 shadow-lg dark:from-neutral-900/50 dark:via-neutral-900/40 dark:to-neutral-900/50 overflow-hidden">
+        <div className="flex-1 flex flex-col rounded-xl border border-neutral-300/75 dark:border-neutral-700/70 bg-white dark:bg-neutral-900/60 shadow-md dark:shadow-lg overflow-hidden">
           {/* Header */}
-          <div className="border-b border-neutral-300/60 dark:border-neutral-700/60 bg-white/95 dark:bg-neutral-900/50 px-6 py-4">
+          <div className="border-b border-neutral-300/70 dark:border-neutral-700/60 bg-white dark:bg-neutral-900/50 px-6 py-4">
             <h3 className="text-lg font-bold tracking-tight text-neutral-900 dark:text-neutral-100 flex items-center gap-2.5">
               <FontAwesomeIcon icon={faCoffee} className="h-5 w-5 text-orange-600 dark:text-orange-400" />
               <span>Available Items</span>
@@ -238,7 +238,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
                   <div
                     key={product.id}
                     onClick={() => onAddToCart(product)}
-                    className="group cursor-pointer rounded border border-neutral-400/70 bg-white transition-all duration-300 hover:border-neutral-500 hover:-translate-y-1 active:scale-95 dark:bg-neutral-900/50 dark:border-neutral-600/70 dark:hover:border-neutral-500 overflow-hidden flex flex-col"
+                    className="group cursor-pointer rounded-lg border border-neutral-300/70 dark:border-neutral-600/70 bg-white dark:bg-neutral-900/50 transition-all duration-300 hover:border-orange-400/70 hover:shadow-md hover:-translate-y-1 active:scale-95 dark:hover:border-orange-400/50 dark:hover:shadow-orange-500/10 overflow-hidden flex flex-col"
                   >
                     {/* Product Image */}
                     <div className="relative w-full aspect-square overflow-hidden bg-neutral-100 dark:bg-neutral-900/50">
@@ -309,9 +309,9 @@ const MainPanel: React.FC<MainPanelProps> = ({
         </div>
 
         {/* Cart Section */}
-        <div className="w-full sm:w-96 md:w-[28rem] lg:w-[32rem] flex flex-col rounded-2xl border border-neutral-300/80 dark:border-neutral-700/80 bg-gradient-to-br from-white via-stone-50/50 to-white/90 shadow-lg dark:from-neutral-900/50 dark:via-neutral-900/40 dark:to-neutral-900/50 overflow-hidden flex-shrink-0">
+        <div className="w-full sm:w-96 md:w-[28rem] lg:w-[32rem] flex flex-col rounded-xl border border-neutral-300/75 dark:border-neutral-700/70 bg-white dark:bg-neutral-900/60 shadow-md dark:shadow-lg overflow-hidden flex-shrink-0">
           {/* Cart Header */}
-          <div className="border-b border-neutral-300/60 bg-white/95 dark:border-neutral-700/60 dark:bg-neutral-900/50 px-6 py-4">
+          <div className="border-b border-neutral-300/70 dark:border-neutral-700/60 bg-white dark:bg-neutral-900/50 px-6 py-4">
             <h3 className="text-lg font-bold tracking-tight text-neutral-900 dark:text-neutral-50 flex items-center gap-2.5">
               <FontAwesomeIcon icon={faShoppingCart} className="h-5 w-5 text-orange-600 dark:text-orange-400" />
               <span>Shopping Cart</span>
@@ -325,7 +325,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
               cart.map(item => (
                 <div
                   key={item.id}
-                  className="group flex items-center gap-3 rounded-lg border border-neutral-300/70 bg-white/80 p-3 shadow-sm transition-all duration-300 hover:border-orange-400/60 hover:shadow-md hover:bg-white dark:border-neutral-700/70 dark:bg-neutral-900/40 dark:hover:border-orange-400/40 dark:hover:shadow-orange-500/10"
+                  className="group flex items-center gap-3 rounded-lg border border-neutral-300/70 dark:border-neutral-700/70 bg-white/90 dark:bg-neutral-900/40 p-3 shadow-sm transition-all duration-300 hover:border-orange-400/70 hover:shadow-md hover:bg-white dark:hover:border-orange-400/50 dark:hover:shadow-orange-500/10"
                 >
                   {/* Icon */}
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-500 text-white font-bold transition-all duration-300 flex-shrink-0 shadow-sm dark:bg-orange-600">
@@ -393,9 +393,9 @@ const MainPanel: React.FC<MainPanelProps> = ({
           </div>
 
           {/* Cart Footer with Total - Minimalist */}
-          <div className="border-t border-neutral-300/60 bg-gradient-to-b from-white/90 to-stone-50/90 px-4 py-5 dark:border-neutral-700/60 dark:from-neutral-900/60 dark:to-neutral-900/50">
+          <div className="border-t border-neutral-300/70 dark:border-neutral-700/60 bg-white dark:bg-neutral-900/50 px-4 py-5">
             <div className="space-y-3">
-              <div className="flex items-center justify-between pb-3 border-b border-neutral-300/60 dark:border-neutral-700/60">
+              <div className="flex items-center justify-between pb-3 border-b border-neutral-300/70 dark:border-neutral-700/60">
                 <span className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">Total Amount</span>
                 <span className="text-4xl font-bold bg-gradient-to-r from-orange-600 to-orange-700 bg-clip-text text-transparent dark:from-orange-400 dark:to-orange-500">
                   ₱{total.toFixed(2)}
@@ -413,7 +413,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
           </div>
 
           {/* Action Buttons - Flat Minimalist Design */}
-          <div className="border-t border-neutral-300/70 space-y-2.5 bg-white/80 px-3 py-3 sm:px-4 sm:py-4 dark:border-neutral-700/70 dark:bg-neutral-900/50 backdrop-blur-sm">
+          <div className="border-t border-neutral-300/70 dark:border-neutral-700/60 space-y-2.5 bg-white dark:bg-neutral-900/50 px-3 py-3 sm:px-4 sm:py-4">
             {/* Primary Action - Buy */}
             <button
               onClick={onBuy}
