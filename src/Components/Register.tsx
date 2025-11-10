@@ -1,6 +1,8 @@
 // src/components/Register.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import TintedBackdrop from './TintedBackdrop';
+
 
 // Registration form styled to match LoginUI aesthetics.
 // Fields: first name, middle name (optional), last name, email, password, role, branch.
@@ -11,7 +13,7 @@ const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const roles = ['Admin', 'Staff', 'Cashier'];
 const branches = ['Main', 'Downtown', 'Uptown', 'Warehouse'];
 
-const Register = () => {
+const Register: React.FC = () => {
   const [firstName, setFirstName] = useState('');
   const [middleName, setMiddleName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -24,13 +26,12 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [roleOpen, setRoleOpen] = useState(false);
   const [roleHighlight, setRoleHighlight] = useState(0);
+  const roleButtonRef = useRef<HTMLButtonElement | null>(null);
+  const roleListRef = useRef<HTMLUListElement | null>(null);
   const [branchOpen, setBranchOpen] = useState(false);
   const [branchHighlight, setBranchHighlight] = useState(0);
-
-  const roleButtonRef = useRef<HTMLButtonElement>(null);
-  const roleListRef = useRef<HTMLUListElement>(null);
-  const branchButtonRef = useRef<HTMLButtonElement>(null);
-  const branchListRef = useRef<HTMLUListElement>(null);
+  const branchButtonRef = useRef<HTMLButtonElement | null>(null);
+  const branchListRef = useRef<HTMLUListElement | null>(null);
 
   // Focus tracking for animated check icons (show only when focused + valid)
   const [focusField, setFocusField] = useState<string | null>(null);
@@ -83,23 +84,28 @@ const Register = () => {
   const errorSummary = Object.keys(errors).length > 1 ? Object.values(errors).join('. ') : null;
 
   return (
-    <div className="relative flex min-h-screen flex-col justify-center overflow-hidden antialiased">
+    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-transparent font-sans">
+      <TintedBackdrop />
+      {/* page overlay: stone-50 with subtle tint for consistency with homepage */}
       <div aria-hidden className="absolute inset-0 z-0 bg-stone-50/90 backdrop-blur-xl dark:bg-neutral-900/60 pointer-events-none" />
-      <main className="relative z-10 flex flex-1 items-center justify-center px-4 py-6 sm:px-6 md:py-10">
-        <div className="relative w-full max-w-[560px]">
-          <div className="auth-card relative rounded-3xl border border-amber-200/70 bg-white/80 p-6 shadow-sm backdrop-blur-lg transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-xl focus-within:-translate-y-2 dark:border-neutral-800/70 dark:bg-neutral-900/85">
-            <div className="absolute -top-3 left-6 inline-flex h-6 items-center rounded-full border border-amber-200 bg-amber-50/80 px-3 text-[11px] font-medium tracking-wide text-amber-600 dark:border-amber-400/60 dark:bg-amber-400/15 dark:text-amber-200">REGISTER</div>
-            <div className="mb-5">
-              <h1 className="text-[25px] font-semibold tracking-tight text-neutral-900 flex items-center gap-2 dark:text-neutral-100">Create your account <span aria-hidden="true" className="coffee-emoji text-[20px]">☕</span></h1>
-              <p className="mt-1 text-[13px] text-neutral-500 dark:text-neutral-400">Enter your details below</p>
+      <main className="relative z-10 flex flex-1 items-center justify-center px-4 py-6 sm:px-6 md:py-8">
+        <div className="relative w-full max-w-[580px]">
+          <div className="auth-card relative rounded-3xl border border-amber-200/70 bg-white/85 p-7 sm:p-8 shadow-lg backdrop-blur-lg transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl focus-within:-translate-y-1 dark:border-neutral-800/70 dark:bg-neutral-900/85">
+            <div className="absolute -top-3 left-6 inline-flex h-6 items-center rounded-full border border-amber-200 bg-amber-50/80 px-3 text-[11px] font-semibold tracking-wide text-amber-600 dark:border-amber-400/60 dark:bg-amber-400/15 dark:text-amber-200">REGISTER</div>
+            <div className="mb-6">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-neutral-900 flex items-center gap-2 dark:text-neutral-100">
+                Create your account 
+                <span aria-hidden="true" className="coffee-emoji text-[20px]">☕</span>
+              </h1>
+              <p className="mt-1.5 text-sm text-neutral-600 dark:text-neutral-400">Enter your details below</p>
             </div>
             <div className="h-px w-full bg-gradient-to-r from-neutral-200 via-neutral-300 to-neutral-200 mb-6 dark:from-neutral-700 dark:via-neutral-600 dark:to-neutral-700" aria-hidden />
-            <form onSubmit={handleSubmit} noValidate className="space-y-5" aria-busy={isLoading}>
+            <form onSubmit={handleSubmit} noValidate className="space-y-4" aria-busy={isLoading}>
               <div role="status" aria-live="polite" className="sr-only">
                 {errors.firstName || errors.lastName || errors.email || errors.password || errors.role || errors.branch || ''}
               </div>
               {errorSummary && (
-                <div className="rounded-lg border border-neutral-300 bg-neutral-50 text-neutral-700 text-[12px] px-3 py-2 dark:border-neutral-700 dark:bg-neutral-900/70 dark:text-neutral-200" role="alert">{errorSummary}</div>
+                <div className="rounded-lg border border-red-200 bg-red-50 text-red-700 text-[12px] px-3 py-2 dark:border-red-900/40 dark:bg-red-900/20 dark:text-red-200" role="alert">{errorSummary}</div>
               )}
               <div className="space-y-5">
                 {/* Name fields */}
@@ -118,7 +124,7 @@ const Register = () => {
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
                         className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-neutral-100 dark:placeholder:text-neutral-500
-                          ${validFirst ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400 dark:focus:border-emerald-400' : 'border-neutral-300 focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900 dark:border-neutral-700 dark:focus:ring-amber-400 dark:focus:border-amber-400'}
+                          ${validFirst ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400 dark:focus:border-emerald-400' : 'border-neutral-300 focus:ring-1 focus:ring-amber-500 focus:border-amber-500 dark:border-neutral-700 dark:focus:ring-amber-400 dark:focus:border-amber-400'}
                           ${isLoading ? 'opacity-90' : ''}`}
                         placeholder="Juan"
                         aria-invalid={errors.firstName ? 'true' : 'false'}
@@ -128,7 +134,7 @@ const Register = () => {
                         <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-emerald-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
                       </div>
                     </div>
-                    {errors.firstName && <p id="firstName-error" className="mt-1 text-[11px] text-neutral-600 dark:text-neutral-300">{errors.firstName}</p>}
+                    {errors.firstName && <p id="firstName-error" className="mt-1 text-[11px] text-red-600 dark:text-red-200">{errors.firstName}</p>}
                   </div>
                   {/* Middle Name (optional) */}
                   <div className="relative">
@@ -144,7 +150,7 @@ const Register = () => {
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
                         className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-3.5 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-neutral-100 dark:placeholder:text-neutral-500
-                          ${validMiddle ? 'border-neutral-300 focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900 dark:border-neutral-700 dark:focus:ring-amber-400 dark:focus:border-amber-400' : 'border-neutral-300 dark:border-neutral-700'}
+                          ${validMiddle ? 'border-neutral-300 focus:ring-1 focus:ring-amber-500 focus:border-amber-500 dark:border-neutral-700 dark:focus:ring-amber-400 dark:focus:border-amber-400' : 'border-neutral-300 dark:border-neutral-700'}
                           ${isLoading ? 'opacity-90' : ''}`}
                         placeholder="Cruz"
                       />
@@ -165,7 +171,7 @@ const Register = () => {
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
                         className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-neutral-100 dark:placeholder:text-neutral-500
-                          ${validLast ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400 dark:focus:border-emerald-400' : 'border-neutral-300 focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900 dark:border-neutral-700 dark:focus:ring-amber-400 dark:focus:border-amber-400'}
+                          ${validLast ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400 dark:focus:border-emerald-400' : 'border-neutral-300 focus:ring-1 focus:ring-amber-500 focus:border-amber-500 dark:border-neutral-700 dark:focus:ring-amber-400 dark:focus:border-amber-400'}
                           ${isLoading ? 'opacity-90' : ''}`}
                         placeholder="Dela Cruz"
                         aria-invalid={errors.lastName ? 'true' : 'false'}
@@ -175,7 +181,7 @@ const Register = () => {
                         <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-emerald-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
                       </div>
                     </div>
-                    {errors.lastName && <p id="lastName-error" className="mt-1 text-[11px] text-neutral-600 dark:text-neutral-300">{errors.lastName}</p>}
+                    {errors.lastName && <p id="lastName-error" className="mt-1 text-[11px] text-red-600 dark:text-red-200">{errors.lastName}</p>}
                   </div>
                 </div>
                 {/* Email + Password (side-by-side on md+) */}
@@ -194,7 +200,7 @@ const Register = () => {
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
                         className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-neutral-100 dark:placeholder:text-neutral-500
-                          ${validEmail ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400 dark:focus:border-emerald-400' : 'border-neutral-300 focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900 dark:border-neutral-700 dark:focus:ring-amber-400 dark:focus:border-amber-400'}
+                          ${validEmail ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400 dark:focus:border-emerald-400' : 'border-neutral-300 focus:ring-1 focus:ring-amber-500 focus:border-amber-500 dark:border-neutral-700 dark:focus:ring-amber-400 dark:focus:border-amber-400'}
                           ${isLoading ? 'opacity-90' : ''}`}
                         placeholder="you@company.com"
                         aria-invalid={errors.email ? 'true' : 'false'}
@@ -204,7 +210,7 @@ const Register = () => {
                         <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-emerald-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
                       </div>
                     </div>
-                    {errors.email && <p id="email-error" className="mt-1 text-[11px] text-neutral-600 dark:text-neutral-300">{errors.email}</p>}
+                    {errors.email && <p id="email-error" className="mt-1 text-[11px] text-red-600 dark:text-red-200">{errors.email}</p>}
                   </div>
                   {/* Password */}
                   <div className="relative">
@@ -225,7 +231,7 @@ const Register = () => {
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
                         className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-neutral-100 dark:placeholder:text-neutral-500
-                          ${validPassword ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400 dark:focus:border-emerald-400' : 'border-neutral-300 focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900 dark:border-neutral-700 dark:focus:ring-amber-400 dark:focus:border-amber-400'}
+                          ${validPassword ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400 dark:focus:border-emerald-400' : 'border-neutral-300 focus:ring-1 focus:ring-amber-500 focus:border-amber-500 dark:border-neutral-700 dark:focus:ring-amber-400 dark:focus:border-amber-400'}
                           ${isLoading ? 'opacity-90' : ''}`}
                         placeholder="••••••••"
                         aria-invalid={errors.password ? 'true' : 'false'}
@@ -235,7 +241,7 @@ const Register = () => {
                         <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-emerald-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
                       </div>
                     </div>
-                    {errors.password && <p id="password-error" className="mt-1 text-[11px] text-neutral-600 dark:text-neutral-300">{errors.password}</p>}
+                    {errors.password && <p id="password-error" className="mt-1 text-[11px] text-red-600 dark:text-red-200">{errors.password}</p>}
                   </div>
                 </div>
                 {/* Role + Branch (side-by-side on md+) */}
@@ -298,7 +304,7 @@ const Register = () => {
                           }
                         }}
                         className={`w-full text-left rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition dark:bg-neutral-900/60 dark:text-neutral-100
-                          ${validRole ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400 dark:focus:border-emerald-400' : 'border-neutral-300 focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900 dark:border-neutral-700 dark:focus:ring-amber-400 dark:focus:border-amber-400'}
+                          ${validRole ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400 dark:focus:border-emerald-400' : 'border-neutral-300 focus:ring-1 focus:ring-amber-500 focus:border-amber-500 dark:border-neutral-700 dark:focus:ring-amber-400 dark:focus:border-amber-400'}
                           ${isLoading ? 'opacity-90' : ''}`}
                         aria-haspopup="listbox"
                         aria-expanded={roleOpen}
@@ -360,7 +366,7 @@ const Register = () => {
                         </ul>
                       )}
                     </div>
-                    {errors.role && <p id="role-error" className="mt-1 text-[11px] text-neutral-600 dark:text-neutral-300">{errors.role}</p>}
+                    {errors.role && <p id="role-error" className="mt-1 text-[11px] text-red-600 dark:text-red-200">{errors.role}</p>}
                   </div>
                   {/* Branch combobox */}
                   <div className="relative">
@@ -420,7 +426,7 @@ const Register = () => {
                           }
                         }}
                         className={`w-full text-left rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition dark:bg-neutral-900/60 dark:text-neutral-100
-                          ${validBranch ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400 dark:focus:border-emerald-400' : 'border-neutral-300 focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900 dark:border-neutral-700 dark:focus:ring-amber-400 dark:focus:border-amber-400'}
+                          ${validBranch ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400 dark:focus:border-emerald-400' : 'border-neutral-300 focus:ring-1 focus:ring-amber-500 focus:border-amber-500 dark:border-neutral-700 dark:focus:ring-amber-400 dark:focus:border-amber-400'}
                           ${isLoading ? 'opacity-90' : ''}`}
                         aria-haspopup="listbox"
                         aria-expanded={branchOpen}
@@ -479,7 +485,7 @@ const Register = () => {
                         </ul>
                       )}
                     </div>
-                    {errors.branch && <p id="branch-error" className="mt-1 text-[11px] text-neutral-600 dark:text-neutral-300">{errors.branch}</p>}
+                    {errors.branch && <p id="branch-error" className="mt-1 text-[11px] text-red-600 dark:text-red-200">{errors.branch}</p>}
                   </div>
                 </div>
               </div>
@@ -490,20 +496,24 @@ const Register = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full inline-flex justify-center items-center gap-2 rounded-xl bg-neutral-900 text-white text-sm md:text-[15px] font-medium py-3 tracking-wide shadow-sm hover:bg-neutral-800 active:scale-[.99] focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 focus:ring-offset-white transition disabled:opacity-50 disabled:hover:bg-neutral-900 disabled:cursor-not-allowed dark:bg-amber-400 dark:text-neutral-900 dark:hover:bg-amber-300 dark:focus:ring-amber-200 dark:focus:ring-offset-neutral-900"
+                className="w-full inline-flex justify-center items-center gap-2 rounded-xl bg-neutral-900 text-white text-sm md:text-[15px] font-medium py-3 tracking-wide shadow-sm hover:bg-neutral-800 active:scale-[.99] focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 focus:ring-offset-white transition disabled:opacity-50 disabled:hover:bg-neutral-900 disabled:cursor-not-allowed dark:bg-amber-400 dark:text-neutral-900 dark:hover:bg-amber-300 dark:focus:ring-amber-200 dark:focus:ring-offset-neutral-900 dark:disabled:hover:bg-amber-400"
               >
                 {isLoading ? (
-                  <svg className="animate-spin h-5 w-5 text-current" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                  </svg>
-                ) : 'Create Account'}
+                  <>
+                    <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" aria-hidden="true">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"></path>
+                    </svg>
+                    <span>Creating…</span>
+                  </>
+                ) : (
+                  <span>Sign up</span>
+                )}
               </button>
             </form>
-            <div className="mt-6 text-center text-[13px] text-neutral-600 dark:text-neutral-400">
-              Already have an account? <Link to="/login" className="font-medium text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900 rounded-sm">Log in</Link>
-            </div>
+            <p className="mt-6 text-center text-[13px] text-neutral-600 dark:text-neutral-400">Already have an account? <Link to="/login" className="font-medium text-neutral-800 hover:underline focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 focus:ring-offset-white rounded dark:text-amber-300 dark:hover:text-amber-200 dark:focus:ring-amber-200 dark:focus:ring-offset-neutral-900">Sign in</Link></p>
           </div>
+       
         </div>
       </main>
     </div>

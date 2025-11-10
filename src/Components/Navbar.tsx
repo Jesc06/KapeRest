@@ -77,21 +77,21 @@ const Navbar: React.FC = () => {
                 Home
                 <span
                   aria-hidden
-                  className={`pointer-events-none absolute inset-x-3 -bottom-0.5 h-[2px] rounded-full bg-gradient-to-r from-neutral-800/80 via-neutral-800 to-neutral-800/80 opacity-0 transition group-hover:opacity-40 group-[aria-current="page"]:opacity-100 dark:from-amber-400/80 dark:via-amber-400 dark:to-amber-400/80`}
+                  className={`pointer-events-none absolute inset-x-3 -bottom-0.5 h-[2px] rounded-full bg-gradient-to-r from-neutral-800/80 via-neutral-800 to-neutral-800/80 opacity-0 transition group-hover:opacity-40 group-[aria-current="page"]:opacity-100 dark:from-yellow-400/80 dark:via-yellow-400 dark:to-yellow-400/80`}
                 />
               </NavLink>
               <a href="#about" className={navLinkBase}>
                 About
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute inset-x-3 -bottom-0.5 h-[2px] rounded-full bg-gradient-to-r from-neutral-800/60 via-neutral-800 to-neutral-800/60 opacity-0 transition group-hover:opacity-40 dark:from-amber-400/60 dark:via-amber-400 dark:to-amber-400/60"
+                  className="pointer-events-none absolute inset-x-3 -bottom-0.5 h-[2px] rounded-full bg-gradient-to-r from-neutral-800/60 via-neutral-800 to-neutral-800/60 opacity-0 transition group-hover:opacity-40 dark:from-yellow-400/60 dark:via-yellow-400 dark:to-yellow-400/60"
                 />
               </a>
               <a href="#contact" className={navLinkBase}>
                 Contact
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute inset-x-3 -bottom-0.5 h-[2px] rounded-full bg-gradient-to-r from-neutral-800/60 via-neutral-800 to-neutral-800/60 opacity-0 transition group-hover:opacity-40 dark:from-amber-400/60 dark:via-amber-400 dark:to-amber-400/60"
+                  className="pointer-events-none absolute inset-x-3 -bottom-0.5 h-[2px] rounded-full bg-gradient-to-r from-neutral-800/60 via-neutral-800 to-neutral-800/60 opacity-0 transition group-hover:opacity-40 dark:from-yellow-400/60 dark:via-yellow-400 dark:to-yellow-400/60"
                 />
               </a>
             </div>
