@@ -190,10 +190,10 @@ const Home: React.FC = () => {
       {/* translucent white overlay (kept for structure; homepage uses a yellow tint via the hero card accents) */}
       <div aria-hidden className="absolute inset-0 z-0 bg-stone-50/90 backdrop-blur-xl dark:bg-neutral-900/60 pointer-events-none" />
   <main className="mx-auto relative z-10 flex w-full max-w-7xl flex-col gap-0 px-4 sm:px-6 lg:px-8">
-        <section className="milk-hero relative flex min-h-[calc(100vh-6rem)] items-center justify-center py-12 sm:py-16 lg:py-20">
-          <div className="w-full overflow-hidden rounded-3xl border border-amber-200/60 bg-white/80 px-6 py-12 shadow-xl backdrop-blur-lg transition-colors duration-300 sm:px-8 sm:py-14 lg:px-12 lg:py-16 dark:border-neutral-800/60 dark:bg-neutral-900/75 dark:shadow-[0_24px_48px_-28px_rgba(15,23,42,0.85)]">
-            <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-start">
-              <div className="space-y-8 flex flex-col justify-center">
+        <section className="milk-hero relative flex min-h-fit items-center justify-center pt-16 pb-8 sm:pt-20 sm:pb-10 lg:pt-24 lg:pb-12">
+          <div className="w-full overflow-hidden rounded-3xl border border-amber-200/60 bg-white/80 px-6 py-10 shadow-xl backdrop-blur-lg transition-colors duration-300 sm:px-8 sm:py-12 lg:px-12 lg:py-14 dark:border-neutral-800/60 dark:bg-neutral-900/75 dark:shadow-[0_24px_48px_-28px_rgba(15,23,42,0.85)]">
+            <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-start">
+              <div className="space-y-6 flex flex-col justify-center">
                 <span className="inline-flex w-fit items-center gap-2 rounded-full border border-amber-200/60 bg-amber-50/70 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.32em] text-amber-700 transition-colors duration-300 dark:border-neutral-700/70 dark:bg-neutral-800/70 dark:text-amber-300">
                   POS for Coffee & Milk Tea
                 </span>
