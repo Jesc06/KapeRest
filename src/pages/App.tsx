@@ -8,11 +8,12 @@ import Navbar from "../Components/Navbar";
 import PageTransition from "../Components/PageTransition";
 import AnimatedBackground from "../Components/AnimatedBackground";
 import Home from "./Home";
+import { CashierPage } from "../Components/Cashier";
 
 const App: React.FC = () => {
   const AnimatedRoutes: React.FC = () => {
     const location = useLocation();
-    const hideNavbar = location.pathname === "/login" || location.pathname === "/register";
+    const hideNavbar = location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/cashier";
 
     return (
       <>
@@ -22,6 +23,7 @@ const App: React.FC = () => {
             <Route path="/" element={<PageTransition><Home /></PageTransition>} />
             <Route path="/login" element={<PageTransition><LoginUI /></PageTransition>} />
             <Route path="/register" element={<PageTransition><Register /></PageTransition>} />
+            <Route path="/cashier" element={<PageTransition><CashierPage /></PageTransition>} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </AnimatePresence>
