@@ -66,7 +66,7 @@ const LogoutPanel: React.FC<LogoutPanelProps> = ({ userRole = 'Cashier' }) => {
             <div className="py-2">
               <button
                 onClick={() => {
-                  alert('Change Password feature coming soon!');
+                  navigate('/cashier/change-password');
                   setShowUserMenu(false);
                 }}
                 className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-orange-700 dark:text-orange-300 hover:bg-orange-50/60 dark:hover:bg-orange-900/20 transition-all duration-200"

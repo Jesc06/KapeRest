@@ -10,11 +10,12 @@ import AnimatedBackground from "../Components/AnimatedBackground";
 import Home from "./Home";
 import { CashierPage } from "../Components/Cashier";
 import SalesPage from "../Components/Cashier/SalesPage";
+import ChangePasswordPage from "../Components/Cashier/ChangePasswordPage";
 
 const App: React.FC = () => {
   const AnimatedRoutes: React.FC = () => {
     const location = useLocation();
-    const hideNavbar = location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/cashier" || location.pathname === "/cashier/sales";
+    const hideNavbar = location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/cashier" || location.pathname === "/cashier/sales" || location.pathname === "/cashier/change-password";
 
     return (
       <>
@@ -26,6 +27,7 @@ const App: React.FC = () => {
             <Route path="/register" element={<PageTransition><Register /></PageTransition>} />
             <Route path="/cashier" element={<PageTransition><CashierPage /></PageTransition>} />
             <Route path="/cashier/sales" element={<PageTransition><SalesPage /></PageTransition>} />
+            <Route path="/cashier/change-password" element={<PageTransition><ChangePasswordPage /></PageTransition>} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </AnimatePresence>
