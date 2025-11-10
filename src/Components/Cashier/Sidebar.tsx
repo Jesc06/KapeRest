@@ -18,7 +18,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
       )}
 
       {/* Sidebar */}
-      <aside className={`fixed left-0 top-0 h-screen flex flex-col border-r border-neutral-900/20 bg-gradient-to-b from-white/95 to-stone-50/90 backdrop-blur-xl transition-[width] duration-500 ease-in-out dark:border-neutral-800/60 dark:from-neutral-900/90 dark:to-neutral-900/80 overflow-y-auto shadow-lg z-30 ${
+      <aside className={`fixed left-0 top-0 h-screen flex flex-col border-r border-neutral-900/20 bg-gradient-to-b from-white/95 to-stone-50/90 backdrop-blur-xl transition-[width] duration-500 ease-in-out dark:border-neutral-800/60 dark:from-neutral-900/90 dark:to-neutral-900/80 shadow-lg z-30 ${
         !isOpen ? '-translate-x-full' : 'translate-x-0'
       } lg:translate-x-0 ${isExpanded ? 'w-64' : 'w-20'}`}>
       {/* Header with Branding */}
@@ -46,7 +46,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
         {/* Sales Link */}
         <Link
           to="#sales"
-          className={`group flex items-center gap-3 rounded-lg border border-transparent text-sm font-medium text-neutral-600 transition-all duration-200 hover:border-neutral-900/30 hover:bg-gradient-to-r hover:from-neutral-100 hover:to-neutral-50 hover:text-neutral-900 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 dark:text-neutral-400 dark:hover:bg-neutral-800/70 dark:hover:border-neutral-700 dark:hover:text-neutral-100 dark:focus:ring-amber-300 dark:focus:ring-offset-neutral-900 ${isExpanded ? 'px-4 py-3' : 'px-3 py-3 justify-center'}`}
+          className={`group flex items-center gap-3 rounded-sm border border-transparent text-sm font-medium text-neutral-600 transition-all duration-200 hover:border-neutral-900/30 hover:bg-gradient-to-r hover:from-neutral-100 hover:to-neutral-50 hover:text-neutral-900 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 dark:text-neutral-400 dark:hover:bg-neutral-800/70 dark:hover:border-neutral-700 dark:hover:text-neutral-100 dark:focus:ring-amber-300 dark:focus:ring-offset-neutral-900 ${isExpanded ? 'px-4 py-3' : 'px-3 py-3 justify-center'}`}
           title={!isExpanded ? 'Sales' : ''}
         >
           <FontAwesomeIcon icon={faChartLine} className="h-5 w-5 flex-shrink-0 transition-all duration-200 group-hover:scale-110 group-hover:rotate-3 text-amber-600 dark:text-amber-400" />
@@ -61,7 +61,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
         {/* Buy Item Link (Active) */}
         <Link
           to="#buy-item"
-          className={`group flex items-center gap-3 rounded-lg border border-neutral-900/30 bg-gradient-to-r from-neutral-100/80 to-neutral-50/60 text-sm font-bold text-neutral-900 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 dark:border-amber-400/50 dark:from-amber-500/25 dark:via-amber-400/15 dark:to-amber-400/10 dark:text-amber-200 dark:shadow-amber-400/20 ${isExpanded ? 'px-4 py-3' : 'px-3 py-3 justify-center'}`}
+          className={`group flex items-center gap-3 rounded-sm border border-neutral-900/30 bg-gradient-to-r from-neutral-100/80 to-neutral-50/60 text-sm font-bold text-neutral-900 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 dark:border-amber-400/50 dark:from-amber-500/25 dark:via-amber-400/15 dark:to-amber-400/10 dark:text-amber-200 dark:shadow-amber-400/20 ${isExpanded ? 'px-4 py-3' : 'px-3 py-3 justify-center'}`}
           title={!isExpanded ? 'Buy Item' : ''}
         >
           <FontAwesomeIcon icon={faShoppingCart} className="h-5 w-5 flex-shrink-0 transition-all duration-200 group-hover:scale-110 group-hover:rotate-3 text-amber-600 dark:text-amber-400" />

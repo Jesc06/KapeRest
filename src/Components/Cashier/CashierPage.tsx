@@ -21,6 +21,7 @@ const CashierPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
+  const [userRole] = useState<string>('Cashier'); // Mock user role - can be fetched from auth/context
 
   // Mock product data
   const products = [
@@ -153,6 +154,7 @@ const CashierPage: React.FC = () => {
           sidebarExpanded={sidebarExpanded}
           onToggleSidebarExpand={() => setSidebarExpanded(!sidebarExpanded)}
           onLogout={handleLogout}
+          userRole={userRole}
         />
       </div>
     </div>
