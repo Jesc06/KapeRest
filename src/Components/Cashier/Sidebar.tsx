@@ -18,24 +18,24 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
       )}
 
       {/* Sidebar */}
-      <aside className={`fixed left-0 top-0 h-screen flex flex-col border-r border-neutral-900/20 bg-gradient-to-b from-white/95 to-stone-50/90 backdrop-blur-xl transition-[width] duration-500 ease-in-out dark:border-neutral-800/60 dark:from-neutral-900/90 dark:to-neutral-900/80 shadow-lg z-30 ${
+      <aside className={`fixed left-0 top-0 h-screen flex flex-col border-r border-orange-300/50 bg-gradient-to-b from-stone-100/95 to-stone-50/90 backdrop-blur-xl transition-[width] duration-500 ease-in-out dark:border-orange-700/30 dark:from-stone-900/90 dark:to-stone-950/85 shadow-lg z-30 ${
         !isOpen ? '-translate-x-full' : 'translate-x-0'
       } lg:translate-x-0 ${isExpanded ? 'w-64' : 'w-20'}`}>
       {/* Header with Branding */}
-      <div className="sticky top-0 flex items-center justify-between gap-3 border-b border-neutral-900/15 bg-white/90 backdrop-blur-lg px-4 py-5 dark:border-neutral-800/60 dark:bg-neutral-900/90 transition-[padding,justify-content] duration-500 ease-in-out">
+      <div className="sticky top-0 flex items-center justify-between gap-3 border-b border-orange-300/40 bg-stone-100/90 backdrop-blur-lg px-4 py-5 dark:border-orange-700/30 dark:bg-stone-900/90 transition-[padding,justify-content] duration-500 ease-in-out">
         {isExpanded && (
           <>
-            <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-md">
+            <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-md">
               <FontAwesomeIcon icon={faCoffee} className="text-base" />
             </div>
             <div className="flex-1 min-w-0">
-              <h2 className="text-base font-bold tracking-tight text-neutral-900 dark:text-neutral-100">KapeRest</h2>
-              <p className="text-xs text-neutral-500 font-medium dark:text-neutral-400">POS Cashier</p>
+              <h2 className="text-base font-bold tracking-tight text-orange-900 dark:text-orange-100">KapeRest</h2>
+              <p className="text-xs text-orange-700 font-medium dark:text-orange-300">POS Cashier</p>
             </div>
           </>
         )}
         {!isExpanded && (
-          <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-md">
+          <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-md">
             <FontAwesomeIcon icon={faCoffee} className="text-base" />
           </div>
         )}
@@ -46,14 +46,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
         {/* Sales Link */}
         <Link
           to="#sales"
-          className={`group flex items-center gap-3 rounded-sm border border-transparent text-sm font-medium text-neutral-600 transition-all duration-200 hover:border-neutral-900/30 hover:bg-gradient-to-r hover:from-neutral-100 hover:to-neutral-50 hover:text-neutral-900 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 dark:text-neutral-400 dark:hover:bg-neutral-800/70 dark:hover:border-neutral-700 dark:hover:text-neutral-100 dark:focus:ring-amber-300 dark:focus:ring-offset-neutral-900 ${isExpanded ? 'px-4 py-3' : 'px-3 py-3 justify-center'}`}
+          className={`group flex items-center gap-3 rounded-sm border border-transparent text-sm font-medium text-orange-700 transition-all duration-200 hover:border-orange-300/60 hover:bg-gradient-to-r hover:from-orange-100/60 hover:to-orange-50/50 hover:text-orange-900 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 dark:text-orange-300 dark:hover:bg-orange-900/30 dark:hover:border-orange-700/60 dark:hover:text-orange-200 dark:focus:ring-orange-400 dark:focus:ring-offset-stone-900 ${isExpanded ? 'px-4 py-3' : 'px-3 py-3 justify-center'}`}
           title={!isExpanded ? 'Sales' : ''}
         >
-          <FontAwesomeIcon icon={faChartLine} className="h-5 w-5 flex-shrink-0 transition-all duration-200 group-hover:scale-110 group-hover:rotate-3 text-amber-600 dark:text-amber-400" />
+          <FontAwesomeIcon icon={faChartLine} className="h-5 w-5 flex-shrink-0 transition-all duration-200 group-hover:scale-110 group-hover:rotate-3 text-orange-600 dark:text-orange-400" />
           {isExpanded && (
             <>
               <span className="font-semibold">Sales</span>
-              <span className="ml-auto text-xs bg-neutral-200 text-neutral-600 px-2 py-0.5 rounded-full text-[10px] font-bold dark:bg-neutral-800 dark:text-neutral-400">Soon</span>
+              <span className="ml-auto text-xs bg-orange-200 text-orange-700 px-2 py-0.5 rounded-full text-[10px] font-bold dark:bg-orange-900/40 dark:text-orange-300">Soon</span>
             </>
           )}
         </Link>
@@ -61,14 +61,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
         {/* Buy Item Link (Active) */}
         <Link
           to="#buy-item"
-          className={`group flex items-center gap-3 rounded-sm border border-neutral-900/30 bg-gradient-to-r from-neutral-100/80 to-neutral-50/60 text-sm font-bold text-neutral-900 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 dark:border-amber-400/50 dark:from-amber-500/25 dark:via-amber-400/15 dark:to-amber-400/10 dark:text-amber-200 dark:shadow-amber-400/20 ${isExpanded ? 'px-4 py-3' : 'px-3 py-3 justify-center'}`}
+          className={`group flex items-center gap-3 rounded-sm border border-orange-300/70 bg-gradient-to-r from-orange-100/80 to-orange-50/60 text-sm font-bold text-orange-900 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 dark:border-orange-400/50 dark:from-orange-500/20 dark:via-orange-400/12 dark:to-orange-400/8 dark:text-orange-200 dark:shadow-orange-500/15 ${isExpanded ? 'px-4 py-3' : 'px-3 py-3 justify-center'}`}
           title={!isExpanded ? 'Buy Item' : ''}
         >
-          <FontAwesomeIcon icon={faShoppingCart} className="h-5 w-5 flex-shrink-0 transition-all duration-200 group-hover:scale-110 group-hover:rotate-3 text-amber-600 dark:text-amber-400" />
+          <FontAwesomeIcon icon={faShoppingCart} className="h-5 w-5 flex-shrink-0 transition-all duration-200 group-hover:scale-110 group-hover:rotate-3 text-orange-600 dark:text-orange-400" />
           {isExpanded && (
             <>
               <span>Buy Item</span>
-              <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-green-200 text-white dark:bg-green-500/40 dark:text-green-200">
+              <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-orange-300 text-white dark:bg-orange-500/60 dark:text-orange-100">
                 <FontAwesomeIcon icon={faCheck} className="h-3 w-3" />
               </span>
             </>
@@ -82,7 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
       {isOpen && (
         <button
           onClick={onClose}
-          className="fixed right-4 top-4 z-40 lg:hidden flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-neutral-200 to-neutral-100 hover:from-neutral-300 hover:to-neutral-200 text-neutral-700 transition-all duration-200 shadow-lg"
+          className="fixed right-4 top-4 z-40 lg:hidden flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-orange-100 to-orange-50 hover:from-orange-200 hover:to-orange-100 text-orange-700 transition-all duration-200 shadow-lg hover:shadow-xl dark:from-orange-900/40 dark:to-orange-900/30 dark:hover:from-orange-900/60 dark:hover:to-orange-900/50 dark:text-orange-400"
         >
           <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
         </button>
