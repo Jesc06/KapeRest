@@ -62,9 +62,9 @@ const MainPanel: React.FC<MainPanelProps> = ({
   const [showUserMenu, setShowUserMenu] = useState(false);
   
   return (
-    <div className={`flex h-screen w-full flex-col bg-stone-50 dark:bg-neutral-900 transition-all duration-300 ${sidebarExpanded ? 'lg:ml-64' : 'lg:ml-20'}`}>
+    <div className={`flex h-screen w-full flex-col bg-stone-100 dark:bg-stone-900 transition-all duration-300 ${sidebarExpanded ? 'lg:ml-64' : 'lg:ml-20'}`}>
       {/* Top Bar - Search & Filters */}
-      <div className="sticky top-0 z-10 border-b border-neutral-300/80 bg-white/95 dark:border-neutral-700/80 dark:bg-neutral-900/50 px-4 sm:px-5 md:px-6 py-3 sm:py-4 shadow-sm transition-all duration-300 backdrop-blur-sm">
+      <div className="sticky top-0 z-10 border-b border-orange-300/50 bg-stone-100/95 dark:border-orange-700/30 dark:bg-stone-800/90 px-4 sm:px-5 md:px-6 py-3 sm:py-4 shadow-sm transition-all duration-300 backdrop-blur-sm">
         {/* Top Section: Sidebar Toggle | Search Bar | Logout Panel */}
         <div className="flex items-center justify-between gap-3 sm:gap-4 mb-3">
           {/* Left Section: Sidebar Toggle */}
@@ -72,7 +72,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
             {/* Hamburger Menu - Mobile Only */}
             <button
               onClick={onToggleSidebar}
-              className="lg:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-neutral-900/30 bg-white hover:bg-neutral-100 text-neutral-700 transition-all duration-200 shadow-sm dark:border-neutral-700/50 dark:bg-neutral-900/50 dark:hover:bg-neutral-900/70 dark:text-neutral-100"
+              className="lg:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-orange-400/60 bg-orange-50 hover:bg-orange-100 text-orange-700 transition-all duration-200 shadow-sm dark:border-orange-600/40 dark:bg-orange-900/30 dark:hover:bg-orange-900/50 dark:text-orange-300"
             >
               <FontAwesomeIcon icon={faBars} className="h-4 w-4" />
             </button>
@@ -106,18 +106,18 @@ const MainPanel: React.FC<MainPanelProps> = ({
           </div>
 
           {/* Right Section: User Dropdown Menu - Absolute Position */}
-          <div className="hidden sm:flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-2 rounded-lg bg-white/70 dark:bg-neutral-900/50 border border-neutral-300/70 dark:border-neutral-700/70 shadow-sm backdrop-blur-sm flex-shrink-0">
+          <div className="hidden sm:flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-2 rounded-lg bg-stone-100/80 dark:bg-stone-800/60 border border-orange-300/50 dark:border-orange-700/30 shadow-sm backdrop-blur-sm flex-shrink-0">
             {/* Divider */}
-            <div className="h-7 w-px bg-neutral-200/50 dark:bg-neutral-700/50" />
+            <div className="h-7 w-px bg-orange-300/50 dark:bg-orange-700/30" />
             
             {/* Terminal Info */}
             <div className="flex flex-col gap-0.5">
-              <span className="text-[10px] font-semibold uppercase tracking-widest text-neutral-500 dark:text-neutral-400 opacity-75">Terminal</span>
-              <span className="text-sm font-bold text-neutral-900 dark:text-neutral-50">Main Counter</span>
+              <span className="text-[10px] font-semibold uppercase tracking-widest text-orange-600 dark:text-orange-400 opacity-75">Terminal</span>
+              <span className="text-sm font-bold text-orange-900 dark:text-orange-100">Main Counter</span>
             </div>
             
             {/* Divider */}
-            <div className="h-7 w-px bg-neutral-200/50 dark:bg-neutral-700/50" />
+            <div className="h-7 w-px bg-orange-300/50 dark:bg-orange-700/30" />
             
             {/* Status Badge */}
             <div className="flex items-center gap-2">
@@ -129,19 +129,19 @@ const MainPanel: React.FC<MainPanelProps> = ({
             </div>
 
             {/* Divider */}
-            <div className="h-8 w-px bg-neutral-200/60 dark:bg-neutral-700/60" />
+            <div className="h-8 w-px bg-orange-300/50 dark:bg-orange-700/30" />
 
             {/* User Menu Dropdown */}
             <div className="relative">
               <button
                 onClick={() => setShowUserMenu(!showUserMenu)}
-                className="group flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 hover:bg-neutral-100/60 dark:hover:bg-neutral-800/60 focus:outline-none focus:ring-2 focus:ring-orange-400/40"
+                className="group flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 hover:bg-orange-50/60 dark:hover:bg-orange-900/20 focus:outline-none focus:ring-2 focus:ring-orange-400/40"
                 title="User menu"
               >
                 <div className="h-8 w-8 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-sm font-bold text-white shadow-md">
                   <FontAwesomeIcon icon={faUser} className="h-4 w-4" />
                 </div>
-                <FontAwesomeIcon icon={faChevronDown} className={`h-3.5 w-3.5 text-neutral-600 dark:text-neutral-400 transition-transform duration-300 ${showUserMenu ? 'rotate-180' : ''}`} />
+                <FontAwesomeIcon icon={faChevronDown} className={`h-3.5 w-3.5 text-orange-600 dark:text-orange-400 transition-transform duration-300 ${showUserMenu ? 'rotate-180' : ''}`} />
               </button>
             </div>
           </div>
@@ -149,15 +149,15 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
         <div className="space-y-2 sm:space-y-3">
           {/* Category Filter Pills */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 items-center">
             {categories.map(category => (
               <button
                 key={category}
                 onClick={() => onCategoryChange(category)}
-                className={`rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold transition-all duration-200 border ${
+                className={`rounded-full px-3.5 sm:px-4.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold transition-all duration-200 border ${
                   selectedCategory === category
-                    ? 'border-orange-400/80 bg-orange-50 text-orange-700 shadow-md hover:shadow-lg hover:scale-105 dark:border-orange-400/60 dark:bg-orange-500/15 dark:text-orange-300'
-                    : 'border-neutral-300/80 bg-white dark:bg-neutral-900/40 text-neutral-700 dark:text-neutral-300 hover:border-neutral-400 hover:bg-neutral-50 hover:shadow-sm dark:hover:border-neutral-600 dark:hover:bg-neutral-900/60'
+                    ? 'border-orange-400/80 bg-orange-50 text-orange-700 shadow-md hover:shadow-lg hover:scale-105 dark:border-orange-400/60 dark:bg-orange-500/15 dark:text-orange-300 active:scale-95'
+                    : 'border-orange-300/40 bg-stone-100/60 dark:bg-stone-800/40 text-orange-700 dark:text-orange-300 hover:border-orange-400/60 hover:bg-orange-50/50 dark:hover:bg-stone-800/60 hover:shadow-sm dark:hover:border-orange-400/50 active:scale-95'
                 }`}
               >
                 {category}
@@ -177,17 +177,17 @@ const MainPanel: React.FC<MainPanelProps> = ({
           />
           
           {/* Dropdown Menu */}
-          <div className="fixed top-[calc(4.5rem+0.5rem)] right-4 sm:right-5 md:right-6 w-56 rounded-lg border border-neutral-300/80 dark:border-neutral-700/70 bg-white dark:bg-neutral-900/95 shadow-lg dark:shadow-xl backdrop-blur-sm z-[1000]">
+          <div className="fixed top-[calc(4.5rem+0.5rem)] right-4 sm:right-5 md:right-6 w-56 rounded-lg border border-orange-300/50 dark:border-orange-700/30 bg-stone-100/95 dark:bg-stone-800/90 shadow-lg dark:shadow-xl backdrop-blur-sm z-[1000]">
             {/* Header */}
-            <div className="px-4 py-3 border-b border-neutral-300/70 dark:border-neutral-700/60">
-              <p className="text-xs font-semibold uppercase tracking-widest text-neutral-500 dark:text-neutral-400">Cashier</p>
-              <p className="text-sm font-bold text-neutral-900 dark:text-neutral-50 mt-1">Main Counter</p>
+            <div className="px-4 py-3 border-b border-orange-300/40 dark:border-orange-700/20">
+              <p className="text-xs font-semibold uppercase tracking-widest text-orange-600 dark:text-orange-400">Cashier</p>
+              <p className="text-sm font-bold text-orange-900 dark:text-orange-100 mt-1">Main Counter</p>
             </div>
 
             {/* Menu Items */}
             <div className="py-2">
               {/* Settings */}
-              <button className="w-full px-4 py-2.5 text-left text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors duration-150 flex items-center gap-3 group">
+              <button className="w-full px-4 py-2.5 text-left text-sm font-medium text-orange-900 dark:text-orange-100 hover:bg-orange-100/50 dark:hover:bg-orange-900/20 transition-colors duration-150 flex items-center gap-3 group">
                 <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center group-hover:bg-blue-200 dark:group-hover:bg-blue-900/60 transition-colors">
                   <FontAwesomeIcon icon={faUser} className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                 </div>
@@ -196,7 +196,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
             </div>
 
             {/* Divider */}
-            <div className="h-px bg-gradient-to-r from-neutral-200/0 via-neutral-200/50 to-neutral-200/0 dark:via-neutral-700/30" />
+            <div className="h-px bg-gradient-to-r from-orange-300/0 via-orange-300/30 to-orange-300/0 dark:via-orange-700/20" />
 
             {/* Logout */}
             <div className="py-2">
@@ -220,9 +220,9 @@ const MainPanel: React.FC<MainPanelProps> = ({
       {/* Main Content Area */}
       <div className="flex flex-1 overflow-hidden gap-4 sm:gap-5 p-4 sm:p-5 md:p-6">
         {/* Products Section (Scrollable) */}
-        <div className="flex-1 flex flex-col rounded-xl border border-neutral-300/75 dark:border-neutral-700/70 bg-white dark:bg-neutral-900/60 shadow-md dark:shadow-lg overflow-hidden">
+        <div className="flex-1 flex flex-col rounded-xl border border-orange-300/50 dark:border-orange-700/30 bg-stone-100/80 dark:bg-stone-800/60 shadow-md dark:shadow-lg overflow-hidden">
           {/* Header */}
-          <div className="border-b border-neutral-300/70 dark:border-neutral-700/60 bg-white dark:bg-neutral-900/50 px-6 py-4">
+          <div className="border-b border-orange-300/40 dark:border-orange-700/30 bg-stone-100/60 dark:bg-stone-800/50 px-6 py-4">
             <h3 className="text-lg font-bold tracking-tight text-neutral-900 dark:text-neutral-100 flex items-center gap-2.5">
               <FontAwesomeIcon icon={faCoffee} className="h-5 w-5 text-orange-600 dark:text-orange-400" />
               <span>Available Items</span>
@@ -238,7 +238,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
                   <div
                     key={product.id}
                     onClick={() => onAddToCart(product)}
-                    className="group cursor-pointer rounded-lg border border-neutral-300/70 dark:border-neutral-600/70 bg-white dark:bg-neutral-900/50 transition-all duration-300 hover:border-orange-400/70 hover:shadow-md hover:-translate-y-1 active:scale-95 dark:hover:border-orange-400/50 dark:hover:shadow-orange-500/10 overflow-hidden flex flex-col"
+                    className="group cursor-pointer rounded-lg border border-orange-300/50 dark:border-orange-700/30 bg-stone-100/70 dark:bg-stone-800/40 transition-all duration-300 hover:border-orange-400/70 hover:shadow-md hover:-translate-y-1 active:scale-95 dark:hover:border-orange-400/50 dark:hover:shadow-orange-500/10 overflow-hidden flex flex-col"
                   >
                     {/* Product Image */}
                     <div className="relative w-full aspect-square overflow-hidden bg-neutral-100 dark:bg-neutral-900/50">
@@ -249,7 +249,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
                           className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-100 to-orange-50 dark:from-orange-900/30 dark:to-orange-800/20">
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-stone-200 to-stone-100 dark:from-stone-800/50 dark:to-stone-900/30">
                           <FontAwesomeIcon icon={faCoffee} className="h-8 w-8 text-orange-400 dark:text-orange-600" />
                         </div>
                       )}
@@ -309,9 +309,9 @@ const MainPanel: React.FC<MainPanelProps> = ({
         </div>
 
         {/* Cart Section */}
-        <div className="w-full sm:w-96 md:w-[28rem] lg:w-[32rem] flex flex-col rounded-xl border border-neutral-300/75 dark:border-neutral-700/70 bg-white dark:bg-neutral-900/60 shadow-md dark:shadow-lg overflow-hidden flex-shrink-0">
+        <div className="w-full sm:w-96 md:w-[28rem] lg:w-[32rem] flex flex-col rounded-xl border border-orange-300/50 dark:border-orange-700/30 bg-stone-100/80 dark:bg-stone-800/60 shadow-md dark:shadow-lg overflow-hidden flex-shrink-0">
           {/* Cart Header */}
-          <div className="border-b border-neutral-300/70 dark:border-neutral-700/60 bg-white dark:bg-neutral-900/50 px-6 py-4">
+          <div className="border-b border-orange-300/40 dark:border-orange-700/30 bg-stone-100/60 dark:bg-stone-800/50 px-6 py-4">
             <h3 className="text-lg font-bold tracking-tight text-neutral-900 dark:text-neutral-50 flex items-center gap-2.5">
               <FontAwesomeIcon icon={faShoppingCart} className="h-5 w-5 text-orange-600 dark:text-orange-400" />
               <span>Shopping Cart</span>
@@ -325,7 +325,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
               cart.map(item => (
                 <div
                   key={item.id}
-                  className="group flex items-center gap-3 rounded-lg border border-neutral-300/70 dark:border-neutral-700/70 bg-white/90 dark:bg-neutral-900/40 p-3 shadow-sm transition-all duration-300 hover:border-orange-400/70 hover:shadow-md hover:bg-white dark:hover:border-orange-400/50 dark:hover:shadow-orange-500/10"
+                  className="group flex items-center gap-3 rounded-lg border border-orange-300/50 dark:border-orange-700/30 bg-stone-100/60 dark:bg-stone-800/40 p-3 shadow-sm transition-all duration-300 hover:border-orange-400/70 hover:shadow-md hover:bg-stone-100 dark:hover:border-orange-400/50 dark:hover:shadow-orange-500/10 dark:hover:bg-stone-800/60"
                 >
                   {/* Icon */}
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-500 text-white font-bold transition-all duration-300 flex-shrink-0 shadow-sm dark:bg-orange-600">
@@ -393,9 +393,9 @@ const MainPanel: React.FC<MainPanelProps> = ({
           </div>
 
           {/* Cart Footer with Total - Minimalist */}
-          <div className="border-t border-neutral-300/70 dark:border-neutral-700/60 bg-white dark:bg-neutral-900/50 px-4 py-5">
+          <div className="border-t border-orange-300/40 dark:border-orange-700/30 bg-stone-100/60 dark:bg-stone-800/50 px-4 py-5">
             <div className="space-y-3">
-              <div className="flex items-center justify-between pb-3 border-b border-neutral-300/70 dark:border-neutral-700/60">
+              <div className="flex items-center justify-between pb-3 border-b border-orange-300/40 dark:border-orange-700/30">
                 <span className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">Total Amount</span>
                 <span className="text-4xl font-bold bg-gradient-to-r from-orange-600 to-orange-700 bg-clip-text text-transparent dark:from-orange-400 dark:to-orange-500">
                   ₱{total.toFixed(2)}
@@ -413,7 +413,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
           </div>
 
           {/* Action Buttons - Flat Minimalist Design */}
-          <div className="border-t border-neutral-300/70 dark:border-neutral-700/60 space-y-2.5 bg-white dark:bg-neutral-900/50 px-3 py-3 sm:px-4 sm:py-4">
+          <div className="border-t border-orange-300/40 dark:border-orange-700/30 space-y-2.5 bg-stone-100/60 dark:bg-stone-800/50 px-3 py-3 sm:px-4 sm:py-4">
             {/* Primary Action - Buy */}
             <button
               onClick={onBuy}
@@ -442,7 +442,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
               <button
                 onClick={onHold}
                 disabled={isLoading || cart.length === 0}
-                className="group flex items-center justify-center gap-1.5 rounded-md border border-neutral-300 bg-neutral-50 hover:bg-neutral-100 px-3 py-2.5 text-xs font-semibold text-neutral-700 transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:ring-offset-1 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-neutral-50 dark:border-neutral-600/50 dark:bg-neutral-800/50 dark:hover:bg-neutral-700/60 dark:text-neutral-300 dark:focus:ring-neutral-500 dark:focus:ring-offset-neutral-900 shadow-sm"
+                className="group flex items-center justify-center gap-1.5 rounded-md border border-orange-300/50 bg-stone-100 hover:bg-stone-200 px-3 py-2.5 text-xs font-semibold text-orange-700 transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-1 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-stone-100 dark:border-orange-600/40 dark:bg-stone-800/60 dark:hover:bg-stone-800/80 dark:text-orange-300 dark:focus:ring-orange-500 dark:focus:ring-offset-stone-900 shadow-sm"
               >
                 <FontAwesomeIcon icon={faPause} className="h-3 w-3" />
                 <span>Hold</span>
@@ -452,7 +452,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
               <button
                 onClick={onGCashPayment}
                 disabled={isLoading || cart.length === 0}
-                className="group flex items-center justify-center gap-1.5 rounded-md border border-blue-300 bg-blue-50 hover:bg-blue-100 px-3 py-2.5 text-xs font-semibold text-blue-700 transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-blue-50 dark:border-blue-600/50 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 dark:text-blue-300 dark:focus:ring-blue-500 dark:focus:ring-offset-neutral-900 shadow-sm"
+                className="group flex items-center justify-center gap-1.5 rounded-md border border-blue-300/60 bg-blue-50/80 hover:bg-blue-100 px-3 py-2.5 text-xs font-semibold text-blue-700 transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-blue-50/80 dark:border-blue-600/40 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 dark:text-blue-300 dark:focus:ring-blue-500 dark:focus:ring-offset-stone-900 shadow-sm"
               >
                 <FontAwesomeIcon icon={faCreditCard} className="h-3 w-3" />
                 <span>GCash</span>

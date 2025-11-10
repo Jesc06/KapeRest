@@ -84,13 +84,13 @@ const Register: React.FC = () => {
   const errorSummary = Object.keys(errors).length > 1 ? Object.values(errors).join('. ') : null;
 
   return (
-    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-amber-50/40 dark:bg-neutral-950 font-sans transition-colors duration-300">
+    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-amber-50/40 dark:bg-stone-900 font-sans transition-colors duration-300">
       <TintedBackdrop />
       {/* Warm Café Theme Background with Coffee Tones */}
-      <div aria-hidden className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-br from-amber-50/60 via-orange-50/40 to-amber-100/30 dark:from-neutral-950 dark:via-neutral-950 dark:to-neutral-950" />
+      <div aria-hidden className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-br from-amber-50/60 via-orange-50/40 to-amber-100/30 dark:from-stone-900 dark:via-stone-950/80 dark:to-amber-950/60" />
       <main className="relative z-10 flex flex-1 items-center justify-center px-4 py-6 sm:px-6 md:py-8">
         <div className="relative w-full max-w-[580px]">
-          <div className="auth-card relative rounded-xl border border-orange-300/50 bg-white/75 p-7 sm:p-8 shadow-lg transition-all duration-300 ease-out dark:border-orange-700/40 dark:bg-neutral-900/85">
+          <div className="auth-card relative rounded-xl border-2 border-orange-500 bg-stone-100/90 p-7 sm:p-8 shadow-lg transition-all duration-300 ease-out dark:border-orange-600 dark:bg-stone-800/70">
             <div className="absolute -top-3 left-6 inline-flex h-6 items-center rounded-full border border-orange-300/70 bg-orange-50 px-3 text-[11px] font-semibold tracking-wide text-orange-700 dark:border-orange-700/60 dark:bg-orange-950/40 dark:text-orange-300">REGISTER</div>
             <div className="mb-6">
               <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-neutral-900 flex items-center gap-2 dark:text-neutral-50">

@@ -57,7 +57,7 @@ const Navbar: React.FC = () => {
       {/* Fixed top bar */}
       <nav className="fixed inset-x-0 top-4 z-30 flex justify-center px-4 sm:px-6">
         <div className="w-full max-w-6xl">
-          <div className="flex h-14 items-center gap-4 rounded-[28px] border border-orange-300/40 bg-white/60 px-4 shadow-[0_20px_48px_-28px_rgba(153,100,55,0.25)] backdrop-blur-xl transition-all duration-300 sm:h-16 sm:px-6 dark:border-orange-700/30 dark:bg-neutral-900/80 dark:shadow-[0_20px_48px_-28px_rgba(15,23,42,0.85)]">
+          <div className="flex h-14 items-center gap-4 rounded-[28px] border border-orange-300/40 bg-white/60 px-4 shadow-[0_20px_48px_-28px_rgba(153,100,55,0.25)] backdrop-blur-xl transition-all duration-300 sm:h-16 sm:px-6 dark:border-orange-700/30 dark:bg-stone-800/70 dark:shadow-[0_20px_48px_-28px_rgba(15,23,42,0.85)]">
             <Link
               to="/"
               className="flex items-center gap-2 rounded-full px-2 py-1 text-orange-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 focus-visible:ring-offset-2 focus-visible:ring-offset-amber-50/40 dark:text-orange-300"
@@ -168,7 +168,7 @@ const Navbar: React.FC = () => {
           </div>
 
           {open && (
-            <div className="mt-3 overflow-hidden rounded-3xl border border-orange-300/40 bg-white/70 shadow-[0_18px_44px_-26px_rgba(153,100,55,0.25)] backdrop-blur-xl md:hidden dark:border-orange-700/30 dark:bg-neutral-900/85">
+            <div className="mt-3 overflow-hidden rounded-3xl border border-orange-300/40 bg-white/70 shadow-[0_18px_44px_-26px_rgba(153,100,55,0.25)] backdrop-blur-xl md:hidden dark:border-orange-700/30 dark:bg-stone-800/70">
               <div className="space-y-1 px-4 py-4">
                 <Link
                   to="/"

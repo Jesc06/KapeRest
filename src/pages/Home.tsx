@@ -185,13 +185,13 @@ const branchHighlights = [
 
 const Home: React.FC = () => {
   return (
-    <div className="relative min-h-[100dvh] text-neutral-900 transition-colors duration-300 dark:text-neutral-100 bg-amber-50/40 dark:bg-neutral-950">
+    <div className="relative min-h-[100dvh] text-neutral-900 transition-colors duration-300 dark:text-neutral-100 bg-amber-50/40 dark:bg-stone-900">
       <TintedBackdrop />
       {/* Warm Café Theme Background with Coffee Tones */}
-      <div aria-hidden className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-br from-amber-50/60 via-orange-50/40 to-amber-100/30 dark:from-neutral-950 dark:via-neutral-950 dark:to-neutral-950" />
+      <div aria-hidden className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-br from-amber-50/60 via-orange-50/40 to-amber-100/30 dark:from-stone-900 dark:via-stone-950/80 dark:to-amber-950/60" />
   <main className="mx-auto relative z-10 flex w-full max-w-7xl flex-col gap-0 px-4 sm:px-6 lg:px-8">
         <section className="milk-hero relative flex min-h-fit items-center justify-center pt-16 pb-8 sm:pt-20 sm:pb-10 lg:pt-24 lg:pb-12">
-          <div className="w-full overflow-hidden rounded-2xl border border-orange-300/50 bg-white/75 px-6 py-10 shadow-lg backdrop-blur-sm transition-colors duration-300 sm:px-8 sm:py-12 lg:px-12 lg:py-14 dark:border-orange-700/40 dark:bg-neutral-900/85 dark:shadow-2xl">
+          <div className="w-full overflow-hidden rounded-2xl border border-orange-300/50 bg-stone-100/90 px-6 py-10 shadow-lg backdrop-blur-sm transition-colors duration-300 sm:px-8 sm:py-12 lg:px-12 lg:py-14 dark:border-orange-700/30 dark:bg-stone-800/70 dark:shadow-2xl">
             <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-start">
               <div className="space-y-6 flex flex-col justify-center">
                 <span className="inline-flex w-fit items-center gap-2 rounded-full border border-orange-300/70 bg-orange-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.32em] text-orange-700 transition-colors duration-300 dark:border-orange-700/60 dark:bg-orange-950/40 dark:text-orange-300">
@@ -247,7 +247,7 @@ const Home: React.FC = () => {
                     </article>
                   ))}
                 </div>
-                <div className="rounded-xl border border-orange-300/50 bg-white/60 p-4 text-xs leading-relaxed text-orange-900 transition-colors duration-300 dark:border-orange-700/40 dark:bg-orange-950/60 dark:text-orange-200">
+                <div className="rounded-xl border border-orange-300/50 bg-stone-100/80 p-4 text-xs leading-relaxed text-orange-900 transition-colors duration-300 dark:border-orange-700/30 dark:bg-stone-800/50 dark:text-orange-100">
                   <p className="font-semibold mb-2">✨ Complete Suite</p>
                   Premium inventory management, multi-location synchronization, advanced analytics, automated reporting, and integrated payment processing.
                 </div>
@@ -269,7 +269,7 @@ const Home: React.FC = () => {
             {featureCards.map(feature => (
                   <article
                 key={feature.title}
-                className="group relative flex h-full flex-col gap-4 overflow-hidden rounded-xl border border-orange-300/50 bg-white/60 p-6 shadow transition-all duration-300 hover:-translate-y-1 hover:border-orange-400/70 hover:bg-white/85 hover:shadow-lg sm:p-6 dark:border-orange-700/40 dark:bg-neutral-900/80 dark:hover:border-orange-600/60 dark:hover:bg-neutral-900/90 dark:hover:shadow-xl"
+                className="group relative flex h-full flex-col gap-4 overflow-hidden rounded-xl border border-orange-300/50 bg-stone-100/80 p-6 shadow transition-all duration-300 hover:-translate-y-1 hover:border-orange-400/70 hover:bg-stone-100 hover:shadow-lg sm:p-6 dark:border-orange-700/30 dark:bg-stone-800/50 dark:hover:bg-stone-800/70 dark:hover:shadow-xl"
               >
                 <span className="inline-flex h-12 w-12 items-center justify-center rounded-lg border border-orange-300/70 bg-orange-100 text-orange-600 shadow transition-all duration-200 group-hover:scale-110 group-hover:border-orange-400 group-hover:bg-orange-200 group-hover:text-orange-700 dark:border-orange-700/60 dark:bg-orange-950/40 dark:text-orange-300 dark:group-hover:border-orange-600 dark:group-hover:bg-orange-900/50">
                     {feature.icon}
@@ -330,7 +330,7 @@ const Home: React.FC = () => {
               {branchHighlights.map(highlight => (
                 <article
                   key={highlight.title}
-                  className="group rounded-xl border border-orange-300/50 bg-white/60 p-6 shadow transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-orange-700/40 dark:bg-neutral-900/80 dark:hover:shadow-xl"
+                  className="group rounded-xl border border-orange-300/50 bg-stone-100/80 p-6 shadow transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-orange-700/30 dark:bg-stone-800/50 dark:hover:shadow-xl"
                 >
                   <p className="text-sm font-semibold text-neutral-900 group-hover:text-neutral-800 dark:text-neutral-100 dark:group-hover:text-neutral-50">{highlight.title}</p>
                   <p className="mt-2 text-sm leading-relaxed text-neutral-600 group-hover:text-neutral-700 dark:text-neutral-400 dark:group-hover:text-neutral-300">{highlight.description}</p>
@@ -341,7 +341,7 @@ const Home: React.FC = () => {
         </section>
 
         <section id="contact" className="scroll-mt-32 py-16 sm:py-20 lg:py-28">
-          <div className="mx-auto flex max-w-5xl flex-col gap-10 rounded-2xl border border-orange-300/50 bg-white/75 p-8 shadow-lg transition-colors duration-300 sm:gap-12 sm:p-10 lg:flex-row lg:items-center dark:border-orange-700/40 dark:bg-neutral-900/85 dark:shadow-2xl">
+          <div className="mx-auto flex max-w-5xl flex-col gap-10 rounded-2xl border border-orange-300/50 bg-stone-100/90 p-8 shadow-lg transition-colors duration-300 sm:gap-12 sm:p-10 lg:flex-row lg:items-center dark:border-orange-700/30 dark:bg-stone-800/70 dark:shadow-2xl">
             <div className="flex-1 space-y-5">
               <h2 className="text-3xl font-bold text-neutral-900 sm:text-4xl dark:text-neutral-50">Ready to elevate your café operations?</h2>
               <p className="text-base leading-relaxed text-neutral-600 sm:text-lg dark:text-neutral-400">
