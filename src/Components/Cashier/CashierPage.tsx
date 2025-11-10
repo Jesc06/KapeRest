@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar.tsx';
 import MainPanel from './MainPanel.tsx';
 import TintedBackdrop from '../TintedBackdrop';
@@ -13,6 +14,7 @@ interface CartItem {
 }
 
 const CashierPage: React.FC = () => {
+  const navigate = useNavigate();
   const [searchText, setSearchText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -117,6 +119,11 @@ const CashierPage: React.FC = () => {
     alert(`GCash payment initiated for ₱${total.toFixed(2)}`);
   };
 
+  // Handle Logout
+  const handleLogout = () => {
+    navigate('/login');
+  };
+
   return (
     <div className="relative min-h-screen bg-transparent text-neutral-800 transition-colors duration-300 dark:text-neutral-200 overflow-hidden">
       <TintedBackdrop />
@@ -146,6 +153,7 @@ const CashierPage: React.FC = () => {
           onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
           sidebarExpanded={sidebarExpanded}
           onToggleSidebarExpand={() => setSidebarExpanded(!sidebarExpanded)}
+          onLogout={handleLogout}
           userRole={userRole}
         />
       </div>

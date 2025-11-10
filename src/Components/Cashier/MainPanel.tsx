@@ -34,6 +34,7 @@ interface MainPanelProps {
   onToggleSidebar?: () => void;
   sidebarExpanded?: boolean;
   onToggleSidebarExpand?: () => void;
+  onLogout?: () => void;
   userRole?: string;
 }
 
