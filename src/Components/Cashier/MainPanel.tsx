@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faSearch, faPlus, faMinus, faTrash, faCheck, faPause, faCreditCard, faBars, faShoppingCart, faChevronLeft, faChevronRight, faChevronDown, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faSearch, faPlus, faMinus, faTrash, faCheck, faPause, faCreditCard, faBars, faShoppingCart, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import LogoutPanel from './LogoutPanel';
 
 interface Product {
   id: number;
@@ -33,7 +34,6 @@ interface MainPanelProps {
   onToggleSidebar?: () => void;
   sidebarExpanded?: boolean;
   onToggleSidebarExpand?: () => void;
-  onLogout?: () => void;
   userRole?: string;
 }
 
@@ -56,10 +56,8 @@ const MainPanel: React.FC<MainPanelProps> = ({
   onToggleSidebar,
   sidebarExpanded = true,
   onToggleSidebarExpand,
-  onLogout,
   userRole = 'Cashier',
 }) => {
-  const [showUserMenu, setShowUserMenu] = useState(false);
   
   return (
     <div className={`flex h-screen w-full flex-col bg-stone-100 dark:bg-stone-900 transition-all duration-300 ${sidebarExpanded ? 'lg:ml-64' : 'lg:ml-20'}`}>
@@ -104,98 +102,10 @@ const MainPanel: React.FC<MainPanelProps> = ({
             </div>
           </div>
 
-          {/* Right Section: User Dropdown Menu - Absolute Position */}
-          <div className="hidden sm:flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-2 rounded-lg bg-stone-100/80 dark:bg-stone-800/60 border border-orange-300/50 dark:border-orange-700/30 shadow-sm backdrop-blur-sm flex-shrink-0">
-            {/* Divider */}
-            <div className="h-7 w-px bg-orange-300/50 dark:bg-orange-700/30" />
-            
-            {/* Terminal Info */}
-            <div className="flex flex-col gap-0.5">
-              <span className="text-[10px] font-semibold uppercase tracking-widest text-orange-600 dark:text-orange-400 opacity-75">Terminal</span>
-              <span className="text-sm font-bold text-orange-900 dark:text-orange-100">Main Counter</span>
-            </div>
-            
-            {/* Divider */}
-            <div className="h-7 w-px bg-orange-300/50 dark:bg-orange-700/30" />
-            
-            {/* Status Badge */}
-            <div className="flex items-center gap-2">
-              <div className="relative flex items-center justify-center">
-                <div className="absolute h-2 w-2 rounded-full bg-orange-400 animate-pulse dark:bg-orange-300" />
-                <div className="h-2 w-2 rounded-full bg-orange-500 dark:bg-orange-400" />
-              </div>
-              <span className="text-sm font-semibold text-orange-700 dark:text-orange-300">Online</span>
-            </div>
-
-            {/* Divider */}
-            <div className="h-8 w-px bg-orange-300/50 dark:bg-orange-700/30" />
-
-            {/* User Menu Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setShowUserMenu(!showUserMenu)}
-                className="group flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 hover:bg-orange-50/60 dark:hover:bg-orange-900/20 focus:outline-none focus:ring-2 focus:ring-orange-400/40"
-                title="User menu"
-              >
-                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-sm font-bold text-white shadow-md">
-                  <FontAwesomeIcon icon={faUser} className="h-4 w-4" />
-                </div>
-                <FontAwesomeIcon icon={faChevronDown} className={`h-3.5 w-3.5 text-orange-600 dark:text-orange-400 transition-transform duration-300 ${showUserMenu ? 'rotate-180' : ''}`} />
-              </button>
-            </div>
-          </div>
+          {/* Right Section: Logout Panel */}
+          <LogoutPanel userRole={userRole} />
         </div>
       </div>
-
-      {/* Dropdown Menu Portal - Rendered outside sticky context */}
-      {showUserMenu && (
-        <>
-          {/* Click-outside overlay */}
-          <div
-            className="fixed inset-0 z-[999]"
-            onClick={() => setShowUserMenu(false)}
-          />
-          
-          {/* Dropdown Menu */}
-          <div className="fixed top-[calc(4.5rem+0.5rem)] right-4 sm:right-5 md:right-6 w-56 rounded-lg border border-orange-300/50 dark:border-orange-700/30 bg-stone-100/95 dark:bg-stone-800/90 shadow-lg dark:shadow-xl backdrop-blur-sm z-[1000]">
-            {/* Header */}
-            <div className="px-4 py-3 border-b border-orange-300/40 dark:border-orange-700/20">
-              <p className="text-xs font-semibold uppercase tracking-widest text-orange-600 dark:text-orange-400">Cashier</p>
-              <p className="text-sm font-bold text-orange-900 dark:text-orange-100 mt-1">Main Counter</p>
-            </div>
-
-            {/* Menu Items */}
-            <div className="py-2">
-              {/* Settings */}
-              <button className="w-full px-4 py-2.5 text-left text-sm font-medium text-orange-900 dark:text-orange-100 hover:bg-orange-100/50 dark:hover:bg-orange-900/20 transition-colors duration-150 flex items-center gap-3 group">
-                <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center group-hover:bg-blue-200 dark:group-hover:bg-blue-900/60 transition-colors">
-                  <FontAwesomeIcon icon={faUser} className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                </div>
-                <span>Profile Settings</span>
-              </button>
-            </div>
-
-            {/* Divider */}
-            <div className="h-px bg-gradient-to-r from-orange-300/0 via-orange-300/30 to-orange-300/0 dark:via-orange-700/20" />
-
-            {/* Logout */}
-            <div className="py-2">
-              <button
-                onClick={() => {
-                  setShowUserMenu(false);
-                  onLogout?.();
-                }}
-                className="w-full px-4 py-2.5 text-left text-sm font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-150 flex items-center gap-3 group"
-              >
-                <div className="h-8 w-8 rounded-full bg-red-100 dark:bg-red-900/40 flex items-center justify-center group-hover:bg-red-200 dark:group-hover:bg-red-900/60 transition-colors">
-                  <FontAwesomeIcon icon={faSignOutAlt} className="h-4 w-4" />
-                </div>
-                <span>Logout</span>
-              </button>
-            </div>
-          </div>
-        </>
-      )}
 
       {/* Main Content Area */}
       <div className="flex flex-1 overflow-hidden gap-4 sm:gap-5 p-4 sm:p-5 md:p-6">

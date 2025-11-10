@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoffee, faChartLine, faShoppingCart, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
@@ -10,6 +10,9 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = true }) => {
+  const location = useLocation();
+  const isSalesPage = location.pathname === '/cashier/sales';
+  const isBuyItemPage = location.pathname === '/cashier';
   return (
     <>
       {/* Mobile Overlay */}
@@ -45,32 +48,41 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
       <nav className={`flex-1 space-y-2 ${isExpanded ? 'px-4' : 'px-2'} py-8 transition-[padding] duration-500 ease-in-out overflow-y-auto scroll-smooth`}>
         {/* Sales Link */}
         <Link
-          to="#sales"
-          className={`group flex items-center gap-3 rounded-sm border border-transparent text-sm font-medium text-orange-700 transition-all duration-200 hover:border-orange-300/60 hover:bg-gradient-to-r hover:from-orange-100/60 hover:to-orange-50/50 hover:text-orange-900 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 dark:text-orange-300 dark:hover:bg-orange-900/30 dark:hover:border-orange-700/60 dark:hover:text-orange-200 dark:focus:ring-orange-400 dark:focus:ring-offset-stone-900 ${isExpanded ? 'px-4 py-3' : 'px-3 py-3 justify-center'}`}
+          to="/cashier/sales"
+          className={`group flex items-center gap-3 rounded-sm border transition-all duration-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+            isSalesPage
+              ? 'border-orange-300/70 bg-gradient-to-r from-orange-100/80 to-orange-50/60 text-orange-900 shadow-sm hover:shadow-md hover:-translate-y-0.5 dark:border-orange-400/50 dark:from-orange-500/20 dark:via-orange-400/12 dark:to-orange-400/8 dark:text-orange-200 dark:shadow-orange-500/15'
+              : 'border-transparent text-orange-700 hover:border-orange-300/60 hover:bg-gradient-to-r hover:from-orange-100/60 hover:to-orange-50/50 hover:text-orange-900 dark:text-orange-300 dark:hover:bg-orange-900/30 dark:hover:border-orange-700/60 dark:hover:text-orange-200'
+          } focus:ring-orange-400 dark:focus:ring-orange-400 dark:focus:ring-offset-stone-900 ${isExpanded ? 'px-4 py-3' : 'px-3 py-3 justify-center'}`}
           title={!isExpanded ? 'Sales' : ''}
         >
           <FontAwesomeIcon icon={faChartLine} className="h-5 w-5 flex-shrink-0 transition-all duration-200 group-hover:scale-110 group-hover:rotate-3 text-orange-600 dark:text-orange-400" />
           {isExpanded && (
             <>
               <span className="font-semibold">Sales</span>
-              <span className="ml-auto text-xs bg-orange-200 text-orange-700 px-2 py-0.5 rounded-full text-[10px] font-bold dark:bg-orange-900/40 dark:text-orange-300">Soon</span>
             </>
           )}
         </Link>
 
-        {/* Buy Item Link (Active) */}
+        {/* Buy Item Link */}
         <Link
-          to="#buy-item"
-          className={`group flex items-center gap-3 rounded-sm border border-orange-300/70 bg-gradient-to-r from-orange-100/80 to-orange-50/60 text-sm font-bold text-orange-900 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 dark:border-orange-400/50 dark:from-orange-500/20 dark:via-orange-400/12 dark:to-orange-400/8 dark:text-orange-200 dark:shadow-orange-500/15 ${isExpanded ? 'px-4 py-3' : 'px-3 py-3 justify-center'}`}
+          to="/cashier"
+          className={`group flex items-center gap-3 rounded-sm border transition-all duration-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+            isBuyItemPage
+              ? 'border-orange-300/70 bg-gradient-to-r from-orange-100/80 to-orange-50/60 text-orange-900 shadow-sm hover:shadow-md hover:-translate-y-0.5 dark:border-orange-400/50 dark:from-orange-500/20 dark:via-orange-400/12 dark:to-orange-400/8 dark:text-orange-200 dark:shadow-orange-500/15'
+              : 'border-transparent text-orange-700 hover:border-orange-300/60 hover:bg-gradient-to-r hover:from-orange-100/60 hover:to-orange-50/50 hover:text-orange-900 dark:text-orange-300 dark:hover:bg-orange-900/30 dark:hover:border-orange-700/60 dark:hover:text-orange-200'
+          } focus:ring-orange-400 dark:focus:ring-orange-400 dark:focus:ring-offset-stone-900 ${isExpanded ? 'px-4 py-3' : 'px-3 py-3 justify-center'}`}
           title={!isExpanded ? 'Buy Item' : ''}
         >
           <FontAwesomeIcon icon={faShoppingCart} className="h-5 w-5 flex-shrink-0 transition-all duration-200 group-hover:scale-110 group-hover:rotate-3 text-orange-600 dark:text-orange-400" />
           {isExpanded && (
             <>
               <span>Buy Item</span>
-              <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-orange-300 text-white dark:bg-orange-500/60 dark:text-orange-100">
-                <FontAwesomeIcon icon={faCheck} className="h-3 w-3" />
-              </span>
+              {isBuyItemPage && (
+                <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-orange-300 text-white dark:bg-orange-500/60 dark:text-orange-100">
+                  <FontAwesomeIcon icon={faCheck} className="h-3 w-3" />
+                </span>
+              )}
             </>
           )}
         </Link>
