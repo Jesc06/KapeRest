@@ -87,22 +87,21 @@ const MainPanel: React.FC<MainPanelProps> = ({
             </button>
           </div>
 
-          {/* Center Section: Amazon-Style Search Bar - Full Width */}
-          <div className="flex-1 flex items-center gap-2 bg-gradient-to-r from-orange-400 to-orange-500 rounded-lg p-2 sm:p-2.5 shadow-lg">
-            <FontAwesomeIcon 
-              icon={faSearch} 
-              className="h-5 w-5 text-white ml-2 sm:ml-3 flex-shrink-0"
-            />
-            <input
-              type="text"
-              placeholder="Search items..."
-              value={searchText}
-              onChange={e => onSearchChange(e.target.value)}
-              className="flex-1 bg-white rounded-md px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-neutral-900 placeholder:text-neutral-500 shadow-none focus:outline-none transition-all duration-300"
-            />
-            <button className="bg-orange-600 hover:bg-orange-700 text-white font-bold px-4 sm:px-6 py-2.5 sm:py-3 rounded-md transition-all duration-200 flex-shrink-0 text-xs sm:text-sm">
-              Search
-            </button>
+          {/* Center Section: Premium Search Bar - Full Width */}
+          <div className="flex-1 flex items-center gap-2 bg-gradient-to-r from-orange-500 via-orange-550 to-orange-600 rounded-lg p-2.5 sm:p-3 shadow-2xl ring-2 ring-orange-400/40 hover:ring-orange-400/60 focus-within:ring-orange-300/80 transition-all duration-300">
+            <div className="flex items-center gap-3 pl-4 sm:pl-5 flex-1">
+              <FontAwesomeIcon 
+                icon={faSearch} 
+                className="h-5 w-5 text-white flex-shrink-0"
+              />
+              <input
+                type="text"
+                placeholder="Search items or categories..."
+                value={searchText}
+                onChange={e => onSearchChange(e.target.value)}
+                className="flex-1 bg-transparent text-sm sm:text-base font-semibold text-white placeholder:text-white/70 shadow-none focus:outline-none transition-all duration-300"
+              />
+            </div>
           </div>
 
           {/* Right Section: User Dropdown Menu - Absolute Position */}
@@ -144,25 +143,6 @@ const MainPanel: React.FC<MainPanelProps> = ({
                 <FontAwesomeIcon icon={faChevronDown} className={`h-3.5 w-3.5 text-orange-600 dark:text-orange-400 transition-transform duration-300 ${showUserMenu ? 'rotate-180' : ''}`} />
               </button>
             </div>
-          </div>
-        </div>
-
-        <div className="space-y-2 sm:space-y-3">
-          {/* Category Filter Pills */}
-          <div className="flex flex-wrap gap-2 items-center">
-            {categories.map(category => (
-              <button
-                key={category}
-                onClick={() => onCategoryChange(category)}
-                className={`rounded-full px-3.5 sm:px-4.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold transition-all duration-200 border ${
-                  selectedCategory === category
-                    ? 'border-orange-400/80 bg-orange-50 text-orange-700 shadow-md hover:shadow-lg hover:scale-105 dark:border-orange-400/60 dark:bg-orange-500/15 dark:text-orange-300 active:scale-95'
-                    : 'border-orange-300/40 bg-stone-100/60 dark:bg-stone-800/40 text-orange-700 dark:text-orange-300 hover:border-orange-400/60 hover:bg-orange-50/50 dark:hover:bg-stone-800/60 hover:shadow-sm dark:hover:border-orange-400/50 active:scale-95'
-                }`}
-              >
-                {category}
-              </button>
-            ))}
           </div>
         </div>
       </div>
@@ -219,6 +199,29 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
       {/* Main Content Area */}
       <div className="flex flex-1 overflow-hidden gap-4 sm:gap-5 p-4 sm:p-5 md:p-6">
+        {/* Left Section: Products & Filters */}
+        <div className="flex-1 flex flex-col gap-3">
+          {/* Category Filter - Same width as products */}
+          <div className="bg-gradient-to-r from-orange-50/40 to-orange-100/30 dark:from-orange-900/15 dark:to-orange-950/10 rounded-md border border-orange-300/50 dark:border-orange-700/30 px-3 py-2.5 shadow-sm">
+            <p className="text-xs font-bold uppercase tracking-widest text-orange-700 dark:text-orange-300 mb-2">Categories</p>
+            {/* Category Filter Pills */}
+            <div className="flex flex-wrap gap-2 items-center">
+              {categories.map(category => (
+                <button
+                  key={category}
+                  onClick={() => onCategoryChange(category)}
+                  className={`rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-bold transition-all duration-300 border ${
+                    selectedCategory === category
+                      ? 'border-orange-500/80 bg-orange-100 text-orange-800 shadow-md hover:shadow-lg hover:scale-105 dark:border-orange-400/70 dark:bg-orange-500/20 dark:text-orange-200 active:scale-95'
+                      : 'border-orange-300/60 bg-stone-100/70 dark:bg-stone-800/50 text-orange-700 dark:text-orange-300 hover:border-orange-400/80 hover:bg-orange-50/60 dark:hover:bg-stone-800/70 hover:shadow-sm dark:hover:border-orange-400/60 active:scale-95'
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
+
         {/* Products Section (Scrollable) */}
         <div className="flex-1 flex flex-col rounded-xl border border-orange-300/50 dark:border-orange-700/30 bg-stone-100/80 dark:bg-stone-800/60 shadow-md dark:shadow-lg overflow-hidden">
           {/* Header */}
@@ -231,17 +234,17 @@ const MainPanel: React.FC<MainPanelProps> = ({
           </div>
 
           {/* Products Grid (Scrollable) */}
-          <div className="flex-1 overflow-y-auto px-3 py-4 sm:px-4 scroll-smooth">
-            <div className="grid gap-2 sm:gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 auto-rows-max">
+          <div className="flex-1 overflow-y-auto px-4 py-4 sm:px-5 sm:py-5 scroll-smooth">
+            <div className="grid gap-3 sm:gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 auto-rows-max">
               {filteredProducts.length > 0 ? (
                 filteredProducts.map(product => (
                   <div
                     key={product.id}
                     onClick={() => onAddToCart(product)}
-                    className="group cursor-pointer rounded-lg border border-orange-300/50 dark:border-orange-700/30 bg-stone-100/70 dark:bg-stone-800/40 transition-all duration-300 hover:border-orange-400/70 hover:shadow-md hover:-translate-y-1 active:scale-95 dark:hover:border-orange-400/50 dark:hover:shadow-orange-500/10 overflow-hidden flex flex-col"
+                    className="group cursor-pointer rounded-xl border-2 border-orange-300/60 dark:border-orange-700/40 bg-stone-100/80 dark:bg-stone-800/50 transition-all duration-300 hover:border-orange-400/80 hover:shadow-lg hover:-translate-y-1.5 active:scale-95 dark:hover:border-orange-400/60 dark:hover:shadow-orange-500/20 overflow-hidden flex flex-col"
                   >
                     {/* Product Image */}
-                    <div className="relative w-full aspect-square overflow-hidden bg-neutral-100 dark:bg-neutral-900/50">
+                    <div className="relative w-full aspect-square overflow-hidden bg-gradient-to-br from-stone-200 to-stone-100 dark:from-stone-800 dark:to-stone-900">
                       {product.image ? (
                         <img
                           src={product.image}
@@ -249,28 +252,28 @@ const MainPanel: React.FC<MainPanelProps> = ({
                           className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-stone-200 to-stone-100 dark:from-stone-800/50 dark:to-stone-900/30">
-                          <FontAwesomeIcon icon={faCoffee} className="h-8 w-8 text-orange-400 dark:text-orange-600" />
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-100 to-orange-50 dark:from-orange-900/20 dark:to-orange-950/30 group-hover:from-orange-200 group-hover:to-orange-100 dark:group-hover:from-orange-900/30 dark:group-hover:to-orange-950/40 transition-all duration-300">
+                          <FontAwesomeIcon icon={faCoffee} className="h-10 w-10 text-orange-400 dark:text-orange-600 opacity-70 group-hover:opacity-100 transition-opacity" />
                         </div>
                       )}
                       {/* Overlay on Hover */}
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-all duration-300" />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300" />
                     </div>
 
                     {/* Content - Bottom Section */}
-                    <div className="flex-1 flex flex-col p-3 sm:p-3.5">
-                      <div className="flex-1 min-w-0 mb-2.5">
-                        <h4 className="font-bold text-xs sm:text-sm leading-tight text-orange-900 dark:text-orange-100 line-clamp-2">
+                    <div className="flex-1 flex flex-col p-3.5 sm:p-4">
+                      <div className="flex-1 min-w-0 mb-3">
+                        <h4 className="font-bold text-sm sm:text-base leading-tight text-orange-900 dark:text-orange-100 line-clamp-2">
                           {product.name}
                         </h4>
-                        <p className="mt-1.5 text-[10px] sm:text-xs text-orange-700 font-semibold dark:text-orange-300 line-clamp-1">
+                        <p className="mt-1.5 text-xs text-orange-700 font-semibold dark:text-orange-300 line-clamp-1">
                           {product.category}
                         </p>
                       </div>
 
                       {/* Footer */}
-                      <div className="flex items-center justify-between gap-2 pt-2.5 border-t border-orange-200/50 dark:border-orange-700/30">
-                        <span className="text-sm sm:text-base font-bold text-orange-600 dark:text-orange-400">
+                      <div className="flex items-center justify-between gap-2.5 pt-3 border-t border-orange-200/60 dark:border-orange-700/40">
+                        <span className="text-base sm:text-lg font-bold text-orange-600 dark:text-orange-400">
                           ₱{product.price}
                         </span>
                         <button
@@ -278,28 +281,25 @@ const MainPanel: React.FC<MainPanelProps> = ({
                             e.stopPropagation();
                             onAddToCart(product);
                           }}
-                          className="inline-flex items-center justify-center rounded-md bg-orange-500 hover:bg-orange-600 p-1.5 sm:p-2 text-xs font-bold text-white transition-all duration-200 hover:shadow-md active:scale-95 dark:bg-orange-600 dark:hover:bg-orange-700 shadow-sm"
+                          className="inline-flex items-center justify-center rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 p-2 sm:p-2.5 text-xs font-bold text-white transition-all duration-200 hover:shadow-lg active:scale-95 dark:from-orange-600 dark:to-orange-700 dark:hover:from-orange-700 dark:hover:to-orange-800 shadow-md"
                         >
-                          <FontAwesomeIcon icon={faPlus} className="h-3.5 w-3.5" />
+                          <FontAwesomeIcon icon={faPlus} className="h-4 w-4" />
                         </button>
                       </div>
                     </div>
                   </div>
                 ))
               ) : (
-                <div className="col-span-full flex items-center justify-center py-16">
-                  <div className="text-center">
-                    <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-900/50">
-                      <FontAwesomeIcon icon={faSearch} className="h-6 w-6 text-neutral-400 dark:text-neutral-600" />
+                <div className="col-span-full flex items-center justify-center py-20">
+                  <div className="text-center px-4">
+                    <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/30">
+                      <FontAwesomeIcon icon={faSearch} className="h-8 w-8 text-orange-500 dark:text-orange-400" />
                     </div>
-                    <p className="text-sm font-semibold text-neutral-600 dark:text-neutral-300">
+                    <p className="text-base font-bold text-orange-900 dark:text-orange-100">
                       No items found
                     </p>
-                    <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                    <p className="mt-2 text-sm text-orange-700 dark:text-orange-300">
                       Try adjusting your filters or search query
-                    </p>
-                    <p className="mt-1 text-xs text-neutral-400 dark:text-neutral-500">
-                      Try adjusting your filters
                     </p>
                   </div>
                 </div>
@@ -307,9 +307,10 @@ const MainPanel: React.FC<MainPanelProps> = ({
             </div>
           </div>
         </div>
+        </div>
 
         {/* Cart Section */}
-        <div className="w-full sm:w-96 md:w-[28rem] lg:w-[32rem] flex flex-col rounded-xl border border-orange-300/50 dark:border-orange-700/30 bg-stone-100/80 dark:bg-stone-800/60 shadow-md dark:shadow-lg overflow-hidden flex-shrink-0">
+        <div className="w-full sm:w-72 md:w-[22rem] lg:w-[24rem] h-full flex flex-col rounded-xl border border-orange-300/50 dark:border-orange-700/30 bg-stone-100/80 dark:bg-stone-800/60 shadow-md dark:shadow-lg overflow-hidden flex-shrink-0">
           {/* Cart Header */}
           <div className="border-b border-orange-300/40 dark:border-orange-700/30 bg-stone-100/60 dark:bg-stone-800/50 px-6 py-4">
             <h3 className="text-lg font-bold tracking-tight text-neutral-900 dark:text-neutral-50 flex items-center gap-2.5">
@@ -418,11 +419,11 @@ const MainPanel: React.FC<MainPanelProps> = ({
             <button
               onClick={onBuy}
               disabled={isLoading || cart.length === 0}
-              className="group w-full flex items-center justify-center gap-2.5 rounded-md bg-orange-600 hover:bg-orange-700 px-3 py-2.5 text-xs font-bold text-white transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-orange-600 dark:focus:ring-orange-500 dark:focus:ring-offset-neutral-900 shadow-sm hover:shadow-md"
+              className="group w-full flex items-center justify-center gap-2.5 rounded-md bg-orange-600 hover:bg-orange-700 px-3 py-3 sm:py-3.5 text-xs sm:text-sm font-bold text-white transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-orange-600 dark:focus:ring-orange-500 dark:focus:ring-offset-stone-900 shadow-md hover:shadow-lg"
             >
               {isLoading ? (
                 <>
-                  <svg className="h-3.5 w-3.5 animate-spin" viewBox="0 0 24 24" aria-hidden="true">
+                  <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" aria-hidden="true">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"></path>
                   </svg>
@@ -430,7 +431,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
                 </>
               ) : (
                 <>
-                  <FontAwesomeIcon icon={faCheck} className="h-3.5 w-3.5" />
+                  <FontAwesomeIcon icon={faCheck} className="h-4 w-4" />
                   <span>Complete Payment</span>
                 </>
               )}
@@ -442,7 +443,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
               <button
                 onClick={onHold}
                 disabled={isLoading || cart.length === 0}
-                className="group flex items-center justify-center gap-1.5 rounded-md border border-orange-300/50 bg-stone-100 hover:bg-stone-200 px-3 py-2.5 text-xs font-semibold text-orange-700 transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-1 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-stone-100 dark:border-orange-600/40 dark:bg-stone-800/60 dark:hover:bg-stone-800/80 dark:text-orange-300 dark:focus:ring-orange-500 dark:focus:ring-offset-stone-900 shadow-sm"
+                className="group flex items-center justify-center gap-1.5 rounded-md border border-orange-300/50 bg-stone-100 hover:bg-stone-200 px-3 py-2.5 text-xs font-semibold text-orange-700 transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-1 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-stone-100 dark:border-orange-600/40 dark:bg-stone-800/60 dark:hover:bg-stone-800/80 dark:text-orange-300 dark:focus:ring-orange-500 dark:focus:ring-offset-stone-900 shadow-sm hover:shadow-md"
               >
                 <FontAwesomeIcon icon={faPause} className="h-3 w-3" />
                 <span>Hold</span>
@@ -452,10 +453,10 @@ const MainPanel: React.FC<MainPanelProps> = ({
               <button
                 onClick={onGCashPayment}
                 disabled={isLoading || cart.length === 0}
-                className="group flex items-center justify-center gap-1.5 rounded-md border border-blue-300/60 bg-blue-50/80 hover:bg-blue-100 px-3 py-2.5 text-xs font-semibold text-blue-700 transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-blue-50/80 dark:border-blue-600/40 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 dark:text-blue-300 dark:focus:ring-blue-500 dark:focus:ring-offset-stone-900 shadow-sm"
+                className="group flex items-center justify-center gap-1.5 rounded-md border border-blue-500/60 bg-blue-600 hover:bg-blue-700 px-3 py-2.5 text-xs font-bold text-white transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-blue-600 dark:border-blue-500/50 dark:focus:ring-blue-400 dark:focus:ring-offset-stone-900 shadow-sm hover:shadow-md"
               >
-                <FontAwesomeIcon icon={faCreditCard} className="h-3 w-3" />
-                <span>GCash</span>
+                <FontAwesomeIcon icon={faCreditCard} className="h-4 w-4 transition-transform group-hover:scale-110" />
+                <span>Pay with GCash</span>
               </button>
             </div>
           </div>
