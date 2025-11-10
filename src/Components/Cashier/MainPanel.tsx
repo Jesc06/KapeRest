@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faSearch, faPlus, faMinus, faTrash, faCheck, faPause, faCreditCard, faBars, faShoppingCart, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faSearch, faPlus, faMinus, faTrash, faCheck, faPause, faCreditCard, faBars, faShoppingCart, faChevronLeft, faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import LogoutPanel from './LogoutPanel';
 
 interface Product {
@@ -58,6 +58,23 @@ const MainPanel: React.FC<MainPanelProps> = ({
   onToggleSidebarExpand,
   userRole = 'Cashier',
 }) => {
+  const [showTaxDiscount, setShowTaxDiscount] = useState(false);
+  const [selectedDiscount, setSelectedDiscount] = useState<number | string>('');
+
+  // Sample discount data from database - you can replace this with API call
+  const discountOptions = [
+    { id: 1, label: 'No Discount', value: 0 },
+    { id: 2, label: 'Senior Citizen (5%)', value: 5 },
+    { id: 3, label: 'PWD Discount (10%)', value: 10 },
+    { id: 4, label: 'Student Discount (15%)', value: 15 },
+    { id: 5, label: 'Member Promo (20%)', value: 20 },
+    { id: 6, label: 'Staff Discount (25%)', value: 25 },
+  ];
+  
+  // Calculate discounted total (percentage only)
+  const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
+  const discountAmount = (total * discountValue) / 100;
+  const finalTotal = Math.max(0, total - discountAmount);
   
   return (
     <div className={`flex h-screen w-full flex-col bg-stone-100 dark:bg-stone-900 transition-all duration-300 ${sidebarExpanded ? 'lg:ml-64' : 'lg:ml-20'}`}>
@@ -304,19 +321,78 @@ const MainPanel: React.FC<MainPanelProps> = ({
           </div>
 
           {/* Cart Footer with Total - Minimalist */}
-          <div className="border-t border-orange-300/40 dark:border-orange-700/30 bg-stone-100/70 dark:bg-stone-800/60 px-4 sm:px-5 py-5 sm:py-6">
-            <div className="space-y-3.5">
-              <div className="flex flex-col gap-2 pb-4 border-b border-orange-300/40 dark:border-orange-700/30">
-                <span className="text-[11px] font-bold uppercase tracking-widest text-orange-700 dark:text-orange-300">Total Amount</span>
-                <span className="text-5xl font-black bg-gradient-to-r from-orange-600 to-orange-700 bg-clip-text text-transparent dark:from-orange-400 dark:to-orange-500">
-                  ₱{total.toFixed(2)}
+          <div className="border-t border-orange-300/40 dark:border-orange-700/30 bg-stone-100/70 dark:bg-stone-800/60 px-4 sm:px-5 py-4 sm:py-5">
+            <div className="space-y-3">
+              {/* Final Total Amount Section */}
+              <div className="flex flex-col gap-1.5">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-orange-700 dark:text-orange-300">Total Amount</span>
+                <span className="text-3xl font-black bg-gradient-to-r from-orange-600 to-orange-700 bg-clip-text text-transparent dark:from-orange-400 dark:to-orange-500">
+                  ₱{finalTotal.toFixed(2)}
                 </span>
               </div>
-              {cart.length > 0 && (
+
+              {/* Discount & Tax Dropdown */}
+              <button
+                onClick={() => setShowTaxDiscount(!showTaxDiscount)}
+                className="w-full flex items-center justify-between px-3 py-2 rounded-md border border-orange-300/40 dark:border-orange-700/30 hover:bg-orange-50/40 dark:hover:bg-orange-900/10 transition-all duration-200"
+              >
+                <span className="text-xs font-semibold text-orange-700 dark:text-orange-300">Breakdown & Discount</span>
+                <FontAwesomeIcon icon={faChevronDown} className={`h-3 w-3 text-orange-600 dark:text-orange-400 transition-transform duration-300 ${showTaxDiscount ? 'rotate-180' : ''}`} />
+              </button>
+
+              {/* Tax, Discount & Custom Discount Details */}
+              {showTaxDiscount && (
+                <div className="space-y-2.5 pt-2 border-t border-orange-300/30 dark:border-orange-700/20">
+                  {/* Base Calculations */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-orange-700 dark:text-orange-300 font-medium">Subtotal:</span>
+                      <span className="font-semibold text-orange-900 dark:text-orange-100">₱{total.toFixed(2)}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-orange-700 dark:text-orange-300 font-medium">Tax (12%):</span>
+                      <span className="font-semibold text-orange-600 dark:text-orange-400">₱{(total * 0.12).toFixed(2)}</span>
+                    </div>
+                  </div>
+
+                  {/* Custom Discount Section */}
+                  <div className="border-t border-orange-300/30 dark:border-orange-700/20 pt-2.5">
+                    <label className="text-xs font-bold text-orange-700 dark:text-orange-300 block mb-2">Apply Discount:</label>
+                    <select
+                      value={selectedDiscount}
+                      onChange={(e) => setSelectedDiscount(e.target.value ? parseFloat(e.target.value) : '')}
+                      className="w-full px-2.5 py-2 text-xs sm:text-sm font-semibold bg-stone-100 dark:bg-stone-800 border border-orange-300/50 dark:border-orange-700/30 rounded focus:outline-none focus:ring-2 focus:ring-orange-400 dark:focus:ring-orange-500 cursor-pointer hover:border-orange-400/70 dark:hover:border-orange-600/50 transition-all"
+                    >
+                      <option value="">Select discount...</option>
+                      {discountOptions.map((option) => (
+                        <option key={option.id} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Discount Amount Display */}
+                  {discountValue > 0 && (
+                    <div className="flex items-center justify-between text-xs border-t border-orange-300/30 dark:border-orange-700/20 pt-2">
+                      <span className="text-red-600 dark:text-red-400 font-medium">Discount ({discountValue}%):</span>
+                      <span className="font-semibold text-red-600 dark:text-red-400">-₱{discountAmount.toFixed(2)}</span>
+                    </div>
+                  )}
+
+                  {/* Items Count */}
+                  <div className="flex items-center justify-between text-xs border-t border-orange-300/30 dark:border-orange-700/20 pt-2">
+                    <span className="text-orange-700 dark:text-orange-300 font-medium">Items:</span>
+                    <span className="font-semibold text-orange-900 dark:text-orange-100">{cart.reduce((sum, item) => sum + item.quantity, 0)}</span>
+                  </div>
+                </div>
+              )}
+
+              {cart.length > 0 && !showTaxDiscount && (
                 <div className="flex items-center justify-between text-xs text-orange-700 dark:text-orange-300 font-semibold">
                   <span className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faShoppingCart} className="h-3.5 w-3.5 text-orange-600 dark:text-orange-400" />
-                    {cart.reduce((sum, item) => sum + item.quantity, 0)} {cart.reduce((sum, item) => sum + item.quantity, 0) === 1 ? 'item' : 'items'} in cart
+                    <FontAwesomeIcon icon={faShoppingCart} className="h-3 w-3 text-orange-600 dark:text-orange-400" />
+                    {cart.reduce((sum, item) => sum + item.quantity, 0)} {cart.reduce((sum, item) => sum + item.quantity, 0) === 1 ? 'item' : 'items'}
                   </span>
                 </div>
               )}
