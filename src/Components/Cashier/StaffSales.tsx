@@ -1,9 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faSearch, faBars, faCalendarDays, faWeightScale, faCalendarAlt, faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faSearch, faBars, faCalendarDays, faWeightScale, faCalendarAlt, faDownload, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import LogoutPanel from './LogoutPanel';
 import StaffSidebar from './StaffSidebar';
-import TintedBackdrop from '../TintedBackdrop';
 
 interface SalesRecord {
   receiptNumber: string;
@@ -27,6 +26,7 @@ const StaffSales: React.FC<StaffSalesProps> = ({
   const [searchText, setSearchText] = useState('');
   const [selectedPeriod, setSelectedPeriod] = useState<PeriodFilter>('daily');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [isGenerating, setIsGenerating] = useState<PeriodFilter | null>(null);
 
   // Helper function to get date range based on period
@@ -110,12 +110,9 @@ const StaffSales: React.FC<StaffSalesProps> = ({
   ];
 
   return (
-    <div className="flex h-screen flex-col bg-stone-100 dark:bg-stone-900 transition-all duration-300 lg:ml-64">
+    <div className={`flex h-screen flex-col bg-stone-100 dark:bg-stone-900 transition-all duration-300 ${sidebarExpanded ? 'lg:ml-64' : 'lg:ml-20'}`}>
       {/* Sidebar */}
-      <StaffSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={true} />
-      
-      {/* Tinted Backdrop for Mobile */}
-      {sidebarOpen && <TintedBackdrop className="cursor-pointer" />}
+      <StaffSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
 
       {/* Top Bar - Search & Filters */}
       <div className="sticky top-0 z-30 border-b border-orange-300/50 bg-stone-100/95 dark:border-orange-700/30 dark:bg-stone-800/90 px-4 sm:px-5 md:px-6 py-3 sm:py-4 shadow-sm transition-all duration-300 backdrop-blur-sm">
@@ -150,9 +147,18 @@ const StaffSales: React.FC<StaffSalesProps> = ({
           </div>
         </div>
 
-        {/* Desktop Top Section: Search Bar | Logout - ONLY on desktop */}
+        {/* Desktop Top Section: Sidebar Toggle | Search Bar | Logout - ONLY on desktop */}
         <div className="hidden lg:flex items-center justify-between gap-3 mb-3">
-          {/* Desktop Search Bar */}
+          {/* Left: Sidebar Toggle Button */}
+          <button
+            onClick={() => setSidebarExpanded(!sidebarExpanded)}
+            className="flex-shrink-0 h-9 w-9 items-center justify-center rounded-lg border border-orange-400/50 bg-gradient-to-br from-orange-50 to-orange-100/80 hover:from-orange-100 hover:to-orange-200 text-orange-600 transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md dark:border-orange-600/40 dark:from-orange-900/30 dark:to-orange-900/20 dark:hover:from-orange-900/50 dark:hover:to-orange-900/40 dark:text-orange-400 dark:hover:text-orange-300"
+            title={sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
+          >
+            <FontAwesomeIcon icon={sidebarExpanded ? faChevronLeft : faChevronRight} className="h-4 w-4" />
+          </button>
+
+          {/* Center: Desktop Search Bar */}
           <div className="flex-1 flex items-center gap-3 pl-4 sm:pl-5 bg-gradient-to-r from-orange-500 via-orange-550 to-orange-600 rounded-lg p-2.5 sm:p-3 shadow-2xl ring-2 ring-orange-400/40 hover:ring-orange-400/60 focus-within:ring-orange-300/80 transition-all duration-300">
             <FontAwesomeIcon
               icon={faSearch}
@@ -167,7 +173,7 @@ const StaffSales: React.FC<StaffSalesProps> = ({
             />
           </div>
 
-          {/* Desktop Logout Panel */}
+          {/* Right: Desktop Logout Panel */}
           <LogoutPanel userRole="Staff" />
         </div>
 

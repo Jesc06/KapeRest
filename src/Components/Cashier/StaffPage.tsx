@@ -20,7 +20,7 @@ const StaffPage: React.FC = () => {
     <div className="min-h-screen w-full bg-gradient-to-br from-stone-900 via-orange-900/20 to-stone-900">
       <TintedBackdrop />
 
-      <div aria-hidden className="absolute inset-0 z-0 bg-stone-50/90 backdrop-blur-xl dark:bg-neutral-900/60 pointer-events-none" />
+      <div aria-hidden className="absolute inset-0 z-0 bg-stone-100 dark:bg-stone-900 pointer-events-none" />
 
       <div className="relative z-10 flex h-screen overflow-hidden">
         {/* Sidebar */}

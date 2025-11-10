@@ -5,8 +5,6 @@ import { AnimatePresence } from "framer-motion";
 import LoginUI from "../Components/Login";
 import Register from "../Components/Register";
 import Navbar from "../Components/Navbar";
-import PageTransition from "../Components/PageTransition";
-import AnimatedBackground from "../Components/AnimatedBackground";
 import Home from "./Home";
 import { CashierPage } from "../Components/Cashier";
 import SalesPage from "../Components/Cashier/SalesPage";
@@ -26,16 +24,16 @@ const App: React.FC = () => {
         {!hideNavbar && <Navbar />}
         <AnimatePresence mode="wait" initial={false}>
           <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<PageTransition><Home /></PageTransition>} />
-            <Route path="/login" element={<PageTransition><LoginUI /></PageTransition>} />
-            <Route path="/register" element={<PageTransition><Register /></PageTransition>} />
-            <Route path="/cashier" element={<PageTransition><CashierPage /></PageTransition>} />
-            <Route path="/cashier/sales" element={<PageTransition><SalesPage /></PageTransition>} />
-            <Route path="/cashier/change-password" element={<PageTransition><ChangePassword /></PageTransition>} />
-            <Route path="/staff" element={<PageTransition><StaffPage /></PageTransition>} />
-            <Route path="/staff/add-supplier" element={<PageTransition><AddSupplier /></PageTransition>} />
-            <Route path="/staff/add-item" element={<PageTransition><AddItem /></PageTransition>} />
-            <Route path="/staff/sales" element={<PageTransition><StaffSales /></PageTransition>} />
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<LoginUI />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/cashier" element={<CashierPage />} />
+            <Route path="/cashier/sales" element={<SalesPage />} />
+            <Route path="/cashier/change-password" element={<ChangePassword />} />
+            <Route path="/staff" element={<StaffPage />} />
+            <Route path="/staff/add-supplier" element={<AddSupplier />} />
+            <Route path="/staff/add-item" element={<AddItem />} />
+            <Route path="/staff/sales" element={<StaffSales />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </AnimatePresence>
@@ -45,8 +43,6 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      {/* Global animated background behind everything */}
-      <AnimatedBackground />
       {/* Navbar rendered inside AnimatedRoutes for route-aware visibility */}
       <AnimatedRoutes />
     </Router>

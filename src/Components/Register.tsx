@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import TintedBackdrop from './TintedBackdrop';
 
-
 // Registration form styled to match LoginUI aesthetics.
 // Fields: first name, middle name (optional), last name, email, password, role, branch.
 // Validation: required (except middle name), email pattern, password >= 8, role selected, branch non-empty.
