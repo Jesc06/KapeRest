@@ -84,22 +84,22 @@ const Register: React.FC = () => {
   const errorSummary = Object.keys(errors).length > 1 ? Object.values(errors).join('. ') : null;
 
   return (
-    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-transparent font-sans">
+    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-amber-50/40 dark:bg-neutral-950 font-sans transition-colors duration-300">
       <TintedBackdrop />
-      {/* page overlay: stone-50 with subtle tint for consistency with homepage */}
-      <div aria-hidden className="absolute inset-0 z-0 bg-stone-50/90 backdrop-blur-xl dark:bg-neutral-900/60 pointer-events-none" />
+      {/* Warm Café Theme Background with Coffee Tones */}
+      <div aria-hidden className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-br from-amber-50/60 via-orange-50/40 to-amber-100/30 dark:from-neutral-950 dark:via-neutral-950 dark:to-neutral-950" />
       <main className="relative z-10 flex flex-1 items-center justify-center px-4 py-6 sm:px-6 md:py-8">
         <div className="relative w-full max-w-[580px]">
-          <div className="auth-card relative rounded-3xl border border-amber-200/70 bg-white/85 p-7 sm:p-8 shadow-lg backdrop-blur-lg transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl focus-within:-translate-y-1 dark:border-neutral-800/70 dark:bg-neutral-900/85">
-            <div className="absolute -top-3 left-6 inline-flex h-6 items-center rounded-full border border-amber-200 bg-amber-50/80 px-3 text-[11px] font-semibold tracking-wide text-amber-600 dark:border-amber-400/60 dark:bg-amber-400/15 dark:text-amber-200">REGISTER</div>
+          <div className="auth-card relative rounded-xl border border-orange-300/50 bg-white/75 p-7 sm:p-8 shadow-lg transition-all duration-300 ease-out dark:border-orange-700/40 dark:bg-neutral-900/85">
+            <div className="absolute -top-3 left-6 inline-flex h-6 items-center rounded-full border border-orange-300/70 bg-orange-50 px-3 text-[11px] font-semibold tracking-wide text-orange-700 dark:border-orange-700/60 dark:bg-orange-950/40 dark:text-orange-300">REGISTER</div>
             <div className="mb-6">
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-neutral-900 flex items-center gap-2 dark:text-neutral-100">
+              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-neutral-900 flex items-center gap-2 dark:text-neutral-50">
                 Create your account 
-                <span aria-hidden="true" className="coffee-emoji text-[20px]">☕</span>
+                <span aria-hidden="true" className="coffee-emoji text-[24px]">☕</span>
               </h1>
-              <p className="mt-1.5 text-sm text-neutral-600 dark:text-neutral-400">Enter your details below</p>
+              <p className="mt-1.5 text-base text-neutral-600 dark:text-neutral-400">Professional POS Management</p>
             </div>
-            <div className="h-px w-full bg-gradient-to-r from-neutral-200 via-neutral-300 to-neutral-200 mb-6 dark:from-neutral-700 dark:via-neutral-600 dark:to-neutral-700" aria-hidden />
+                        <div className="h-px w-full bg-gradient-to-r from-neutral-300 via-neutral-400 to-neutral-300 mb-6 dark:from-neutral-800 dark:via-neutral-700 dark:to-neutral-800" aria-hidden />
             <form onSubmit={handleSubmit} noValidate className="space-y-4" aria-busy={isLoading}>
               <div role="status" aria-live="polite" className="sr-only">
                 {errors.firstName || errors.lastName || errors.email || errors.password || errors.role || errors.branch || ''}
@@ -123,15 +123,15 @@ const Register: React.FC = () => {
                         onFocus={() => setFocusField('firstName')}
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
-                        className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-neutral-100 dark:placeholder:text-neutral-500
-                          ${validFirst ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400 dark:focus:border-emerald-400' : 'border-neutral-300 focus:ring-1 focus:ring-amber-500 focus:border-amber-500 dark:border-neutral-700 dark:focus:ring-amber-400 dark:focus:border-amber-400'}
+                        className={`peer block w-full rounded-lg border bg-white pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-neutral-100 dark:placeholder:text-neutral-500
+                          ${validFirst ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400' : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-neutral-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
                           ${isLoading ? 'opacity-90' : ''}`}
                         placeholder="Juan"
                         aria-invalid={errors.firstName ? 'true' : 'false'}
                         aria-describedby={errors.firstName ? 'firstName-error' : undefined}
                       />
-                      <div className={`pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/10 transition-all duration-150 ease-out ${focusField==='firstName' && validFirst ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-emerald-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                      <div className={`pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500/10 transition-all duration-150 ease-out ${focusField==='firstName' && validFirst ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-orange-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
                       </div>
                     </div>
                     {errors.firstName && <p id="firstName-error" className="mt-1 text-[11px] text-red-600 dark:text-red-200">{errors.firstName}</p>}
@@ -171,14 +171,14 @@ const Register: React.FC = () => {
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
                         className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-neutral-100 dark:placeholder:text-neutral-500
-                          ${validLast ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400 dark:focus:border-emerald-400' : 'border-neutral-300 focus:ring-1 focus:ring-amber-500 focus:border-amber-500 dark:border-neutral-700 dark:focus:ring-amber-400 dark:focus:border-amber-400'}
+                          ${validLast ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400' : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-neutral-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
                           ${isLoading ? 'opacity-90' : ''}`}
                         placeholder="Dela Cruz"
                         aria-invalid={errors.lastName ? 'true' : 'false'}
                         aria-describedby={errors.lastName ? 'lastName-error' : undefined}
                       />
-                      <div className={`pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/10 transition-all duration-150 ease-out ${focusField==='lastName' && validLast ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-emerald-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                      <div className={`pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500/10 transition-all duration-150 ease-out ${focusField==='lastName' && validLast ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-orange-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
                       </div>
                     </div>
                     {errors.lastName && <p id="lastName-error" className="mt-1 text-[11px] text-red-600 dark:text-red-200">{errors.lastName}</p>}
@@ -200,14 +200,14 @@ const Register: React.FC = () => {
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
                         className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-neutral-100 dark:placeholder:text-neutral-500
-                          ${validEmail ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400 dark:focus:border-emerald-400' : 'border-neutral-300 focus:ring-1 focus:ring-amber-500 focus:border-amber-500 dark:border-neutral-700 dark:focus:ring-amber-400 dark:focus:border-amber-400'}
+                          ${validEmail ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400' : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-neutral-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
                           ${isLoading ? 'opacity-90' : ''}`}
                         placeholder="you@company.com"
                         aria-invalid={errors.email ? 'true' : 'false'}
                         aria-describedby={errors.email ? 'email-error' : undefined}
                       />
-                      <div className={`pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/10 transition-all duration-150 ease-out ${focusField==='email' && validEmail ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-emerald-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                      <div className={`pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500/10 transition-all duration-150 ease-out ${focusField==='email' && validEmail ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-orange-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
                       </div>
                     </div>
                     {errors.email && <p id="email-error" className="mt-1 text-[11px] text-red-600 dark:text-red-200">{errors.email}</p>}
@@ -231,14 +231,14 @@ const Register: React.FC = () => {
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
                         className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-neutral-100 dark:placeholder:text-neutral-500
-                          ${validPassword ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400 dark:focus:border-emerald-400' : 'border-neutral-300 focus:ring-1 focus:ring-amber-500 focus:border-amber-500 dark:border-neutral-700 dark:focus:ring-amber-400 dark:focus:border-amber-400'}
+                          ${validPassword ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400' : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-neutral-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
                           ${isLoading ? 'opacity-90' : ''}`}
                         placeholder="••••••••"
                         aria-invalid={errors.password ? 'true' : 'false'}
                         aria-describedby={errors.password ? 'password-error' : undefined}
                       />
-                      <div className={`pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/10 transition-all duration-150 ease-out ${focusField==='password' && validPassword ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-emerald-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                      <div className={`pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500/10 transition-all duration-150 ease-out ${focusField==='password' && validPassword ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-orange-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
                       </div>
                     </div>
                     {errors.password && <p id="password-error" className="mt-1 text-[11px] text-red-600 dark:text-red-200">{errors.password}</p>}
@@ -304,7 +304,7 @@ const Register: React.FC = () => {
                           }
                         }}
                         className={`w-full text-left rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition dark:bg-neutral-900/60 dark:text-neutral-100
-                          ${validRole ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400 dark:focus:border-emerald-400' : 'border-neutral-300 focus:ring-1 focus:ring-amber-500 focus:border-amber-500 dark:border-neutral-700 dark:focus:ring-amber-400 dark:focus:border-amber-400'}
+                          ${validRole ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400' : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-neutral-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
                           ${isLoading ? 'opacity-90' : ''}`}
                         aria-haspopup="listbox"
                         aria-expanded={roleOpen}
@@ -323,8 +323,8 @@ const Register: React.FC = () => {
                         </span>
                       </button>
                       {/* Success icon bubble when valid + focused */}
-                      <div className={`pointer-events-none absolute right-8 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/10 transition-all duration-150 ease-out ${focusField==='role' && validRole ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-emerald-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                      <div className={`pointer-events-none absolute right-8 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500/10 transition-all duration-150 ease-out ${focusField==='role' && validRole ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-orange-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
                       </div>
                       {roleOpen && (
                         <ul
@@ -356,7 +356,7 @@ const Register: React.FC = () => {
                               >
                                 <span className="truncate text-neutral-900 dark:text-neutral-100">{r}</span>
                                 {selected && (
-                                  <svg viewBox="0 0 20 20" className="h-4 w-4 text-emerald-600" fill="none" aria-hidden>
+                                  <svg viewBox="0 0 20 20" className="h-4 w-4 text-orange-600" fill="none" aria-hidden>
                                     <path d="M6 10.5l2.25 2.25L14 7.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                                   </svg>
                                 )}
@@ -426,7 +426,7 @@ const Register: React.FC = () => {
                           }
                         }}
                         className={`w-full text-left rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition dark:bg-neutral-900/60 dark:text-neutral-100
-                          ${validBranch ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400 dark:focus:border-emerald-400' : 'border-neutral-300 focus:ring-1 focus:ring-amber-500 focus:border-amber-500 dark:border-neutral-700 dark:focus:ring-amber-400 dark:focus:border-amber-400'}
+                          ${validBranch ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400' : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-neutral-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
                           ${isLoading ? 'opacity-90' : ''}`}
                         aria-haspopup="listbox"
                         aria-expanded={branchOpen}
@@ -444,8 +444,8 @@ const Register: React.FC = () => {
                         </span>
                       </button>
                       {/* Success icon bubble when valid + focused */}
-                      <div className={`pointer-events-none absolute right-8 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/10 transition-all duration-150 ease-out ${focusField==='branch' && validBranch ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-emerald-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                      <div className={`pointer-events-none absolute right-8 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500/10 transition-all duration-150 ease-out ${focusField==='branch' && validBranch ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-orange-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
                       </div>
                       {branchOpen && (
                         <ul
@@ -475,7 +475,7 @@ const Register: React.FC = () => {
                               >
                                 <span className="truncate text-neutral-900 dark:text-neutral-100">{b}</span>
                                 {selected && (
-                                  <svg viewBox="0 0 20 20" className="h-4 w-4 text-emerald-600" fill="none" aria-hidden>
+                                  <svg viewBox="0 0 20 20" className="h-4 w-4 text-orange-600" fill="none" aria-hidden>
                                     <path d="M6 10.5l2.25 2.25L14 7.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                                   </svg>
                                 )}
@@ -496,7 +496,7 @@ const Register: React.FC = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full inline-flex justify-center items-center gap-2 rounded-xl bg-neutral-900 text-white text-sm md:text-[15px] font-medium py-3 tracking-wide shadow-sm hover:bg-neutral-800 active:scale-[.99] focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 focus:ring-offset-white transition disabled:opacity-50 disabled:hover:bg-neutral-900 disabled:cursor-not-allowed dark:bg-amber-400 dark:text-neutral-900 dark:hover:bg-amber-300 dark:focus:ring-amber-200 dark:focus:ring-offset-neutral-900 dark:disabled:hover:bg-amber-400"
+                className="w-full inline-flex justify-center items-center gap-2 rounded-xl bg-orange-600 text-white text-sm md:text-[15px] font-medium py-3 tracking-wide shadow-sm hover:bg-orange-700 active:scale-[.99] focus:outline-none focus:ring-2 focus:ring-orange-600 focus:ring-offset-2 focus:ring-offset-white transition disabled:opacity-50 disabled:hover:bg-orange-600 disabled:cursor-not-allowed dark:bg-orange-400 dark:text-neutral-900 dark:hover:bg-orange-300 dark:focus:ring-orange-200 dark:focus:ring-offset-neutral-950 dark:disabled:hover:bg-orange-400"
               >
                 {isLoading ? (
                   <>
@@ -511,7 +511,7 @@ const Register: React.FC = () => {
                 )}
               </button>
             </form>
-            <p className="mt-6 text-center text-[13px] text-neutral-600 dark:text-neutral-400">Already have an account? <Link to="/login" className="font-medium text-neutral-800 hover:underline focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 focus:ring-offset-white rounded dark:text-amber-300 dark:hover:text-amber-200 dark:focus:ring-amber-200 dark:focus:ring-offset-neutral-900">Sign in</Link></p>
+            <p className="mt-6 text-center text-[13px] text-neutral-600 dark:text-neutral-400">Already have an account? <Link to="/login" className="font-medium text-neutral-800 hover:underline focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 focus:ring-offset-white rounded dark:text-orange-300 dark:hover:text-orange-200 dark:focus:ring-orange-200 dark:focus:ring-offset-neutral-900">Sign in</Link></p>
           </div>
        
         </div>

@@ -185,44 +185,44 @@ const branchHighlights = [
 
 const Home: React.FC = () => {
   return (
-    <div className="relative min-h-[100dvh] text-neutral-800 transition-colors duration-300 dark:text-neutral-200">
+    <div className="relative min-h-[100dvh] text-neutral-900 transition-colors duration-300 dark:text-neutral-100 bg-amber-50/40 dark:bg-neutral-950">
       <TintedBackdrop />
-      {/* translucent white overlay (kept for structure; homepage uses a yellow tint via the hero card accents) */}
-      <div aria-hidden className="absolute inset-0 z-0 bg-stone-50/90 backdrop-blur-xl dark:bg-neutral-900/60 pointer-events-none" />
+      {/* Warm Café Theme Background with Coffee Tones */}
+      <div aria-hidden className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-br from-amber-50/60 via-orange-50/40 to-amber-100/30 dark:from-neutral-950 dark:via-neutral-950 dark:to-neutral-950" />
   <main className="mx-auto relative z-10 flex w-full max-w-7xl flex-col gap-0 px-4 sm:px-6 lg:px-8">
         <section className="milk-hero relative flex min-h-fit items-center justify-center pt-16 pb-8 sm:pt-20 sm:pb-10 lg:pt-24 lg:pb-12">
-          <div className="w-full overflow-hidden rounded-3xl border border-amber-200/60 bg-white/80 px-6 py-10 shadow-xl backdrop-blur-lg transition-colors duration-300 sm:px-8 sm:py-12 lg:px-12 lg:py-14 dark:border-neutral-800/60 dark:bg-neutral-900/75 dark:shadow-[0_24px_48px_-28px_rgba(15,23,42,0.85)]">
+          <div className="w-full overflow-hidden rounded-2xl border border-orange-300/50 bg-white/75 px-6 py-10 shadow-lg backdrop-blur-sm transition-colors duration-300 sm:px-8 sm:py-12 lg:px-12 lg:py-14 dark:border-orange-700/40 dark:bg-neutral-900/85 dark:shadow-2xl">
             <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-start">
               <div className="space-y-6 flex flex-col justify-center">
-                <span className="inline-flex w-fit items-center gap-2 rounded-full border border-amber-200/60 bg-amber-50/70 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.32em] text-amber-700 transition-colors duration-300 dark:border-neutral-700/70 dark:bg-neutral-800/70 dark:text-amber-300">
-                  POS for Coffee & Milk Tea
+                <span className="inline-flex w-fit items-center gap-2 rounded-full border border-orange-300/70 bg-orange-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.32em] text-orange-700 transition-colors duration-300 dark:border-orange-700/60 dark:bg-orange-950/40 dark:text-orange-300">
+                  Premium POS for Cafés
                 </span>
                 <div className="space-y-5">
-                  <h1 className="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl lg:text-5xl dark:text-neutral-100">
-                    Align every branch with one POS dashboard
+                  <h1 className="text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl dark:text-neutral-50">
+                    Unified café operations for every location
                   </h1>
-                  <p className="max-w-2xl text-sm leading-relaxed text-neutral-600 sm:text-base dark:text-neutral-300">
-                    KapeRest centralizes ordering, payments, and inventory so franchise owners see the full picture in seconds—from Metro Manila flagships to provincial kiosks. Launch new stores faster while keeping quality and cash control on track.
+                  <p className="max-w-2xl text-base leading-relaxed text-neutral-600 sm:text-lg dark:text-neutral-300">
+                    KapeRest brings sophisticated POS management to café chains. Centralized inventory, multi-location sync, real-time analytics, and streamlined payments—all in one elegant platform.
                   </p>
                 </div>
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                   <Link
                     to="/register"
-                    className="inline-flex items-center justify-center rounded-xl bg-neutral-900 px-8 py-3.5 text-sm font-semibold text-white shadow-md transition duration-200 hover:bg-neutral-800 active:scale-95 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 focus:ring-offset-white dark:bg-amber-400 dark:text-neutral-900 dark:hover:bg-amber-300 dark:focus:ring-amber-300 dark:focus:ring-offset-neutral-900"
+                    className="inline-flex items-center justify-center rounded-lg bg-orange-600 px-8 py-3 text-sm font-semibold text-white shadow-lg transition duration-200 hover:bg-orange-700 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:ring-offset-2 focus:ring-offset-white dark:bg-orange-500 dark:text-neutral-950 dark:hover:bg-orange-400 dark:focus:ring-orange-400 dark:focus:ring-offset-neutral-950"
                   >
                     Get started
                   </Link>
                   <Link
                     to="/login"
-                    className="inline-flex items-center justify-center rounded-xl border border-amber-300/50 bg-amber-100/40 px-8 py-3.5 text-sm font-semibold text-amber-800 shadow-sm transition duration-200 hover:bg-amber-100/60 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 focus:ring-offset-white dark:border-amber-300/40 dark:bg-neutral-900/50 dark:text-amber-200 dark:hover:bg-neutral-900/30 dark:focus:ring-amber-200 dark:focus:ring-offset-neutral-900"
+                    className="inline-flex items-center justify-center rounded-lg border border-orange-300/70 bg-orange-50 px-8 py-3 text-sm font-semibold text-orange-700 shadow transition duration-200 hover:bg-orange-100 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-white dark:border-orange-700/60 dark:bg-neutral-900 dark:text-orange-300 dark:hover:bg-neutral-800 dark:focus:ring-orange-400 dark:focus:ring-offset-neutral-950"
                   >
                     Sign in
                   </Link>
                 </div>
-                <ul className="mt-6 grid gap-3 text-xs sm:text-sm text-neutral-600 sm:grid-cols-2 dark:text-neutral-300">
+                <ul className="mt-6 grid gap-3 text-sm text-neutral-600 sm:grid-cols-2 dark:text-neutral-300">
                   {heroHighlights.map(item => (
                     <li key={item} className="flex items-start gap-2.5">
-                      <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-600 dark:bg-neutral-800 dark:text-amber-300">
+                      <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-orange-100 text-orange-600 dark:bg-orange-950/60 dark:text-orange-300">
                         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-3 w-3">
                           <path d="M5 10l3 3 7-7" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
@@ -237,19 +237,19 @@ const Home: React.FC = () => {
                   {heroFeatureBlocks.map(feature => (
                     <article
                       key={feature.title}
-                      className="group rounded-2xl border border-amber-200/50 bg-white/60 p-5 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-amber-200 hover:bg-white/80 hover:shadow-md sm:p-5 dark:border-neutral-800/50 dark:bg-neutral-900/40 dark:hover:border-neutral-800 dark:hover:bg-neutral-900/60"
+                      className="group rounded-xl border border-orange-300/50 bg-white/60 p-5 shadow transition-all duration-200 hover:border-orange-400/80 hover:bg-white/85 hover:shadow-md sm:p-5 dark:border-orange-700/40 dark:bg-neutral-900/80 dark:hover:border-orange-600/60 dark:hover:bg-neutral-900/90"
                     >
-                      <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-amber-200/70 bg-amber-100 text-amber-600 transition-colors duration-200 group-hover:border-amber-300 group-hover:bg-amber-200 dark:border-neutral-700 dark:bg-neutral-800 dark:text-amber-200 dark:group-hover:border-amber-300/60">
+                      <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-orange-300/70 bg-orange-100 text-orange-600 transition-colors duration-200 group-hover:border-orange-400 group-hover:bg-orange-200 group-hover:text-orange-700 dark:border-orange-700/60 dark:bg-orange-950/40 dark:text-orange-300 dark:group-hover:border-orange-600 dark:group-hover:bg-orange-900/50">
                         {feature.icon}
                       </span>
                       <p className="mt-3 text-sm font-semibold text-neutral-900 group-hover:text-neutral-800 dark:text-neutral-100 dark:group-hover:text-neutral-50">{feature.title}</p>
-                      <p className="mt-1.5 text-xs leading-relaxed text-neutral-600 group-hover:text-neutral-700 dark:text-neutral-300 dark:group-hover:text-neutral-200">{feature.description}</p>
+                      <p className="mt-1.5 text-xs leading-relaxed text-neutral-600 group-hover:text-neutral-700 dark:text-neutral-400 dark:group-hover:text-neutral-300">{feature.description}</p>
                     </article>
                   ))}
                 </div>
-                <div className="rounded-2xl border border-amber-300/50 bg-amber-100/50 p-4 text-xs leading-relaxed text-amber-900 transition-colors duration-300 dark:border-amber-400/40 dark:bg-amber-400/10 dark:text-amber-100">
-                  <p className="font-semibold mb-2">✨ Key Features</p>
-                  Bring inventory, multi-branch POS, AI analysis, automated reports, and GCash integration to your operations.
+                <div className="rounded-xl border border-orange-300/50 bg-white/60 p-4 text-xs leading-relaxed text-orange-900 transition-colors duration-300 dark:border-orange-700/40 dark:bg-orange-950/60 dark:text-orange-200">
+                  <p className="font-semibold mb-2">✨ Complete Suite</p>
+                  Premium inventory management, multi-location synchronization, advanced analytics, automated reporting, and integrated payment processing.
                 </div>
               </div>
             </div>
@@ -258,30 +258,30 @@ const Home: React.FC = () => {
 
         <section id="features" className="scroll-mt-32 py-16 sm:py-20 lg:py-28">
           <div className="mx-auto max-w-3xl text-center space-y-3 mb-16">
-            <h2 className="text-3xl font-bold text-neutral-900 sm:text-4xl lg:text-5xl dark:text-neutral-100">
-              Designed for café teams that live on data
+            <h2 className="text-4xl font-bold text-neutral-900 sm:text-5xl lg:text-6xl dark:text-neutral-50">
+              Professional Café Management
             </h2>
-            <p className="text-sm leading-relaxed text-neutral-600 sm:text-base dark:text-neutral-300">
-              KapeRest keeps operations calm with dashboards built for franchise owners, operations leads, and store crews.
+            <p className="text-base leading-relaxed text-neutral-600 sm:text-lg dark:text-neutral-400">
+              A unified platform designed for café owners and managers who demand elegance and precision.
             </p>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {featureCards.map(feature => (
                   <article
                 key={feature.title}
-                className="group relative flex h-full flex-col gap-4 overflow-hidden rounded-2xl border border-neutral-200/70 bg-white/80 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-neutral-300 hover:shadow-md sm:p-6 dark:border-neutral-800/60 dark:bg-neutral-900/70 dark:hover:border-neutral-700/80 dark:hover:bg-neutral-900/60 dark:hover:shadow-lg"
+                className="group relative flex h-full flex-col gap-4 overflow-hidden rounded-xl border border-orange-300/50 bg-white/60 p-6 shadow transition-all duration-300 hover:-translate-y-1 hover:border-orange-400/70 hover:bg-white/85 hover:shadow-lg sm:p-6 dark:border-orange-700/40 dark:bg-neutral-900/80 dark:hover:border-orange-600/60 dark:hover:bg-neutral-900/90 dark:hover:shadow-xl"
               >
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-amber-200/70 bg-amber-100 text-amber-600 shadow-sm transition-all duration-200 group-hover:scale-110 group-hover:border-amber-300 group-hover:bg-amber-200 group-hover:text-amber-700 dark:border-neutral-700 dark:bg-neutral-800 dark:text-amber-200 dark:group-hover:border-amber-300/60 dark:group-hover:bg-neutral-700 dark:group-hover:text-amber-200">
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-lg border border-orange-300/70 bg-orange-100 text-orange-600 shadow transition-all duration-200 group-hover:scale-110 group-hover:border-orange-400 group-hover:bg-orange-200 group-hover:text-orange-700 dark:border-orange-700/60 dark:bg-orange-950/40 dark:text-orange-300 dark:group-hover:border-orange-600 dark:group-hover:bg-orange-900/50">
                     {feature.icon}
                   </span>
                   <div className="space-y-2">
                     <h3 className="text-lg font-semibold text-neutral-900 transition duration-200 group-hover:text-neutral-800 dark:text-neutral-100 dark:group-hover:text-neutral-50">{feature.title}</h3>
-                    <p className="text-sm text-neutral-600 transition duration-200 group-hover:text-neutral-700 dark:text-neutral-300 dark:group-hover:text-neutral-200">{feature.summary}</p>
+                    <p className="text-sm text-neutral-600 transition duration-200 group-hover:text-neutral-700 dark:text-neutral-400 dark:group-hover:text-neutral-300">{feature.summary}</p>
                   </div>
-                  <ul className="mt-auto space-y-2 text-xs text-neutral-600 dark:text-neutral-300">
+                  <ul className="mt-auto space-y-2 text-xs text-neutral-600 dark:text-neutral-400">
                     {feature.points.map(point => (
                       <li key={point} className="flex items-start gap-2">
-                        <span className="mt-0.5 inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full bg-amber-400/80 dark:bg-amber-300" aria-hidden />
+                        <span className="mt-0.5 inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full bg-orange-500 dark:bg-orange-400" aria-hidden />
                         <span className="leading-snug">{point}</span>
                       </li>
                     ))}
@@ -293,36 +293,36 @@ const Home: React.FC = () => {
         <section id="about" className="scroll-mt-32 py-16 sm:py-20 lg:py-28">
           <div className="grid gap-14 lg:grid-cols-[1fr_1fr] lg:items-start">
             <div className="space-y-6">
-              <h2 className="text-3xl font-bold text-neutral-900 sm:text-4xl lg:text-5xl dark:text-neutral-100">
-                Quiet clarity for branch operators
+              <h2 className="text-4xl font-bold text-neutral-900 sm:text-5xl lg:text-6xl dark:text-neutral-50">
+                Elegance in Every Detail
               </h2>
-              <p className="text-sm leading-relaxed text-neutral-600 sm:text-base dark:text-neutral-300">
-                Keep every café in rhythm without living in spreadsheets. KapeRest consolidates POS activity, stock usage, and payments in a single, calm workspace.
+              <p className="text-base leading-relaxed text-neutral-600 sm:text-lg dark:text-neutral-400">
+                Sophisticated POS operations don't require complexity. KapeRest streamlines café management from inventory to analytics in a refined, professional interface.
               </p>
-              <ul className="space-y-4 text-sm text-neutral-600 dark:text-neutral-300">
+              <ul className="space-y-4 text-base text-neutral-600 dark:text-neutral-400">
                 <li className="flex items-start gap-3">
-                  <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-600 dark:bg-neutral-800 dark:text-amber-300">
+                  <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-orange-100 text-orange-600 dark:bg-orange-950/60 dark:text-orange-300">
                     <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5">
                       <path d="M5 10l3 3 7-7" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </span>
-                  <span className="leading-relaxed">Real-time variance alerts surface void spikes and unusual discounts immediately.</span>
+                  <span className="leading-relaxed">Real-time inventory tracking with elegant alerts for stock adjustments.</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-600 dark:bg-neutral-800 dark:text-amber-300">
+                  <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-orange-100 text-orange-600 dark:bg-orange-950/60 dark:text-orange-300">
                     <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5">
                       <path d="M4 10h12M10 4v12" strokeLinecap="round" />
                     </svg>
                   </span>
-                  <span className="leading-relaxed">Branch scorecards benchmark crew performance and highlight top sellers every week.</span>
+                  <span className="leading-relaxed">Multi-location sync with instant menu, pricing, and promotion updates.</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-600 dark:bg-neutral-800 dark:text-amber-300">
+                  <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-orange-100 text-orange-600 dark:bg-orange-950/60 dark:text-orange-300">
                     <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5">
                       <path d="M5 15l4-4 3 3 3-6" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </span>
-                  <span className="leading-relaxed">Ingredient usage, prep batches, and cash reconciliation live side by side.</span>
+                  <span className="leading-relaxed">Advanced analytics with beautiful, actionable dashboards.</span>
                 </li>
               </ul>
             </div>
@@ -330,10 +330,10 @@ const Home: React.FC = () => {
               {branchHighlights.map(highlight => (
                 <article
                   key={highlight.title}
-                  className="group rounded-2xl border border-neutral-200/70 bg-white/80 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-neutral-800/60 dark:bg-neutral-900/70 dark:hover:shadow-lg"
+                  className="group rounded-xl border border-orange-300/50 bg-white/60 p-6 shadow transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-orange-700/40 dark:bg-neutral-900/80 dark:hover:shadow-xl"
                 >
                   <p className="text-sm font-semibold text-neutral-900 group-hover:text-neutral-800 dark:text-neutral-100 dark:group-hover:text-neutral-50">{highlight.title}</p>
-                  <p className="mt-2 text-sm leading-relaxed text-neutral-600 group-hover:text-neutral-700 dark:text-neutral-300 dark:group-hover:text-neutral-200">{highlight.description}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-neutral-600 group-hover:text-neutral-700 dark:text-neutral-400 dark:group-hover:text-neutral-300">{highlight.description}</p>
                 </article>
               ))}
             </div>
@@ -341,77 +341,75 @@ const Home: React.FC = () => {
         </section>
 
         <section id="contact" className="scroll-mt-32 py-16 sm:py-20 lg:py-28">
-          <div className="mx-auto flex max-w-5xl flex-col gap-10 rounded-3xl border border-neutral-200/70 bg-white/80 p-8 shadow-lg transition-colors duration-300 sm:gap-12 sm:p-10 lg:flex-row lg:items-center dark:border-neutral-800/60 dark:bg-neutral-900/70 dark:shadow-[0_24px_48px_-28px_rgba(15,23,42,0.85)]">
+          <div className="mx-auto flex max-w-5xl flex-col gap-10 rounded-2xl border border-orange-300/50 bg-white/75 p-8 shadow-lg transition-colors duration-300 sm:gap-12 sm:p-10 lg:flex-row lg:items-center dark:border-orange-700/40 dark:bg-neutral-900/85 dark:shadow-2xl">
             <div className="flex-1 space-y-5">
-              <h2 className="text-2xl font-bold text-neutral-900 sm:text-3xl dark:text-neutral-100">Ready for a calmer café rollout?</h2>
-              <p className="text-sm leading-relaxed text-neutral-600 sm:text-base dark:text-neutral-300">
-                Our team guides menu migration, payment setup, and branch training so you can focus on customer experience.
+              <h2 className="text-3xl font-bold text-neutral-900 sm:text-4xl dark:text-neutral-50">Ready to elevate your café operations?</h2>
+              <p className="text-base leading-relaxed text-neutral-600 sm:text-lg dark:text-neutral-400">
+                Our team guides you through implementation with professionalism and expertise.
               </p>
               <Link
                 to="/register"
-                className="inline-flex w-full max-w-xs items-center justify-center rounded-xl bg-neutral-900 px-6 py-3 text-sm font-semibold text-white transition duration-200 hover:bg-neutral-800 active:scale-95 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 focus:ring-offset-white dark:bg-amber-400 dark:text-neutral-900 dark:hover:bg-amber-300 dark:focus:ring-amber-300 dark:focus:ring-offset-neutral-900"
+                className="inline-flex w-full max-w-xs items-center justify-center rounded-lg bg-orange-600 px-6 py-3 text-base font-semibold text-white transition duration-200 hover:bg-orange-700 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:ring-offset-2 focus:ring-offset-white dark:bg-orange-500 dark:text-neutral-950 dark:hover:bg-orange-400 dark:focus:ring-orange-400 dark:focus:ring-offset-neutral-950"
               >
-                Book a walkthrough
+                Schedule Consultation
               </Link>
             </div>
-            <div className="flex-1 space-y-6 border-t lg:border-l lg:border-t-0 pt-8 lg:pt-0 lg:pl-10 border-neutral-200/70 dark:border-neutral-800/70">
+            <div className="flex-1 space-y-6 border-t lg:border-l lg:border-t-0 pt-8 lg:pt-0 lg:pl-10 border-neutral-300/60 dark:border-neutral-800/70">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">Email</p>
-                <p className="mt-2 text-base font-semibold text-neutral-900 dark:text-neutral-100">hello@kaperest.io</p>
-                <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">Send us your current branch setup—we'll map the rollout within a day.</p>
+                <p className="mt-2 text-lg font-semibold text-neutral-900 dark:text-neutral-100">hello@kaperest.io</p>
+                <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">We'll respond within one business day.</p>
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">Support line</p>
-                <p className="mt-2 text-base font-semibold text-neutral-900 dark:text-neutral-100">+63 917 000 1234</p>
-                <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">Weekdays 9 AM–6 PM for deployment planning and support.</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">Support</p>
+                <p className="mt-2 text-lg font-semibold text-neutral-900 dark:text-neutral-100">+63 917 000 1234</p>
+                <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">Available 9 AM–6 PM weekdays.</p>
               </div>
             </div>
           </div>
         </section>
       </main>
-      <footer className="mt-16 border-t border-neutral-200/70 bg-white/80 backdrop-blur-lg transition-colors duration-300 sm:mt-20 dark:border-neutral-800/70 dark:bg-neutral-900/80">
+      <footer className="mt-16 border-t border-neutral-300/60 bg-white transition-colors duration-300 sm:mt-20 dark:border-neutral-800/70 dark:bg-neutral-950">
               <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
               <div className="flex flex-col gap-10 md:flex-row md:justify-between">
             <div className="max-w-sm">
-              <span className="text-xs font-semibold uppercase tracking-[0.32em] text-amber-700 dark:text-amber-300">KapeRest</span>
-              <p className="mt-3 text-sm text-neutral-600 dark:text-neutral-300">
-                A milk tea POS crafted for teams that scale fast. Keep every branch aligned, settled, and ready for the next rush.
+              <span className="text-xs font-semibold uppercase tracking-[0.32em] text-orange-700 dark:text-orange-300">KapeRest</span>
+              <p className="mt-3 text-sm text-neutral-600 dark:text-neutral-400">
+                Professional POS management for discerning café operators. Centralized, elegant, and built for scale.
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-8 text-sm text-neutral-600 sm:grid-cols-3 dark:text-neutral-300">
+            <div className="grid grid-cols-2 gap-8 text-sm text-neutral-600 sm:grid-cols-3 dark:text-neutral-400">
               <div>
                 <p className="font-semibold text-neutral-900 dark:text-neutral-100">Product</p>
                 <ul className="mt-3 space-y-2">
-                  <li><a href="#features" className="transition-colors duration-200 hover:text-amber-600 dark:hover:text-amber-300">Features</a></li>
-                  <li><a href="#about" className="transition-colors duration-200 hover:text-amber-600 dark:hover:text-amber-300">Why KapeRest</a></li>
-                  <li><Link to="/register" className="transition-colors duration-200 hover:text-amber-600 dark:hover:text-amber-300">Request a Demo</Link></li>
+                  <li><a href="#features" className="transition-colors duration-200 hover:text-orange-600 dark:hover:text-orange-400">Features</a></li>
+                  <li><a href="#about" className="transition-colors duration-200 hover:text-orange-600 dark:hover:text-orange-400">About</a></li>
+                  <li><Link to="/register" className="transition-colors duration-200 hover:text-orange-600 dark:hover:text-orange-400">Get Started</Link></li>
                 </ul>
               </div>
               <div>
                 <p className="font-semibold text-neutral-900 dark:text-neutral-100">Support</p>
                 <ul className="mt-3 space-y-2">
-                  <li><a href="#contact" className="transition-colors duration-200 hover:text-amber-600 dark:hover:text-amber-300">Contact</a></li>
-                  <li><a href="#contact" className="transition-colors duration-200 hover:text-amber-600 dark:hover:text-amber-300">Onboarding</a></li>
-                  <li><a href="#contact" className="transition-colors duration-200 hover:text-amber-600 dark:hover:text-amber-300">Knowledge Base</a></li>
+                  <li><a href="#contact" className="transition-colors duration-200 hover:text-orange-600 dark:hover:text-orange-400">Contact</a></li>
+                  <li><a href="#contact" className="transition-colors duration-200 hover:text-orange-600 dark:hover:text-orange-400">Support</a></li>
+                  <li><a href="#contact" className="transition-colors duration-200 hover:text-orange-600 dark:hover:text-orange-400">Documentation</a></li>
                 </ul>
               </div>
               <div>
-                <p className="font-semibold text-neutral-900 dark:text-neutral-100">Development Team</p>
+                <p className="font-semibold text-neutral-900 dark:text-neutral-100">Team</p>
                 <ul className="mt-3 space-y-2">
-                  <li className="dark:text-neutral-300">John Joshua Manalo Escarez</li>
-                  <li className="dark:text-neutral-300">CJ Royo Mendoza</li>
-                  <li className="dark:text-neutral-300">Lhey Anne Inao Pedernal</li>
-                  <li className="dark:text-neutral-300">Jaira Gomez Cunanan</li>
+                  <li className="dark:text-neutral-400">John Joshua Manalo Escarez</li>
+                  <li className="dark:text-neutral-400">CJ Royo Mendoza</li>
                 </ul>
               </div>
             </div>
           </div>
-                  <div className="mt-10 flex flex-col gap-4 border-t border-amber-200/70 pt-6 text-xs text-neutral-500 sm:flex-row sm:items-center sm:justify-between dark:border-neutral-800/70 dark:text-neutral-400">
-            <p>© {new Date().getFullYear()} KapeRest Milk Tea POS. All rights reserved.</p>
+                  <div className="mt-10 flex flex-col gap-4 border-t border-neutral-300/60 pt-6 text-xs text-neutral-500 sm:flex-row sm:items-center sm:justify-between dark:border-neutral-800/70 dark:text-neutral-500">
+            <p>© {new Date().getFullYear()} KapeRest. All rights reserved.</p>
             <div className="flex items-center gap-4">
-                      <a href="#" className="transition-colors duration-200 hover:text-amber-600 dark:hover:text-amber-300">Privacy</a>
-                      <a href="#" className="transition-colors duration-200 hover:text-amber-600 dark:hover:text-amber-300">Terms</a>
-                      <Link to="/login" className="transition-colors duration-200 hover:text-amber-600 dark:hover:text-amber-300">Admin Login</Link>
+                      <a href="#" className="transition-colors duration-200 hover:text-orange-600 dark:hover:text-orange-400">Privacy</a>
+                      <a href="#" className="transition-colors duration-200 hover:text-orange-600 dark:hover:text-orange-400">Terms</a>
+                      <Link to="/login" className="transition-colors duration-200 hover:text-orange-600 dark:hover:text-orange-400">Login</Link>
             </div>
           </div>
         </div>

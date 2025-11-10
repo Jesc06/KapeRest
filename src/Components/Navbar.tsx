@@ -41,14 +41,14 @@ const Navbar: React.FC = () => {
 
   // Shared styles
   const navLinkBase =
-    "group relative inline-flex items-center rounded-full px-4 py-2 text-sm font-medium text-neutral-600 transition hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 dark:text-neutral-300 dark:hover:text-white";
+    "group relative inline-flex items-center rounded-full px-4 py-2 text-sm font-medium text-neutral-700 transition hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 dark:text-neutral-300 dark:hover:text-white";
 
   const buttonBase =
     "inline-flex items-center justify-center h-10 px-4 rounded-full text-sm font-medium focus:outline-none transition select-none";
   const btnText =
-    `${buttonBase} border border-neutral-200/70 bg-white/40 text-neutral-900 hover:bg-white/70 focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-neutral-700 dark:bg-neutral-800/70 dark:text-neutral-200 dark:hover:bg-neutral-800`;
+    `${buttonBase} border border-orange-300/70 bg-white/50 text-orange-900 hover:bg-white/80 focus-visible:ring-2 focus-visible:ring-orange-600 focus-visible:ring-offset-2 focus-visible:ring-offset-amber-50/40 dark:border-orange-700/60 dark:bg-neutral-800/70 dark:text-orange-300 dark:hover:bg-neutral-800`;
   const btnPrimary =
-    `${buttonBase} bg-neutral-900 text-white shadow-sm hover:bg-neutral-800 focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:bg-amber-400 dark:text-neutral-900 dark:hover:bg-amber-300`;
+    `${buttonBase} bg-orange-600 text-white shadow-sm hover:bg-orange-700 focus-visible:ring-2 focus-visible:ring-orange-600 focus-visible:ring-offset-2 focus-visible:ring-offset-amber-50/40 dark:bg-orange-400 dark:text-neutral-900 dark:hover:bg-orange-300 dark:focus-visible:ring-offset-neutral-950`;
 
   const toggleTheme = () => setTheme(current => (current === "dark" ? "light" : "dark"));
 
@@ -57,10 +57,10 @@ const Navbar: React.FC = () => {
       {/* Fixed top bar */}
       <nav className="fixed inset-x-0 top-4 z-30 flex justify-center px-4 sm:px-6">
         <div className="w-full max-w-6xl">
-          <div className="flex h-14 items-center gap-4 rounded-[28px] border border-white/60 bg-white/70 px-4 shadow-[0_20px_48px_-28px_rgba(15,23,42,0.55)] backdrop-blur-2xl transition-all duration-300 sm:h-16 sm:px-6 dark:border-neutral-800/80 dark:bg-neutral-900/75 dark:shadow-[0_20px_48px_-28px_rgba(15,23,42,0.85)]">
+          <div className="flex h-14 items-center gap-4 rounded-[28px] border border-orange-300/40 bg-white/60 px-4 shadow-[0_20px_48px_-28px_rgba(153,100,55,0.25)] backdrop-blur-xl transition-all duration-300 sm:h-16 sm:px-6 dark:border-orange-700/30 dark:bg-neutral-900/80 dark:shadow-[0_20px_48px_-28px_rgba(15,23,42,0.85)]">
             <Link
               to="/"
-              className="flex items-center gap-2 rounded-full px-2 py-1 text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-neutral-100"
+              className="flex items-center gap-2 rounded-full px-2 py-1 text-orange-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 focus-visible:ring-offset-2 focus-visible:ring-offset-amber-50/40 dark:text-orange-300"
             >
               <span className="text-lg font-semibold tracking-tight sm:text-xl">KapeRest</span>
             </Link>
@@ -77,21 +77,21 @@ const Navbar: React.FC = () => {
                 Home
                 <span
                   aria-hidden
-                  className={`pointer-events-none absolute inset-x-3 -bottom-0.5 h-[2px] rounded-full bg-gradient-to-r from-neutral-800/80 via-neutral-800 to-neutral-800/80 opacity-0 transition group-hover:opacity-40 group-[aria-current="page"]:opacity-100 dark:from-yellow-400/80 dark:via-yellow-400 dark:to-yellow-400/80`}
+                  className={`pointer-events-none absolute inset-x-3 -bottom-0.5 h-[2px] rounded-full bg-gradient-to-r from-orange-600/80 via-orange-600 to-orange-600/80 opacity-0 transition group-hover:opacity-40 group-[aria-current="page"]:opacity-100 dark:from-orange-400/80 dark:via-orange-400 dark:to-orange-400/80`}
                 />
               </NavLink>
               <a href="#about" className={navLinkBase}>
                 About
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute inset-x-3 -bottom-0.5 h-[2px] rounded-full bg-gradient-to-r from-neutral-800/60 via-neutral-800 to-neutral-800/60 opacity-0 transition group-hover:opacity-40 dark:from-yellow-400/60 dark:via-yellow-400 dark:to-yellow-400/60"
+                  className="pointer-events-none absolute inset-x-3 -bottom-0.5 h-[2px] rounded-full bg-gradient-to-r from-orange-600/60 via-orange-600 to-orange-600/60 opacity-0 transition group-hover:opacity-40 dark:from-orange-400/60 dark:via-orange-400 dark:to-orange-400/60"
                 />
               </a>
               <a href="#contact" className={navLinkBase}>
                 Contact
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute inset-x-3 -bottom-0.5 h-[2px] rounded-full bg-gradient-to-r from-neutral-800/60 via-neutral-800 to-neutral-800/60 opacity-0 transition group-hover:opacity-40 dark:from-yellow-400/60 dark:via-yellow-400 dark:to-yellow-400/60"
+                  className="pointer-events-none absolute inset-x-3 -bottom-0.5 h-[2px] rounded-full bg-gradient-to-r from-orange-600/60 via-orange-600 to-orange-600/60 opacity-0 transition group-hover:opacity-40 dark:from-orange-400/60 dark:via-orange-400 dark:to-orange-400/60"
                 />
               </a>
             </div>
@@ -116,7 +116,7 @@ const Navbar: React.FC = () => {
                 onClick={toggleTheme}
                 aria-pressed={isDark}
                 aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-transparent bg-white/40 text-neutral-900 transition hover:bg-white/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-neutral-700 dark:bg-neutral-800/70 dark:text-neutral-200 dark:hover:bg-neutral-800"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-orange-300/40 bg-white/50 text-orange-700 transition hover:bg-white/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 focus-visible:ring-offset-2 focus-visible:ring-offset-amber-50/40 dark:border-orange-700/60 dark:bg-neutral-800/70 dark:text-orange-300 dark:hover:bg-neutral-800"
               >
                 {isDark ? (
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-5 w-5">
@@ -142,7 +142,7 @@ const Navbar: React.FC = () => {
               aria-label="Toggle menu"
               aria-expanded={open}
               onClick={() => setOpen(v => !v)}
-              className="ml-auto inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/0 text-neutral-700 transition hover:bg-white/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-neutral-300 dark:hover:bg-neutral-800/80 md:hidden"
+              className="ml-auto inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/30 text-orange-700 transition hover:bg-white/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 focus-visible:ring-offset-2 focus-visible:ring-offset-amber-50/40 dark:text-orange-300 dark:hover:bg-neutral-800/80 md:hidden"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -168,28 +168,28 @@ const Navbar: React.FC = () => {
           </div>
 
           {open && (
-            <div className="mt-3 overflow-hidden rounded-3xl border border-white/60 bg-white/85 shadow-[0_18px_44px_-26px_rgba(15,23,42,0.5)] backdrop-blur-2xl md:hidden dark:border-neutral-800/80 dark:bg-neutral-900/85">
+            <div className="mt-3 overflow-hidden rounded-3xl border border-orange-300/40 bg-white/70 shadow-[0_18px_44px_-26px_rgba(153,100,55,0.25)] backdrop-blur-xl md:hidden dark:border-orange-700/30 dark:bg-neutral-900/85">
               <div className="space-y-1 px-4 py-4">
                 <Link
                   to="/"
                   aria-current={isHome ? "page" : undefined}
-                  className={`block rounded-full px-3 py-2 text-sm font-medium transition hover:bg-white/70 ${isHome ? "text-neutral-900" : "text-neutral-700"} dark:hover:bg-neutral-800/60 ${isHome ? "dark:text-neutral-100" : "dark:text-neutral-300"}`}
+                  className={`block rounded-full px-3 py-2 text-sm font-medium transition hover:bg-white/70 ${isHome ? "text-orange-900" : "text-orange-700"} dark:hover:bg-neutral-800/60 ${isHome ? "dark:text-orange-300" : "dark:text-orange-400"}`}
                 >
                   Home
                 </Link>
                 <a
                   href="#about"
-                  className="block rounded-full px-3 py-2 text-sm font-medium text-neutral-700 transition hover:bg-white/70 dark:text-neutral-300 dark:hover:bg-neutral-800/60"
+                  className="block rounded-full px-3 py-2 text-sm font-medium text-orange-700 transition hover:bg-white/70 dark:text-orange-400 dark:hover:bg-neutral-800/60"
                 >
                   About
                 </a>
                 <a
                   href="#contact"
-                  className="block rounded-full px-3 py-2 text-sm font-medium text-neutral-700 transition hover:bg-white/70 dark:text-neutral-300 dark:hover:bg-neutral-800/60"
+                  className="block rounded-full px-3 py-2 text-sm font-medium text-orange-700 transition hover:bg-white/70 dark:text-orange-400 dark:hover:bg-neutral-800/60"
                 >
                   Contact
                 </a>
-                <div className="my-3 h-px bg-neutral-200/80 dark:bg-neutral-800/70" aria-hidden />
+                <div className="my-3 h-px bg-orange-300/40 dark:bg-orange-700/30" aria-hidden />
                 <Link to="/login" aria-current={isLogin ? "page" : undefined} className={`${btnText} block w-full text-center`}>
                   Sign in
                 </Link>
@@ -201,7 +201,7 @@ const Navbar: React.FC = () => {
                   onClick={toggleTheme}
                   aria-pressed={isDark}
                   aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-                  className="mt-3 inline-flex w-full items-center justify-center rounded-full border border-neutral-200/70 bg-white/40 px-4 py-2.5 text-sm font-medium text-neutral-900 transition hover:bg-white/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-neutral-700 dark:bg-neutral-800/70 dark:text-neutral-200 dark:hover:bg-neutral-800"
+                  className="mt-3 inline-flex w-full items-center justify-center rounded-full border border-orange-300/40 bg-white/50 px-4 py-2.5 text-sm font-medium text-orange-700 transition hover:bg-white/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 focus-visible:ring-offset-2 focus-visible:ring-offset-amber-50/40 dark:border-orange-700/60 dark:bg-neutral-800/70 dark:text-orange-300 dark:hover:bg-neutral-800"
                 >
                   <span className="mr-2">
                     {isDark ? "Dark" : "Light"} mode

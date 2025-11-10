@@ -51,20 +51,20 @@ const LoginUI: React.FC = () => {
   const errorSummary = Object.keys(errors).length > 1 ? Object.values(errors).join(". ") : null;
 
   return (
-    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-transparent font-sans">
+    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-amber-50/40 dark:bg-neutral-950 font-sans transition-colors duration-300">
       <TintedBackdrop />
-      {/* page overlay: stone-50 for consistency with homepage */}
-      <div aria-hidden className="absolute inset-0 z-0 bg-stone-50/90 backdrop-blur-xl dark:bg-neutral-900/60 pointer-events-none" />
+      {/* Warm Café Theme Background with Coffee Tones */}
+      <div aria-hidden className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-br from-amber-50/60 via-orange-50/40 to-amber-100/30 dark:from-neutral-950 dark:via-neutral-950 dark:to-neutral-950" />
       <main className="relative z-10 flex flex-1 items-center justify-center px-4 py-6 sm:px-6 md:py-8">
         <div className="relative w-full max-w-[420px]">
-          <div className="auth-card relative rounded-3xl border border-amber-200/70 bg-white/85 p-7 sm:p-8 shadow-lg backdrop-blur-lg transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl focus-within:-translate-y-1 dark:border-neutral-800/70 dark:bg-neutral-900/85">
-            <div className="absolute -top-3 left-6 inline-flex h-6 items-center rounded-full border border-amber-200 bg-amber-50/80 px-3 text-[11px] font-semibold tracking-wide text-amber-600 dark:border-amber-400/60 dark:bg-amber-400/15 dark:text-amber-200">LOGIN</div>
+          <div className="auth-card relative rounded-xl border border-orange-300/50 bg-white/75 p-7 sm:p-8 shadow-lg transition-all duration-300 ease-out dark:border-orange-700/40 dark:bg-neutral-900/85">
+            <div className="absolute -top-3 left-6 inline-flex h-6 items-center rounded-full border border-orange-300/70 bg-orange-50 px-3 text-[11px] font-semibold tracking-wide text-orange-700 dark:border-orange-700/60 dark:bg-orange-950/40 dark:text-orange-300">LOGIN</div>
             {/* Brand */}
             <div className="mb-6">
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-neutral-900 flex items-center gap-2 dark:text-neutral-100">KapeRest <span aria-hidden="true" className="coffee-emoji text-[20px]">☕</span></h1>
-              <p className="mt-1.5 text-sm text-neutral-600 dark:text-neutral-400">Access your POS workspace</p>
+              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-neutral-900 flex items-center gap-2 dark:text-neutral-50">KapeRest <span aria-hidden="true" className="coffee-emoji text-[24px]">☕</span></h1>
+              <p className="mt-1.5 text-base text-neutral-600 dark:text-neutral-400">Professional POS Management</p>
             </div>
-            <div className="h-px w-full bg-gradient-to-r from-neutral-200 via-neutral-300 to-neutral-200 mb-6 dark:from-neutral-700 dark:via-neutral-600 dark:to-neutral-700" aria-hidden />
+            <div className="h-px w-full bg-gradient-to-r from-neutral-300 via-neutral-400 to-neutral-300 mb-6 dark:from-neutral-800 dark:via-neutral-700 dark:to-neutral-800" aria-hidden />
             {/* Form */}
             <form onSubmit={handleSubmit} noValidate className="space-y-4" aria-busy={isLoading}>
               {/* Screen reader announcements for first error */}
@@ -91,10 +91,10 @@ const LoginUI: React.FC = () => {
                       onFocus={() => setEmailFocused(true)}
                       onBlur={() => setEmailFocused(false)}
                       disabled={isLoading}
-                      className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-10 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-neutral-100 dark:placeholder:text-neutral-500
+                      className={`peer block w-full rounded-lg border bg-white pr-10 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-neutral-100 dark:placeholder:text-neutral-500
                         ${emailValid && email.trim().length > 0
-                          ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400 dark:focus:border-emerald-400'
-                          : 'border-neutral-300 focus:ring-1 focus:ring-amber-500 focus:border-amber-500 dark:border-neutral-700 dark:focus:ring-amber-400 dark:focus:border-amber-400'}
+                          ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400'
+                          : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-neutral-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
                         ${isLoading ? 'opacity-90' : ''}`}
                       placeholder="you@company.com"
                       aria-invalid={errors.email ? 'true' : 'false'}
@@ -114,7 +114,7 @@ const LoginUI: React.FC = () => {
                 <div className="relative">
                   <label htmlFor="password" className="flex items-center justify-between text-[13px] font-medium text-neutral-700 tracking-wide dark:text-neutral-300">
                     <span>Password</span>
-                    {capsOn && <span className="text-[10px] font-medium text-amber-600 dark:text-amber-300">CAPS ON</span>}
+                    {capsOn && <span className="text-[10px] font-medium text-orange-600 dark:text-orange-300">CAPS ON</span>}
                   </label>
                   <div className="mt-1 relative">
                     <input
@@ -128,10 +128,10 @@ const LoginUI: React.FC = () => {
                       onFocus={() => setPasswordFocused(true)}
                       onBlur={() => setPasswordFocused(false)}
                       disabled={isLoading}
-                      className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-10 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-neutral-100 dark:placeholder:text-neutral-500
+                      className={`peer block w-full rounded-lg border bg-white pr-10 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-neutral-100 dark:placeholder:text-neutral-500
                         ${passwordValid
-                          ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400 dark:focus:border-emerald-400'
-                          : 'border-neutral-300 focus:ring-1 focus:ring-amber-500 focus:border-amber-500 dark:border-neutral-700 dark:focus:ring-amber-400 dark:focus:border-amber-400'}
+                          ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400'
+                          : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-neutral-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
                         ${isLoading ? 'opacity-90' : ''}`}
                       placeholder="••••••••"
                       aria-invalid={errors.password ? 'true' : 'false'}
@@ -147,7 +147,7 @@ const LoginUI: React.FC = () => {
                     </div>
                   </div>
                   {capsOn && (
-                    <p id="caps-warning" aria-live="polite" className="mt-1 text-xs text-amber-600 dark:text-amber-300">Caps Lock is on</p>
+                    <p id="caps-warning" aria-live="polite" className="mt-1 text-xs text-orange-600 dark:text-orange-300">Caps Lock is on</p>
                   )}
                   {errors.password && (
                     <p id="password-error" className="mt-1 text-[11px] text-red-600 dark:text-red-200">{errors.password}</p>
@@ -159,7 +159,7 @@ const LoginUI: React.FC = () => {
                   <input
                     type="checkbox"
                     disabled={isLoading}
-                    className="peer relative h-4 w-4 shrink-0 appearance-none rounded-[5px] border border-neutral-300 bg-white transition-colors before:absolute before:inset-0 before:rounded-[4px] before:bg-neutral-900 before:scale-0 before:opacity-0 before:transition checked:before:scale-100 checked:before:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 disabled:opacity-60 cursor-pointer dark:border-neutral-700 dark:bg-neutral-800 dark:before:bg-amber-400 dark:focus-visible:ring-amber-300"
+                    className="peer relative h-4 w-4 shrink-0 appearance-none rounded-[5px] border border-neutral-300 bg-white transition-colors before:absolute before:inset-0 before:rounded-[4px] before:bg-neutral-900 before:scale-0 before:opacity-0 before:transition checked:before:scale-100 checked:before:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 disabled:opacity-60 cursor-pointer dark:border-neutral-700 dark:bg-neutral-800 dark:before:bg-orange-400 dark:focus-visible:ring-orange-400"
                   />
                   <svg viewBox="0 0 20 20" className="pointer-events-none absolute left-[6px] h-[10px] w-[10px] text-white opacity-0 transition-opacity peer-checked:opacity-100" aria-hidden>
                     <path d="M6 10.5l2.25 2.25L14 7.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
@@ -171,7 +171,7 @@ const LoginUI: React.FC = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full inline-flex justify-center items-center gap-2 rounded-xl bg-neutral-900 text-white text-sm md:text-[15px] font-medium py-3 tracking-wide shadow-sm hover:bg-neutral-800 active:scale-[.99] focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 focus:ring-offset-white transition disabled:opacity-50 disabled:hover:bg-neutral-900 disabled:cursor-not-allowed dark:bg-amber-400 dark:text-neutral-900 dark:hover:bg-amber-300 dark:focus:ring-amber-200 dark:focus:ring-offset-neutral-900"
+                className="w-full inline-flex justify-center items-center gap-2 rounded-lg bg-orange-600 text-white text-sm md:text-[15px] font-medium py-3 tracking-wide shadow-sm hover:bg-orange-700 active:scale-[.99] focus:outline-none focus:ring-2 focus:ring-orange-600 focus:ring-offset-2 focus:ring-offset-white transition disabled:opacity-50 disabled:hover:bg-orange-600 disabled:cursor-not-allowed dark:bg-orange-500 dark:text-neutral-950 dark:hover:bg-orange-400 dark:focus:ring-orange-400 dark:focus:ring-offset-neutral-950"
               >
                 {isLoading ? (
                   <>
@@ -188,7 +188,7 @@ const LoginUI: React.FC = () => {
             </form>
           {/* Secondary */}
           <p className="mt-6 text-center text-[13px] text-neutral-600 dark:text-neutral-400">
-            Don't have an account? <Link to="/register" className="font-medium text-neutral-800 hover:underline focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 focus:ring-offset-white rounded dark:text-amber-300 dark:hover:text-amber-200 dark:focus:ring-amber-200 dark:focus:ring-offset-neutral-900">Sign up</Link>
+            Don't have an account? <Link to="/register" className="font-medium text-neutral-800 hover:underline focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 focus:ring-offset-white rounded dark:text-orange-300 dark:hover:text-orange-200 dark:focus:ring-orange-400 dark:focus:ring-offset-neutral-950">Sign up</Link>
           </p>
           </div>
         </div>
