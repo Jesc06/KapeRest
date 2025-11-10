@@ -87,11 +87,39 @@ const MainPanel: React.FC<MainPanelProps> = ({
             </button>
           </div>
 
-          {/* Center Section: Welcome Message */}
+          {/* Center Section: Welcome Message - Ads Style */}
           <div className="hidden lg:flex items-center justify-center px-2">
-            <div className="text-center bg-gradient-to-br from-amber-100/60 via-amber-50/50 to-stone-50/60 dark:from-amber-900/40 dark:via-amber-900/30 dark:to-stone-900/30 rounded-sm px-14 sm:px-16 py-2.5 border border-amber-300/40 dark:border-amber-700/50 shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-amber-500/20 transition-all duration-300 min-w-fit">
-              <p className="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-300 opacity-90 mb-1">Welcome</p>
-              <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-amber-800 to-amber-700 dark:from-amber-300 dark:to-amber-400 bg-clip-text text-transparent leading-none">{userRole}</p>
+            {/* Ads-style animated banner */}
+            <div className="relative px-20 sm:px-32 py-1 min-w-fit group overflow-visible">
+              {/* Animated gradient background - subtle */}
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/60 via-teal-400/50 to-cyan-400/60 dark:from-emerald-600/50 dark:via-teal-600/40 dark:to-cyan-600/50 rounded-lg opacity-70 animate-pulse shadow-lg" />
+              
+              {/* Inner content container */}
+              <div className="relative bg-white dark:bg-neutral-900 rounded-lg px-6 py-1 z-10 border border-emerald-300/40 dark:border-emerald-600/40">
+                {/* Top animated accent line */}
+                <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-emerald-400 to-transparent animate-pulse" />
+                
+                {/* Main content */}
+                <div className="text-center relative">
+                  <p className="text-xs font-bold uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400 animate-pulse">Welcome Back</p>
+                  <p className="text-xl sm:text-2xl font-black text-transparent bg-gradient-to-r from-emerald-700 via-teal-700 to-cyan-700 dark:from-emerald-300 dark:via-teal-300 dark:to-cyan-300 bg-clip-text leading-none tracking-tight animate-bounce" style={{ animationDuration: '2s' }}>Cashier!</p>
+                  
+                  {/* Animated side accent dots */}
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 flex gap-1">
+                    <div className="h-1 w-1 rounded-full bg-emerald-400 animate-pulse shadow-lg shadow-emerald-400/50" />
+                    <div className="h-1 w-1 rounded-full bg-teal-400 animate-bounce shadow-lg shadow-teal-400/50" style={{ animationDelay: '0.1s' }} />
+                  </div>
+                  
+                  {/* Animated right accent dots */}
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-6 flex gap-1">
+                    <div className="h-1 w-1 rounded-full bg-cyan-400 animate-bounce shadow-lg shadow-cyan-400/50" style={{ animationDelay: '0.1s' }} />
+                    <div className="h-1 w-1 rounded-full bg-emerald-400 animate-pulse shadow-lg shadow-emerald-400/50" />
+                  </div>
+                </div>
+                
+                {/* Bottom animated accent line */}
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-pulse" />
+              </div>
             </div>
           </div>
 
@@ -182,7 +210,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
           />
           
           {/* Dropdown Menu */}
-          <div className="fixed top-[calc(4.5rem)] right-4 sm:right-6 md:right-8 w-56 rounded-lg border border-neutral-300/80 bg-white shadow-2xl dark:border-neutral-700/70 dark:bg-neutral-900/95 backdrop-blur-sm z-[1000]">
+          <div className="fixed top-[calc(4.5rem+0.5rem)] right-4 sm:right-5 md:right-6 w-56 rounded-lg border border-neutral-300/80 bg-white shadow-2xl dark:border-neutral-700/70 dark:bg-neutral-900/95 backdrop-blur-sm z-[1000]">
             {/* Header */}
             <div className="px-4 py-3 border-b border-neutral-300/60 dark:border-neutral-700/60">
               <p className="text-xs font-semibold uppercase tracking-widest text-neutral-500 dark:text-neutral-400">Cashier</p>
@@ -243,7 +271,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
                   <div
                     key={product.id}
                     onClick={() => onAddToCart(product)}
-                    className="group cursor-pointer rounded-xl border border-neutral-300/70 bg-white shadow-md hover:shadow-xl transition-all duration-300 hover:border-amber-400/60 hover:-translate-y-1 active:scale-95 dark:border-neutral-700/70 dark:bg-neutral-900/50 dark:hover:border-amber-400/60 dark:hover:shadow-amber-500/10 overflow-hidden flex flex-col"
+                    className="group cursor-pointer rounded border border-neutral-400/70 bg-white transition-all duration-300 hover:border-neutral-500 hover:-translate-y-1 active:scale-95 dark:bg-neutral-900/50 dark:border-neutral-600/70 dark:hover:border-neutral-500 overflow-hidden flex flex-col"
                   >
                     {/* Product Image */}
                     <div className="relative w-full aspect-square overflow-hidden bg-neutral-100 dark:bg-neutral-900/50">
