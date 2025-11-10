@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar.tsx';
 import MainPanel from './MainPanel.tsx';
-import TintedBackdrop from '../TintedBackdrop';
+
 
 interface CartItem {
   id: number;
@@ -125,9 +125,9 @@ const CashierPage: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-transparent text-neutral-800 transition-colors duration-300 dark:text-neutral-200 overflow-hidden">
-      <TintedBackdrop />
-      <div aria-hidden className="absolute inset-0 z-0 bg-stone-50/90 backdrop-blur-xl dark:bg-neutral-900/60 pointer-events-none" />
+    <div className="relative min-h-screen bg-white dark:bg-neutral-900 text-neutral-900 transition-colors duration-300 dark:text-white overflow-hidden">
+      
+      <div aria-hidden className="absolute inset-0 z-0 bg-gradient-to-br from-stone-50 via-white to-stone-50 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900 pointer-events-none" />
 
       <div className="relative z-10 flex h-screen overflow-hidden">
         {/* Sidebar */}

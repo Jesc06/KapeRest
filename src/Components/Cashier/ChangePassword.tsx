@@ -6,6 +6,7 @@ import Sidebar from './Sidebar';
 import LogoutPanel from './LogoutPanel';
 import TintedBackdrop from '../TintedBackdrop';
 
+
 const ChangePassword: React.FC = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');

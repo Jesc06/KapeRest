@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faChevronLeft, faChevronRight, faBox, faFileAlt, faImage } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from './StaffSidebar';
 import LogoutPanel from './LogoutPanel';
-import TintedBackdrop from '../TintedBackdrop';
+
 
 interface ItemFormData {
   itemName: string;
@@ -131,7 +131,7 @@ const AddItem: React.FC = () => {
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-stone-900 via-orange-900/20 to-stone-900">
-      <TintedBackdrop />
+      
 
       <div aria-hidden className="absolute inset-0 z-0 bg-stone-50/90 backdrop-blur-xl dark:bg-neutral-900/60 pointer-events-none" />
 

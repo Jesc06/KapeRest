@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from './StaffSidebar';
 import LogoutPanel from './LogoutPanel';
-import TintedBackdrop from '../TintedBackdrop';
+
 
 const StaffPage: React.FC = () => {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const StaffPage: React.FC = () => {
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-stone-900 via-orange-900/20 to-stone-900">
-      <TintedBackdrop />
+     
 
       <div aria-hidden className="absolute inset-0 z-0 bg-stone-100 dark:bg-stone-900 pointer-events-none" />
 
