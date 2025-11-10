@@ -65,10 +65,10 @@ const MainPanel: React.FC<MainPanelProps> = ({
     <div className={`flex h-screen w-full flex-col bg-stone-50 dark:bg-neutral-900 transition-all duration-300 ${sidebarExpanded ? 'lg:ml-64' : 'lg:ml-20'}`}>
       {/* Top Bar - Search & Filters */}
       <div className="sticky top-0 z-10 border-b border-neutral-300/80 bg-white/95 dark:border-neutral-700/80 dark:bg-neutral-900/50 px-4 sm:px-5 md:px-6 py-3 sm:py-4 shadow-sm transition-all duration-300 backdrop-blur-sm">
-        {/* Top Section: Control Area */}
-        <div className="flex items-center justify-center gap-2 sm:gap-3 mb-3 relative">
-          {/* Left Section: Hamburger & Sidebar Toggle - Absolute Position */}
-          <div className="absolute left-0 flex items-center gap-1.5 sm:gap-2">
+        {/* Top Section: Sidebar Toggle | Search Bar | Logout Panel */}
+        <div className="flex items-center justify-between gap-3 sm:gap-4 mb-3">
+          {/* Left Section: Sidebar Toggle */}
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
             {/* Hamburger Menu - Mobile Only */}
             <button
               onClick={onToggleSidebar}
@@ -80,51 +80,33 @@ const MainPanel: React.FC<MainPanelProps> = ({
             {/* Sidebar Toggle Button - Desktop Only */}
             <button
               onClick={onToggleSidebarExpand}
-              className="hidden lg:flex flex-shrink-0 h-9 w-9 items-center justify-center rounded-lg border border-amber-400/50 bg-gradient-to-br from-amber-50 to-amber-100/80 hover:from-amber-100 hover:to-amber-200 text-amber-600 transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md dark:border-amber-600/40 dark:from-amber-900/30 dark:to-amber-900/20 dark:hover:from-amber-900/50 dark:hover:to-amber-900/40 dark:text-amber-400 dark:hover:text-amber-300"
+              className="hidden lg:flex flex-shrink-0 h-9 w-9 items-center justify-center rounded-lg border border-orange-400/50 bg-gradient-to-br from-orange-50 to-orange-100/80 hover:from-orange-100 hover:to-orange-200 text-orange-600 transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md dark:border-orange-600/40 dark:from-orange-900/30 dark:to-orange-900/20 dark:hover:from-orange-900/50 dark:hover:to-orange-900/40 dark:text-orange-400 dark:hover:text-orange-300"
               title={sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
             >
               <FontAwesomeIcon icon={sidebarExpanded ? faChevronLeft : faChevronRight} className="h-4 w-4" />
             </button>
           </div>
 
-          {/* Center Section: Welcome Message - Ads Style */}
-          <div className="hidden lg:flex items-center justify-center px-2">
-            {/* Ads-style animated banner */}
-            <div className="relative px-20 sm:px-32 py-1 min-w-fit group overflow-visible">
-              {/* Animated gradient background - subtle */}
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/60 via-teal-400/50 to-cyan-400/60 dark:from-emerald-600/50 dark:via-teal-600/40 dark:to-cyan-600/50 rounded-lg opacity-70 animate-pulse shadow-lg" />
-              
-              {/* Inner content container */}
-              <div className="relative bg-white dark:bg-neutral-900 rounded-lg px-6 py-1 z-10 border border-emerald-300/40 dark:border-emerald-600/40">
-                {/* Top animated accent line */}
-                <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-emerald-400 to-transparent animate-pulse" />
-                
-                {/* Main content */}
-                <div className="text-center relative">
-                  <p className="text-xs font-bold uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400 animate-pulse">Welcome Back</p>
-                  <p className="text-xl sm:text-2xl font-black text-transparent bg-gradient-to-r from-emerald-700 via-teal-700 to-cyan-700 dark:from-emerald-300 dark:via-teal-300 dark:to-cyan-300 bg-clip-text leading-none tracking-tight animate-bounce" style={{ animationDuration: '2s' }}>Cashier!</p>
-                  
-                  {/* Animated side accent dots */}
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 flex gap-1">
-                    <div className="h-1 w-1 rounded-full bg-emerald-400 animate-pulse shadow-lg shadow-emerald-400/50" />
-                    <div className="h-1 w-1 rounded-full bg-teal-400 animate-bounce shadow-lg shadow-teal-400/50" style={{ animationDelay: '0.1s' }} />
-                  </div>
-                  
-                  {/* Animated right accent dots */}
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-6 flex gap-1">
-                    <div className="h-1 w-1 rounded-full bg-cyan-400 animate-bounce shadow-lg shadow-cyan-400/50" style={{ animationDelay: '0.1s' }} />
-                    <div className="h-1 w-1 rounded-full bg-emerald-400 animate-pulse shadow-lg shadow-emerald-400/50" />
-                  </div>
-                </div>
-                
-                {/* Bottom animated accent line */}
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-pulse" />
-              </div>
-            </div>
+          {/* Center Section: Amazon-Style Search Bar - Full Width */}
+          <div className="flex-1 flex items-center gap-2 bg-gradient-to-r from-orange-400 to-orange-500 rounded-lg p-2 sm:p-2.5 shadow-lg">
+            <FontAwesomeIcon 
+              icon={faSearch} 
+              className="h-5 w-5 text-white ml-2 sm:ml-3 flex-shrink-0"
+            />
+            <input
+              type="text"
+              placeholder="Search items..."
+              value={searchText}
+              onChange={e => onSearchChange(e.target.value)}
+              className="flex-1 bg-white rounded-md px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-neutral-900 placeholder:text-neutral-500 shadow-none focus:outline-none transition-all duration-300"
+            />
+            <button className="bg-orange-600 hover:bg-orange-700 text-white font-bold px-4 sm:px-6 py-2.5 sm:py-3 rounded-md transition-all duration-200 flex-shrink-0 text-xs sm:text-sm">
+              Search
+            </button>
           </div>
 
           {/* Right Section: User Dropdown Menu - Absolute Position */}
-          <div className="absolute right-0 hidden sm:flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-2 rounded-lg bg-white/70 dark:bg-neutral-900/50 border border-neutral-300/70 dark:border-neutral-700/70 shadow-sm backdrop-blur-sm">
+          <div className="hidden sm:flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-2 rounded-lg bg-white/70 dark:bg-neutral-900/50 border border-neutral-300/70 dark:border-neutral-700/70 shadow-sm backdrop-blur-sm flex-shrink-0">
             {/* Divider */}
             <div className="h-7 w-px bg-neutral-200/50 dark:bg-neutral-700/50" />
             
@@ -140,10 +122,10 @@ const MainPanel: React.FC<MainPanelProps> = ({
             {/* Status Badge */}
             <div className="flex items-center gap-2">
               <div className="relative flex items-center justify-center">
-                <div className="absolute h-2 w-2 rounded-full bg-emerald-400 animate-pulse dark:bg-emerald-300" />
-                <div className="h-2 w-2 rounded-full bg-emerald-500 dark:bg-emerald-400" />
+                <div className="absolute h-2 w-2 rounded-full bg-orange-400 animate-pulse dark:bg-orange-300" />
+                <div className="h-2 w-2 rounded-full bg-orange-500 dark:bg-orange-400" />
               </div>
-              <span className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">Online</span>
+              <span className="text-sm font-semibold text-orange-700 dark:text-orange-300">Online</span>
             </div>
 
             {/* Divider */}
@@ -153,10 +135,10 @@ const MainPanel: React.FC<MainPanelProps> = ({
             <div className="relative">
               <button
                 onClick={() => setShowUserMenu(!showUserMenu)}
-                className="group flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 hover:bg-neutral-100/60 dark:hover:bg-neutral-800/60 focus:outline-none focus:ring-2 focus:ring-emerald-400/40"
+                className="group flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 hover:bg-neutral-100/60 dark:hover:bg-neutral-800/60 focus:outline-none focus:ring-2 focus:ring-orange-400/40"
                 title="User menu"
               >
-                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-sm font-bold text-white shadow-md">
+                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-sm font-bold text-white shadow-md">
                   <FontAwesomeIcon icon={faUser} className="h-4 w-4" />
                 </div>
                 <FontAwesomeIcon icon={faChevronDown} className={`h-3.5 w-3.5 text-neutral-600 dark:text-neutral-400 transition-transform duration-300 ${showUserMenu ? 'rotate-180' : ''}`} />
@@ -165,22 +147,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
           </div>
         </div>
 
-        <div className="space-y-3 sm:space-y-4">
-          {/* Search Bar */}
-          <div className="relative group">
-            <FontAwesomeIcon 
-              icon={faSearch} 
-              className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400 transition-colors duration-300 group-focus-within:text-amber-600 dark:text-neutral-500 dark:group-focus-within:text-amber-400"
-            />
-            <input
-              type="text"
-              placeholder="Search items..."
-              value={searchText}
-              onChange={e => onSearchChange(e.target.value)}
-              className="w-full rounded-lg border border-neutral-300/80 bg-white/95 pl-11 pr-4 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-neutral-900 placeholder:text-neutral-400 shadow-sm focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400/40 transition-all duration-300 hover:border-neutral-400 dark:border-neutral-700/60 dark:bg-neutral-900/60 dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:hover:border-neutral-600 dark:focus:ring-amber-400/30"
-            />
-          </div>
-
+        <div className="space-y-2 sm:space-y-3">
           {/* Category Filter Pills */}
           <div className="flex flex-wrap gap-2">
             {categories.map(category => (
@@ -189,7 +156,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
                 onClick={() => onCategoryChange(category)}
                 className={`rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold transition-all duration-200 border ${
                   selectedCategory === category
-                    ? 'border-amber-400 bg-amber-50 text-amber-700 shadow-md hover:shadow-lg hover:scale-105 dark:border-amber-400/60 dark:bg-amber-500/15 dark:text-amber-300'
+                    ? 'border-orange-400 bg-orange-50 text-orange-700 shadow-md hover:shadow-lg hover:scale-105 dark:border-orange-400/60 dark:bg-orange-500/15 dark:text-orange-300'
                     : 'border-neutral-300/80 bg-neutral-50/80 text-neutral-700 hover:border-neutral-400 hover:bg-neutral-100 hover:shadow-sm dark:border-neutral-700/60 dark:bg-neutral-900/40 dark:text-neutral-300 dark:hover:border-neutral-600 dark:hover:bg-neutral-800/50'
                 }`}
               >
@@ -257,9 +224,9 @@ const MainPanel: React.FC<MainPanelProps> = ({
           {/* Header */}
           <div className="border-b border-neutral-300/60 dark:border-neutral-700/60 bg-white/95 dark:bg-neutral-900/50 px-6 py-4">
             <h3 className="text-lg font-bold tracking-tight text-neutral-900 dark:text-neutral-100 flex items-center gap-2.5">
-              <FontAwesomeIcon icon={faCoffee} className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+              <FontAwesomeIcon icon={faCoffee} className="h-5 w-5 text-orange-600 dark:text-orange-400" />
               <span>Available Items</span>
-              <span className="font-semibold text-amber-600 dark:text-amber-400 text-sm ml-1">({filteredProducts.length})</span>
+              <span className="font-semibold text-orange-600 dark:text-orange-400 text-sm ml-1">({filteredProducts.length})</span>
             </h3>
           </div>
 
@@ -282,8 +249,8 @@ const MainPanel: React.FC<MainPanelProps> = ({
                           className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-100 to-amber-50 dark:from-amber-900/30 dark:to-amber-800/20">
-                          <FontAwesomeIcon icon={faCoffee} className="h-8 w-8 text-amber-400 dark:text-amber-600" />
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-100 to-orange-50 dark:from-orange-900/30 dark:to-orange-800/20">
+                          <FontAwesomeIcon icon={faCoffee} className="h-8 w-8 text-orange-400 dark:text-orange-600" />
                         </div>
                       )}
                       {/* Overlay on Hover */}
@@ -303,7 +270,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
                       {/* Footer */}
                       <div className="flex items-center justify-between gap-2 pt-2 border-t border-neutral-100 dark:border-neutral-800/40">
-                        <span className="text-sm sm:text-base font-bold text-amber-600 dark:text-amber-400">
+                        <span className="text-sm sm:text-base font-bold text-orange-600 dark:text-orange-400">
                           ₱{product.price}
                         </span>
                         <button
@@ -311,7 +278,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
                             e.stopPropagation();
                             onAddToCart(product);
                           }}
-                          className="inline-flex items-center justify-center rounded-md bg-amber-500 hover:bg-amber-600 p-1.5 sm:p-2 text-xs font-bold text-white transition-all duration-200 hover:shadow-md active:scale-95 dark:bg-amber-600 dark:hover:bg-amber-700 shadow-sm"
+                          className="inline-flex items-center justify-center rounded-md bg-orange-500 hover:bg-orange-600 p-1.5 sm:p-2 text-xs font-bold text-white transition-all duration-200 hover:shadow-md active:scale-95 dark:bg-orange-600 dark:hover:bg-orange-700 shadow-sm"
                         >
                           <FontAwesomeIcon icon={faPlus} className="h-3.5 w-3.5" />
                         </button>
@@ -346,9 +313,9 @@ const MainPanel: React.FC<MainPanelProps> = ({
           {/* Cart Header */}
           <div className="border-b border-neutral-300/60 bg-white/95 dark:border-neutral-700/60 dark:bg-neutral-900/50 px-6 py-4">
             <h3 className="text-lg font-bold tracking-tight text-neutral-900 dark:text-neutral-50 flex items-center gap-2.5">
-              <FontAwesomeIcon icon={faShoppingCart} className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+              <FontAwesomeIcon icon={faShoppingCart} className="h-5 w-5 text-orange-600 dark:text-orange-400" />
               <span>Shopping Cart</span>
-              <span className="font-semibold text-emerald-600 dark:text-emerald-400 text-sm ml-auto bg-emerald-100 dark:bg-emerald-900/30 px-2 py-1 rounded-full">({cart.length})</span>
+              <span className="font-semibold text-orange-600 dark:text-orange-400 text-sm ml-auto bg-orange-100 dark:bg-orange-900/30 px-2 py-1 rounded-full">({cart.length})</span>
             </h3>
           </div>
 
@@ -358,10 +325,10 @@ const MainPanel: React.FC<MainPanelProps> = ({
               cart.map(item => (
                 <div
                   key={item.id}
-                  className="group flex items-center gap-3 rounded-lg border border-neutral-300/70 bg-white/80 p-3 shadow-sm transition-all duration-300 hover:border-amber-400/60 hover:shadow-md hover:bg-white dark:border-neutral-700/70 dark:bg-neutral-900/40 dark:hover:border-amber-400/40 dark:hover:shadow-amber-500/10"
+                  className="group flex items-center gap-3 rounded-lg border border-neutral-300/70 bg-white/80 p-3 shadow-sm transition-all duration-300 hover:border-orange-400/60 hover:shadow-md hover:bg-white dark:border-neutral-700/70 dark:bg-neutral-900/40 dark:hover:border-orange-400/40 dark:hover:shadow-orange-500/10"
                 >
                   {/* Icon */}
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500 text-white font-bold transition-all duration-300 flex-shrink-0 shadow-sm dark:bg-amber-600">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-500 text-white font-bold transition-all duration-300 flex-shrink-0 shadow-sm dark:bg-orange-600">
                     <FontAwesomeIcon icon={faCoffee} size="sm" />
                   </div>
 
@@ -403,7 +370,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
                   </button>
 
                   {/* Line Total Tooltip */}
-                  <div className="text-right text-[10px] font-black text-amber-600 dark:text-amber-300 whitespace-nowrap">
+                  <div className="text-right text-[10px] font-black text-orange-600 dark:text-orange-300 whitespace-nowrap">
                     ₱{(item.price * item.quantity).toFixed(2)}
                   </div>
                 </div>
@@ -430,7 +397,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
             <div className="space-y-3">
               <div className="flex items-center justify-between pb-3 border-b border-neutral-300/60 dark:border-neutral-700/60">
                 <span className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">Total Amount</span>
-                <span className="text-4xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-700 bg-clip-text text-transparent dark:from-emerald-400 dark:to-emerald-500">
+                <span className="text-4xl font-bold bg-gradient-to-r from-orange-600 to-orange-700 bg-clip-text text-transparent dark:from-orange-400 dark:to-orange-500">
                   ₱{total.toFixed(2)}
                 </span>
               </div>
@@ -451,7 +418,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
             <button
               onClick={onBuy}
               disabled={isLoading || cart.length === 0}
-              className="group w-full flex items-center justify-center gap-2.5 rounded-md bg-emerald-600 hover:bg-emerald-700 px-3 py-2.5 text-xs font-bold text-white transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-emerald-600 dark:focus:ring-emerald-500 dark:focus:ring-offset-neutral-900 shadow-sm hover:shadow-md"
+              className="group w-full flex items-center justify-center gap-2.5 rounded-md bg-orange-600 hover:bg-orange-700 px-3 py-2.5 text-xs font-bold text-white transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-orange-600 dark:focus:ring-orange-500 dark:focus:ring-offset-neutral-900 shadow-sm hover:shadow-md"
             >
               {isLoading ? (
                 <>
