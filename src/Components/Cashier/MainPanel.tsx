@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoffee, faSearch, faPlus, faMinus, faTrash, faCheck, faPause, faCreditCard, faBars, faShoppingCart, faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import LogoutPanel from './LogoutPanel';
+import LogoutPanel from '../Shared/LogoutPanel';
 
 interface Product {
   id: number;

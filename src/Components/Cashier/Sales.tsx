@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoffee, faSearch, faBars, faCalendarDays, faWeightScale, faCalendarAlt, faReceipt, faMoneyBillWave, faPercentage, faChartLine } from '@fortawesome/free-solid-svg-icons';
-import LogoutPanel from './LogoutPanel';
+import LogoutPanel from '../Shared/LogoutPanel';
 
 interface SalesRecord {
   receiptNumber: string;

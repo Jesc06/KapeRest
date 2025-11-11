@@ -1,108 +1,106 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faSearch, faTruck, faEdit, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
-import StaffSidebar from './StaffSidebar';
+import { faBars, faSearch, faCoffee, faEdit, faTrash, faPlus, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import StaffSidebar from '../Staff/StaffSidebar';
 import LogoutPanel from './LogoutPanel';
 
-interface Supplier {
+interface Item {
   id: number;
-  supplierName: string;
-  contactPerson: string;
-  phoneNumber: string;
-  email: string;
-  address: string;
-  transactionDate: string;
+  itemName: string;
+  price: number;
+  description: string;
+  isAvailable: boolean;
+  image: string;
 }
 
-const SupplierList: React.FC = () => {
+const ItemList: React.FC = () => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+  const [items, setItems] = useState<Item[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Mock data - Replace with actual API call
   useEffect(() => {
-    const fetchSuppliers = async () => {
+    const fetchItems = async () => {
       setIsLoading(true);
       // Simulate API call
       setTimeout(() => {
-        const mockData: Supplier[] = [
+        const mockData: Item[] = [
           {
             id: 1,
-            supplierName: "Coca-cola",
-            contactPerson: "Albert",
-            phoneNumber: "09839349321",
-            email: "esc@gmail.com",
-            address: "odiong",
-            transactionDate: "2025-10-31T23:29:05.6902053"
+            itemName: "Espresso",
+            price: 120,
+            description: "Strong and bold coffee shot",
+            isAvailable: true,
+            image: "/images/espresso.jpg"
           },
           {
             id: 2,
-            supplierName: "Pepsi Co.",
-            contactPerson: "John Doe",
-            phoneNumber: "09123456789",
-            email: "john@pepsi.com",
-            address: "Manila City",
-            transactionDate: "2025-11-01T10:15:30.1234567"
+            itemName: "Cappuccino",
+            price: 150,
+            description: "Espresso with steamed milk foam",
+            isAvailable: true,
+            image: "/images/cappuccino.jpg"
           },
           {
             id: 3,
-            supplierName: "Coffee Beans Inc.",
-            contactPerson: "Maria Santos",
-            phoneNumber: "09876543210",
-            email: "maria@coffeebeans.com",
-            address: "Quezon City",
-            transactionDate: "2025-11-05T14:20:45.9876543"
+            itemName: "Latte",
+            price: 140,
+            description: "Smooth espresso with steamed milk",
+            isAvailable: true,
+            image: "/images/latte.jpg"
           },
           {
             id: 4,
-            supplierName: "Fresh Dairy Products",
-            contactPerson: "Pedro Cruz",
-            phoneNumber: "09112233445",
-            email: "pedro@freshdairy.com",
-            address: "Makati City",
-            transactionDate: "2025-11-08T08:30:00.5555555"
+            itemName: "Mocha",
+            price: 160,
+            description: "Coffee with chocolate and milk",
+            isAvailable: false,
+            image: "/images/mocha.jpg"
+          },
+          {
+            id: 5,
+            itemName: "Americano",
+            price: 110,
+            description: "Espresso diluted with hot water",
+            isAvailable: true,
+            image: "/images/americano.jpg"
+          },
+          {
+            id: 6,
+            itemName: "Iced Coffee",
+            price: 130,
+            description: "Cold brewed coffee with ice",
+            isAvailable: false,
+            image: "/images/iced-coffee.jpg"
           }
         ];
-        setSuppliers(mockData);
+        setItems(mockData);
         setIsLoading(false);
       }, 500);
     };
 
-    fetchSuppliers();
+    fetchItems();
   }, []);
 
-  // Filter suppliers based on search term
-  const filteredSuppliers = suppliers.filter(supplier =>
-    supplier.supplierName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    supplier.contactPerson.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    supplier.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    supplier.phoneNumber.includes(searchTerm) ||
-    supplier.address.toLowerCase().includes(searchTerm.toLowerCase())
+  // Filter items based on search term
+  const filteredItems = items.filter(item =>
+    item.itemName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.price.toString().includes(searchTerm)
   );
 
-  const handleEdit = (supplierId: number) => {
-    navigate(`/staff/update-supplier/${supplierId}`);
+  const handleEdit = (itemId: number) => {
+    navigate(`/staff/update-item/${itemId}`);
   };
 
-  const handleDelete = (supplierId: number) => {
-    if (window.confirm('Are you sure you want to delete this supplier?')) {
-      setSuppliers(suppliers.filter(s => s.id !== supplierId));
+  const handleDelete = (itemId: number) => {
+    if (window.confirm('Are you sure you want to delete this item?')) {
+      setItems(items.filter(i => i.id !== itemId));
     }
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
   };
 
   return (
@@ -135,7 +133,7 @@ const SupplierList: React.FC = () => {
                   <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                 </button>
 
-                <h1 className="text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-400 dark:to-orange-300 bg-clip-text text-transparent truncate">Supplier Management</h1>
+                <h1 className="text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-400 dark:to-orange-300 bg-clip-text text-transparent truncate">Menu Item Management</h1>
               </div>
 
               <LogoutPanel />
@@ -149,11 +147,11 @@ const SupplierList: React.FC = () => {
               <div className="mb-6">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/25">
-                    <FontAwesomeIcon icon={faTruck} className="h-6 w-6 text-white" />
+                    <FontAwesomeIcon icon={faCoffee} className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300 bg-clip-text text-transparent">Supplier List</h2>
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">Manage your suppliers and contacts</p>
+                    <h2 className="text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300 bg-clip-text text-transparent">Menu Items List</h2>
+                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">Manage your menu items and availability</p>
                   </div>
                 </div>
               </div>
@@ -166,7 +164,7 @@ const SupplierList: React.FC = () => {
                     <FontAwesomeIcon icon={faSearch} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-neutral-500 text-sm" />
                     <input
                       type="text"
-                      placeholder="Search suppliers..."
+                      placeholder="Search menu items..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-lg text-sm text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:border-orange-500 transition-colors duration-200"
@@ -175,11 +173,11 @@ const SupplierList: React.FC = () => {
 
                   {/* Add Button */}
                   <button
-                    onClick={() => navigate('/staff/add-supplier')}
+                    onClick={() => navigate('/staff/add-item')}
                     className="flex items-center justify-center gap-2 px-5 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-medium rounded-lg transition-colors duration-200"
                   >
                     <FontAwesomeIcon icon={faPlus} className="h-3.5 w-3.5" />
-                    <span className="hidden sm:inline text-sm">Add Supplier</span>
+                    <span className="hidden sm:inline text-sm">Add Item</span>
                   </button>
                 </div>
               </div>
@@ -190,14 +188,14 @@ const SupplierList: React.FC = () => {
                   <div className="flex items-center justify-center py-20">
                     <div className="text-center">
                       <div className="inline-block h-12 w-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                      <p className="text-neutral-600 dark:text-neutral-400">Loading suppliers...</p>
+                      <p className="text-neutral-600 dark:text-neutral-400">Loading menu items...</p>
                     </div>
                   </div>
-                ) : filteredSuppliers.length === 0 ? (
+                ) : filteredItems.length === 0 ? (
                   <div className="flex items-center justify-center py-20">
                     <div className="text-center">
-                      <FontAwesomeIcon icon={faTruck} className="h-16 w-16 text-neutral-300 dark:text-neutral-700 mb-4" />
-                      <p className="text-neutral-600 dark:text-neutral-400 text-lg font-medium">No suppliers found</p>
+                      <FontAwesomeIcon icon={faCoffee} className="h-16 w-16 text-neutral-300 dark:text-neutral-700 mb-4" />
+                      <p className="text-neutral-600 dark:text-neutral-400 text-lg font-medium">No menu items found</p>
                       <p className="text-neutral-500 dark:text-neutral-500 text-sm mt-2">Try adjusting your search</p>
                     </div>
                   </div>
@@ -206,59 +204,71 @@ const SupplierList: React.FC = () => {
                     <table className="w-full">
                       <thead>
                         <tr className="border-b border-orange-100 dark:border-neutral-800 bg-orange-50/50 dark:bg-neutral-800/50">
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Supplier Name</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Contact Person</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Phone Number</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Email</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Address</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Date</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Item Name</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Price</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Description</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Image</th>
+                          <th className="px-6 py-4 text-center text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Availability</th>
                           <th className="px-6 py-4 text-center text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Actions</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-orange-100 dark:divide-neutral-800">
-                        {filteredSuppliers.map((supplier) => (
+                        {filteredItems.map((item) => (
                           <tr
-                            key={supplier.id}
+                            key={item.id}
                             className="hover:bg-orange-50/50 dark:hover:bg-neutral-800/30 transition-colors duration-150"
                           >
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="flex items-center">
                                 <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-orange-100 dark:bg-orange-900/30 mr-3">
-                                  <FontAwesomeIcon icon={faTruck} className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+                                  <FontAwesomeIcon icon={faCoffee} className="h-4 w-4 text-orange-600 dark:text-orange-400" />
                                 </div>
                                 <div className="text-sm font-semibold text-neutral-900 dark:text-white">
-                                  {supplier.supplierName}
+                                  {item.itemName}
                                 </div>
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-neutral-900 dark:text-white">{supplier.contactPerson}</div>
+                              <div className="text-sm font-medium text-orange-600 dark:text-orange-400">
+                                ₱{item.price.toFixed(2)}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="text-sm text-neutral-600 dark:text-neutral-400 max-w-xs truncate">
+                                {item.description}
+                              </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-neutral-600 dark:text-neutral-400">{supplier.phoneNumber}</div>
+                              <div className="text-xs text-neutral-500 dark:text-neutral-500 font-mono truncate max-w-[150px]">
+                                {item.image}
+                              </div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-neutral-600 dark:text-neutral-400">{supplier.email}</div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-neutral-600 dark:text-neutral-400">{supplier.address}</div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-neutral-600 dark:text-neutral-400">{formatDate(supplier.transactionDate)}</div>
+                            <td className="px-6 py-4 whitespace-nowrap text-center">
+                              {item.isAvailable ? (
+                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
+                                  <FontAwesomeIcon icon={faCheckCircle} className="h-3 w-3" />
+                                  Available
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400">
+                                  <FontAwesomeIcon icon={faTimesCircle} className="h-3 w-3" />
+                                  Unavailable
+                                </span>
+                              )}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-center">
                               <div className="flex items-center justify-center gap-2">
                                 <button
-                                  onClick={() => handleEdit(supplier.id)}
+                                  onClick={() => handleEdit(item.id)}
                                   className="p-2 bg-blue-100 hover:bg-blue-200 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-400 rounded-lg transition-all duration-200 active:scale-95"
-                                  title="Edit supplier"
+                                  title="Edit item"
                                 >
                                   <FontAwesomeIcon icon={faEdit} className="h-4 w-4" />
                                 </button>
                                 <button
-                                  onClick={() => handleDelete(supplier.id)}
+                                  onClick={() => handleDelete(item.id)}
                                   className="p-2 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 rounded-lg transition-all duration-200 active:scale-95"
-                                  title="Delete supplier"
+                                  title="Delete item"
                                 >
                                   <FontAwesomeIcon icon={faTrash} className="h-4 w-4" />
                                 </button>
@@ -273,26 +283,22 @@ const SupplierList: React.FC = () => {
               </div>
 
               {/* Summary Card */}
-              {!isLoading && filteredSuppliers.length > 0 && (
+              {!isLoading && filteredItems.length > 0 && (
                 <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="bg-white dark:bg-neutral-900 p-4 rounded-lg border border-neutral-200 dark:border-neutral-800">
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">Total Suppliers</p>
-                    <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">{filteredSuppliers.length}</p>
+                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">Total Items</p>
+                    <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">{filteredItems.length}</p>
                   </div>
                   <div className="bg-white dark:bg-neutral-900 p-4 rounded-lg border border-neutral-200 dark:border-neutral-800">
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">Active Suppliers</p>
-                    <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">{filteredSuppliers.length}</p>
+                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">Available Items</p>
+                    <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                      {filteredItems.filter(item => item.isAvailable).length}
+                    </p>
                   </div>
                   <div className="bg-white dark:bg-neutral-900 p-4 rounded-lg border border-neutral-200 dark:border-neutral-800">
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">Recent Additions</p>
-                    <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">
-                      {filteredSuppliers.filter(s => {
-                        const date = new Date(s.transactionDate);
-                        const now = new Date();
-                        const diffTime = Math.abs(now.getTime() - date.getTime());
-                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                        return diffDays <= 7;
-                      }).length}
+                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">Unavailable Items</p>
+                    <p className="text-2xl font-bold text-red-600 dark:text-red-400">
+                      {filteredItems.filter(item => !item.isAvailable).length}
                     </p>
                   </div>
                 </div>
@@ -305,4 +311,4 @@ const SupplierList: React.FC = () => {
   );
 };
 
-export default SupplierList;
+export default ItemList;

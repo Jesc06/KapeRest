@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faChevronLeft, faChevronRight, faSearch, faFilter, faPause, faPlay, faCalendar, faCreditCard, faPercentage, faHashtag, faBoxOpen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Sidebar from './Sidebar';
-import LogoutPanel from './LogoutPanel';
+import LogoutPanel from '../Shared/LogoutPanel';
 
 interface CartItem {
   id: number;

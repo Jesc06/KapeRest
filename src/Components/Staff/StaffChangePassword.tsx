@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faEye, faEyeSlash, faBars, faChevronLeft, faChevronRight, faEnvelope, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from './StaffSidebar';
-import LogoutPanel from './LogoutPanel';
+import LogoutPanel from '../Shared/LogoutPanel';
 
 interface PasswordStrength {
   hasMinLength: boolean;

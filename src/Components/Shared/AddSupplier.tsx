@@ -8,7 +8,7 @@ import {
   faExclamationCircle,
   faArrowLeft
 } from '@fortawesome/free-solid-svg-icons';
-import StaffSidebar from './StaffSidebar';
+import StaffSidebar from '../Staff/StaffSidebar';
 import LogoutPanel from './LogoutPanel';
 
 interface SupplierFormData {

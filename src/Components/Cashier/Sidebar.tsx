@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faChartLine, faShoppingCart, faTimes, faHome, faReceipt, faPause } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faChartLine, faShoppingCart, faTimes, faHome, faPause, faReceipt } from '@fortawesome/free-solid-svg-icons';
 
 interface SidebarProps {
   isOpen?: boolean;
@@ -13,9 +13,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
   const location = useLocation();
   const isSalesPage = location.pathname === '/cashier/sales';
   const isBuyItemPage = location.pathname === '/cashier/buy-item';
-  const isPurchasesPage = location.pathname === '/cashier/purchases';
-  const isHoldItemsPage = location.pathname === '/cashier/hold-items';
   const isHomePage = location.pathname === '/cashier';
+  const isHoldItemsPage = location.pathname === '/cashier/hold-items';
+  const isPurchasesPage = location.pathname === '/cashier/purchases';
   
   return (
     <>
@@ -87,6 +87,21 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
           )}
         </Link>
 
+        {/* Sales Link */}
+        <Link
+          to="/cashier/sales"
+          className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg transition-all duration-200 group ${
+            isSalesPage
+              ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
+              : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
+          }`}
+        >
+          <FontAwesomeIcon icon={faChartLine} className="text-base flex-shrink-0" />
+          {isExpanded && (
+            <span className="flex-1 text-left text-sm font-semibold truncate">Sales</span>
+          )}
+        </Link>
+
         {/* Hold Items Link */}
         <Link
           to="/cashier/hold-items"
@@ -114,21 +129,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
           <FontAwesomeIcon icon={faReceipt} className="text-base flex-shrink-0" />
           {isExpanded && (
             <span className="flex-1 text-left text-sm font-semibold truncate">Purchases</span>
-          )}
-        </Link>
-
-        {/* Sales Link */}
-        <Link
-          to="/cashier/sales"
-          className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg transition-all duration-200 group ${
-            isSalesPage
-              ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
-              : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
-          }`}
-        >
-          <FontAwesomeIcon icon={faChartLine} className="text-base flex-shrink-0" />
-          {isExpanded && (
-            <span className="flex-1 text-left text-sm font-semibold truncate">Sales</span>
           )}
         </Link>
       </nav>

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTruck, faBoxOpen, faChartLine, faPlus, faList, faWarehouse } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from './StaffSidebar';
-import LogoutPanel from './LogoutPanel';
+import LogoutPanel from '../Shared/LogoutPanel';
 
 const StaffPage: React.FC = () => {
   const navigate = useNavigate();

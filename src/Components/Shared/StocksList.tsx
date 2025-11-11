@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faSearch, faBox, faEdit, faTrash, faPlus, faFilter } from '@fortawesome/free-solid-svg-icons';
-import StaffSidebar from './StaffSidebar';
+import StaffSidebar from '../Staff/StaffSidebar';
 import LogoutPanel from './LogoutPanel';
 
 interface Stock {
