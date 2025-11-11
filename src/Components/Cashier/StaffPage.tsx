@@ -17,40 +17,36 @@ const StaffPage: React.FC = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-stone-900 via-orange-900/20 to-stone-900">
-     
-
-      <div aria-hidden className="absolute inset-0 z-0 bg-stone-100 dark:bg-stone-900 pointer-events-none" />
-
+    <div className="min-h-screen w-full bg-gradient-to-br from-white to-stone-50 dark:from-neutral-900 dark:to-neutral-800">
       <div className="relative z-10 flex h-screen overflow-hidden">
         {/* Sidebar */}
         <StaffSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
 
         {/* Main Content */}
-        <div className={`flex h-screen w-full flex-col bg-stone-100 dark:bg-stone-900 transition-all duration-300 ${sidebarExpanded ? 'lg:ml-64' : 'lg:ml-20'}`}>
+        <div className={`flex h-screen w-full flex-col bg-white dark:bg-neutral-900 transition-all duration-300 ${sidebarExpanded ? 'lg:ml-64' : 'lg:ml-20'}`}>
           {/* Top Bar - Minimal Header */}
-          <div className="sticky top-0 z-20 border-b border-orange-300/30 bg-stone-100/90 dark:border-orange-700/20 dark:bg-stone-800/80 px-4 sm:px-6 md:px-8 py-3.5 sm:py-4 shadow-sm transition-all duration-300 backdrop-blur-sm">
+          <div className="sticky top-0 z-20 border-b border-stone-200 dark:border-neutral-700 bg-white/95 dark:bg-neutral-800/95 px-4 sm:px-6 md:px-8 py-3.5 sm:py-4 shadow-sm transition-all duration-300 backdrop-blur-sm">
             <div className="flex items-center justify-between gap-4">
               {/* Left: Controls & Title */}
               <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
                 {/* Hamburger - Mobile Only */}
                 <button
                   onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className="lg:hidden flex-shrink-0 h-8 w-8 flex items-center justify-center rounded-md border border-orange-400/40 bg-orange-50/60 hover:bg-orange-100/60 text-orange-700 dark:border-orange-600/30 dark:bg-orange-900/20 dark:hover:bg-orange-900/40 dark:text-orange-400 transition-all duration-200"
+                  className="lg:hidden flex-shrink-0 h-10 w-10 flex items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                 >
-                  <FontAwesomeIcon icon={faBars} className="h-3.5 w-3.5" />
+                  <FontAwesomeIcon icon={faBars} className="h-4 w-4" />
                 </button>
 
                 {/* Sidebar Toggle - Desktop Only */}
                 <button
                   onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                  className="hidden lg:flex flex-shrink-0 h-8 w-8 items-center justify-center rounded-md border border-orange-400/40 bg-orange-50/60 hover:bg-orange-100/60 dark:border-orange-600/30 dark:bg-orange-900/20 dark:hover:bg-orange-900/40 text-orange-700 dark:text-orange-400 transition-all duration-200 active:scale-95"
+                  className="hidden lg:flex flex-shrink-0 h-10 w-10 items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                 >
-                  <FontAwesomeIcon icon={sidebarExpanded ? faChevronLeft : faChevronRight} className="h-3.5 w-3.5" />
+                  <FontAwesomeIcon icon={sidebarExpanded ? faChevronLeft : faChevronRight} className="h-4 w-4" />
                 </button>
 
                 {/* Title */}
-                <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-orange-900 dark:text-orange-100 truncate">Staff Management</h1>
+                <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-neutral-900 dark:text-stone-100 truncate">Staff Management</h1>
               </div>
 
               {/* Right: Logout Panel */}
@@ -61,7 +57,7 @@ const StaffPage: React.FC = () => {
           {/* Loading State */}
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center">
-              <p className="text-orange-600 dark:text-orange-400">Loading...</p>
+              <p className="text-orange-600 dark:text-orange-400 font-medium">Loading...</p>
             </div>
           </div>
         </div>
