@@ -118,17 +118,17 @@ const MainPanel: React.FC<MainPanelProps> = ({
             />
           </div>
 
-          {/* Right Section: Logout Panel - match cart width (w-full sm:w-80 lg:w-96) */}
-          <div className="w-full sm:w-80 lg:w-96 flex-shrink-0">
+          {/* Right Section: Logout Panel - match cart width */}
+          <div className="w-full lg:w-80 xl:w-96 flex-shrink-0">
             <LogoutPanel userRole={userRole} />
           </div>
         </div>
       </div>
 
       {/* Main Content Area - Proper padding and alignment */}
-      <div className="flex flex-1 overflow-hidden gap-6 px-6 sm:px-8 md:px-10 py-6 bg-gradient-to-br from-white to-stone-50 dark:from-neutral-900 dark:to-neutral-800">
+      <div className="flex flex-col lg:flex-row flex-1 overflow-hidden gap-6 px-6 sm:px-8 md:px-10 py-6 bg-gradient-to-br from-white to-stone-50 dark:from-neutral-900 dark:to-neutral-800">
         {/* Left Section: Products & Filters - Main content area */}
-        <div className="flex-1 flex flex-col gap-5 min-w-0">
+        <div className="flex-1 flex flex-col gap-5 min-w-0 overflow-hidden">
           {/* Category Filter */}
           <div className="bg-white dark:bg-neutral-900 rounded-xl border border-stone-200 dark:border-neutral-800 px-6 py-5 shadow-sm hover:shadow-md transition-all duration-300">
             <p className="text-xs font-semibold tracking-widest text-neutral-700 dark:text-neutral-300 mb-4 uppercase">Categories</p>
@@ -163,7 +163,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
             {/* Products Grid (Scrollable) */}
             <div className="flex-1 overflow-y-auto px-6 py-5 scroll-smooth">
-              <div className="grid gap-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 auto-rows-max">
+              <div className="grid gap-5 auto-rows-max" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(180px, 100%), 1fr))' }}>
                 {filteredProducts.length > 0 ? (
                   filteredProducts.map(product => (
                     <div
@@ -235,69 +235,69 @@ const MainPanel: React.FC<MainPanelProps> = ({
         </div>
 
         {/* Cart Section */}
-        <div className="w-full sm:w-80 lg:w-96 h-full flex flex-col rounded-xl border border-stone-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-sm overflow-hidden flex-shrink-0">
+        <div className="w-full lg:w-80 lg:min-w-[320px] xl:w-96 xl:min-w-[384px] flex flex-col rounded-xl border border-stone-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-sm overflow-hidden flex-shrink-0 max-h-full">
           {/* Cart Header */}
-          <div className="border-b border-stone-200 dark:border-neutral-800 bg-gradient-to-r from-stone-50 to-white dark:from-neutral-800 dark:to-neutral-900 px-6 py-5">
-            <h3 className="text-base font-bold tracking-tight text-neutral-900 dark:text-white flex items-center gap-3">
-              <FontAwesomeIcon icon={faShoppingCart} className="h-5 w-5 text-orange-600 dark:text-orange-500" />
+          <div className="border-b border-stone-200 dark:border-neutral-800 bg-gradient-to-r from-stone-50 to-white dark:from-neutral-800 dark:to-neutral-900 px-4 py-3.5 flex-shrink-0">
+            <h3 className="text-sm font-bold tracking-tight text-neutral-900 dark:text-white flex items-center gap-2">
+              <FontAwesomeIcon icon={faShoppingCart} className="h-4 w-4 text-orange-600 dark:text-orange-500" />
               <span>Shopping Cart</span>
-              <span className="ml-auto font-semibold text-stone-600 dark:text-stone-400 text-sm bg-stone-100 dark:bg-neutral-800 px-3 py-1 rounded-full border border-stone-200 dark:border-neutral-700">({cart.length})</span>
+              <span className="ml-auto font-semibold text-stone-600 dark:text-stone-400 text-xs bg-stone-100 dark:bg-neutral-800 px-2 py-0.5 rounded-full border border-stone-200 dark:border-neutral-700">({cart.length})</span>
             </h3>
           </div>
 
           {/* Cart Items (Scrollable) */}
-          <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3 scroll-smooth">
+          <div className="flex-1 overflow-y-auto px-3 py-3 space-y-2 scroll-smooth min-h-0">
             {cart.length > 0 ? (
               cart.map((item, index) => (
                 <div
                   key={item.id}
-                  className="cart-item-motion group flex items-start gap-3 rounded-lg border border-stone-200 dark:border-neutral-800 bg-stone-50 dark:bg-neutral-800 p-4 shadow-sm transition-all duration-300 hover:shadow-md hover:border-orange-400 dark:hover:border-orange-500"
+                  className="cart-item-motion group flex items-center gap-2 rounded-lg border border-stone-200 dark:border-neutral-800 bg-stone-50 dark:bg-neutral-800 p-2.5 shadow-sm transition-all duration-300 hover:shadow-md hover:border-orange-400 dark:hover:border-orange-500 min-w-0"
                   style={{ animationDelay: `${index * 0.05}s` }}
                 >
                   {/* Icon */}
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-600 text-white font-semibold transition-all duration-300 flex-shrink-0 shadow-sm">
-                    <FontAwesomeIcon icon={faCoffee} className="h-5 w-5" />
+                  <div className="flex h-8 w-8 min-w-[32px] items-center justify-center rounded-lg bg-orange-600 text-white font-semibold transition-all duration-300 flex-shrink-0 shadow-sm">
+                    <FontAwesomeIcon icon={faCoffee} className="h-4 w-4" />
                   </div>
 
                   {/* Item Info */}
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-sm text-neutral-900 dark:text-white leading-tight line-clamp-1">
+                  <div className="flex-1 min-w-0 max-w-[120px]">
+                    <p className="font-semibold text-xs text-neutral-900 dark:text-white leading-tight line-clamp-1">
                       {item.name}
                     </p>
-                    <p className="text-xs text-stone-600 dark:text-stone-400 mt-1">
+                    <p className="text-[10px] text-stone-600 dark:text-stone-400 mt-0.5">
                       ₱{item.price} × {item.quantity}
                     </p>
                   </div>
 
                   {/* Quantity Controls */}
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1 flex-shrink-0">
                     <button
                       onClick={() => onUpdateQuantity(item.id, Math.max(1, item.quantity - 1))}
-                      className="flex h-7 w-7 items-center justify-center rounded border border-stone-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white font-semibold text-xs transition-all duration-200 active:scale-90 hover:bg-stone-100 dark:hover:bg-neutral-800 hover:border-orange-400"
+                      className="flex h-6 w-6 min-w-[24px] items-center justify-center rounded border border-stone-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white font-semibold text-xs transition-all duration-200 active:scale-90 hover:bg-stone-100 dark:hover:bg-neutral-800 hover:border-orange-400"
                     >
-                      <FontAwesomeIcon icon={faMinus} className="h-3 w-3" />
+                      <FontAwesomeIcon icon={faMinus} className="h-2.5 w-2.5" />
                     </button>
-                    <span className="w-6 text-center font-semibold text-xs text-neutral-900 dark:text-white">
+                    <span className="w-5 min-w-[20px] text-center font-semibold text-[10px] text-neutral-900 dark:text-white">
                       {item.quantity}
                     </span>
                     <button
                       onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
-                      className="flex h-7 w-7 items-center justify-center rounded border border-stone-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white font-semibold text-xs transition-all duration-200 active:scale-90 hover:bg-stone-100 dark:hover:bg-neutral-800 hover:border-orange-400"
+                      className="flex h-6 w-6 min-w-[24px] items-center justify-center rounded border border-stone-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white font-semibold text-xs transition-all duration-200 active:scale-90 hover:bg-stone-100 dark:hover:bg-neutral-800 hover:border-orange-400"
                     >
-                      <FontAwesomeIcon icon={faPlus} className="h-3 w-3" />
+                      <FontAwesomeIcon icon={faPlus} className="h-2.5 w-2.5" />
                     </button>
                   </div>
 
                   {/* Remove Button */}
                   <button
                     onClick={() => onRemoveFromCart(item.id)}
-                    className="flex h-7 w-7 items-center justify-center rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold text-xs transition-all duration-200 active:scale-90 flex-shrink-0 shadow-sm"
+                    className="flex h-6 w-6 min-w-[24px] items-center justify-center rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold text-xs transition-all duration-200 active:scale-90 flex-shrink-0 shadow-sm"
                   >
-                    <FontAwesomeIcon icon={faTrash} className="h-3 w-3" />
+                    <FontAwesomeIcon icon={faTrash} className="h-2.5 w-2.5" />
                   </button>
 
                   {/* Line Total */}
-                  <div className="text-right text-xs font-bold text-orange-600 dark:text-orange-400 whitespace-nowrap">
+                  <div className="text-right text-[10px] font-bold text-orange-600 dark:text-orange-400 whitespace-nowrap min-w-[50px] flex-shrink-0">
                     ₱{(item.price * item.quantity).toFixed(2)}
                   </div>
                 </div>
@@ -316,13 +316,13 @@ const MainPanel: React.FC<MainPanelProps> = ({
             )}
           </div>
 
-          {/* Cart Footer with Total */}
-          <div className="border-t border-stone-200 dark:border-neutral-800 bg-gradient-to-r from-stone-50 to-white dark:from-neutral-800 dark:to-neutral-900 px-6 py-6">
-            <div className="space-y-5">
+          {/* Cart Footer with Total - Scrollable when needed */}
+          <div className="flex-shrink-0 border-t border-stone-200 dark:border-neutral-800 bg-gradient-to-r from-stone-50 to-white dark:from-neutral-800 dark:to-neutral-900 max-h-[60vh] overflow-y-auto">
+            <div className="px-4 lg:px-6 py-4 lg:py-6 space-y-4 lg:space-y-5">
               {/* Final Total Amount Section */}
-              <div className="flex flex-col gap-2.5">
-                <span className="text-sm font-bold tracking-widest text-stone-700 dark:text-stone-300 uppercase">Total Amount</span>
-                <span className="text-4xl font-black bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-500 dark:to-orange-400 bg-clip-text text-transparent">
+              <div className="flex flex-col gap-2">
+                <span className="text-xs lg:text-sm font-bold tracking-widest text-stone-700 dark:text-stone-300 uppercase">Total Amount</span>
+                <span className="text-3xl lg:text-4xl font-black bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-500 dark:to-orange-400 bg-clip-text text-transparent">
                   ₱{finalTotal.toFixed(2)}
                 </span>
               </div>
@@ -330,17 +330,17 @@ const MainPanel: React.FC<MainPanelProps> = ({
               {/* Discount & Tax Dropdown */}
               <button
                 onClick={() => setShowTaxDiscount(!showTaxDiscount)}
-                className="w-full flex items-center justify-between px-4 py-3 rounded-lg border border-stone-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 hover:bg-stone-50 dark:hover:bg-neutral-800 hover:border-orange-400 dark:hover:border-orange-500 transition-all duration-200 text-sm"
+                className="w-full flex items-center justify-between px-3 lg:px-4 py-2.5 lg:py-3 rounded-lg border border-stone-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 hover:bg-stone-50 dark:hover:bg-neutral-800 hover:border-orange-400 dark:hover:border-orange-500 transition-all duration-200 text-xs lg:text-sm"
               >
                 <span className="font-semibold text-neutral-900 dark:text-white">Breakdown</span>
-                <FontAwesomeIcon icon={faChevronDown} className={`h-4 w-4 text-neutral-900 dark:text-white transition-transform duration-300 ${showTaxDiscount ? 'rotate-180' : ''}`} />
+                <FontAwesomeIcon icon={faChevronDown} className={`h-3 lg:h-4 w-3 lg:w-4 text-neutral-900 dark:text-white transition-transform duration-300 ${showTaxDiscount ? 'rotate-180' : ''}`} />
               </button>
 
               {/* Tax, Discount Details */}
               {showTaxDiscount && (
-                <div className="space-y-3 pt-4 border-t border-stone-300 dark:border-neutral-700">
+                <div className="space-y-2.5 lg:space-y-3 pt-3 lg:pt-4 border-t border-stone-300 dark:border-neutral-700">
                   {/* Base Calculations */}
-                  <div className="space-y-2.5 text-sm">
+                  <div className="space-y-2 lg:space-y-2.5 text-xs lg:text-sm">
                     <div className="flex items-center justify-between">
                       <span className="text-stone-600 dark:text-stone-400">Subtotal:</span>
                       <span className="font-semibold text-neutral-900 dark:text-white">₱{total.toFixed(2)}</span>
@@ -352,12 +352,12 @@ const MainPanel: React.FC<MainPanelProps> = ({
                   </div>
 
                   {/* Custom Discount Section */}
-                  <div className="border-t border-stone-300 dark:border-neutral-700 pt-3">
-                    <label className="text-sm font-semibold text-neutral-900 dark:text-white block mb-2">Discount:</label>
+                  <div className="border-t border-stone-300 dark:border-neutral-700 pt-2.5 lg:pt-3">
+                    <label className="text-xs lg:text-sm font-semibold text-neutral-900 dark:text-white block mb-2">Discount:</label>
                     <select
                       value={selectedDiscount}
                       onChange={(e) => setSelectedDiscount(e.target.value ? parseFloat(e.target.value) : '')}
-                      className="w-full px-3 py-2.5 text-sm bg-white dark:bg-neutral-900 border border-stone-300 dark:border-neutral-700 rounded-lg font-semibold text-neutral-900 dark:text-white hover:border-orange-400 dark:hover:border-orange-500 transition-all focus:outline-none focus:ring-2 focus:ring-orange-600"
+                      className="w-full px-2.5 lg:px-3 py-2 lg:py-2.5 text-xs lg:text-sm bg-white dark:bg-neutral-900 border border-stone-300 dark:border-neutral-700 rounded-lg font-semibold text-neutral-900 dark:text-white hover:border-orange-400 dark:hover:border-orange-500 transition-all focus:outline-none focus:ring-2 focus:ring-orange-600"
                     >
                       <option value="">None</option>
                       {discountOptions.map((option) => (
@@ -370,14 +370,14 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
                   {/* Discount Amount Display */}
                   {discountValue > 0 && (
-                    <div className="flex items-center justify-between text-sm border-t border-stone-300 dark:border-neutral-700 pt-3">
+                    <div className="flex items-center justify-between text-xs lg:text-sm border-t border-stone-300 dark:border-neutral-700 pt-2.5 lg:pt-3">
                       <span className="text-red-600 dark:text-red-400 font-semibold">Discount:</span>
                       <span className="font-semibold text-red-600 dark:text-red-400">-₱{discountAmount.toFixed(2)}</span>
                     </div>
                   )}
 
                   {/* Items Count */}
-                  <div className="flex items-center justify-between text-sm border-t border-stone-300 dark:border-neutral-700 pt-3">
+                  <div className="flex items-center justify-between text-xs lg:text-sm border-t border-stone-300 dark:border-neutral-700 pt-2.5 lg:pt-3">
                     <span className="text-neutral-900 dark:text-white font-semibold">Items:</span>
                     <span className="font-semibold text-neutral-900 dark:text-white">{cart.reduce((sum, item) => sum + item.quantity, 0)}</span>
                   </div>
@@ -386,17 +386,17 @@ const MainPanel: React.FC<MainPanelProps> = ({
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="border-t border-stone-200 dark:border-neutral-800 space-y-3 bg-stone-50 dark:bg-neutral-800 px-5 py-5">
+          {/* Action Buttons - Always visible at bottom */}
+          <div className="flex-shrink-0 border-t border-stone-200 dark:border-neutral-800 space-y-2.5 lg:space-y-3 bg-stone-50 dark:bg-neutral-800 px-4 lg:px-5 py-4 lg:py-5">
             {/* Primary Action - Buy */}
             <button
               onClick={onBuy}
               disabled={isLoading || cart.length === 0}
-              className="group w-full flex items-center justify-center gap-3 rounded-lg bg-orange-600 hover:bg-orange-700 dark:bg-orange-500 dark:hover:bg-orange-600 px-5 py-4 text-base font-bold text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-orange-600 dark:disabled:hover:bg-orange-500 shadow-md hover:shadow-lg hover:scale-105 disabled:hover:scale-100"
+              className="group w-full flex items-center justify-center gap-2 lg:gap-3 rounded-lg bg-orange-600 hover:bg-orange-700 dark:bg-orange-500 dark:hover:bg-orange-600 px-4 lg:px-5 py-3 lg:py-4 text-sm lg:text-base font-bold text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-orange-600 dark:disabled:hover:bg-orange-500 shadow-md hover:shadow-lg hover:scale-105 disabled:hover:scale-100"
             >
               {isLoading ? (
                 <>
-                  <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24" aria-hidden="true">
+                  <svg className="h-4 lg:h-5 w-4 lg:w-5 animate-spin" viewBox="0 0 24 24" aria-hidden="true">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"></path>
                   </svg>
@@ -404,21 +404,21 @@ const MainPanel: React.FC<MainPanelProps> = ({
                 </>
               ) : (
                 <>
-                  <FontAwesomeIcon icon={faCheck} className="h-5 w-5" />
+                  <FontAwesomeIcon icon={faCheck} className="h-4 lg:h-5 w-4 lg:w-5" />
                   <span>Complete Purchase</span>
                 </>
               )}
             </button>
 
             {/* Secondary Actions - Grid Layout */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2.5 lg:gap-3">
               {/* Hold Button */}
               <button
                 onClick={onHold}
                 disabled={isLoading || cart.length === 0}
-                className="group flex items-center justify-center gap-2 rounded-lg border border-stone-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 hover:bg-stone-100 dark:hover:bg-neutral-800 hover:border-orange-400 dark:hover:border-orange-500 px-4 py-3 text-sm font-semibold text-neutral-900 dark:text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
+                className="group flex items-center justify-center gap-1.5 lg:gap-2 rounded-lg border border-stone-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 hover:bg-stone-100 dark:hover:bg-neutral-800 hover:border-orange-400 dark:hover:border-orange-500 px-3 lg:px-4 py-2.5 lg:py-3 text-xs lg:text-sm font-semibold text-neutral-900 dark:text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
               >
-                <FontAwesomeIcon icon={faPause} className="h-4 w-4" />
+                <FontAwesomeIcon icon={faPause} className="h-3.5 lg:h-4 w-3.5 lg:w-4" />
                 <span>Hold</span>
               </button>
 
@@ -426,9 +426,9 @@ const MainPanel: React.FC<MainPanelProps> = ({
               <button
                 onClick={onGCashPayment}
                 disabled={isLoading || cart.length === 0}
-                className="group flex items-center justify-center gap-2 rounded-lg border border-blue-600 bg-blue-600 hover:bg-blue-700 px-4 py-3 text-sm font-semibold text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600 shadow-sm hover:shadow-md"
+                className="group flex items-center justify-center gap-1.5 lg:gap-2 rounded-lg border border-blue-600 bg-blue-600 hover:bg-blue-700 px-3 lg:px-4 py-2.5 lg:py-3 text-xs lg:text-sm font-semibold text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600 shadow-sm hover:shadow-md"
               >
-                <FontAwesomeIcon icon={faCreditCard} className="h-4 w-4" />
+                <FontAwesomeIcon icon={faCreditCard} className="h-3.5 lg:h-4 w-3.5 lg:w-4" />
                 <span>GCash</span>
               </button>
             </div>

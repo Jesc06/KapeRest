@@ -61,7 +61,7 @@ const CashierPage: React.FC = () => {
         {/* Main Content */}
         <div className={`flex h-screen w-full flex-col bg-white dark:bg-neutral-900 transition-all duration-300 ${sidebarExpanded ? 'lg:ml-64' : 'lg:ml-16'}`}>
           {/* Top Bar - Minimal Header */}
-          <div className="sticky top-0 z-20 border-b border-stone-200 dark:border-neutral-700 bg-white/95 dark:bg-neutral-800/95 px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 shadow-sm transition-all duration-300 backdrop-blur-sm">
+          <div className="sticky top-0 z-20 border-b border-stone-200 dark:border-neutral-700 bg-white/95 dark:bg-neutral-800/95 px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 transition-all duration-300 backdrop-blur-sm">
             <div className="flex items-center justify-between gap-3">
               {/* Left: Controls & Title */}
               <div className="flex items-center gap-2 sm:gap-2.5 flex-1 min-w-0">
@@ -95,32 +95,32 @@ const CashierPage: React.FC = () => {
             <div className="w-full px-4 sm:px-5 md:px-6 py-5 sm:py-6">
               {/* Welcome Section */}
               <div className="mb-6 sm:mb-7">
-                <div className="relative bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 dark:from-orange-600 dark:via-orange-700 dark:to-orange-600 rounded-xl p-6 sm:p-7 overflow-hidden group">
+                <div className="relative bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 dark:from-orange-600 dark:via-orange-700 dark:to-orange-600 rounded-xl p-7 sm:p-8 overflow-hidden group shadow-2xl">
                   {/* Animated Background Pattern */}
                   <div className="absolute inset-0 opacity-10">
                     <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] animate-pulse"></div>
                   </div>
                   
-                  <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
                     <div className="flex-1">
-                      <div className="flex items-center gap-2.5 mb-2.5">
-                        <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center border border-white/30">
-                          <span className="text-2xl">👋</span>
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center border border-white/30">
+                          <span className="text-3xl">👋</span>
                         </div>
                         <div>
-                          <h2 className="text-2xl sm:text-3xl font-black text-white mb-0.5 tracking-tight">
+                          <h2 className="text-3xl sm:text-4xl font-black text-white mb-1 tracking-tight">
                             {getGreeting()}!
                           </h2>
                           <p className="text-orange-100 text-sm font-medium">Cashier Portal</p>
                         </div>
                       </div>
-                      <p className="text-orange-50 text-sm sm:text-base leading-relaxed max-w-2xl">
+                      <p className="text-orange-50 text-base sm:text-lg leading-relaxed max-w-2xl">
                         Welcome to your dashboard. Ready to serve customers and process transactions efficiently?
                       </p>
                     </div>
-                    <div className="bg-white/10 backdrop-blur-md rounded-xl px-5 py-3 border-2 border-white/20">
-                      <p className="text-white/80 text-xs font-bold uppercase tracking-wider mb-0.5">Today</p>
-                      <p className="text-white text-xl font-black">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                    <div className="bg-white/10 backdrop-blur-md rounded-xl px-6 py-4 border-2 border-white/20">
+                      <p className="text-white/80 text-xs font-bold uppercase tracking-wider mb-1">Today</p>
+                      <p className="text-white text-2xl font-black">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
                       <p className="text-white/90 text-sm font-semibold">{new Date().toLocaleDateString('en-US', { year: 'numeric' })}</p>
                     </div>
                   </div>
