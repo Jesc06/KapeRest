@@ -95,7 +95,7 @@ const CashierPage: React.FC = () => {
             <div className="w-full px-4 sm:px-6 md:px-8 py-6 sm:py-8">
               {/* Welcome Section */}
               <div className="mb-8 sm:mb-10">
-                <div className="relative bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 dark:from-orange-600 dark:via-orange-700 dark:to-orange-600 rounded-2xl p-8 sm:p-10 shadow-2xl overflow-hidden group">
+                <div className="relative bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 dark:from-orange-600 dark:via-orange-700 dark:to-orange-600 rounded-2xl p-8 sm:p-10 overflow-hidden group">
                   {/* Animated Background Pattern */}
                   <div className="absolute inset-0 opacity-10">
                     <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] animate-pulse"></div>
@@ -104,7 +104,7 @@ const CashierPage: React.FC = () => {
                   <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-3">
-                        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30 shadow-lg">
+                        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30">
                           <span className="text-3xl">👋</span>
                         </div>
                         <div>
@@ -118,7 +118,7 @@ const CashierPage: React.FC = () => {
                         Welcome to your dashboard. Ready to serve customers and process transactions efficiently?
                       </p>
                     </div>
-                    <div className="bg-white/10 backdrop-blur-md rounded-2xl px-6 py-4 border-2 border-white/20 shadow-xl group-hover:scale-105 transition-transform duration-300">
+                    <div className="bg-white/10 backdrop-blur-md rounded-2xl px-6 py-4 border-2 border-white/20">
                       <p className="text-white/80 text-xs font-bold uppercase tracking-wider mb-1">Today</p>
                       <p className="text-white text-2xl font-black">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
                       <p className="text-white/90 text-sm font-semibold">{new Date().toLocaleDateString('en-US', { year: 'numeric' })}</p>
@@ -137,23 +137,20 @@ const CashierPage: React.FC = () => {
                   {statsCards.map((stat, index) => (
                     <div
                       key={index}
-                      className="relative bg-white dark:bg-neutral-800 rounded-2xl p-7 shadow-lg border-2 border-stone-100 dark:border-neutral-700 overflow-hidden group hover:shadow-2xl transition-all duration-300 hover:border-orange-200 dark:hover:border-orange-900/50"
+                      className="bg-white dark:bg-neutral-800 rounded-lg p-7 border border-stone-200 dark:border-neutral-700 hover:border-orange-300 dark:hover:border-orange-700 transition-all duration-300"
                     >
-                      {/* Decorative Background */}
-                      <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${stat.color} opacity-5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500`}></div>
-                      
-                      <div className="relative flex items-start justify-between">
+                      <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <p className="text-sm font-semibold text-neutral-500 dark:text-neutral-400 mb-2 uppercase tracking-wide">
                             {stat.title}
                           </p>
-                          <p className="text-3xl font-black text-neutral-900 dark:text-stone-100 mb-1">
+                          <p className="text-3xl font-bold text-neutral-900 dark:text-stone-100 mb-1">
                             {stat.value}
                           </p>
                           <p className="text-xs text-neutral-400 dark:text-neutral-500">Updated just now</p>
                         </div>
-                        <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}>
-                          <FontAwesomeIcon icon={stat.icon} className="h-7 w-7 text-white" />
+                        <div className={`w-14 h-14 rounded-xl ${stat.color.includes('green') ? 'bg-green-100 dark:bg-green-900/30' : 'bg-purple-100 dark:bg-purple-900/30'} flex items-center justify-center`}>
+                          <FontAwesomeIcon icon={stat.icon} className={`h-7 w-7 ${stat.color.includes('green') ? 'text-green-600 dark:text-green-400' : 'text-purple-600 dark:text-purple-400'}`} />
                         </div>
                       </div>
                     </div>
@@ -172,17 +169,11 @@ const CashierPage: React.FC = () => {
                     <button
                       key={index}
                       onClick={() => navigate(action.path)}
-                      className="group relative bg-white dark:bg-neutral-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-stone-100 dark:border-neutral-700 hover:border-orange-200 dark:hover:border-orange-900/50 overflow-hidden transform hover:-translate-y-1"
+                      className="group bg-white dark:bg-neutral-800 rounded-lg p-8 border border-stone-200 dark:border-neutral-700 hover:border-orange-300 dark:hover:border-orange-700 transition-all duration-300"
                     >
-                      {/* Gradient Background on Hover */}
-                      <div className={`absolute inset-0 bg-gradient-to-br ${action.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>
-                      
-                      {/* Decorative Corner */}
-                      <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-orange-100/50 to-transparent dark:from-orange-900/20 rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      
-                      <div className="relative z-10 flex items-start gap-5">
-                        <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-md`}>
-                          <FontAwesomeIcon icon={action.icon} className="h-8 w-8 text-white" />
+                      <div className="flex items-start gap-5">
+                        <div className={`w-16 h-16 rounded-xl ${action.color.includes('orange') ? 'bg-orange-100 dark:bg-orange-900/30' : 'bg-blue-100 dark:bg-blue-900/30'} flex items-center justify-center flex-shrink-0`}>
+                          <FontAwesomeIcon icon={action.icon} className={`h-8 w-8 ${action.color.includes('orange') ? 'text-orange-600 dark:text-orange-400' : 'text-blue-600 dark:text-blue-400'}`} />
                         </div>
                         <div className="flex-1 text-left">
                           <h4 className="text-xl font-bold text-neutral-900 dark:text-stone-100 mb-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">
@@ -204,9 +195,9 @@ const CashierPage: React.FC = () => {
               </div>
 
               {/* Helpful Tips */}
-              <div className="mt-10 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-7 shadow-lg">
+              <div className="mt-10 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-7">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center flex-shrink-0 shadow-lg">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center flex-shrink-0">
                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faChartLine, faTimes, faChevronRight, faPlus, faList, faBuilding, faUtensils, faBoxes, faHome } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faChartLine, faTimes, faChevronRight, faBuilding, faUtensils, faBoxes, faHome } from '@fortawesome/free-solid-svg-icons';
 
 interface StaffSidebarProps {
   isOpen?: boolean;
@@ -143,11 +143,10 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                   }}
                   className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
                     isAddSupplier
-                      ? "bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 font-semibold shadow-sm"
+                      ? "bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 font-semibold"
                       : "text-neutral-600 dark:text-neutral-400 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
                   }`}
                 >
-                  <FontAwesomeIcon icon={faPlus} className="text-xs" />
                   <span>Add</span>
                 </button>
                 
@@ -158,11 +157,10 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                   }}
                   className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
                     isSupplierList
-                      ? "bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 font-semibold shadow-sm"
+                      ? "bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 font-semibold"
                       : "text-neutral-600 dark:text-neutral-400 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
                   }`}
                 >
-                  <FontAwesomeIcon icon={faList} className="text-xs" />
                   <span>List</span>
                 </button>
               </div>
@@ -203,11 +201,10 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                   }}
                   className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
                     isAddItem
-                      ? "bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 font-semibold shadow-sm"
+                      ? "bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 font-semibold"
                       : "text-neutral-600 dark:text-neutral-400 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
                   }`}
                 >
-                  <FontAwesomeIcon icon={faPlus} className="text-xs" />
                   <span>Add</span>
                 </button>
                 
@@ -218,11 +215,10 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                   }}
                   className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
                     isMenuItemList
-                      ? "bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 font-semibold shadow-sm"
+                      ? "bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 font-semibold"
                       : "text-neutral-600 dark:text-neutral-400 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
                   }`}
                 >
-                  <FontAwesomeIcon icon={faList} className="text-xs" />
                   <span>List</span>
                 </button>
               </div>
@@ -263,11 +259,10 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                   }}
                   className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
                     isAddStocks
-                      ? "bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 font-semibold shadow-sm"
+                      ? "bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 font-semibold"
                       : "text-neutral-600 dark:text-neutral-400 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
                   }`}
                 >
-                  <FontAwesomeIcon icon={faPlus} className="text-xs" />
                   <span>Add</span>
                 </button>
                 
@@ -278,11 +273,10 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                   }}
                   className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
                     isStocksList
-                      ? "bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 font-semibold shadow-sm"
+                      ? "bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 font-semibold"
                       : "text-neutral-600 dark:text-neutral-400 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
                   }`}
                 >
-                  <FontAwesomeIcon icon={faList} className="text-xs" />
                   <span>List</span>
                 </button>
               </div>

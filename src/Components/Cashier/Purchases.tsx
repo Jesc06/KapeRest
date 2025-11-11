@@ -159,21 +159,16 @@ const Purchases: React.FC = () => {
             <div className="w-full px-4 sm:px-6 md:px-8 py-6 sm:py-8">
               {/* Header Section */}
               <div className="mb-6">
-                <div className="relative bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 dark:from-orange-600 dark:via-orange-700 dark:to-orange-600 rounded-2xl p-6 sm:p-8 shadow-2xl overflow-hidden">
-                  {/* Animated Background Pattern */}
-                  <div className="absolute inset-0 opacity-10">
-                    <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] animate-pulse"></div>
-                  </div>
-                  
-                  <div className="relative flex items-center gap-4">
-                    <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30 shadow-lg">
-                      <FontAwesomeIcon icon={faReceipt} className="text-3xl text-white" />
+                <div className="bg-white dark:bg-neutral-800 border-l-4 border-orange-500 rounded-lg p-6 sm:p-8">
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 bg-orange-100 dark:bg-orange-900/30 rounded-xl flex items-center justify-center">
+                      <FontAwesomeIcon icon={faReceipt} className="text-3xl text-orange-600 dark:text-orange-400" />
                     </div>
                     <div className="flex-1">
-                      <h2 className="text-2xl sm:text-3xl font-black text-white mb-1 tracking-tight">
+                      <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-stone-100 mb-1">
                         Purchase History
                       </h2>
-                      <p className="text-orange-100 text-sm font-medium">
+                      <p className="text-neutral-600 dark:text-neutral-400 text-sm font-medium">
                         View all purchase transactions and details
                       </p>
                     </div>
@@ -224,7 +219,7 @@ const Purchases: React.FC = () => {
               {/* Purchases List */}
               <div className="space-y-4">
                 {filteredPurchases.length === 0 ? (
-                  <div className="bg-white dark:bg-neutral-800 rounded-2xl p-12 text-center border-2 border-stone-200 dark:border-neutral-700">
+                  <div className="bg-white dark:bg-neutral-800 rounded-2xl p-12 text-center border border-stone-200 dark:border-neutral-700">
                     <div className="w-20 h-20 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                       <FontAwesomeIcon icon={faReceipt} className="text-4xl text-orange-500" />
                     </div>
@@ -235,14 +230,14 @@ const Purchases: React.FC = () => {
                   filteredPurchases.map((purchase) => (
                     <div
                       key={purchase.id}
-                      className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg border-2 border-stone-100 dark:border-neutral-700 hover:border-orange-200 dark:hover:border-orange-900/50 transition-all duration-300 hover:shadow-xl"
+                      className="bg-white dark:bg-neutral-800 rounded-2xl p-6 border border-stone-200 dark:border-neutral-700 hover:border-orange-300 dark:hover:border-orange-700 transition-all duration-300"
                     >
                       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
                         {/* Left: Purchase Info */}
                         <div className="lg:col-span-5">
                           <div className="flex items-start gap-4">
-                            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
-                              <FontAwesomeIcon icon={faBoxOpen} className="text-white text-xl" />
+                            <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
+                              <FontAwesomeIcon icon={faBoxOpen} className="text-orange-600 dark:text-orange-400 text-xl" />
                             </div>
                             <div className="flex-1 min-w-0">
                               <h3 className="text-lg font-bold text-neutral-900 dark:text-stone-100 mb-1 truncate">

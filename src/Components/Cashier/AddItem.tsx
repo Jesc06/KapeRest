@@ -184,7 +184,7 @@ const AddItem: React.FC = () => {
               )}
 
               {success && (
-                <div className="mb-6 p-4 bg-green-50/80 dark:bg-green-950/30 border border-green-200 dark:border-green-800/50 rounded-2xl flex items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-300 backdrop-blur-sm shadow-lg">
+                <div className="mb-6 p-4 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800/50 rounded-lg flex items-start gap-3">
                   <FontAwesomeIcon icon={faCheckCircle} className="h-5 w-5 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-sm font-semibold text-green-700 dark:text-green-300">Success!</p>
@@ -193,120 +193,98 @@ const AddItem: React.FC = () => {
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-6 bg-white/70 dark:bg-neutral-900/70 p-6 sm:p-8 rounded-3xl border border-orange-100/50 dark:border-neutral-800/50 shadow-2xl shadow-orange-500/5 backdrop-blur-xl">
+              {/* Form - Flat Design */}
+              <form onSubmit={handleSubmit} className="space-y-5 bg-white dark:bg-neutral-900 p-6 rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-sm">
                 
-                {/* Item Name - Floating Label */}
-                <div className="relative group">
+                {/* Item Name */}
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    Item Name <span className="text-red-500">*</span>
+                  </label>
                   <input
                     type="text"
                     name="itemName"
-                    id="itemName"
                     value={formData.itemName}
                     onChange={handleChange}
-                    className="w-full px-4 pt-6 pb-2.5 text-base rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder-transparent focus:outline-none peer border-neutral-200 dark:border-neutral-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 dark:focus:border-orange-400 dark:focus:ring-orange-400/10 hover:border-orange-300 dark:hover:border-orange-600"
-                    placeholder="Item Name"
+                    className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
+                    placeholder="e.g., Iced Latte"
                     disabled={isLoading}
                   />
-                  <label 
-                    htmlFor="itemName"
-                    className={`absolute left-4 top-4 text-neutral-500 dark:text-neutral-400 transition-all duration-200 pointer-events-none
-                      peer-placeholder-shown:top-4 peer-placeholder-shown:text-base
-                      peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-orange-600 dark:peer-focus:text-orange-400
-                      ${formData.itemName ? 'top-1.5 text-xs text-orange-600 dark:text-orange-400' : ''}`}
-                  >
-                    <FontAwesomeIcon icon={faBox} className="mr-1.5" />
-                    Item Name <span className="text-red-500">*</span>
-                  </label>
                 </div>
 
-                {/* Price - Floating Label */}
-                <div className="relative group">
-                  <input
-                    type="number"
-                    name="price"
-                    id="price"
-                    value={formData.price}
-                    onChange={handleChange}
-                    className="w-full px-4 pt-6 pb-2.5 text-base rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder-transparent focus:outline-none peer border-neutral-200 dark:border-neutral-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 dark:focus:border-orange-400 dark:focus:ring-orange-400/10 hover:border-orange-300 dark:hover:border-orange-600"
-                    placeholder="Price"
-                    step="0.01"
-                    min="0"
-                    disabled={isLoading}
-                  />
-                  <label 
-                    htmlFor="price"
-                    className={`absolute left-4 top-4 text-neutral-500 dark:text-neutral-400 transition-all duration-200 pointer-events-none
-                      peer-placeholder-shown:top-4 peer-placeholder-shown:text-base
-                      peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-orange-600 dark:peer-focus:text-orange-400
-                      ${formData.price ? 'top-1.5 text-xs text-orange-600 dark:text-orange-400' : ''}`}
-                  >
-                    <FontAwesomeIcon icon={faTag} className="mr-1.5" />
-                    Price (₱) <span className="text-red-500">*</span>
+                {/* Price */}
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    Price <span className="text-red-500">*</span>
                   </label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-2 text-neutral-500 dark:text-neutral-400">₱</span>
+                    <input
+                      type="number"
+                      name="price"
+                      value={formData.price}
+                      onChange={handleChange}
+                      className="w-full pl-7 pr-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
+                      placeholder="0.00"
+                      step="0.01"
+                      min="0"
+                      disabled={isLoading}
+                    />
+                  </div>
                 </div>
 
-                {/* Description - Floating Label */}
-                <div className="relative group">
-                  <textarea
-                    name="description"
-                    id="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    className="w-full px-4 pt-6 pb-2.5 text-base rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder-transparent focus:outline-none peer border-neutral-200 dark:border-neutral-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 dark:focus:border-orange-400 dark:focus:ring-orange-400/10 hover:border-orange-300 dark:hover:border-orange-600 resize-none"
-                    rows={4}
-                    placeholder="Description"
-                    disabled={isLoading}
-                  />
-                  <label 
-                    htmlFor="description"
-                    className={`absolute left-4 top-4 text-neutral-500 dark:text-neutral-400 transition-all duration-200 pointer-events-none
-                      peer-placeholder-shown:top-4 peer-placeholder-shown:text-base
-                      peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-orange-600 dark:peer-focus:text-orange-400
-                      ${formData.description ? 'top-1.5 text-xs text-orange-600 dark:text-orange-400' : ''}`}
-                  >
-                    <FontAwesomeIcon icon={faFileAlt} className="mr-1.5" />
+                {/* Description */}
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
                     Description <span className="text-red-500">*</span>
                   </label>
+                  <textarea
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50 resize-none"
+                    rows={3}
+                    placeholder="Brief description"
+                    disabled={isLoading}
+                  />
                 </div>
 
                 {/* Image Upload */}
-                <div className="space-y-3">
-                  <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300">
-                    <FontAwesomeIcon icon={faImage} className="mr-1.5 text-orange-600 dark:text-orange-400" />
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
                     Item Image <span className="text-red-500">*</span>
                   </label>
-                  <div className="relative border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-2xl p-6 hover:border-orange-400 dark:hover:border-orange-500 hover:bg-orange-50/30 dark:hover:bg-orange-950/20 transition-all cursor-pointer group">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      className="absolute inset-0 opacity-0 cursor-pointer"
-                      disabled={isLoading}
-                    />
-                    <div className="flex flex-col items-center justify-center">
-                      <div className="w-12 h-12 rounded-xl bg-orange-100 dark:bg-orange-950/50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-200">
-                        <FontAwesomeIcon icon={faImage} className="h-6 w-6 text-orange-600 dark:text-orange-400" />
+                  
+                  {!formData.imagePreview ? (
+                    <div className="relative border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-lg p-6 hover:border-orange-400 cursor-pointer bg-neutral-50 dark:bg-neutral-800/50">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="absolute inset-0 opacity-0 cursor-pointer"
+                        disabled={isLoading}
+                      />
+                      <div className="flex flex-col items-center text-center">
+                        <FontAwesomeIcon icon={faImage} className="h-8 w-8 text-neutral-400 mb-2" />
+                        <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Click to upload</p>
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">PNG, JPG up to 5MB</p>
                       </div>
-                      <p className="text-sm font-semibold text-neutral-900 dark:text-white">Click to upload or drag and drop</p>
-                      <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1">PNG, JPG, GIF up to 5MB</p>
                     </div>
-                  </div>
-
-                  {formData.imagePreview && (
-                    <div className="relative rounded-2xl overflow-hidden border-2 border-orange-200 dark:border-orange-800 bg-gradient-to-br from-orange-50 to-white dark:from-orange-950/30 dark:to-neutral-900 shadow-lg animate-in fade-in zoom-in duration-300">
+                  ) : (
+                    <div className="relative rounded-lg overflow-hidden border border-neutral-300 dark:border-neutral-700">
                       <img
                         src={formData.imagePreview}
                         alt="Preview"
                         className="w-full h-48 object-cover"
                       />
                       <div className="absolute top-2 right-2 flex gap-2">
-                        <div className="px-3 py-1.5 bg-green-500 text-white text-xs font-bold rounded-full shadow-lg">
+                        <span className="px-2 py-1 bg-green-500 text-white text-xs font-medium rounded">
                           ✓ Uploaded
-                        </div>
+                        </span>
                         <button
                           type="button"
                           onClick={() => setFormData((prev) => ({ ...prev, image: null, imagePreview: null }))}
-                          className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-full shadow-lg transition-colors"
+                          className="px-2 py-1 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded"
                         >
                           Remove
                         </button>
@@ -316,20 +294,20 @@ const AddItem: React.FC = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                <div className="flex gap-3 pt-2">
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="flex-1 px-6 py-3.5 bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 disabled:from-neutral-400 disabled:to-neutral-400 text-white text-base font-bold rounded-2xl transition-all duration-300 shadow-xl shadow-orange-500/25 hover:shadow-2xl hover:shadow-orange-500/30 disabled:shadow-none active:scale-[0.98] disabled:cursor-not-allowed flex items-center justify-center gap-3 group"
+                    className="flex-1 px-4 py-2.5 bg-orange-600 hover:bg-orange-700 disabled:bg-neutral-400 text-white font-medium rounded-lg disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {isLoading ? (
                       <>
-                        <span className="inline-block h-5 w-5 border-3 border-white/30 border-t-white rounded-full animate-spin"></span>
-                        <span>Adding Item...</span>
+                        <span className="inline-block h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                        <span>Adding...</span>
                       </>
                     ) : (
                       <>
-                        <FontAwesomeIcon icon={faCheckCircle} className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
+                        <FontAwesomeIcon icon={faCheckCircle} className="h-4 w-4" />
                         <span>Add Item</span>
                       </>
                     )}
@@ -339,19 +317,17 @@ const AddItem: React.FC = () => {
                     type="button"
                     onClick={() => navigate('/staff')}
                     disabled={isLoading}
-                    className="flex-1 px-6 py-3.5 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 disabled:bg-neutral-50 dark:disabled:bg-neutral-900 text-neutral-900 dark:text-white text-base font-bold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl active:scale-[0.98] disabled:cursor-not-allowed flex items-center justify-center gap-3 group border-2 border-neutral-200 dark:border-neutral-700"
+                    className="flex-1 px-4 py-2.5 bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white font-medium rounded-lg disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
-                    <FontAwesomeIcon icon={faArrowLeft} className="h-5 w-5 transition-transform duration-300 group-hover:-translate-x-1" />
+                    <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4" />
                     <span>Cancel</span>
                   </button>
                 </div>
 
                 {/* Helper Text */}
-                <div className="text-left pt-2">
-                  <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                    <span className="text-red-500 font-semibold">*</span> Required fields
-                  </p>
-                </div>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400 pt-1">
+                  <span className="text-red-500">*</span> Required fields
+                </p>
               </form>
             </div>
           </div>

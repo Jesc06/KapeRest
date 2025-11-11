@@ -212,142 +212,202 @@ const AddItem: React.FC = () => {
                 </div>
               )}
 
-              {/* Form */}
-              <form onSubmit={handleSubmit} className="space-y-6 bg-white/70 dark:bg-neutral-900/70 p-6 sm:p-8 rounded-3xl border border-orange-100/50 dark:border-neutral-800/50 shadow-2xl shadow-orange-500/5 backdrop-blur-xl">
+              {/* Form - Enhanced Design */}
+              <form onSubmit={handleSubmit} className="space-y-8 bg-white/80 dark:bg-neutral-900/80 p-8 sm:p-10 rounded-3xl border-2 border-orange-100/80 dark:border-neutral-800/80 shadow-2xl shadow-orange-500/10 backdrop-blur-xl">
                 
-                {/* Item Name - Floating Label */}
-                <div className="relative group">
-                  <input
-                    type="text"
-                    name="itemName"
-                    id="itemName"
-                    value={formData.itemName}
-                    onChange={handleChange}
-                    className="w-full px-5 pt-6 pb-2.5 text-base rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder-transparent focus:outline-none peer border-neutral-200 dark:border-neutral-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 dark:focus:border-orange-400 dark:focus:ring-orange-400/10 hover:border-orange-300 dark:hover:border-orange-600"
-                    placeholder="Item Name"
-                    disabled={isLoading}
-                  />
-                  <label 
-                    htmlFor="itemName"
-                    className={`absolute left-5 top-4 text-neutral-500 dark:text-neutral-400 transition-all duration-200 pointer-events-none
-                      peer-placeholder-shown:top-4 peer-placeholder-shown:text-base
-                      peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-orange-600 dark:peer-focus:text-orange-400
-                      ${formData.itemName ? 'top-1.5 text-xs text-orange-600 dark:text-orange-400' : ''}`}
-                  >
-                    <FontAwesomeIcon icon={faBox} className="mr-2" />
-                    Item Name <span className="text-red-500">*</span>
-                  </label>
-                </div>
-
-                {/* Price & Description Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Price - Floating Label */}
+                {/* Form Fields Section */}
+                <div className="space-y-6">
+                  {/* Item Name - Floating Label */}
                   <div className="relative group">
-                    <input
-                      type="number"
-                      name="price"
-                      id="price"
-                      value={formData.price}
-                      onChange={handleChange}
-                      className="w-full px-5 pt-6 pb-2.5 text-base rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder-transparent focus:outline-none peer border-neutral-200 dark:border-neutral-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 dark:focus:border-orange-400 dark:focus:ring-orange-400/10 hover:border-orange-300 dark:hover:border-orange-600"
-                      placeholder="Price"
-                      step="0.01"
-                      min="0"
-                      disabled={isLoading}
-                    />
-                    <label 
-                      htmlFor="price"
-                      className={`absolute left-5 top-4 text-neutral-500 dark:text-neutral-400 transition-all duration-200 pointer-events-none
-                        peer-placeholder-shown:top-4 peer-placeholder-shown:text-base
-                        peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-orange-600 dark:peer-focus:text-orange-400
-                        ${formData.price ? 'top-1.5 text-xs text-orange-600 dark:text-orange-400' : ''}`}
-                    >
-                      <FontAwesomeIcon icon={faTag} className="mr-2" />
-                      Price (₱) <span className="text-red-500">*</span>
-                    </label>
-                  </div>
-
-                  {/* Description - Floating Label */}
-                  <div className="relative group">
-                    <textarea
-                      name="description"
-                      id="description"
-                      value={formData.description}
-                      onChange={handleChange}
-                      className="w-full px-5 pt-6 pb-2.5 text-base rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder-transparent focus:outline-none peer border-neutral-200 dark:border-neutral-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 dark:focus:border-orange-400 dark:focus:ring-orange-400/10 hover:border-orange-300 dark:hover:border-orange-600 resize-none"
-                      rows={3}
-                      placeholder="Description"
-                      disabled={isLoading}
-                    />
-                    <label 
-                      htmlFor="description"
-                      className={`absolute left-5 top-4 text-neutral-500 dark:text-neutral-400 transition-all duration-200 pointer-events-none
-                        peer-placeholder-shown:top-4 peer-placeholder-shown:text-base
-                        peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-orange-600 dark:peer-focus:text-orange-400
-                        ${formData.description ? 'top-1.5 text-xs text-orange-600 dark:text-orange-400' : ''}`}
-                    >
-                      <FontAwesomeIcon icon={faFileAlt} className="mr-2" />
-                      Description <span className="text-red-500">*</span>
-                    </label>
-                  </div>
-                </div>
-
-                {/* Image Upload */}
-                <div className="space-y-3">
-                  <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300">
-                    <FontAwesomeIcon icon={faImage} className="mr-2 text-orange-600 dark:text-orange-400" />
-                    Item Image (Optional)
-                  </label>
-                  <div className="relative border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-2xl p-6 hover:border-orange-400 dark:hover:border-orange-500 hover:bg-orange-50/30 dark:hover:bg-orange-950/20 transition-all cursor-pointer group">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      className="absolute inset-0 opacity-0 cursor-pointer"
-                      disabled={isLoading}
-                    />
-                    <div className="flex flex-col items-center justify-center">
-                      <div className="w-12 h-12 rounded-xl bg-orange-100 dark:bg-orange-950/50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-200">
-                        <FontAwesomeIcon icon={faImage} className="h-6 w-6 text-orange-600 dark:text-orange-400" />
+                    <div className="absolute left-5 top-4 z-10 flex items-center gap-2 pointer-events-none">
+                      <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                        formData.itemName 
+                          ? 'bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/30' 
+                          : 'bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700'
+                      }`}>
+                        <FontAwesomeIcon icon={faBox} className={`h-4 w-4 transition-colors duration-300 ${
+                          formData.itemName ? 'text-white' : 'text-neutral-400 dark:text-neutral-500'
+                        }`} />
                       </div>
-                      <p className="text-sm font-semibold text-neutral-900 dark:text-white">Click to upload or drag and drop</p>
-                      <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1">PNG, JPG, GIF up to 5MB</p>
+                    </div>
+                    <input
+                      type="text"
+                      name="itemName"
+                      id="itemName"
+                      value={formData.itemName}
+                      onChange={handleChange}
+                      className="w-full pl-16 pr-5 py-4 text-base font-medium rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none border-neutral-200 dark:border-neutral-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 hover:border-orange-300 dark:hover:border-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                      placeholder="Enter item name (e.g., Iced Latte)"
+                      disabled={isLoading}
+                    />
+                    <label 
+                      htmlFor="itemName"
+                      className="absolute -top-2.5 left-14 px-2 bg-white dark:bg-neutral-900 text-xs font-semibold text-orange-600 dark:text-orange-400"
+                    >
+                      Item Name <span className="text-red-500">*</span>
+                    </label>
+                  </div>
+
+                  {/* Price & Category Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Price - Floating Label */}
+                    <div className="relative group">
+                      <div className="absolute left-5 top-4 z-10 flex items-center gap-2 pointer-events-none">
+                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                          formData.price 
+                            ? 'bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/30' 
+                            : 'bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700'
+                        }`}>
+                          <FontAwesomeIcon icon={faTag} className={`h-4 w-4 transition-colors duration-300 ${
+                            formData.price ? 'text-white' : 'text-neutral-400 dark:text-neutral-500'
+                          }`} />
+                        </div>
+                      </div>
+                      <input
+                        type="number"
+                        name="price"
+                        id="price"
+                        value={formData.price}
+                        onChange={handleChange}
+                        className="w-full pl-16 pr-5 py-4 text-base font-medium rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none border-neutral-200 dark:border-neutral-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 hover:border-orange-300 dark:hover:border-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                        placeholder="0.00"
+                        step="0.01"
+                        min="0"
+                        disabled={isLoading}
+                      />
+                      <label 
+                        htmlFor="price"
+                        className="absolute -top-2.5 left-14 px-2 bg-white dark:bg-neutral-900 text-xs font-semibold text-orange-600 dark:text-orange-400"
+                      >
+                        Price (₱) <span className="text-red-500">*</span>
+                      </label>
+                      {formData.price && parseFloat(formData.price) > 0 && (
+                        <div className="absolute right-4 top-4 text-sm font-bold text-orange-600 dark:text-orange-400">
+                          ₱{parseFloat(formData.price).toFixed(2)}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Character Count for Description */}
+                    <div className="relative group md:col-span-2">
+                      <div className="absolute left-5 top-4 z-10 flex items-center gap-2 pointer-events-none">
+                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                          formData.description 
+                            ? 'bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/30' 
+                            : 'bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700'
+                        }`}>
+                          <FontAwesomeIcon icon={faFileAlt} className={`h-4 w-4 transition-colors duration-300 ${
+                            formData.description ? 'text-white' : 'text-neutral-400 dark:text-neutral-500'
+                          }`} />
+                        </div>
+                      </div>
+                      <textarea
+                        name="description"
+                        id="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                        className="w-full pl-16 pr-5 py-4 text-base font-medium rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none border-neutral-200 dark:border-neutral-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 hover:border-orange-300 dark:hover:border-orange-600 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
+                        rows={4}
+                        maxLength={200}
+                        placeholder="Describe your item (e.g., Rich espresso with steamed milk and ice)"
+                        disabled={isLoading}
+                      />
+                      <label 
+                        htmlFor="description"
+                        className="absolute -top-2.5 left-14 px-2 bg-white dark:bg-neutral-900 text-xs font-semibold text-orange-600 dark:text-orange-400"
+                      >
+                        Description <span className="text-red-500">*</span>
+                      </label>
+                      <div className="absolute bottom-3 right-4 text-xs font-medium text-neutral-400 dark:text-neutral-500">
+                        {formData.description.length}/200
+                      </div>
                     </div>
                   </div>
+                </div>
 
-                  {/* Image Preview */}
-                  {formData.imagePreview && (
-                    <div className="relative rounded-2xl overflow-hidden border-2 border-orange-200 dark:border-orange-800 bg-gradient-to-br from-orange-50 to-white dark:from-orange-950/30 dark:to-neutral-900 shadow-lg animate-in fade-in zoom-in duration-300">
-                      <img
-                        src={formData.imagePreview}
-                        alt="Preview"
-                        className="h-48 w-full object-cover"
+                {/* Image Upload Section */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <label className="flex items-center gap-2 text-sm font-bold text-neutral-800 dark:text-neutral-200">
+                      <FontAwesomeIcon icon={faImage} className="text-orange-600 dark:text-orange-400" />
+                      Item Image <span className="text-neutral-400 dark:text-neutral-500 font-normal">(Optional)</span>
+                    </label>
+                    <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">
+                      Max 5MB
+                    </span>
+                  </div>
+                  
+                  {!formData.imagePreview ? (
+                    <div className="relative border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-2xl p-8 hover:border-orange-400 dark:hover:border-orange-500 hover:bg-gradient-to-br hover:from-orange-50/50 hover:to-amber-50/30 dark:hover:from-orange-950/30 dark:hover:to-amber-950/20 transition-all duration-300 cursor-pointer group bg-gradient-to-br from-neutral-50/50 to-white dark:from-neutral-900/50 dark:to-neutral-900">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="absolute inset-0 opacity-0 cursor-pointer"
+                        disabled={isLoading}
                       />
-                      <div className="absolute top-2 right-2">
-                        <div className="px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full shadow-lg">
-                          ✓ Uploaded
+                      <div className="flex flex-col items-center justify-center text-center">
+                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-100 to-orange-50 dark:from-orange-950/50 dark:to-orange-900/30 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg shadow-orange-500/10">
+                          <FontAwesomeIcon icon={faImage} className="h-8 w-8 text-orange-600 dark:text-orange-400" />
                         </div>
+                        <p className="text-base font-bold text-neutral-900 dark:text-white mb-1">
+                          Click to upload or drag and drop
+                        </p>
+                        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                          PNG, JPG, GIF up to 5MB
+                        </p>
+                        <div className="mt-4 px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-sm font-semibold rounded-xl group-hover:shadow-lg group-hover:shadow-orange-500/30 transition-all duration-300">
+                          Choose File
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="relative rounded-2xl overflow-hidden border-2 border-orange-300 dark:border-orange-700 bg-gradient-to-br from-orange-50 to-white dark:from-orange-950/30 dark:to-neutral-900 shadow-xl shadow-orange-500/20 animate-in fade-in zoom-in-95 duration-300">
+                      <div className="aspect-video w-full bg-neutral-100 dark:bg-neutral-800">
+                        <img
+                          src={formData.imagePreview}
+                          alt="Preview"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+                      <div className="absolute top-3 right-3 flex gap-2">
+                        <div className="px-4 py-2 bg-green-500 text-white text-xs font-bold rounded-xl shadow-lg backdrop-blur-sm flex items-center gap-2">
+                          <FontAwesomeIcon icon={faCheckCircle} className="h-3.5 w-3.5" />
+                          Uploaded
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setFormData((prev) => ({ ...prev, image: null, imagePreview: null }))}
+                          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl shadow-lg transition-all duration-200 hover:scale-105 active:scale-95"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                      <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                        <p className="text-xs font-semibold opacity-90">Image Preview</p>
                       </div>
                     </div>
                   )}
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                <div className="flex flex-col sm:flex-row gap-4 pt-6">
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="flex-1 px-8 py-3.5 bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 disabled:from-neutral-400 disabled:to-neutral-400 text-white text-base font-bold rounded-2xl transition-all duration-300 shadow-xl shadow-orange-500/25 hover:shadow-2xl hover:shadow-orange-500/30 disabled:shadow-none active:scale-[0.98] disabled:cursor-not-allowed flex items-center justify-center gap-3 group"
+                    className="flex-1 relative overflow-hidden px-8 py-4 bg-gradient-to-r from-orange-600 via-orange-500 to-orange-600 hover:from-orange-700 hover:via-orange-600 hover:to-orange-700 disabled:from-neutral-400 disabled:to-neutral-400 text-white text-base font-bold rounded-2xl transition-all duration-300 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:shadow-orange-500/40 disabled:shadow-none active:scale-[0.98] disabled:cursor-not-allowed flex items-center justify-center gap-3 group"
                   >
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"></div>
                     {isLoading ? (
                       <>
-                        <span className="inline-block h-5 w-5 border-3 border-white/30 border-t-white rounded-full animate-spin"></span>
-                        <span>Adding Item...</span>
+                        <span className="relative inline-block h-5 w-5 border-3 border-white/30 border-t-white rounded-full animate-spin"></span>
+                        <span className="relative">Adding Item...</span>
                       </>
                     ) : (
                       <>
-                        <FontAwesomeIcon icon={faCheckCircle} className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
-                        <span>Add Item</span>
+                        <FontAwesomeIcon icon={faCheckCircle} className="relative h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
+                        <span className="relative">Add Menu Item</span>
                       </>
                     )}
                   </button>
@@ -356,7 +416,7 @@ const AddItem: React.FC = () => {
                     type="button"
                     onClick={() => navigate('/staff')}
                     disabled={isLoading}
-                    className="flex-1 px-8 py-3.5 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 disabled:bg-neutral-50 dark:disabled:bg-neutral-900 text-neutral-900 dark:text-white text-base font-bold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl active:scale-[0.98] disabled:cursor-not-allowed flex items-center justify-center gap-3 group border-2 border-neutral-200 dark:border-neutral-700"
+                    className="flex-1 px-8 py-4 bg-white dark:bg-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:bg-neutral-50 dark:disabled:bg-neutral-900 text-neutral-900 dark:text-white text-base font-bold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl active:scale-[0.98] disabled:cursor-not-allowed flex items-center justify-center gap-3 group border-2 border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600"
                   >
                     <FontAwesomeIcon icon={faArrowLeft} className="h-5 w-5 transition-transform duration-300 group-hover:-translate-x-1" />
                     <span>Cancel</span>
@@ -364,9 +424,12 @@ const AddItem: React.FC = () => {
                 </div>
 
                 {/* Helper Text */}
-                <div className="text-left pt-2">
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                <div className="flex items-center justify-between pt-4 text-xs">
+                  <p className="text-neutral-500 dark:text-neutral-400">
                     <span className="text-red-500 font-semibold">*</span> Required fields
+                  </p>
+                  <p className="text-neutral-400 dark:text-neutral-500">
+                    All data will be saved securely
                   </p>
                 </div>
               </form>

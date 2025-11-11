@@ -134,21 +134,16 @@ const HoldItems: React.FC = () => {
             <div className="w-full px-4 sm:px-6 md:px-8 py-6 sm:py-8">
               {/* Header Section */}
               <div className="mb-6">
-                <div className="relative bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-500 dark:from-yellow-600 dark:via-yellow-700 dark:to-yellow-600 rounded-2xl p-6 sm:p-8 shadow-2xl overflow-hidden">
-                  {/* Animated Background Pattern */}
-                  <div className="absolute inset-0 opacity-10">
-                    <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] animate-pulse"></div>
-                  </div>
-                  
-                  <div className="relative flex items-center gap-4">
-                    <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30 shadow-lg">
-                      <FontAwesomeIcon icon={faPause} className="text-3xl text-white" />
+                <div className="bg-white dark:bg-neutral-800 border-l-4 border-yellow-500 rounded-lg p-6 sm:p-8">
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 bg-yellow-100 dark:bg-yellow-900/30 rounded-xl flex items-center justify-center">
+                      <FontAwesomeIcon icon={faPause} className="text-3xl text-yellow-600 dark:text-yellow-400" />
                     </div>
                     <div className="flex-1">
-                      <h2 className="text-2xl sm:text-3xl font-black text-white mb-1 tracking-tight">
+                      <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-stone-100 mb-1">
                         Hold Items
                       </h2>
-                      <p className="text-yellow-100 text-sm font-medium">
+                      <p className="text-neutral-600 dark:text-neutral-400 text-sm font-medium">
                         Manage temporarily held orders - Resume or remove items
                       </p>
                     </div>
@@ -199,7 +194,7 @@ const HoldItems: React.FC = () => {
               {/* Hold Items List */}
               <div className="space-y-4">
                 {filteredHoldItems.length === 0 ? (
-                  <div className="bg-white dark:bg-neutral-800 rounded-2xl p-12 text-center border-2 border-stone-200 dark:border-neutral-700">
+                  <div className="bg-white dark:bg-neutral-800 rounded-2xl p-12 text-center border border-stone-200 dark:border-neutral-700">
                     <div className="w-20 h-20 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                       <FontAwesomeIcon icon={faPause} className="text-4xl text-yellow-500" />
                     </div>
@@ -210,14 +205,14 @@ const HoldItems: React.FC = () => {
                   filteredHoldItems.map((item) => (
                     <div
                       key={item.id}
-                      className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg border-2 border-stone-100 dark:border-neutral-700 hover:border-yellow-200 dark:hover:border-yellow-900/50 transition-all duration-300 hover:shadow-xl"
+                      className="bg-white dark:bg-neutral-800 rounded-2xl p-6 border border-stone-200 dark:border-neutral-700 hover:border-yellow-300 dark:hover:border-yellow-700 transition-all duration-300"
                     >
                       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
                         {/* Left: Item Info */}
                         <div className="lg:col-span-5">
                           <div className="flex items-start gap-4">
-                            <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
-                              <FontAwesomeIcon icon={faBoxOpen} className="text-white text-xl" />
+                            <div className="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
+                              <FontAwesomeIcon icon={faBoxOpen} className="text-yellow-600 dark:text-yellow-400 text-xl" />
                             </div>
                             <div className="flex-1 min-w-0">
                               <h3 className="text-lg font-bold text-neutral-900 dark:text-stone-100 mb-1 truncate">
@@ -303,14 +298,14 @@ const HoldItems: React.FC = () => {
                           <div className="flex gap-2 w-full">
                             <button
                               onClick={() => handleResumeItem(item)}
-                              className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg active:scale-95"
+                              className="flex-1 bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2 active:scale-95"
                             >
                               <FontAwesomeIcon icon={faPlay} />
                               <span>Resume</span>
                             </button>
                             <button
                               onClick={() => handleDeleteItem(item.id)}
-                              className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center shadow-md hover:shadow-lg active:scale-95"
+                              className="bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center active:scale-95"
                             >
                               <FontAwesomeIcon icon={faTrash} />
                             </button>
