@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faChevronLeft, faChevronRight, faUser, faPhone, faEnvelope, faMapPin, faBuilding } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faChevronLeft, faChevronRight, faBox, faTag, faWarehouse, faBuilding, faCube } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from './StaffSidebar';
 import LogoutPanel from './LogoutPanel';
 
-interface SupplierFormData {
-  supplierName: string;
-  contactPerson: string;
-  phoneNumber: string;
-  email: string;
-  address: string;
+interface StockFormData {
+  productName: string;
+  costPrice: string;
+  stocks: string;
+  units: string;
+  supplierId: string;
 }
 
-const AddSupplier: React.FC = () => {
+interface Supplier {
+  id: number;
+  name: string;
+}
+
+const AddStocks: React.FC = () => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
@@ -21,15 +26,33 @@ const AddSupplier: React.FC = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const [formData, setFormData] = useState<SupplierFormData>({
-    supplierName: '',
-    contactPerson: '',
-    phoneNumber: '',
-    email: '',
-    address: '',
+  const [formData, setFormData] = useState<StockFormData>({
+    productName: '',
+    costPrice: '',
+    stocks: '',
+    units: '',
+    supplierId: '',
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  // Mock supplier data - replace with API call
+  const suppliers: Supplier[] = [
+    { id: 1, name: 'ABC Coffee Supplies Inc.' },
+    { id: 2, name: 'Premium Imports Co.' },
+    { id: 3, name: 'Local Distributors Ltd.' },
+    { id: 4, name: 'International Traders' },
+  ];
+
+  // Unit options
+  const unitOptions = [
+    { value: 'pcs', label: 'Pieces (pcs)' },
+    { value: 'kg', label: 'Kilogram (kg)' },
+    { value: 'ltr', label: 'Liter (ltr)' },
+    { value: 'box', label: 'Box' },
+    { value: 'bag', label: 'Bag' },
+    { value: 'bundle', label: 'Bundle' },
+  ];
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -43,28 +66,28 @@ const AddSupplier: React.FC = () => {
     setSuccess('');
 
     // Validation
-    if (!formData.supplierName.trim()) {
-      setError('Supplier name is required');
+    if (!formData.productName.trim()) {
+      setError('Product name is required');
       return;
     }
 
-    if (!formData.contactPerson.trim()) {
-      setError('Contact person name is required');
+    if (!formData.costPrice || parseFloat(formData.costPrice) <= 0) {
+      setError('Cost price must be greater than 0');
       return;
     }
 
-    if (!formData.phoneNumber.trim()) {
-      setError('Phone number is required');
+    if (!formData.stocks || parseInt(formData.stocks) < 0) {
+      setError('Stock quantity must be 0 or greater');
       return;
     }
 
-    if (!formData.email.includes('@')) {
-      setError('Please enter a valid email address');
+    if (!formData.units) {
+      setError('Unit of measurement is required');
       return;
     }
 
-    if (!formData.address.trim()) {
-      setError('Address is required');
+    if (!formData.supplierId) {
+      setError('Please select a supplier');
       return;
     }
 
@@ -72,7 +95,7 @@ const AddSupplier: React.FC = () => {
 
     try {
       // TODO: Replace with actual API call
-      // const response = await fetch('/api/suppliers', {
+      // const response = await fetch('/api/stocks', {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' },
       //   body: JSON.stringify(formData)
@@ -81,20 +104,20 @@ const AddSupplier: React.FC = () => {
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      setSuccess('Supplier added successfully!');
+      setSuccess('Stock added successfully!');
       setFormData({
-        supplierName: '',
-        contactPerson: '',
-        phoneNumber: '',
-        email: '',
-        address: '',
+        productName: '',
+        costPrice: '',
+        stocks: '',
+        units: '',
+        supplierId: '',
       });
 
       setTimeout(() => {
         navigate('/staff');
       }, 2000);
     } catch (err) {
-      setError('Failed to add supplier. Please try again.');
+      setError('Failed to add stock. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -130,7 +153,7 @@ const AddSupplier: React.FC = () => {
                 </button>
 
                 {/* Title */}
-                <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-neutral-900 dark:text-stone-100 truncate">Add Supplier</h1>
+                <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-neutral-900 dark:text-stone-100 truncate">Add Stocks</h1>
               </div>
 
               {/* Right: Logout Panel */}
@@ -145,12 +168,12 @@ const AddSupplier: React.FC = () => {
               {/* Card */}
               <div className="relative rounded-2xl border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 p-8 sm:p-10 shadow-sm hover:shadow-md transition-all duration-300 ease-out">
                 {/* Label Tag - Visual Hierarchy */}
-                <div className="absolute -top-4 left-8 inline-flex h-8 items-center rounded-full border border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-950 px-4 text-xs font-bold tracking-wider text-orange-700 dark:text-orange-300 uppercase">New Supplier</div>
+                <div className="absolute -top-4 left-8 inline-flex h-8 items-center rounded-full border border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-950 px-4 text-xs font-bold tracking-wider text-orange-700 dark:text-orange-300 uppercase">New Stock Entry</div>
 
                 {/* Title with Visual Hierarchy */}
                 <div className="mb-7">
-                  <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-stone-100 mb-3">Register Supplier</h2>
-                  <p className="text-sm text-stone-600 dark:text-stone-400 font-normal leading-relaxed">Add a new supplier to your inventory management system</p>
+                  <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-stone-100 mb-3">Add Stock</h2>
+                  <p className="text-sm text-stone-600 dark:text-stone-400 font-normal leading-relaxed">Add new product stock to your inventory system</p>
                 </div>
 
                 {/* Divider - Subtle */}
@@ -172,108 +195,120 @@ const AddSupplier: React.FC = () => {
 
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  {/* Two Column Layout */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Supplier Name Field */}
+                  {/* Product Name Field */}
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-stone-200 mb-2">
+                      Product Name
+                    </label>
+                    <div className="relative">
+                      <FontAwesomeIcon icon={faBox} className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-orange-600/50 dark:text-orange-400/50 pointer-events-none" />
+                      <input
+                        type="text"
+                        name="productName"
+                        value={formData.productName}
+                        onChange={handleChange}
+                        className="w-full pl-10 pr-4 py-3 text-sm sm:text-base rounded-lg border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:outline-none focus:border-orange-600 focus:ring-1 focus:ring-orange-600/30 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200"
+                        placeholder="e.g., Arabica Coffee Beans"
+                        disabled={isLoading}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Cost Price Field */}
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-stone-200 mb-2">
+                      Cost Price (₱)
+                    </label>
+                    <div className="relative">
+                      <FontAwesomeIcon icon={faTag} className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-orange-600/50 dark:text-orange-400/50 pointer-events-none" />
+                      <input
+                        type="number"
+                        name="costPrice"
+                        value={formData.costPrice}
+                        onChange={handleChange}
+                        className="w-full pl-10 pr-4 py-3 text-sm sm:text-base rounded-lg border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:outline-none focus:border-orange-600 focus:ring-1 focus:ring-orange-600/30 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200"
+                        placeholder="0.00"
+                        step="0.01"
+                        disabled={isLoading}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Two Column Layout for Stocks and Units */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Stocks Field */}
                     <div>
                       <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-stone-200 mb-2">
-                        Supplier Name
+                        Quantity
                       </label>
                       <div className="relative">
-                        <FontAwesomeIcon icon={faBuilding} className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-orange-600/50 dark:text-orange-400/50 pointer-events-none" />
+                        <FontAwesomeIcon icon={faCube} className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-orange-600/50 dark:text-orange-400/50 pointer-events-none" />
                         <input
-                          type="text"
-                          name="supplierName"
-                          value={formData.supplierName}
+                          type="number"
+                          name="stocks"
+                          value={formData.stocks}
                           onChange={handleChange}
                           className="w-full pl-10 pr-4 py-3 text-sm sm:text-base rounded-lg border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:outline-none focus:border-orange-600 focus:ring-1 focus:ring-orange-600/30 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200"
-                          placeholder="e.g., ABC Coffee Supplies Inc."
+                          placeholder="0"
+                          min="0"
                           disabled={isLoading}
                         />
                       </div>
                     </div>
 
-                    {/* Contact Person Field */}
+                    {/* Units Field */}
                     <div>
                       <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-stone-200 mb-2">
-                        Contact Person
+                        Unit of Measurement
                       </label>
                       <div className="relative">
-                        <FontAwesomeIcon icon={faUser} className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-orange-600/50 dark:text-orange-400/50 pointer-events-none" />
-                        <input
-                          type="text"
-                          name="contactPerson"
-                          value={formData.contactPerson}
+                        <FontAwesomeIcon icon={faWarehouse} className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-orange-600/50 dark:text-orange-400/50 pointer-events-none" />
+                        <select
+                          name="units"
+                          value={formData.units}
                           onChange={handleChange}
-                          className="w-full pl-10 pr-4 py-3 text-sm sm:text-base rounded-lg border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:outline-none focus:border-orange-600 focus:ring-1 focus:ring-orange-600/30 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200"
-                          placeholder="Full name of contact person"
+                          className="w-full pl-10 pr-4 py-3 text-sm sm:text-base rounded-lg border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:outline-none focus:border-orange-600 focus:ring-1 focus:ring-orange-600/30 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200 appearance-none cursor-pointer"
                           disabled={isLoading}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Phone Number Field */}
-                    <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-stone-200 mb-2">
-                        Phone Number
-                      </label>
-                      <div className="relative">
-                        <FontAwesomeIcon icon={faPhone} className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-orange-600/50 dark:text-orange-400/50 pointer-events-none" />
-                        <input
-                          type="tel"
-                          name="phoneNumber"
-                          value={formData.phoneNumber}
-                          onChange={handleChange}
-                          className="w-full pl-10 pr-4 py-3 text-sm sm:text-base rounded-lg border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:outline-none focus:border-orange-600 focus:ring-1 focus:ring-orange-600/30 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200"
-                          placeholder="+63 9XX XXX XXXX"
-                          disabled={isLoading}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Email Field */}
-                    <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-stone-200 mb-2">
-                        Email Address
-                      </label>
-                      <div className="relative">
-                        <FontAwesomeIcon icon={faEnvelope} className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-orange-600/50 dark:text-orange-400/50 pointer-events-none" />
-                        <input
-                          type="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleChange}
-                          className="w-full pl-10 pr-4 py-3 text-sm sm:text-base rounded-lg border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:outline-none focus:border-orange-600 focus:ring-1 focus:ring-orange-600/30 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200"
-                          placeholder="supplier@company.com"
-                          disabled={isLoading}
-                        />
+                        >
+                          <option value="">Select Unit</option>
+                          {unitOptions.map((unit) => (
+                            <option key={unit.value} value={unit.value}>
+                              {unit.label}
+                            </option>
+                          ))}
+                        </select>
                       </div>
                     </div>
                   </div>
 
-                  {/* Address Field - Full Width */}
+                  {/* Supplier Field */}
                   <div>
                     <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-stone-200 mb-2">
-                      Address
+                      Supplier
                     </label>
                     <div className="relative">
-                      <FontAwesomeIcon icon={faMapPin} className="absolute left-3.5 top-3.5 h-4 w-4 text-orange-600/50 dark:text-orange-400/50 pointer-events-none" />
-                      <textarea
-                        name="address"
-                        value={formData.address}
+                      <FontAwesomeIcon icon={faBuilding} className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-orange-600/50 dark:text-orange-400/50 pointer-events-none" />
+                      <select
+                        name="supplierId"
+                        value={formData.supplierId}
                         onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-3 text-sm sm:text-base rounded-lg border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:outline-none focus:border-orange-600 focus:ring-1 focus:ring-orange-600/30 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200 resize-none"
-                        rows={2}
-                        placeholder="Street address, city, province, postal code"
+                        className="w-full pl-10 pr-4 py-3 text-sm sm:text-base rounded-lg border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:outline-none focus:border-orange-600 focus:ring-1 focus:ring-orange-600/30 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200 appearance-none cursor-pointer"
                         disabled={isLoading}
-                      />
+                      >
+                        <option value="">Select Supplier</option>
+                        {suppliers.map((supplier) => (
+                          <option key={supplier.id} value={supplier.id.toString()}>
+                            {supplier.name}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
 
                   {/* Info Box */}
                   <div className="bg-blue-50 dark:bg-blue-950/20 rounded-lg p-2.5 border border-blue-200 dark:border-blue-800/40">
                     <p className="text-xs text-blue-700 dark:text-blue-300 font-medium">
-                      ℹ️ All fields are required to register a new supplier
+                      ℹ️ All fields are required to add a new stock entry
                     </p>
                   </div>
 
@@ -284,7 +319,7 @@ const AddSupplier: React.FC = () => {
                       disabled={isLoading}
                       className="flex-1 px-4 py-3 bg-orange-600 hover:bg-orange-700 disabled:bg-orange-400 text-white text-sm sm:text-base font-semibold rounded-lg transition-all duration-200 shadow-sm hover:shadow-md disabled:shadow-none active:scale-95 disabled:cursor-not-allowed"
                     >
-                      {isLoading ? 'Adding...' : 'Add Supplier'}
+                      {isLoading ? 'Adding...' : 'Add Stock'}
                     </button>
 
                     <button
@@ -306,4 +341,4 @@ const AddSupplier: React.FC = () => {
   );
 };
 
-export default AddSupplier;
+export default AddStocks;

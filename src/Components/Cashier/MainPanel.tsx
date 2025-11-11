@@ -88,7 +88,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
             {/* Hamburger Menu - Mobile Only */}
             <button
               onClick={onToggleSidebar}
-              className="lg:hidden flex h-10 w-10 items-center justify-center rounded-lg border border-stone-300 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-800 hover:bg-stone-100 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95"
+              className="lg:hidden flex h-10 w-10 items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 shadow-sm hover:shadow-md active:scale-95"
             >
               <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
             </button>
@@ -96,7 +96,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
             {/* Sidebar Toggle Button - Desktop Only */}
             <button
               onClick={onToggleSidebarExpand}
-              className="hidden lg:flex flex-shrink-0 h-10 w-10 items-center justify-center rounded-lg border border-orange-300 dark:border-orange-700 bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md"
+              className="hidden lg:flex flex-shrink-0 h-10 w-10 items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md"
               title={sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
             >
               <FontAwesomeIcon icon={sidebarExpanded ? faChevronLeft : faChevronRight} className="h-5 w-5" />
@@ -118,22 +118,22 @@ const MainPanel: React.FC<MainPanelProps> = ({
             />
           </div>
 
-          {/* Right Section: Logout Panel - same width as shopping cart */}
-          <div className="w-96 flex-shrink-0">
+          {/* Right Section: Logout Panel - match cart width (w-full sm:w-80 lg:w-96) */}
+          <div className="w-full sm:w-80 lg:w-96 flex-shrink-0">
             <LogoutPanel userRole={userRole} />
           </div>
         </div>
       </div>
 
-      {/* Main Content Area */}
-      <div className="flex flex-1 overflow-hidden gap-6 p-6 bg-gradient-to-br from-white to-stone-50 dark:from-neutral-900 dark:to-neutral-800">
-        {/* Left Section: Products & Filters */}
+      {/* Main Content Area - Proper padding and alignment */}
+      <div className="flex flex-1 overflow-hidden gap-5 px-4 sm:px-6 md:px-8 py-5 bg-gradient-to-br from-white to-stone-50 dark:from-neutral-900 dark:to-neutral-800">
+        {/* Left Section: Products & Filters - Main content area */}
         <div className="flex-1 flex flex-col gap-4 min-w-0">
           {/* Category Filter */}
-          <div className="bg-white dark:bg-neutral-900 rounded-xl border border-stone-200 dark:border-neutral-800 px-4 py-3 shadow-sm hover:shadow-md transition-all duration-300">
-            <p className="text-xs font-semibold tracking-widest text-neutral-600 dark:text-neutral-400 mb-3 uppercase">Categories</p>
+          <div className="bg-white dark:bg-neutral-900 rounded-xl border border-stone-200 dark:border-neutral-800 px-5 py-4 shadow-sm hover:shadow-md transition-all duration-300">
+            <p className="text-xs font-semibold tracking-widest text-neutral-700 dark:text-neutral-300 mb-4 uppercase">Categories</p>
             {/* Category Filter Pills */}
-            <div className="flex flex-wrap gap-2 items-center">
+            <div className="flex flex-wrap gap-2.5 items-center">
               {categories.map(category => (
                 <button
                   key={category}
@@ -153,11 +153,11 @@ const MainPanel: React.FC<MainPanelProps> = ({
           {/* Products Section (Scrollable) */}
           <div className="flex-1 flex flex-col rounded-xl border border-stone-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-sm overflow-hidden">
             {/* Header */}
-            <div className="border-b border-stone-200 dark:border-neutral-800 bg-stone-50 dark:bg-neutral-800 px-6 py-4">
-              <h3 className="text-base font-semibold tracking-tight text-neutral-900 dark:text-white flex items-center gap-3">
-                <FontAwesomeIcon icon={faCoffee} className="h-5 w-5 text-orange-600" />
+            <div className="border-b border-stone-200 dark:border-neutral-800 bg-gradient-to-r from-stone-50 to-white dark:from-neutral-800 dark:to-neutral-900 px-6 py-5">
+              <h3 className="text-base font-bold tracking-tight text-neutral-900 dark:text-white flex items-center gap-3">
+                <FontAwesomeIcon icon={faCoffee} className="h-5 w-5 text-orange-600 dark:text-orange-500" />
                 <span>Available Items</span>
-                <span className="font-semibold text-stone-600 dark:text-stone-400 text-sm">({filteredProducts.length})</span>
+                <span className="ml-auto font-semibold text-stone-600 dark:text-stone-400 text-sm bg-stone-100 dark:bg-neutral-800 px-3 py-1 rounded-full border border-stone-200 dark:border-neutral-700">({filteredProducts.length})</span>
               </h3>
             </div>
 
@@ -237,11 +237,11 @@ const MainPanel: React.FC<MainPanelProps> = ({
         {/* Cart Section */}
         <div className="w-full sm:w-80 lg:w-96 h-full flex flex-col rounded-xl border border-stone-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-sm overflow-hidden flex-shrink-0">
           {/* Cart Header */}
-          <div className="border-b border-stone-200 dark:border-neutral-800 bg-stone-50 dark:bg-neutral-800 px-6 py-4">
-            <h3 className="text-base font-semibold tracking-tight text-neutral-900 dark:text-white flex items-center gap-3">
-              <FontAwesomeIcon icon={faShoppingCart} className="h-5 w-5 text-orange-600" />
+          <div className="border-b border-stone-200 dark:border-neutral-800 bg-gradient-to-r from-stone-50 to-white dark:from-neutral-800 dark:to-neutral-900 px-6 py-5">
+            <h3 className="text-base font-bold tracking-tight text-neutral-900 dark:text-white flex items-center gap-3">
+              <FontAwesomeIcon icon={faShoppingCart} className="h-5 w-5 text-orange-600 dark:text-orange-500" />
               <span>Shopping Cart</span>
-              <span className="font-semibold text-stone-600 dark:text-stone-400 text-sm ml-auto bg-stone-100 dark:bg-neutral-700 px-2.5 py-1 rounded-full border border-stone-200 dark:border-neutral-600">({cart.length})</span>
+              <span className="ml-auto font-semibold text-stone-600 dark:text-stone-400 text-sm bg-stone-100 dark:bg-neutral-800 px-3 py-1 rounded-full border border-stone-200 dark:border-neutral-700">({cart.length})</span>
             </h3>
           </div>
 
@@ -317,12 +317,12 @@ const MainPanel: React.FC<MainPanelProps> = ({
           </div>
 
           {/* Cart Footer with Total */}
-          <div className="border-t border-stone-200 dark:border-neutral-800 bg-stone-50 dark:bg-neutral-800 px-4 py-4">
-            <div className="space-y-3">
+          <div className="border-t border-stone-200 dark:border-neutral-800 bg-gradient-to-r from-stone-50 to-white dark:from-neutral-800 dark:to-neutral-900 px-5 py-5">
+            <div className="space-y-4">
               {/* Final Total Amount Section */}
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-semibold tracking-widest text-stone-600 dark:text-stone-400 uppercase">Total Amount</span>
-                <span className="text-3xl font-bold text-orange-600 dark:text-orange-400">
+              <div className="flex flex-col gap-2">
+                <span className="text-xs font-bold tracking-widest text-stone-700 dark:text-stone-300 uppercase">Total Amount</span>
+                <span className="text-4xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-500 dark:to-orange-400 bg-clip-text text-transparent">
                   ₱{finalTotal.toFixed(2)}
                 </span>
               </div>

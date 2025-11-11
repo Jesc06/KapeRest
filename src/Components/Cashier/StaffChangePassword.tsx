@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faEye, faEyeSlash, faBars, faChevronLeft, faChevronRight, faEnvelope, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-import Sidebar from './Sidebar';
+import StaffSidebar from './StaffSidebar';
 import LogoutPanel from './LogoutPanel';
 
 interface PasswordStrength {
@@ -12,7 +12,7 @@ interface PasswordStrength {
   hasNumber: boolean;
 }
 
-const ChangePassword: React.FC = () => {
+const StaffChangePassword: React.FC = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
@@ -39,6 +39,7 @@ const ChangePassword: React.FC = () => {
 
   const passwordStrength = checkPasswordStrength(newPassword);
   const isPasswordStrong = Object.values(passwordStrength).every(val => val);
+  // compute a simple strength score (0-100)
   const strengthScore = Math.round((Object.values(passwordStrength).filter(Boolean).length / 4) * 100);
   const strengthColor = strengthScore < 50 ? 'bg-red-500' : strengthScore < 80 ? 'bg-amber-500' : 'bg-green-600';
 
@@ -92,7 +93,7 @@ const ChangePassword: React.FC = () => {
       setNewPassword('');
       setConfirmPassword('');
       setTimeout(() => {
-        navigate('/cashier');
+        navigate('/staff/add-supplier');
       }, 2000);
     } catch (err) {
       setError('Failed to change password. Please try again.');
@@ -105,7 +106,7 @@ const ChangePassword: React.FC = () => {
     <div className="min-h-screen w-full bg-gradient-to-br from-white to-stone-50 dark:from-neutral-900 dark:to-neutral-800">
       <div className="relative z-10 flex h-screen overflow-hidden">
         {/* Sidebar */}
-        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
+        <StaffSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
 
         {/* Main Content */}
         <div className={`flex h-screen w-full flex-col bg-white dark:bg-neutral-900 transition-all duration-300 ${sidebarExpanded ? 'lg:ml-64' : 'lg:ml-20'}`}>
@@ -157,6 +158,7 @@ const ChangePassword: React.FC = () => {
                 {/* Divider - Subtle */}
                 <div className="h-px w-full bg-stone-200 dark:bg-neutral-700 mb-6" aria-hidden />
 
+                {/* Error / Success Messages (aria-live) */}
                 <div aria-live="polite" className="mb-4">
                   {error && (
                     <div className="p-3.5 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800/40 rounded-lg">
@@ -241,6 +243,7 @@ const ChangePassword: React.FC = () => {
                     </div>
                   </div>
 
+                  {/* Password strength UI: progress bar + checklist */}
                   {newPassword && (
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
@@ -324,7 +327,7 @@ const ChangePassword: React.FC = () => {
 
                     <button
                       type="button"
-                      onClick={() => navigate('/cashier')}
+                      onClick={() => navigate('/staff/add-supplier')}
                       disabled={isLoading}
                       className="flex-1 px-4 py-3 bg-stone-200 dark:bg-neutral-700 hover:bg-stone-300 dark:hover:bg-neutral-600 disabled:bg-stone-100 dark:disabled:bg-neutral-800 text-neutral-900 dark:text-stone-100 text-sm sm:text-base font-semibold rounded-lg transition-all duration-200 shadow-sm hover:shadow-md active:scale-95 disabled:cursor-not-allowed"
                     >
@@ -341,4 +344,4 @@ const ChangePassword: React.FC = () => {
   );
 };
 
-export default ChangePassword;
+export default StaffChangePassword;

@@ -108,7 +108,7 @@ const Sales: React.FC<SalesProps> = ({
             {/* Hamburger Menu - Mobile Only */}
             <button
               onClick={onToggleSidebar}
-              className="lg:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-stone-300 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-800 hover:bg-stone-100 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white transition-all duration-200 shadow-sm"
+              className="lg:hidden flex h-10 w-10 items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 shadow-sm hover:shadow-md active:scale-95"
             >
               <FontAwesomeIcon icon={faBars} className="h-4 w-4" />
             </button>
@@ -116,7 +116,7 @@ const Sales: React.FC<SalesProps> = ({
             {/* Sidebar Toggle Button - Desktop Only */}
             <button
               onClick={onToggleSidebarExpand}
-              className="hidden lg:flex flex-shrink-0 h-9 w-9 items-center justify-center rounded-lg border border-orange-300 dark:border-orange-700 bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95 shadow-sm"
+              className="hidden lg:flex flex-shrink-0 h-10 w-10 items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md"
               title={sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
             >
               <FontAwesomeIcon icon={sidebarExpanded ? faChevronLeft : faChevronRight} className="h-4 w-4" />
@@ -166,15 +166,15 @@ const Sales: React.FC<SalesProps> = ({
       </div>
 
       {/* Main Content */}
-      <div className="flex flex-1 overflow-hidden gap-4 sm:gap-5 p-4 sm:p-5 md:p-6">
+      <div className="flex flex-1 overflow-hidden gap-5 px-4 sm:px-6 md:px-8 py-5 bg-gradient-to-br from-white to-stone-50 dark:from-neutral-900 dark:to-neutral-800">
         {/* Sales Table Container */}
-        <div className="flex-1 flex flex-col rounded-lg border border-stone-300 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-800 shadow-sm overflow-hidden">
+        <div className="flex-1 flex flex-col rounded-xl border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 shadow-sm overflow-hidden">
           {/* Header */}
-          <div className="border-b border-stone-300 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-800 px-6 py-4">
-            <h3 className="text-base font-semibold tracking-tight text-neutral-900 dark:text-white flex items-center gap-2">
-              <FontAwesomeIcon icon={faCoffee} className="h-4 w-4 text-orange-600" />
+          <div className="border-b border-stone-200 dark:border-neutral-800 bg-gradient-to-r from-stone-50 to-white dark:from-neutral-800 dark:to-neutral-900 px-6 py-5">
+            <h3 className="text-base font-bold tracking-tight text-neutral-900 dark:text-white flex items-center gap-3">
+              <FontAwesomeIcon icon={faCoffee} className="h-5 w-5 text-orange-600 dark:text-orange-500" />
               <span>Sales Records</span>
-              <span className="font-semibold text-stone-600 dark:text-stone-400 text-sm">({filteredSales.length})</span>
+              <span className="ml-auto font-semibold text-stone-600 dark:text-stone-400 text-sm bg-stone-100 dark:bg-neutral-800 px-3 py-1 rounded-full border border-stone-200 dark:border-neutral-700">({filteredSales.length})</span>
             </h3>
           </div>
 

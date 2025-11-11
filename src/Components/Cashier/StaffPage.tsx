@@ -5,7 +5,6 @@ import { faBars, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-s
 import StaffSidebar from './StaffSidebar';
 import LogoutPanel from './LogoutPanel';
 
-
 const StaffPage: React.FC = () => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -57,7 +56,7 @@ const StaffPage: React.FC = () => {
           {/* Loading State */}
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center">
-              <p className="text-orange-600 dark:text-orange-400 font-medium">Loading...</p>
+              <p className="text-orange-600 dark:text-orange-400 font-medium">Redirecting...</p>
             </div>
           </div>
         </div>

@@ -152,7 +152,7 @@ const StaffSales: React.FC<StaffSalesProps> = ({
           {/* Left: Sidebar Toggle Button */}
           <button
             onClick={() => setSidebarExpanded(!sidebarExpanded)}
-            className="flex-shrink-0 h-10 w-10 items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95 shadow-sm"
+            className="flex-shrink-0 flex h-10 w-10 items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md"
             title={sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
           >
             <FontAwesomeIcon icon={sidebarExpanded ? faChevronLeft : faChevronRight} className="h-4 w-4" />
@@ -201,9 +201,9 @@ const StaffSales: React.FC<StaffSalesProps> = ({
       </div>
 
       {/* Main Content */}
-      <div className="flex flex-1 overflow-hidden flex-col gap-4 sm:gap-5 p-4 sm:p-5 md:p-6">
+      <div className="flex flex-1 overflow-hidden flex-col gap-5 px-4 sm:px-6 md:px-8 py-5 bg-gradient-to-br from-white to-stone-50 dark:from-neutral-900 dark:to-neutral-800">
         {/* Report Generation Buttons */}
-        <div className="flex flex-wrap gap-3 rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50/50 dark:bg-neutral-800/50 p-4 sm:p-5 shadow-sm hover:shadow-md transition-all">
+        <div className="flex flex-wrap gap-3 rounded-lg border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 p-4 sm:p-5 shadow-sm hover:shadow-md transition-all">
           <p className="w-full text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-stone-400 mb-1">Generate Reports:</p>
           
           <button
@@ -247,13 +247,13 @@ const StaffSales: React.FC<StaffSalesProps> = ({
         </div>
 
         {/* Sales Table Container */}
-        <div className="flex-1 flex flex-col rounded-lg border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 shadow-sm dark:shadow-md overflow-hidden">
+        <div className="flex-1 flex flex-col rounded-xl border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 shadow-sm overflow-hidden">
           {/* Header */}
-          <div className="border-b border-stone-200 dark:border-neutral-700 bg-stone-50/50 dark:bg-neutral-800/50 px-6 py-4">
-            <h3 className="text-lg font-bold tracking-tight text-neutral-900 dark:text-stone-100 flex items-center gap-2.5">
-              <FontAwesomeIcon icon={faCoffee} className="h-5 w-5 text-orange-600 dark:text-orange-400" />
+          <div className="border-b border-stone-200 dark:border-neutral-800 bg-gradient-to-r from-stone-50 to-white dark:from-neutral-800 dark:to-neutral-900 px-6 py-5">
+            <h3 className="text-base font-bold tracking-tight text-neutral-900 dark:text-white flex items-center gap-3">
+              <FontAwesomeIcon icon={faCoffee} className="h-5 w-5 text-orange-600 dark:text-orange-500" />
               <span>Sales Records</span>
-              <span className="font-semibold text-orange-600 dark:text-orange-400 text-sm ml-1">({filteredSales.length})</span>
+              <span className="ml-auto font-semibold text-stone-600 dark:text-stone-400 text-sm bg-stone-100 dark:bg-neutral-800 px-3 py-1 rounded-full border border-stone-200 dark:border-neutral-700">({filteredSales.length})</span>
             </h3>
           </div>
 

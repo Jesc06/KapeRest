@@ -168,22 +168,22 @@ const AddItem: React.FC = () => {
           </div>
 
           {/* Content Area */}
-          <div className="flex-1 overflow-auto flex items-center justify-center p-2 sm:p-3">
+          <div className="flex-1 overflow-auto flex items-center justify-center px-4 sm:px-6 md:px-8 py-6">
             {/* Form Container - Minimal & Centered */}
-            <div className="w-full max-w-6xl px-3 sm:px-4 md:px-6">
+            <div className="w-full max-w-2xl">
               {/* Card */}
-              <div className="relative rounded-2xl border border-stone-200 dark:border-neutral-700 bg-stone-50/50 dark:bg-neutral-800/50 p-6 sm:p-7 shadow-sm hover:shadow-md transition-all duration-300 ease-out">
+              <div className="relative rounded-2xl border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 p-8 sm:p-10 shadow-sm hover:shadow-md transition-all duration-300 ease-out">
                 {/* Label Tag - Visual Hierarchy */}
-                <div className="absolute -top-3 left-6 inline-flex h-6 items-center rounded-full border border-orange-600/30 bg-orange-50 dark:bg-orange-950/40 px-3 text-[10px] font-semibold tracking-wider text-orange-600 dark:text-orange-400">NEW MENUITEM</div>
+                <div className="absolute -top-4 left-8 inline-flex h-8 items-center rounded-full border border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-950 px-4 text-xs font-bold tracking-wider text-orange-700 dark:text-orange-300 uppercase">New Menu Item</div>
 
                 {/* Title with Visual Hierarchy */}
-                <div className="mb-5">
-                  <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-stone-100">Add MenuItem</h2>
-                  <p className="mt-1.5 text-xs sm:text-sm text-stone-500 dark:text-stone-400 font-normal">Register a new menu item to your inventory</p>
+                <div className="mb-7">
+                  <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-stone-100 mb-3">Add Menu Item</h2>
+                  <p className="text-sm text-stone-600 dark:text-stone-400 font-normal leading-relaxed">Register a new menu item to your inventory</p>
                 </div>
 
                 {/* Divider - Subtle */}
-                <div className="h-px w-full bg-stone-200 dark:bg-neutral-700 mb-5" aria-hidden />
+                <div className="h-px w-full bg-gradient-to-r from-stone-200 via-stone-200 to-transparent dark:from-neutral-700 dark:via-neutral-700 mb-6" aria-hidden />
 
                 {/* Error Message */}
                 {error && (
