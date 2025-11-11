@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar.tsx';
 import MainPanel from './MainPanel.tsx';
@@ -13,6 +13,20 @@ interface CartItem {
   image: string;
 }
 
+interface HoldItem {
+  id: number;
+  menuItemId: number;
+  menuItemName: string;
+  category: string;
+  quantity: number;
+  discountPercent: number;
+  tax: number;
+  paymentMethod: string;
+  totalAmount: number;
+  holdDate: string;
+  cartItems: CartItem[];
+}
+
 const BuyItem: React.FC = () => {
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState('');
@@ -22,6 +36,24 @@ const BuyItem: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [userRole] = useState<string>('Cashier'); // Mock user role - can be fetched from auth/context
+
+  // Check for resumed item on component mount
+  useEffect(() => {
+    const resumedItemStr = sessionStorage.getItem('resumeItem');
+    if (resumedItemStr) {
+      try {
+        const resumedItem: HoldItem = JSON.parse(resumedItemStr);
+        // Restore cart items from hold
+        if (resumedItem.cartItems && resumedItem.cartItems.length > 0) {
+          setCart(resumedItem.cartItems);
+        }
+        // Clear the session storage
+        sessionStorage.removeItem('resumeItem');
+      } catch (error) {
+        console.error('Error parsing resumed item:', error);
+      }
+    }
+  }, []);
 
   // Mock product data
   const products = [
@@ -105,8 +137,39 @@ const BuyItem: React.FC = () => {
       alert('Cart is empty');
       return;
     }
-    console.log('Cart held:', cart);
-    alert('Cart has been saved temporarily');
+
+    // Get existing hold items from localStorage
+    const existingHoldItemsStr = localStorage.getItem('holdItems');
+    const existingHoldItems = existingHoldItemsStr ? JSON.parse(existingHoldItemsStr) : [];
+
+    // Create hold item object
+    const holdItem: HoldItem = {
+      id: Date.now(), // Generate unique ID based on timestamp
+      menuItemId: cart[0]?.id || 0,
+      menuItemName: cart.length > 1 ? `${cart.length} items` : cart[0]?.name || 'Items',
+      category: cart[0]?.category || 'Mixed',
+      quantity: cart.reduce((sum, item) => sum + item.quantity, 0),
+      discountPercent: 0,
+      tax: 12,
+      paymentMethod: 'Cash',
+      totalAmount: total,
+      holdDate: new Date().toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      }),
+      cartItems: cart // Store the entire cart
+    };
+
+    // Add to hold items array
+    const updatedHoldItems = [...existingHoldItems, holdItem];
+    localStorage.setItem('holdItems', JSON.stringify(updatedHoldItems));
+
+    // Clear cart
+    setCart([]);
+    alert('Cart has been held! You can resume it from Hold Items page.');
   };
 
   // Handle GCash Payment

@@ -1,5 +1,7 @@
 export { default as CashierPage } from './CashierPage';
 export { default as BuyItem } from './BuyItem';
+export { default as HoldItems } from './HoldItems';
+export { default as Purchases } from './Purchases';
 export { default as Sidebar } from './Sidebar';
 export { default as MainPanel } from './MainPanel';
 export { default as StocksList } from './StocksList';

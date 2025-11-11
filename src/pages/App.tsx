@@ -6,7 +6,7 @@ import LoginUI from "../Components/Login";
 import Register from "../Components/Register";
 import Navbar from "../Components/Navbar";
 import Home from "./Home";
-import { CashierPage, BuyItem } from "../Components/Cashier";
+import { CashierPage, BuyItem, HoldItems, Purchases } from "../Components/Cashier";
 import SalesPage from "../Components/Cashier/SalesPage";
 import ChangePassword from "../Components/Cashier/ChangePassword";
 import StaffPage from "../Components/Cashier/StaffPage";
@@ -22,7 +22,7 @@ import StaffChangePassword from "../Components/Cashier/StaffChangePassword";
 const App: React.FC = () => {
   const AnimatedRoutes: React.FC = () => {
     const location = useLocation();
-    const hideNavbar = location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/cashier" || location.pathname === "/cashier/buy-item" || location.pathname === "/cashier/sales" || location.pathname === "/cashier/change-password" || location.pathname === "/staff" || location.pathname === "/staff/add-supplier" || location.pathname === "/staff/suppliers" || location.pathname === "/staff/add-item" || location.pathname === "/staff/items" || location.pathname === "/staff/add-stocks" || location.pathname === "/staff/stocks" || location.pathname === "/staff/sales" || location.pathname === "/staff/change-password";
+    const hideNavbar = location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/cashier" || location.pathname === "/cashier/buy-item" || location.pathname === "/cashier/hold-items" || location.pathname === "/cashier/purchases" || location.pathname === "/cashier/sales" || location.pathname === "/cashier/change-password" || location.pathname === "/staff" || location.pathname === "/staff/add-supplier" || location.pathname === "/staff/suppliers" || location.pathname === "/staff/add-item" || location.pathname === "/staff/items" || location.pathname === "/staff/add-stocks" || location.pathname === "/staff/stocks" || location.pathname === "/staff/sales" || location.pathname === "/staff/change-password";
 
     return (
       <>
@@ -34,6 +34,8 @@ const App: React.FC = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/cashier" element={<CashierPage />} />
             <Route path="/cashier/buy-item" element={<BuyItem />} />
+            <Route path="/cashier/hold-items" element={<HoldItems />} />
+            <Route path="/cashier/purchases" element={<Purchases />} />
             <Route path="/cashier/sales" element={<SalesPage />} />
             <Route path="/cashier/change-password" element={<ChangePassword />} />
             <Route path="/staff" element={<StaffPage />} />
