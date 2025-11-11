@@ -1,161 +1,229 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faChevronLeft, faChevronRight, faShoppingCart, faChartLine, faCashRegister, faReceipt } from '@fortawesome/free-solid-svg-icons';
 import Sidebar from './Sidebar.tsx';
-import MainPanel from './MainPanel.tsx';
-
-
-interface CartItem {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  category: string;
-  image: string;
-}
+import LogoutPanel from './LogoutPanel';
 
 const CashierPage: React.FC = () => {
   const navigate = useNavigate();
-  const [searchText, setSearchText] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
-  const [userRole] = useState<string>('Cashier'); // Mock user role - can be fetched from auth/context
 
-  // Mock product data
-  const products = [
-    { id: 1, name: 'Iced Latte', price: 120, category: 'Drinks', image: 'https://images.unsplash.com/photo-1518432031498-a3bae2b2b2d5?w=300&h=300&fit=crop' },
-    { id: 2, name: 'Iced Americano', price: 100, category: 'Drinks', image: 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=300&h=300&fit=crop' },
-    { id: 3, name: 'Iced Macchiato', price: 130, category: 'Drinks', image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=300&h=300&fit=crop' },
-    { id: 4, name: 'Hot Espresso', price: 80, category: 'Drinks', image: 'https://images.unsplash.com/photo-1559056199-641a0ac8b3f7?w=300&h=300&fit=crop' },
-    { id: 5, name: 'Milk Tea', price: 110, category: 'Drinks', image: 'https://images.unsplash.com/photo-1585518419759-87a89e9b339b?w=300&h=300&fit=crop' },
-    { id: 6, name: 'Brown Sugar Milk Tea', price: 130, category: 'Drinks', image: 'https://images.unsplash.com/photo-1578668473245-8b891e02b484?w=300&h=300&fit=crop' },
-    { id: 7, name: 'Chocolate Cake', price: 150, category: 'Food', image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=300&h=300&fit=crop' },
-    { id: 8, name: 'Croissant', price: 90, category: 'Food', image: 'https://images.unsplash.com/photo-1585080195519-c21a5514f15f?w=300&h=300&fit=crop' },
-    { id: 9, name: 'Sandwich', price: 180, category: 'Food', image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=300&h=300&fit=crop' },
-    { id: 10, name: 'Cookie', price: 60, category: 'Snacks', image: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=300&h=300&fit=crop' },
-    { id: 11, name: 'Donut', price: 70, category: 'Snacks', image: 'https://images.unsplash.com/photo-1631334932583-7acc2b0a1e32?w=300&h=300&fit=crop' },
-    { id: 12, name: 'Pastry', price: 85, category: 'Snacks', image: 'https://images.unsplash.com/photo-1589080876485-3faf44f9cb31?w=300&h=300&fit=crop' },
+  // Get current time for greeting
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good Morning';
+    if (hour < 18) return 'Good Afternoon';
+    return 'Good Evening';
+  };
+
+  // Quick action cards
+  const quickActions = [
+    {
+      title: 'Buy Item',
+      description: 'Process customer orders',
+      icon: faShoppingCart,
+      color: 'from-orange-500 to-orange-600',
+      path: '/cashier/buy-item'
+    },
+    {
+      title: 'View Sales',
+      description: 'Check sales records',
+      icon: faChartLine,
+      color: 'from-blue-500 to-blue-600',
+      path: '/cashier/sales'
+    }
   ];
 
-  const categories = ['All', 'Drinks', 'Food', 'Snacks'];
-
-  // Filter products based on search and category
-  const filteredProducts = useMemo(() => {
-    return products.filter(product => {
-      const matchesSearch = product.name.toLowerCase().includes(searchText.toLowerCase());
-      const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
-      return matchesSearch && matchesCategory;
-    });
-  }, [searchText, selectedCategory]);
-
-  // Add item to cart
-  const handleAddToCart = (product: typeof products[0]) => {
-    setCart(prevCart => {
-      const existingItem = prevCart.find(item => item.id === product.id);
-      if (existingItem) {
-        return prevCart.map(item =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      }
-      return [...prevCart, { ...product, quantity: 1 }];
-    });
-  };
-
-  // Remove item from cart
-  const handleRemoveFromCart = (productId: number) => {
-    setCart(prevCart => prevCart.filter(item => item.id !== productId));
-  };
-
-  // Update item quantity
-  const handleUpdateQuantity = (productId: number, quantity: number) => {
-    if (quantity <= 0) {
-      handleRemoveFromCart(productId);
-    } else {
-      setCart(prevCart =>
-        prevCart.map(item =>
-          item.id === productId ? { ...item, quantity } : item
-        )
-      );
+  // Quick stats cards
+  const statsCards = [
+    {
+      title: 'Today\'s Sales',
+      value: '₱0.00',
+      icon: faCashRegister,
+      color: 'from-green-500 to-green-600'
+    },
+    {
+      title: 'Transactions',
+      value: '0',
+      icon: faReceipt,
+      color: 'from-purple-500 to-purple-600'
     }
-  };
-
-  // Calculate total
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-  // Handle Buy
-  const handleBuy = () => {
-    if (cart.length === 0) {
-      alert('Cart is empty');
-      return;
-    }
-    setIsLoading(true);
-    setTimeout(() => {
-      console.log('Purchase completed:', cart);
-      alert('Purchase completed!');
-      setCart([]);
-      setIsLoading(false);
-    }, 800);
-  };
-
-  // Handle Hold
-  const handleHold = () => {
-    if (cart.length === 0) {
-      alert('Cart is empty');
-      return;
-    }
-    console.log('Cart held:', cart);
-    alert('Cart has been saved temporarily');
-  };
-
-  // Handle GCash Payment
-  const handleGCashPayment = () => {
-    if (cart.length === 0) {
-      alert('Cart is empty');
-      return;
-    }
-    console.log('GCash payment initiated for:', total);
-    alert(`GCash payment initiated for ₱${total.toFixed(2)}`);
-  };
-
-  // Handle Logout
-  const handleLogout = () => {
-    navigate('/login');
-  };
+  ];
 
   return (
-    <div className="relative min-h-screen bg-white dark:bg-neutral-900 text-neutral-900 transition-colors duration-300 dark:text-white overflow-hidden">
-      
-      <div aria-hidden className="absolute inset-0 z-0 bg-gradient-to-br from-stone-50 via-white to-stone-50 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900 pointer-events-none" />
-
+    <div className="min-h-screen w-full bg-gradient-to-br from-white to-stone-50 dark:from-neutral-900 dark:to-neutral-800">
       <div className="relative z-10 flex h-screen overflow-hidden">
         {/* Sidebar */}
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
 
-        {/* Main Panel */}
-        <MainPanel
-          filteredProducts={filteredProducts}
-          categories={categories}
-          searchText={searchText}
-          selectedCategory={selectedCategory}
-          onSearchChange={setSearchText}
-          onCategoryChange={setSelectedCategory}
-          onAddToCart={handleAddToCart}
-          cart={cart}
-          onRemoveFromCart={handleRemoveFromCart}
-          onUpdateQuantity={handleUpdateQuantity}
-          total={total}
-          onBuy={handleBuy}
-          onHold={handleHold}
-          onGCashPayment={handleGCashPayment}
-          isLoading={isLoading}
-          onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
-          sidebarExpanded={sidebarExpanded}
-          onToggleSidebarExpand={() => setSidebarExpanded(!sidebarExpanded)}
-          onLogout={handleLogout}
-          userRole={userRole}
-        />
+        {/* Main Content */}
+        <div className={`flex h-screen w-full flex-col bg-white dark:bg-neutral-900 transition-all duration-300 ${sidebarExpanded ? 'lg:ml-64' : 'lg:ml-16'}`}>
+          {/* Top Bar - Minimal Header */}
+          <div className="sticky top-0 z-20 border-b border-stone-200 dark:border-neutral-700 bg-white/95 dark:bg-neutral-800/95 px-4 sm:px-6 md:px-8 py-3.5 sm:py-4 shadow-sm transition-all duration-300 backdrop-blur-sm">
+            <div className="flex items-center justify-between gap-4">
+              {/* Left: Controls & Title */}
+              <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                {/* Hamburger - Mobile Only */}
+                <button
+                  onClick={() => setSidebarOpen(!sidebarOpen)}
+                  className="lg:hidden flex-shrink-0 h-10 w-10 flex items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
+                >
+                  <FontAwesomeIcon icon={faBars} className="h-4 w-4" />
+                </button>
+
+                {/* Sidebar Toggle - Desktop Only */}
+                <button
+                  onClick={() => setSidebarExpanded(!sidebarExpanded)}
+                  className="hidden lg:flex flex-shrink-0 h-10 w-10 items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
+                >
+                  <FontAwesomeIcon icon={sidebarExpanded ? faChevronLeft : faChevronRight} className="h-4 w-4" />
+                </button>
+
+                {/* Title */}
+                <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-neutral-900 dark:text-stone-100 truncate">Cashier Dashboard</h1>
+              </div>
+
+              {/* Right: Logout Panel */}
+              <LogoutPanel />
+            </div>
+          </div>
+
+          {/* Main Content Area */}
+          <div className="flex-1 overflow-y-auto bg-gradient-to-br from-stone-50/50 to-orange-50/30 dark:from-neutral-900 dark:to-neutral-800/50">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8">
+              {/* Welcome Section */}
+              <div className="mb-8 sm:mb-10">
+                <div className="relative bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 dark:from-orange-600 dark:via-orange-700 dark:to-orange-600 rounded-2xl p-8 sm:p-10 shadow-2xl overflow-hidden group">
+                  {/* Animated Background Pattern */}
+                  <div className="absolute inset-0 opacity-10">
+                    <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] animate-pulse"></div>
+                  </div>
+                  
+                  <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30 shadow-lg">
+                          <span className="text-3xl">👋</span>
+                        </div>
+                        <div>
+                          <h2 className="text-3xl sm:text-4xl font-black text-white mb-1 tracking-tight">
+                            {getGreeting()}!
+                          </h2>
+                          <p className="text-orange-100 text-sm font-medium">Cashier Portal</p>
+                        </div>
+                      </div>
+                      <p className="text-orange-50 text-base sm:text-lg leading-relaxed max-w-2xl">
+                        Welcome to your dashboard. Ready to serve customers and process transactions efficiently?
+                      </p>
+                    </div>
+                    <div className="bg-white/10 backdrop-blur-md rounded-2xl px-6 py-4 border-2 border-white/20 shadow-xl group-hover:scale-105 transition-transform duration-300">
+                      <p className="text-white/80 text-xs font-bold uppercase tracking-wider mb-1">Today</p>
+                      <p className="text-white text-2xl font-black">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                      <p className="text-white/90 text-sm font-semibold">{new Date().toLocaleDateString('en-US', { year: 'numeric' })}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Stats */}
+              <div className="mb-8">
+                <div className="flex items-center justify-between mb-5">
+                  <h3 className="text-xl font-black text-neutral-900 dark:text-stone-100">Today's Overview</h3>
+                  <div className="h-1 flex-1 ml-4 bg-gradient-to-r from-orange-200 to-transparent dark:from-orange-900/30 rounded-full"></div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  {statsCards.map((stat, index) => (
+                    <div
+                      key={index}
+                      className="relative bg-white dark:bg-neutral-800 rounded-2xl p-7 shadow-lg border-2 border-stone-100 dark:border-neutral-700 overflow-hidden group hover:shadow-2xl transition-all duration-300 hover:border-orange-200 dark:hover:border-orange-900/50"
+                    >
+                      {/* Decorative Background */}
+                      <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${stat.color} opacity-5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500`}></div>
+                      
+                      <div className="relative flex items-start justify-between">
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold text-neutral-500 dark:text-neutral-400 mb-2 uppercase tracking-wide">
+                            {stat.title}
+                          </p>
+                          <p className="text-3xl font-black text-neutral-900 dark:text-stone-100 mb-1">
+                            {stat.value}
+                          </p>
+                          <p className="text-xs text-neutral-400 dark:text-neutral-500">Updated just now</p>
+                        </div>
+                        <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}>
+                          <FontAwesomeIcon icon={stat.icon} className="h-7 w-7 text-white" />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Quick Actions */}
+              <div className="mb-8">
+                <div className="flex items-center justify-between mb-5">
+                  <h3 className="text-xl font-black text-neutral-900 dark:text-stone-100">Quick Actions</h3>
+                  <div className="h-1 flex-1 ml-4 bg-gradient-to-r from-orange-200 to-transparent dark:from-orange-900/30 rounded-full"></div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  {quickActions.map((action, index) => (
+                    <button
+                      key={index}
+                      onClick={() => navigate(action.path)}
+                      className="group relative bg-white dark:bg-neutral-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-stone-100 dark:border-neutral-700 hover:border-orange-200 dark:hover:border-orange-900/50 overflow-hidden transform hover:-translate-y-1"
+                    >
+                      {/* Gradient Background on Hover */}
+                      <div className={`absolute inset-0 bg-gradient-to-br ${action.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>
+                      
+                      {/* Decorative Corner */}
+                      <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-orange-100/50 to-transparent dark:from-orange-900/20 rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      
+                      <div className="relative z-10 flex items-start gap-5">
+                        <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-md`}>
+                          <FontAwesomeIcon icon={action.icon} className="h-8 w-8 text-white" />
+                        </div>
+                        <div className="flex-1 text-left">
+                          <h4 className="text-xl font-bold text-neutral-900 dark:text-stone-100 mb-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">
+                            {action.title}
+                          </h4>
+                          <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                            {action.description}
+                          </p>
+                        </div>
+                        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <svg className="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Helpful Tips */}
+              <div className="mt-10 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-7 shadow-lg">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-base font-bold text-blue-900 dark:text-blue-300 mb-2 flex items-center gap-2">
+                      <span>💡 Quick Tip</span>
+                    </h4>
+                    <p className="text-sm text-blue-800 dark:text-blue-400 leading-relaxed">
+                      Use the sidebar to navigate between different sections. Click on "Buy Item" to start processing customer orders. Remember to check sales regularly to track performance!
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
