@@ -92,7 +92,7 @@ const CashierPage: React.FC = () => {
 
           {/* Main Content Area */}
           <div className="flex-1 overflow-y-auto bg-gradient-to-br from-stone-50/50 to-orange-50/30 dark:from-neutral-900 dark:to-neutral-800/50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8">
+            <div className="w-full px-4 sm:px-6 md:px-8 py-6 sm:py-8">
               {/* Welcome Section */}
               <div className="mb-8 sm:mb-10">
                 <div className="relative bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 dark:from-orange-600 dark:via-orange-700 dark:to-orange-600 rounded-2xl p-8 sm:p-10 shadow-2xl overflow-hidden group">
