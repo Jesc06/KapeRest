@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faChartLine, faTimes, faChevronRight, faPlus, faList, faBuilding, faUtensils, faBoxes } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faChartLine, faTimes, faChevronRight, faPlus, faList, faBuilding, faUtensils, faBoxes, faHome } from '@fortawesome/free-solid-svg-icons';
 
 interface StaffSidebarProps {
   isOpen?: boolean;
@@ -53,6 +53,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
   const isSales = location.pathname === '/staff/sales';
   const isAddStocks = location.pathname === '/staff/add-stocks';
   const isStocksList = location.pathname === '/staff/stocks';
+  const isHome = location.pathname === '/staff';
 
   return (
     <>
@@ -62,30 +63,52 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
       )}
 
       {/* Sidebar */}
-      <aside className={`fixed left-0 top-0 h-screen flex flex-col border-r border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 transition-[width] duration-300 ease-in-out z-40 ${
+      <aside className={`fixed left-0 top-0 h-screen flex flex-col border-r border-neutral-200 dark:border-neutral-700 bg-gradient-to-b from-white to-stone-50 dark:from-neutral-900 dark:to-neutral-900 transition-[width] duration-300 ease-in-out z-40 shadow-xl ${
         !isOpen ? '-translate-x-full' : 'translate-x-0'
       } lg:translate-x-0 ${isExpanded ? 'w-64' : 'w-16'}`}>
       {/* Header with Branding */}
-        <div className="sticky top-0 flex items-center justify-center border-b border-neutral-200 dark:border-neutral-700 px-3 py-4 transition-all duration-300">
+        <div className="sticky top-0 flex items-center justify-center border-b border-neutral-200 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-sm px-3 py-4 transition-all duration-300">
           {isExpanded ? (
             <div className="flex items-center gap-2 w-full">
-              <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-orange-500 text-white">
-                <FontAwesomeIcon icon={faCoffee} className="text-sm" />
+              <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg">
+                <FontAwesomeIcon icon={faCoffee} className="text-base" />
               </div>
               <div className="flex-1 min-w-0">
-                <h2 className="text-sm font-bold text-neutral-900 dark:text-white">KapeRest</h2>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">Staff</p>
+                <h2 className="text-base font-bold text-neutral-900 dark:text-white">KapeRest</h2>
+                <p className="text-xs text-orange-600 dark:text-orange-400 font-medium">Staff Portal</p>
               </div>
             </div>
           ) : (
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-500 text-white">
-              <FontAwesomeIcon icon={faCoffee} className="text-sm" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg">
+              <FontAwesomeIcon icon={faCoffee} className="text-base" />
             </div>
           )}
         </div>
 
         {/* Navigation Items */}
         <nav className="flex-1 overflow-y-auto px-2 py-3 space-y-1">
+          {/* Home - First Item */}
+          <button
+            onClick={() => navigate('/staff')}
+            className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg transition-all duration-200 group ${
+              isHome
+                ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
+                : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
+            }`}
+          >
+            <FontAwesomeIcon icon={faHome} className="text-base flex-shrink-0" />
+            {isExpanded && (
+              <span className="flex-1 text-left text-sm font-semibold truncate">Home</span>
+            )}
+          </button>
+
+          {/* Divider */}
+          {isExpanded && (
+            <div className="py-2">
+              <div className="border-t border-neutral-200 dark:border-neutral-700"></div>
+            </div>
+          )}
+
           {/* Supplier Section */}
           <div>
             <button
@@ -93,16 +116,16 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                 if (!isExpanded) return;
                 toggleSupplier();
               }}
-              className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg transition-all duration-200 ${
+              className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg transition-all duration-200 group ${
                 isAddSupplier || isSupplierList
-                  ? "bg-orange-500 text-white"
-                  : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                  ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
+                  : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
               }`}
             >
               <FontAwesomeIcon icon={faBuilding} className="text-base flex-shrink-0" />
               {isExpanded && (
                 <>
-                  <span className="flex-1 text-left text-sm font-medium truncate">Supplier</span>
+                  <span className="flex-1 text-left text-sm font-semibold truncate">Supplier</span>
                   <FontAwesomeIcon 
                     icon={faChevronRight} 
                     className={`text-xs transition-transform duration-200 ${supplierOpen ? 'rotate-90' : 'rotate-0'}`}
@@ -112,16 +135,16 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
             </button>
             
             {isExpanded && supplierOpen && (
-              <div className="ml-6 mt-1 space-y-0.5">
+              <div className="ml-6 mt-1 space-y-0.5 pl-1 border-l-2 border-orange-200 dark:border-orange-900/30">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     navigate('/staff/add-supplier');
                   }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-all duration-200 ${
+                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
                     isAddSupplier
-                      ? "bg-orange-50 dark:bg-orange-950/30 text-orange-600 dark:text-orange-400 font-medium"
-                      : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
+                      ? "bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 font-semibold shadow-sm"
+                      : "text-neutral-600 dark:text-neutral-400 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
                   }`}
                 >
                   <FontAwesomeIcon icon={faPlus} className="text-xs" />
@@ -133,10 +156,10 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                     e.stopPropagation();
                     navigate('/staff/suppliers');
                   }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-all duration-200 ${
+                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
                     isSupplierList
-                      ? "bg-orange-50 dark:bg-orange-950/30 text-orange-600 dark:text-orange-400 font-medium"
-                      : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
+                      ? "bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 font-semibold shadow-sm"
+                      : "text-neutral-600 dark:text-neutral-400 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
                   }`}
                 >
                   <FontAwesomeIcon icon={faList} className="text-xs" />
@@ -153,16 +176,16 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                 if (!isExpanded) return;
                 toggleMenuItem();
               }}
-              className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg transition-all duration-200 ${
+              className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg transition-all duration-200 group ${
                 isAddItem || isMenuItemList
-                  ? "bg-orange-500 text-white"
-                  : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                  ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
+                  : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
               }`}
             >
               <FontAwesomeIcon icon={faUtensils} className="text-base flex-shrink-0" />
               {isExpanded && (
                 <>
-                  <span className="flex-1 text-left text-sm font-medium truncate">Menu Item</span>
+                  <span className="flex-1 text-left text-sm font-semibold truncate">Menu Item</span>
                   <FontAwesomeIcon 
                     icon={faChevronRight} 
                     className={`text-xs transition-transform duration-200 ${menuItemOpen ? 'rotate-90' : 'rotate-0'}`}
@@ -172,16 +195,16 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
             </button>
             
             {isExpanded && menuItemOpen && (
-              <div className="ml-6 mt-1 space-y-0.5">
+              <div className="ml-6 mt-1 space-y-0.5 pl-1 border-l-2 border-orange-200 dark:border-orange-900/30">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     navigate('/staff/add-item');
                   }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-all duration-200 ${
+                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
                     isAddItem
-                      ? "bg-orange-50 dark:bg-orange-950/30 text-orange-600 dark:text-orange-400 font-medium"
-                      : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
+                      ? "bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 font-semibold shadow-sm"
+                      : "text-neutral-600 dark:text-neutral-400 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
                   }`}
                 >
                   <FontAwesomeIcon icon={faPlus} className="text-xs" />
@@ -193,10 +216,10 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                     e.stopPropagation();
                     navigate('/staff/items');
                   }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-all duration-200 ${
+                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
                     isMenuItemList
-                      ? "bg-orange-50 dark:bg-orange-950/30 text-orange-600 dark:text-orange-400 font-medium"
-                      : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
+                      ? "bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 font-semibold shadow-sm"
+                      : "text-neutral-600 dark:text-neutral-400 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
                   }`}
                 >
                   <FontAwesomeIcon icon={faList} className="text-xs" />
@@ -213,16 +236,16 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                 if (!isExpanded) return;
                 toggleStocks();
               }}
-              className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg transition-all duration-200 ${
+              className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg transition-all duration-200 group ${
                 isAddStocks || isStocksList
-                  ? "bg-orange-500 text-white"
-                  : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                  ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
+                  : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
               }`}
             >
               <FontAwesomeIcon icon={faBoxes} className="text-base flex-shrink-0" />
               {isExpanded && (
                 <>
-                  <span className="flex-1 text-left text-sm font-medium truncate">Stocks</span>
+                  <span className="flex-1 text-left text-sm font-semibold truncate">Stocks</span>
                   <FontAwesomeIcon 
                     icon={faChevronRight} 
                     className={`text-xs transition-transform duration-200 ${stocksOpen ? 'rotate-90' : 'rotate-0'}`}
@@ -232,16 +255,16 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
             </button>
             
             {isExpanded && stocksOpen && (
-              <div className="ml-6 mt-1 space-y-0.5">
+              <div className="ml-6 mt-1 space-y-0.5 pl-1 border-l-2 border-orange-200 dark:border-orange-900/30">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     navigate('/staff/add-stocks');
                   }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-all duration-200 ${
+                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
                     isAddStocks
-                      ? "bg-orange-50 dark:bg-orange-950/30 text-orange-600 dark:text-orange-400 font-medium"
-                      : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
+                      ? "bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 font-semibold shadow-sm"
+                      : "text-neutral-600 dark:text-neutral-400 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
                   }`}
                 >
                   <FontAwesomeIcon icon={faPlus} className="text-xs" />
@@ -253,10 +276,10 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                     e.stopPropagation();
                     navigate('/staff/stocks');
                   }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-all duration-200 ${
+                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
                     isStocksList
-                      ? "bg-orange-50 dark:bg-orange-950/30 text-orange-600 dark:text-orange-400 font-medium"
-                      : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
+                      ? "bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 font-semibold shadow-sm"
+                      : "text-neutral-600 dark:text-neutral-400 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
                   }`}
                 >
                   <FontAwesomeIcon icon={faList} className="text-xs" />
@@ -269,15 +292,15 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
           {/* Sales - Standalone */}
           <button
             onClick={() => navigate('/staff/sales')}
-            className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg transition-all duration-200 ${
+            className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg transition-all duration-200 group ${
               isSales
-                ? "bg-orange-500 text-white"
-                : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
+                : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
             }`}
           >
             <FontAwesomeIcon icon={faChartLine} className="text-base flex-shrink-0" />
             {isExpanded && (
-              <span className="flex-1 text-left text-sm font-medium truncate">Sales</span>
+              <span className="flex-1 text-left text-sm font-semibold truncate">Sales</span>
             )}
           </button>
         </nav>
