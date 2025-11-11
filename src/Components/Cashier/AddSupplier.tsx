@@ -5,10 +5,6 @@ import {
   faBars, 
   faChevronLeft, 
   faChevronRight, 
-  faUser, 
-  faPhone, 
-  faEnvelope, 
-  faMapMarker, 
   faBuilding,
   faCheckCircle,
   faExclamationCircle,
@@ -77,11 +73,15 @@ const AddSupplier: React.FC = () => {
       case 'supplierName':
         if (!formData.supplierName.trim()) {
           newErrors.supplierName = 'Supplier name is required';
+        } else {
+          delete newErrors.supplierName;
         }
         break;
       case 'contactPerson':
         if (!formData.contactPerson.trim()) {
           newErrors.contactPerson = 'Contact person name is required';
+        } else {
+          delete newErrors.contactPerson;
         }
         break;
       case 'phoneNumber':
@@ -89,6 +89,8 @@ const AddSupplier: React.FC = () => {
           newErrors.phoneNumber = 'Phone number is required';
         } else if (!/^[\d\s\-\+\(\)]+$/.test(formData.phoneNumber)) {
           newErrors.phoneNumber = 'Please enter a valid phone number';
+        } else {
+          delete newErrors.phoneNumber;
         }
         break;
       case 'email':
@@ -96,11 +98,15 @@ const AddSupplier: React.FC = () => {
           newErrors.email = 'Email is required';
         } else if (!formData.email.includes('@')) {
           newErrors.email = 'Please enter a valid email address';
+        } else {
+          delete newErrors.email;
         }
         break;
       case 'address':
         if (!formData.address.trim()) {
           newErrors.address = 'Address is required';
+        } else {
+          delete newErrors.address;
         }
         break;
       default:
@@ -249,7 +255,7 @@ const AddSupplier: React.FC = () => {
               )}
 
               {success && (
-                <div className="mb-6 p-4 bg-green-50/80 dark:bg-green-950/30 border border-green-200 dark:border-green-800/50 rounded-2xl flex items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-300 backdrop-blur-sm shadow-lg">
+                <div className="mb-6 p-4 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800/50 rounded-lg flex items-start gap-3">
                   <FontAwesomeIcon icon={faCheckCircle} className="h-5 w-5 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-sm font-semibold text-green-700 dark:text-green-300">Success!</p>
@@ -258,222 +264,164 @@ const AddSupplier: React.FC = () => {
                 </div>
               )}
 
-              {/* Form */}
-              <form onSubmit={handleSubmit} className="space-y-6 bg-white/70 dark:bg-neutral-900/70 p-6 sm:p-8 rounded-3xl border border-orange-100/50 dark:border-neutral-800/50 shadow-2xl shadow-orange-500/5 backdrop-blur-xl">
+              {/* Form - Flat Design */}
+              <form onSubmit={handleSubmit} className="space-y-5 bg-white dark:bg-neutral-900 p-6 rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-sm">
                 
-                {/* Supplier Name - Floating Label */}
-                <div className="relative group">
+                {/* Supplier Name */}
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    Supplier Name <span className="text-red-500">*</span>
+                  </label>
                   <input
                     type="text"
                     name="supplierName"
-                    id="supplierName"
                     value={formData.supplierName}
                     onChange={handleChange}
                     onBlur={() => handleFieldBlur('supplierName')}
-                    aria-label="Supplier Name"
-                    aria-invalid={!!fieldErrors.supplierName}
-                    aria-describedby={fieldErrors.supplierName ? 'supplierName-error' : undefined}
-                    className={`w-full px-5 pt-6 pb-2.5 text-base rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder-transparent focus:outline-none peer ${
+                    className={`w-full px-3 py-2 rounded-lg border bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
                       fieldErrors.supplierName
-                        ? 'border-red-400 dark:border-red-500/50 focus:ring-4 focus:ring-red-500/10 dark:focus:ring-red-400/10'
-                        : 'border-neutral-200 dark:border-neutral-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 dark:focus:border-orange-400 dark:focus:ring-orange-400/10'
-                    } hover:border-orange-300 dark:hover:border-orange-600`}
-                    placeholder="Supplier Name"
+                        ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500'
+                        : 'border-neutral-300 dark:border-neutral-700 focus:border-orange-500 focus:ring-orange-500'
+                    }`}
+                    placeholder="e.g., ABC Supplies Inc."
                     disabled={isLoading}
                   />
-                  <label 
-                    htmlFor="supplierName"
-                    className={`absolute left-5 top-4 text-neutral-500 dark:text-neutral-400 transition-all duration-200 pointer-events-none
-                      peer-placeholder-shown:top-4 peer-placeholder-shown:text-base
-                      peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-orange-600 dark:peer-focus:text-orange-400
-                      ${formData.supplierName ? 'top-1.5 text-xs text-orange-600 dark:text-orange-400' : ''}`}
-                  >
-                    <FontAwesomeIcon icon={faBuilding} className="mr-2" />
-                    Supplier Name <span className="text-red-500">*</span>
-                  </label>
                   {fieldErrors.supplierName && (
-                    <p id="supplierName-error" className="text-xs text-red-600 dark:text-red-400 mt-2 ml-1 flex items-center gap-1.5 animate-in fade-in slide-in-from-top-1 duration-200">
-                      <span className="inline-block w-1 h-1 bg-red-600 dark:bg-red-400 rounded-full"></span> {fieldErrors.supplierName}
+                    <p className="text-xs text-red-600 dark:text-red-400 mt-1">
+                      {fieldErrors.supplierName}
                     </p>
                   )}
                 </div>
 
-                {/* Contact Person - Floating Label */}
-                <div className="relative group">
+                {/* Contact Person */}
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    Contact Person <span className="text-red-500">*</span>
+                  </label>
                   <input
                     type="text"
                     name="contactPerson"
-                    id="contactPerson"
                     value={formData.contactPerson}
                     onChange={handleChange}
                     onBlur={() => handleFieldBlur('contactPerson')}
-                    aria-label="Contact Person Name"
-                    aria-invalid={!!fieldErrors.contactPerson}
-                    aria-describedby={fieldErrors.contactPerson ? 'contactPerson-error' : undefined}
-                    className={`w-full px-5 pt-6 pb-2.5 text-base rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder-transparent focus:outline-none peer ${
+                    className={`w-full px-3 py-2 rounded-lg border bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
                       fieldErrors.contactPerson
-                        ? 'border-red-400 dark:border-red-500/50 focus:ring-4 focus:ring-red-500/10 dark:focus:ring-red-400/10'
-                        : 'border-neutral-200 dark:border-neutral-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 dark:focus:border-orange-400 dark:focus:ring-orange-400/10'
-                    } hover:border-orange-300 dark:hover:border-orange-600`}
-                    placeholder="Contact Person"
+                        ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500'
+                        : 'border-neutral-300 dark:border-neutral-700 focus:border-orange-500 focus:ring-orange-500'
+                    }`}
+                    placeholder="e.g., Juan Dela Cruz"
                     disabled={isLoading}
                   />
-                  <label 
-                    htmlFor="contactPerson"
-                    className={`absolute left-5 top-4 text-neutral-500 dark:text-neutral-400 transition-all duration-200 pointer-events-none
-                      peer-placeholder-shown:top-4 peer-placeholder-shown:text-base
-                      peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-orange-600 dark:peer-focus:text-orange-400
-                      ${formData.contactPerson ? 'top-1.5 text-xs text-orange-600 dark:text-orange-400' : ''}`}
-                  >
-                    <FontAwesomeIcon icon={faUser} className="mr-2" />
-                    Contact Person <span className="text-red-500">*</span>
-                  </label>
                   {fieldErrors.contactPerson && (
-                    <p id="contactPerson-error" className="text-xs text-red-600 dark:text-red-400 mt-2 ml-1 flex items-center gap-1.5 animate-in fade-in slide-in-from-top-1 duration-200">
-                      <span className="inline-block w-1 h-1 bg-red-600 dark:bg-red-400 rounded-full"></span> {fieldErrors.contactPerson}
+                    <p className="text-xs text-red-600 dark:text-red-400 mt-1">
+                      {fieldErrors.contactPerson}
                     </p>
                   )}
                 </div>
 
                 {/* Phone & Email Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Phone Number - Floating Label */}
-                  <div className="relative group">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {/* Phone Number */}
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+                      Phone Number <span className="text-red-500">*</span>
+                    </label>
                     <input
                       type="tel"
                       name="phoneNumber"
-                      id="phoneNumber"
                       value={formData.phoneNumber}
                       onChange={handleChange}
                       onBlur={() => handleFieldBlur('phoneNumber')}
-                      aria-label="Phone Number"
-                      aria-invalid={!!fieldErrors.phoneNumber}
-                      aria-describedby={fieldErrors.phoneNumber ? 'phoneNumber-error' : undefined}
-                      className={`w-full px-5 pt-6 pb-2.5 text-base rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder-transparent focus:outline-none peer ${
+                      className={`w-full px-3 py-2 rounded-lg border bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
                         fieldErrors.phoneNumber
-                          ? 'border-red-400 dark:border-red-500/50 focus:ring-4 focus:ring-red-500/10 dark:focus:ring-red-400/10'
-                          : 'border-neutral-200 dark:border-neutral-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 dark:focus:border-orange-400 dark:focus:ring-orange-400/10'
-                      } hover:border-orange-300 dark:hover:border-orange-600`}
-                      placeholder="Phone Number"
+                          ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500'
+                          : 'border-neutral-300 dark:border-neutral-700 focus:border-orange-500 focus:ring-orange-500'
+                      }`}
+                      placeholder="e.g., 09123456789"
                       disabled={isLoading}
                     />
-                    <label 
-                      htmlFor="phoneNumber"
-                      className={`absolute left-5 top-4 text-neutral-500 dark:text-neutral-400 transition-all duration-200 pointer-events-none
-                        peer-placeholder-shown:top-4 peer-placeholder-shown:text-base
-                        peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-orange-600 dark:peer-focus:text-orange-400
-                        ${formData.phoneNumber ? 'top-1.5 text-xs text-orange-600 dark:text-orange-400' : ''}`}
-                    >
-                      <FontAwesomeIcon icon={faPhone} className="mr-2" />
-                      Phone Number <span className="text-red-500">*</span>
-                    </label>
                     {fieldErrors.phoneNumber && (
-                      <p id="phoneNumber-error" className="text-xs text-red-600 dark:text-red-400 mt-2 ml-1 flex items-center gap-1.5 animate-in fade-in slide-in-from-top-1 duration-200">
-                        <span className="inline-block w-1 h-1 bg-red-600 dark:bg-red-400 rounded-full"></span> {fieldErrors.phoneNumber}
+                      <p className="text-xs text-red-600 dark:text-red-400 mt-1">
+                        {fieldErrors.phoneNumber}
                       </p>
                     )}
                   </div>
 
-                  {/* Email - Floating Label */}
-                  <div className="relative group">
+                  {/* Email */}
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+                      Email Address <span className="text-red-500">*</span>
+                    </label>
                     <input
                       type="email"
                       name="email"
-                      id="email"
                       value={formData.email}
                       onChange={handleChange}
                       onBlur={() => handleFieldBlur('email')}
-                      aria-label="Email Address"
-                      aria-invalid={!!fieldErrors.email}
-                      aria-describedby={fieldErrors.email ? 'email-error' : undefined}
-                      className={`w-full px-5 pt-6 pb-2.5 text-base rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder-transparent focus:outline-none peer ${
+                      className={`w-full px-3 py-2 rounded-lg border bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
                         fieldErrors.email
-                          ? 'border-red-400 dark:border-red-500/50 focus:ring-4 focus:ring-red-500/10 dark:focus:ring-red-400/10'
-                          : 'border-neutral-200 dark:border-neutral-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 dark:focus:border-orange-400 dark:focus:ring-orange-400/10'
-                      } hover:border-orange-300 dark:hover:border-orange-600`}
-                      placeholder="Email"
+                          ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500'
+                          : 'border-neutral-300 dark:border-neutral-700 focus:border-orange-500 focus:ring-orange-500'
+                      }`}
+                      placeholder="e.g., supplier@email.com"
                       disabled={isLoading}
                     />
-                    <label 
-                      htmlFor="email"
-                      className={`absolute left-5 top-4 text-neutral-500 dark:text-neutral-400 transition-all duration-200 pointer-events-none
-                        peer-placeholder-shown:top-4 peer-placeholder-shown:text-base
-                        peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-orange-600 dark:peer-focus:text-orange-400
-                        ${formData.email ? 'top-1.5 text-xs text-orange-600 dark:text-orange-400' : ''}`}
-                    >
-                      <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
-                      Email Address <span className="text-red-500">*</span>
-                    </label>
                     {fieldErrors.email && (
-                      <p id="email-error" className="text-xs text-red-600 dark:text-red-400 mt-2 ml-1 flex items-center gap-1.5 animate-in fade-in slide-in-from-top-1 duration-200">
-                        <span className="inline-block w-1 h-1 bg-red-600 dark:bg-red-400 rounded-full"></span> {fieldErrors.email}
+                      <p className="text-xs text-red-600 dark:text-red-400 mt-1">
+                        {fieldErrors.email}
                       </p>
                     )}
                   </div>
                 </div>
 
-                {/* Address - Floating Label */}
-                <div className="relative group">
+                {/* Address */}
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    Address <span className="text-red-500">*</span>
+                  </label>
                   <input
                     type="text"
                     name="address"
-                    id="address"
                     value={formData.address}
                     onChange={handleChange}
                     onBlur={() => handleFieldBlur('address')}
-                    aria-label="Address"
-                    aria-invalid={!!fieldErrors.address}
-                    aria-describedby={fieldErrors.address ? 'address-error' : undefined}
-                    className={`w-full px-5 pt-6 pb-2.5 text-base rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder-transparent focus:outline-none peer ${
+                    className={`w-full px-3 py-2 rounded-lg border bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
                       fieldErrors.address
-                        ? 'border-red-400 dark:border-red-500/50 focus:ring-4 focus:ring-red-500/10 dark:focus:ring-red-400/10'
-                        : 'border-neutral-200 dark:border-neutral-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 dark:focus:border-orange-400 dark:focus:ring-orange-400/10'
-                    } hover:border-orange-300 dark:hover:border-orange-600`}
-                    placeholder="Address"
+                        ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500'
+                        : 'border-neutral-300 dark:border-neutral-700 focus:border-orange-500 focus:ring-orange-500'
+                    }`}
+                    placeholder="Complete address"
                     disabled={isLoading}
                   />
-                  <label 
-                    htmlFor="address"
-                    className={`absolute left-5 top-4 text-neutral-500 dark:text-neutral-400 transition-all duration-200 pointer-events-none
-                      peer-placeholder-shown:top-4 peer-placeholder-shown:text-base
-                      peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-orange-600 dark:peer-focus:text-orange-400
-                      ${formData.address ? 'top-1.5 text-xs text-orange-600 dark:text-orange-400' : ''}`}
-                  >
-                    <FontAwesomeIcon icon={faMapMarker} className="mr-2" />
-                    Address <span className="text-red-500">*</span>
-                  </label>
                   {fieldErrors.address && (
-                    <p id="address-error" className="text-xs text-red-600 dark:text-red-400 mt-2 ml-1 flex items-center gap-1.5 animate-in fade-in slide-in-from-top-1 duration-200">
-                      <span className="inline-block w-1 h-1 bg-red-600 dark:bg-red-400 rounded-full"></span> {fieldErrors.address}
+                    <p className="text-xs text-red-600 dark:text-red-400 mt-1">
+                      {fieldErrors.address}
                     </p>
                   )}
                 </div>
 
                 {/* Form Status Indicator */}
                 {hasErrors && (
-                  <div className="p-3.5 bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/40 rounded-2xl text-sm text-amber-700 dark:text-amber-400 backdrop-blur-sm animate-in fade-in slide-in-from-top-2 duration-300">
-                    <div className="flex items-center gap-2">
-                      <span className="inline-block w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
-                      <span className="font-semibold">Please fix the errors above before submitting</span>
-                    </div>
+                  <div className="p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/40 rounded-lg text-sm text-amber-700 dark:text-amber-400">
+                    Please fix the errors above before submitting
                   </div>
                 )}
 
                 {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                <div className="flex gap-3 pt-2">
                   <button
                     type="submit"
                     disabled={isLoading || hasErrors}
-                    className="flex-1 px-8 py-3.5 bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 disabled:from-neutral-400 disabled:to-neutral-400 text-white text-base font-bold rounded-2xl transition-all duration-300 shadow-xl shadow-orange-500/25 hover:shadow-2xl hover:shadow-orange-500/30 disabled:shadow-none active:scale-[0.98] disabled:cursor-not-allowed flex items-center justify-center gap-3 group"
+                    className="flex-1 px-4 py-2.5 bg-orange-600 hover:bg-orange-700 disabled:bg-neutral-400 text-white font-medium rounded-lg disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {isLoading ? (
                       <>
-                        <span className="inline-block h-5 w-5 border-3 border-white/30 border-t-white rounded-full animate-spin"></span>
-                        <span>Adding Supplier...</span>
+                        <span className="inline-block h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                        <span>Adding...</span>
                       </>
                     ) : (
                       <>
-                        <FontAwesomeIcon icon={faCheckCircle} className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
+                        <FontAwesomeIcon icon={faCheckCircle} className="h-4 w-4" />
                         <span>Add Supplier</span>
                       </>
                     )}
@@ -483,19 +431,17 @@ const AddSupplier: React.FC = () => {
                     type="button"
                     onClick={() => navigate('/staff')}
                     disabled={isLoading}
-                    className="flex-1 px-8 py-3.5 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 disabled:bg-neutral-50 dark:disabled:bg-neutral-900 text-neutral-900 dark:text-white text-base font-bold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl active:scale-[0.98] disabled:cursor-not-allowed flex items-center justify-center gap-3 group border-2 border-neutral-200 dark:border-neutral-700"
+                    className="flex-1 px-4 py-2.5 bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white font-medium rounded-lg disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
-                    <FontAwesomeIcon icon={faArrowLeft} className="h-5 w-5 transition-transform duration-300 group-hover:-translate-x-1" />
+                    <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4" />
                     <span>Cancel</span>
                   </button>
                 </div>
 
                 {/* Helper Text */}
-                <div className="text-left pt-2">
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                    <span className="text-red-500 font-semibold">*</span> Required fields
-                  </p>
-                </div>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400 pt-1">
+                  <span className="text-red-500">*</span> Required fields
+                </p>
               </form>
             </div>
           </div>

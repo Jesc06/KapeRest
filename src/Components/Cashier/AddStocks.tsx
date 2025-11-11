@@ -5,11 +5,7 @@ import {
   faBars, 
   faChevronLeft, 
   faChevronRight, 
-  faBox, 
-  faTag, 
   faWarehouse, 
-  faBuilding, 
-  faCube,
   faCheckCircle,
   faExclamationCircle,
   faArrowLeft
@@ -208,7 +204,7 @@ const AddStocks: React.FC = () => {
 
               {/* Success Message */}
               {success && (
-                <div className="mb-6 p-4 bg-green-50/80 dark:bg-green-950/30 border border-green-200 dark:border-green-800/50 rounded-2xl flex items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-300 backdrop-blur-sm shadow-lg">
+                <div className="mb-6 p-4 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800/50 rounded-lg flex items-start gap-3">
                   <FontAwesomeIcon icon={faCheckCircle} className="h-5 w-5 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-sm font-semibold text-green-700 dark:text-green-300">Success!</p>
@@ -217,160 +213,125 @@ const AddStocks: React.FC = () => {
                 </div>
               )}
 
-              {/* Form */}
-              <form onSubmit={handleSubmit} className="space-y-6 bg-white/70 dark:bg-neutral-900/70 p-6 sm:p-8 rounded-3xl border border-orange-100/50 dark:border-neutral-800/50 shadow-2xl shadow-orange-500/5 backdrop-blur-xl">
+              {/* Form - Flat Design */}
+              <form onSubmit={handleSubmit} className="space-y-5 bg-white dark:bg-neutral-900 p-6 rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-sm">
                 
-                {/* Product Name - Floating Label */}
-                <div className="relative group">
+                {/* Product Name */}
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    Product Name <span className="text-red-500">*</span>
+                  </label>
                   <input
                     type="text"
                     name="productName"
-                    id="productName"
                     value={formData.productName}
                     onChange={handleChange}
-                    className="w-full px-5 pt-6 pb-2.5 text-base rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder-transparent focus:outline-none peer border-neutral-200 dark:border-neutral-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 dark:focus:border-orange-400 dark:focus:ring-orange-400/10 hover:border-orange-300 dark:hover:border-orange-600"
-                    placeholder="Product Name"
+                    className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
+                    placeholder="e.g., Arabica Coffee Beans"
                     disabled={isLoading}
                   />
-                  <label 
-                    htmlFor="productName"
-                    className={`absolute left-5 top-4 text-neutral-500 dark:text-neutral-400 transition-all duration-200 pointer-events-none
-                      peer-placeholder-shown:top-4 peer-placeholder-shown:text-base
-                      peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-orange-600 dark:peer-focus:text-orange-400
-                      ${formData.productName ? 'top-1.5 text-xs text-orange-600 dark:text-orange-400' : ''}`}
-                  >
-                    <FontAwesomeIcon icon={faBox} className="mr-2" />
-                    Product Name <span className="text-red-500">*</span>
-                  </label>
                 </div>
 
                 {/* Cost Price & Quantity Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Cost Price - Floating Label */}
-                  <div className="relative group">
-                    <input
-                      type="number"
-                      name="costPrice"
-                      id="costPrice"
-                      value={formData.costPrice}
-                      onChange={handleChange}
-                      className="w-full px-5 pt-6 pb-2.5 text-base rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder-transparent focus:outline-none peer border-neutral-200 dark:border-neutral-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 dark:focus:border-orange-400 dark:focus:ring-orange-400/10 hover:border-orange-300 dark:hover:border-orange-600"
-                      placeholder="Cost Price"
-                      step="0.01"
-                      disabled={isLoading}
-                    />
-                    <label 
-                      htmlFor="costPrice"
-                      className={`absolute left-5 top-4 text-neutral-500 dark:text-neutral-400 transition-all duration-200 pointer-events-none
-                        peer-placeholder-shown:top-4 peer-placeholder-shown:text-base
-                        peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-orange-600 dark:peer-focus:text-orange-400
-                        ${formData.costPrice ? 'top-1.5 text-xs text-orange-600 dark:text-orange-400' : ''}`}
-                    >
-                      <FontAwesomeIcon icon={faTag} className="mr-2" />
-                      Cost Price (₱) <span className="text-red-500">*</span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {/* Cost Price */}
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+                      Cost Price <span className="text-red-500">*</span>
                     </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-2 text-neutral-500 dark:text-neutral-400">₱</span>
+                      <input
+                        type="number"
+                        name="costPrice"
+                        value={formData.costPrice}
+                        onChange={handleChange}
+                        className="w-full pl-7 pr-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
+                        placeholder="0.00"
+                        step="0.01"
+                        disabled={isLoading}
+                      />
+                    </div>
                   </div>
 
-                  {/* Quantity - Floating Label */}
-                  <div className="relative group">
+                  {/* Quantity */}
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+                      Quantity <span className="text-red-500">*</span>
+                    </label>
                     <input
                       type="number"
                       name="stocks"
-                      id="stocks"
                       value={formData.stocks}
                       onChange={handleChange}
-                      className="w-full px-5 pt-6 pb-2.5 text-base rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder-transparent focus:outline-none peer border-neutral-200 dark:border-neutral-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 dark:focus:border-orange-400 dark:focus:ring-orange-400/10 hover:border-orange-300 dark:hover:border-orange-600"
-                      placeholder="Quantity"
+                      className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
+                      placeholder="0"
                       min="0"
                       disabled={isLoading}
                     />
-                    <label 
-                      htmlFor="stocks"
-                      className={`absolute left-5 top-4 text-neutral-500 dark:text-neutral-400 transition-all duration-200 pointer-events-none
-                        peer-placeholder-shown:top-4 peer-placeholder-shown:text-base
-                        peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-orange-600 dark:peer-focus:text-orange-400
-                        ${formData.stocks ? 'top-1.5 text-xs text-orange-600 dark:text-orange-400' : ''}`}
-                    >
-                      <FontAwesomeIcon icon={faCube} className="mr-2" />
-                      Quantity <span className="text-red-500">*</span>
-                    </label>
                   </div>
                 </div>
 
                 {/* Unit & Supplier Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Unit - Floating Label */}
-                  <div className="relative group">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {/* Unit */}
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+                      Unit <span className="text-red-500">*</span>
+                    </label>
                     <select
                       name="units"
-                      id="units"
                       value={formData.units}
                       onChange={handleChange}
-                      className="w-full px-5 pt-6 pb-2.5 text-base rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none peer border-neutral-200 dark:border-neutral-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 dark:focus:border-orange-400 dark:focus:ring-orange-400/10 hover:border-orange-300 dark:hover:border-orange-600 appearance-none cursor-pointer"
+                      className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
                       disabled={isLoading}
                     >
-                      <option value=""></option>
+                      <option value="">Select unit</option>
                       {unitOptions.map((unit) => (
                         <option key={unit.value} value={unit.value}>
                           {unit.label}
                         </option>
                       ))}
                     </select>
-                    <label 
-                      htmlFor="units"
-                      className={`absolute left-5 top-4 text-neutral-500 dark:text-neutral-400 transition-all duration-200 pointer-events-none
-                        peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-orange-600 dark:peer-focus:text-orange-400
-                        ${formData.units ? 'top-1.5 text-xs text-orange-600 dark:text-orange-400' : 'top-4 text-base'}`}
-                    >
-                      <FontAwesomeIcon icon={faWarehouse} className="mr-2" />
-                      Unit <span className="text-red-500">*</span>
-                    </label>
                   </div>
 
-                  {/* Supplier - Floating Label */}
-                  <div className="relative group">
+                  {/* Supplier */}
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+                      Supplier <span className="text-red-500">*</span>
+                    </label>
                     <select
                       name="supplierId"
-                      id="supplierId"
                       value={formData.supplierId}
                       onChange={handleChange}
-                      className="w-full px-5 pt-6 pb-2.5 text-base rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none peer border-neutral-200 dark:border-neutral-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 dark:focus:border-orange-400 dark:focus:ring-orange-400/10 hover:border-orange-300 dark:hover:border-orange-600 appearance-none cursor-pointer"
+                      className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
                       disabled={isLoading}
                     >
-                      <option value=""></option>
+                      <option value="">Select supplier</option>
                       {suppliers.map((supplier) => (
                         <option key={supplier.id} value={supplier.id.toString()}>
                           {supplier.name}
                         </option>
                       ))}
                     </select>
-                    <label 
-                      htmlFor="supplierId"
-                      className={`absolute left-5 top-4 text-neutral-500 dark:text-neutral-400 transition-all duration-200 pointer-events-none
-                        peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-orange-600 dark:peer-focus:text-orange-400
-                        ${formData.supplierId ? 'top-1.5 text-xs text-orange-600 dark:text-orange-400' : 'top-4 text-base'}`}
-                    >
-                      <FontAwesomeIcon icon={faBuilding} className="mr-2" />
-                      Supplier <span className="text-red-500">*</span>
-                    </label>
                   </div>
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                <div className="flex gap-3 pt-2">
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="flex-1 px-8 py-3.5 bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 disabled:from-neutral-400 disabled:to-neutral-400 text-white text-base font-bold rounded-2xl transition-all duration-300 shadow-xl shadow-orange-500/25 hover:shadow-2xl hover:shadow-orange-500/30 disabled:shadow-none active:scale-[0.98] disabled:cursor-not-allowed flex items-center justify-center gap-3 group"
+                    className="flex-1 px-4 py-2.5 bg-orange-600 hover:bg-orange-700 disabled:bg-neutral-400 text-white font-medium rounded-lg disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {isLoading ? (
                       <>
-                        <span className="inline-block h-5 w-5 border-3 border-white/30 border-t-white rounded-full animate-spin"></span>
-                        <span>Adding Stock...</span>
+                        <span className="inline-block h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                        <span>Adding...</span>
                       </>
                     ) : (
                       <>
-                        <FontAwesomeIcon icon={faCheckCircle} className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
+                        <FontAwesomeIcon icon={faCheckCircle} className="h-4 w-4" />
                         <span>Add Stock</span>
                       </>
                     )}
@@ -380,19 +341,17 @@ const AddStocks: React.FC = () => {
                     type="button"
                     onClick={() => navigate('/staff')}
                     disabled={isLoading}
-                    className="flex-1 px-8 py-3.5 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 disabled:bg-neutral-50 dark:disabled:bg-neutral-900 text-neutral-900 dark:text-white text-base font-bold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl active:scale-[0.98] disabled:cursor-not-allowed flex items-center justify-center gap-3 group border-2 border-neutral-200 dark:border-neutral-700"
+                    className="flex-1 px-4 py-2.5 bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white font-medium rounded-lg disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
-                    <FontAwesomeIcon icon={faArrowLeft} className="h-5 w-5 transition-transform duration-300 group-hover:-translate-x-1" />
+                    <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4" />
                     <span>Cancel</span>
                   </button>
                 </div>
 
                 {/* Helper Text */}
-                <div className="text-left pt-2">
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                    <span className="text-red-500 font-semibold">*</span> Required fields
-                  </p>
-                </div>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400 pt-1">
+                  <span className="text-red-500">*</span> Required fields
+                </p>
               </form>
             </div>
           </div>
