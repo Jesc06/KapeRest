@@ -49,7 +49,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
   const isAddSupplier = location.pathname === '/staff/add-supplier';
   const isSupplierList = location.pathname === '/staff/suppliers';
   const isAddItem = location.pathname === '/staff/add-item';
-  const isMenuItemList = location.pathname === '/staff/menu-items';
+  const isMenuItemList = location.pathname === '/staff/items';
   const isSales = location.pathname === '/staff/sales';
   const isAddStocks = location.pathname === '/staff/add-stocks';
   const isStocksList = location.pathname === '/staff/stocks';
@@ -191,7 +191,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigate('/staff/menu-items');
+                    navigate('/staff/items');
                   }}
                   className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-all duration-200 ${
                     isMenuItemList
