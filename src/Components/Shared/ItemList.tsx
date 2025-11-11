@@ -133,7 +133,7 @@ const ItemList: React.FC = () => {
                   <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                 </button>
 
-                <h1 className="text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-400 dark:to-orange-300 bg-clip-text text-transparent truncate">Menu Item Management</h1>
+                <h1 className="text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-400 dark:to-orange-300 bg-clip-text text-transparent truncate">Menu</h1>
               </div>
 
               <LogoutPanel />

@@ -13,18 +13,18 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
   const navigate = useNavigate();
   const location = useLocation();
   
-  // Dropdown states - collapsed by default on first visit, then persisted
+  // Dropdown states - expanded by default on first visit, then persisted
   const [supplierOpen, setSupplierOpen] = useState(() => {
     const saved = localStorage.getItem('staffSidebar_supplierOpen');
-    return saved ? JSON.parse(saved) : false;
+    return saved ? JSON.parse(saved) : true;
   });
   const [menuItemOpen, setMenuItemOpen] = useState(() => {
     const saved = localStorage.getItem('staffSidebar_menuItemOpen');
-    return saved ? JSON.parse(saved) : false;
+    return saved ? JSON.parse(saved) : true;
   });
   const [stocksOpen, setStocksOpen] = useState(() => {
     const saved = localStorage.getItem('staffSidebar_stocksOpen');
-    return saved ? JSON.parse(saved) : false;
+    return saved ? JSON.parse(saved) : true;
   });
 
   // Toggle functions - save state to localStorage
