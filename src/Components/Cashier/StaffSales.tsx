@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faSearch, faBars, faCalendarDays, faWeightScale, faCalendarAlt, faDownload, faChevronLeft, faChevronRight, faReceipt, faMoneyBillWave, faPercentage, faChartLine, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faSearch, faBars, faCalendarDays, faWeightScale, faCalendarAlt, faDownload, faReceipt, faMoneyBillWave, faPercentage, faChartLine, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import LogoutPanel from './LogoutPanel';
 import StaffSidebar from './StaffSidebar';
 
@@ -152,10 +152,10 @@ const StaffSales: React.FC<StaffSalesProps> = ({
           {/* Left: Sidebar Toggle Button */}
           <button
             onClick={() => setSidebarExpanded(!sidebarExpanded)}
-            className="flex-shrink-0 flex h-10 w-10 items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md"
+            className="flex-shrink-0 flex h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md"
             title={sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
           >
-            <FontAwesomeIcon icon={sidebarExpanded ? faChevronLeft : faChevronRight} className="h-4 w-4" />
+            <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
           </button>
 
           {/* Center: Desktop Search Bar */}

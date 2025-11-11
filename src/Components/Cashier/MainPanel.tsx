@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faSearch, faPlus, faMinus, faTrash, faCheck, faPause, faCreditCard, faBars, faShoppingCart, faChevronLeft, faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faSearch, faPlus, faMinus, faTrash, faCheck, faPause, faCreditCard, faBars, faShoppingCart, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import LogoutPanel from './LogoutPanel';
 
 interface Product {
@@ -96,10 +96,10 @@ const MainPanel: React.FC<MainPanelProps> = ({
             {/* Sidebar Toggle Button - Desktop Only */}
             <button
               onClick={onToggleSidebarExpand}
-              className="hidden lg:flex flex-shrink-0 h-10 w-10 items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md"
+              className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md"
               title={sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
             >
-              <FontAwesomeIcon icon={sidebarExpanded ? faChevronLeft : faChevronRight} className="h-5 w-5" />
+              <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
             </button>
           </div>
 

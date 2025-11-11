@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faChevronLeft, faChevronRight, faShoppingCart, faChartLine, faCashRegister, faReceipt } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faShoppingCart, faChartLine, faCashRegister, faReceipt } from '@fortawesome/free-solid-svg-icons';
 import Sidebar from './Sidebar.tsx';
 import LogoutPanel from './LogoutPanel';
 
@@ -76,9 +76,9 @@ const CashierPage: React.FC = () => {
                 {/* Sidebar Toggle - Desktop Only */}
                 <button
                   onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                  className="hidden lg:flex flex-shrink-0 h-9 w-9 items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
+                  className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                 >
-                  <FontAwesomeIcon icon={sidebarExpanded ? faChevronLeft : faChevronRight} className="h-4 w-4" />
+                  <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                 </button>
 
                 {/* Title */}
