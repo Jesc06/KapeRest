@@ -162,9 +162,9 @@ const AddStocks: React.FC = () => {
           </div>
 
           {/* Content Area */}
-          <div className="flex-1 overflow-auto flex items-center justify-center px-4 sm:px-6 md:px-8 py-6">
-            {/* Form Container - Minimal & Centered */}
-            <div className="w-full max-w-2xl">
+          <div className="flex-1 overflow-auto flex items-start justify-center px-4 sm:px-6 md:px-8 py-6">
+            {/* Form Container - Landscape Layout */}
+            <div className="w-full max-w-7xl">
               {/* Card */}
               <div className="relative rounded-2xl border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 p-8 sm:p-10 shadow-sm hover:shadow-md transition-all duration-300 ease-out">
                 {/* Label Tag - Visual Hierarchy */}
@@ -195,38 +195,37 @@ const AddStocks: React.FC = () => {
 
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  {/* Product Name Field */}
-                  <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-stone-200 mb-2">
-                      Product Name
-                    </label>
-                    <div className="relative">
-                      <FontAwesomeIcon icon={faBox} className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-orange-600/50 dark:text-orange-400/50 pointer-events-none" />
+                  {/* Row 1: Product Name, Cost Price */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
+                    {/* Product Name Field */}
+                    <div className="group">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-stone-200 mb-2 group-focus-within:text-orange-600 dark:group-focus-within:text-orange-400 transition-colors duration-200">
+                        <FontAwesomeIcon icon={faBox} className="mr-1.5 text-orange-600 dark:text-orange-500" />
+                        Product Name
+                      </label>
                       <input
                         type="text"
                         name="productName"
                         value={formData.productName}
                         onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-3 text-sm sm:text-base rounded-lg border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:outline-none focus:border-orange-600 focus:ring-1 focus:ring-orange-600/30 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200"
+                        className="w-full px-4 py-2.5 text-sm rounded-lg border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200 shadow-sm hover:shadow-md"
                         placeholder="e.g., Arabica Coffee Beans"
                         disabled={isLoading}
                       />
                     </div>
-                  </div>
 
-                  {/* Cost Price Field */}
-                  <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-stone-200 mb-2">
-                      Cost Price (₱)
-                    </label>
-                    <div className="relative">
-                      <FontAwesomeIcon icon={faTag} className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-orange-600/50 dark:text-orange-400/50 pointer-events-none" />
+                    {/* Cost Price Field */}
+                    <div className="group">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-stone-200 mb-2 group-focus-within:text-orange-600 dark:group-focus-within:text-orange-400 transition-colors duration-200">
+                        <FontAwesomeIcon icon={faTag} className="mr-1.5 text-orange-600 dark:text-orange-500" />
+                        Cost Price (₱)
+                      </label>
                       <input
                         type="number"
                         name="costPrice"
                         value={formData.costPrice}
                         onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-3 text-sm sm:text-base rounded-lg border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:outline-none focus:border-orange-600 focus:ring-1 focus:ring-orange-600/30 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200"
+                        className="w-full px-4 py-2.5 text-sm rounded-lg border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200 shadow-sm hover:shadow-md"
                         placeholder="0.00"
                         step="0.01"
                         disabled={isLoading}
@@ -234,65 +233,59 @@ const AddStocks: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Two Column Layout for Stocks and Units */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {/* Stocks Field */}
-                    <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-stone-200 mb-2">
+                  {/* Row 2: Quantity, Unit, Supplier */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-4">
+                    {/* Stocks/Quantity Field */}
+                    <div className="group">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-stone-200 mb-2 group-focus-within:text-orange-600 dark:group-focus-within:text-orange-400 transition-colors duration-200">
+                        <FontAwesomeIcon icon={faCube} className="mr-1.5 text-orange-600 dark:text-orange-500" />
                         Quantity
                       </label>
-                      <div className="relative">
-                        <FontAwesomeIcon icon={faCube} className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-orange-600/50 dark:text-orange-400/50 pointer-events-none" />
-                        <input
-                          type="number"
-                          name="stocks"
-                          value={formData.stocks}
-                          onChange={handleChange}
-                          className="w-full pl-10 pr-4 py-3 text-sm sm:text-base rounded-lg border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:outline-none focus:border-orange-600 focus:ring-1 focus:ring-orange-600/30 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200"
-                          placeholder="0"
-                          min="0"
-                          disabled={isLoading}
-                        />
-                      </div>
+                      <input
+                        type="number"
+                        name="stocks"
+                        value={formData.stocks}
+                        onChange={handleChange}
+                        className="w-full px-4 py-2.5 text-sm rounded-lg border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200 shadow-sm hover:shadow-md"
+                        placeholder="0"
+                        min="0"
+                        disabled={isLoading}
+                      />
                     </div>
 
                     {/* Units Field */}
-                    <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-stone-200 mb-2">
-                        Unit of Measurement
+                    <div className="group">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-stone-200 mb-2 group-focus-within:text-orange-600 dark:group-focus-within:text-orange-400 transition-colors duration-200">
+                        <FontAwesomeIcon icon={faWarehouse} className="mr-1.5 text-orange-600 dark:text-orange-500" />
+                        Unit
                       </label>
-                      <div className="relative">
-                        <FontAwesomeIcon icon={faWarehouse} className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-orange-600/50 dark:text-orange-400/50 pointer-events-none" />
-                        <select
-                          name="units"
-                          value={formData.units}
-                          onChange={handleChange}
-                          className="w-full pl-10 pr-4 py-3 text-sm sm:text-base rounded-lg border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:outline-none focus:border-orange-600 focus:ring-1 focus:ring-orange-600/30 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200 appearance-none cursor-pointer"
-                          disabled={isLoading}
-                        >
-                          <option value="">Select Unit</option>
-                          {unitOptions.map((unit) => (
-                            <option key={unit.value} value={unit.value}>
-                              {unit.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
+                      <select
+                        name="units"
+                        value={formData.units}
+                        onChange={handleChange}
+                        className="w-full px-4 py-2.5 text-sm rounded-lg border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-stone-100 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200 shadow-sm hover:shadow-md appearance-none cursor-pointer"
+                        disabled={isLoading}
+                      >
+                        <option value="">Select Unit</option>
+                        {unitOptions.map((unit) => (
+                          <option key={unit.value} value={unit.value}>
+                            {unit.label}
+                          </option>
+                        ))}
+                      </select>
                     </div>
-                  </div>
 
-                  {/* Supplier Field */}
-                  <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-stone-200 mb-2">
-                      Supplier
-                    </label>
-                    <div className="relative">
-                      <FontAwesomeIcon icon={faBuilding} className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-orange-600/50 dark:text-orange-400/50 pointer-events-none" />
+                    {/* Supplier Field */}
+                    <div className="group">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-stone-200 mb-2 group-focus-within:text-orange-600 dark:group-focus-within:text-orange-400 transition-colors duration-200">
+                        <FontAwesomeIcon icon={faBuilding} className="mr-1.5 text-orange-600 dark:text-orange-500" />
+                        Supplier
+                      </label>
                       <select
                         name="supplierId"
                         value={formData.supplierId}
                         onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-3 text-sm sm:text-base rounded-lg border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:outline-none focus:border-orange-600 focus:ring-1 focus:ring-orange-600/30 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200 appearance-none cursor-pointer"
+                        className="w-full px-4 py-2.5 text-sm rounded-lg border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-stone-100 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200 shadow-sm hover:shadow-md appearance-none cursor-pointer"
                         disabled={isLoading}
                       >
                         <option value="">Select Supplier</option>
@@ -306,18 +299,18 @@ const AddStocks: React.FC = () => {
                   </div>
 
                   {/* Info Box */}
-                  <div className="bg-blue-50 dark:bg-blue-950/20 rounded-lg p-2.5 border border-blue-200 dark:border-blue-800/40">
-                    <p className="text-xs text-blue-700 dark:text-blue-300 font-medium">
+                  <div className="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-3 border border-blue-200 dark:border-blue-800/50 mt-4">
+                    <p className="text-xs sm:text-sm text-blue-700 dark:text-blue-300 font-medium leading-relaxed">
                       ℹ️ All fields are required to add a new stock entry
                     </p>
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-3 pt-1">
+                  <div className="flex gap-2.5 pt-2">
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="flex-1 px-4 py-3 bg-orange-600 hover:bg-orange-700 disabled:bg-orange-400 text-white text-sm sm:text-base font-semibold rounded-lg transition-all duration-200 shadow-sm hover:shadow-md disabled:shadow-none active:scale-95 disabled:cursor-not-allowed"
+                      className="flex-1 px-5 py-2.5 bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 disabled:from-orange-400 disabled:to-orange-400 text-white text-sm font-bold rounded-lg transition-all duration-200 shadow-sm hover:shadow-md disabled:shadow-none active:scale-95 disabled:cursor-not-allowed"
                     >
                       {isLoading ? 'Adding...' : 'Add Stock'}
                     </button>
@@ -326,7 +319,7 @@ const AddStocks: React.FC = () => {
                       type="button"
                       onClick={() => navigate('/staff')}
                       disabled={isLoading}
-                      className="flex-1 px-4 py-3 bg-stone-200 dark:bg-neutral-700 hover:bg-stone-300 dark:hover:bg-neutral-600 disabled:bg-stone-100 dark:disabled:bg-neutral-800 text-neutral-900 dark:text-stone-100 text-sm sm:text-base font-semibold rounded-lg transition-all duration-200 shadow-sm hover:shadow-md active:scale-95 disabled:cursor-not-allowed"
+                      className="flex-1 px-5 py-2.5 bg-stone-200 dark:bg-neutral-700 hover:bg-stone-300 dark:hover:bg-neutral-600 disabled:bg-stone-100 dark:disabled:bg-neutral-800 text-neutral-900 dark:text-stone-100 text-sm font-bold rounded-lg transition-all duration-200 shadow-sm hover:shadow-md active:scale-95 disabled:cursor-not-allowed"
                     >
                       Cancel
                     </button>
