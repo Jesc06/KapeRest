@@ -78,7 +78,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
   const finalTotal = Math.max(0, total - discountAmount);
   
   return (
-    <div className={`flex h-screen w-full flex-col bg-white dark:bg-neutral-900 transition-all duration-300 ${sidebarExpanded ? 'lg:ml-64' : 'lg:ml-20'}`}>
+    <div className={`flex h-screen w-full flex-col bg-white dark:bg-neutral-900 transition-all duration-300 ${sidebarExpanded ? 'lg:ml-64' : 'lg:ml-16'}`}>
       {/* Top Bar - Search & Filters */}
       <div className="sticky top-0 z-10 border-b border-stone-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-4 sm:px-6 md:px-8 py-4 shadow-sm transition-all duration-300">
         {/* Top Section: Sidebar Toggle | Search Bar | Logout Panel */}
