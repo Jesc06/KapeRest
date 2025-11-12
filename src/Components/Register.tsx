@@ -22,7 +22,7 @@ interface CashierAccount {
 
 interface Branch {
   id: number;
-  name: string;
+  branchName: string;
   location: string;
 }
 
@@ -607,13 +607,13 @@ const Register: React.FC = () => {
                                 onMouseEnter={() => setBranchHighlight(i)}
                                 onMouseDown={(e) => { e.preventDefault(); }}
                                 onClick={() => {
-                                  setBranch(`${b.name} - ${b.location}`);
+                                  setBranch(`${b.branchName} - ${b.location}`);
                                   setBranchId(b.id);
                                   setBranchOpen(false);
                                   setFocusField(null);
                                 }}
                               >
-                                <span className="truncate text-neutral-900 dark:text-neutral-100">{b.name} - {b.location}</span>
+                                <span className="truncate text-neutral-900 dark:text-neutral-100">{b.branchName} - {b.location}</span>
                                 {selected && (
                                   <svg viewBox="0 0 20 20" className="h-4 w-4 text-orange-600" fill="none" aria-hidden>
                                     <path d="M6 10.5l2.25 2.25L14 7.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
