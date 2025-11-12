@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import TintedBackdrop from './TintedBackdrop';
+import { API_BASE_URL } from '../config/api';
 
 // Registration form styled to match LoginUI aesthetics.
 // Fields: first name, middle name (optional), last name, email, password, role, branch.
@@ -10,7 +11,20 @@ import TintedBackdrop from './TintedBackdrop';
 
 const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const roles = ['Admin', 'Staff', 'Cashier'];
-const branches = ['Main', 'Downtown', 'Uptown', 'Warehouse'];
+
+interface CashierAccount {
+  id: string;
+  userName: string;
+  branchId: number;
+  branchName: string;
+  location: string;
+}
+
+interface Branch {
+  id: number;
+  name: string;
+  location: string;
+}
 
 const Register: React.FC = () => {
   const [firstName, setFirstName] = useState('');
@@ -20,9 +34,15 @@ const Register: React.FC = () => {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
   const [branch, setBranch] = useState('');
+  const [branchId, setBranchId] = useState<number>(0);
+  const [assignedCashier, setAssignedCashier] = useState('');
+  const [assignedCashierId, setAssignedCashierId] = useState('');
   const [capsOn, setCapsOn] = useState(false);
   const [errors, setErrors] = useState<{[k:string]: string}>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [cashiers, setCashiers] = useState<CashierAccount[]>([]);
+  const [branches, setBranches] = useState<Branch[]>([]);
+  const [loadingCashiers, setLoadingCashiers] = useState(false);
   const [roleOpen, setRoleOpen] = useState(false);
   const [roleHighlight, setRoleHighlight] = useState(0);
   const roleButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -31,9 +51,49 @@ const Register: React.FC = () => {
   const [branchHighlight, setBranchHighlight] = useState(0);
   const branchButtonRef = useRef<HTMLButtonElement | null>(null);
   const branchListRef = useRef<HTMLUListElement | null>(null);
+  const [cashierOpen, setCashierOpen] = useState(false);
+  const [cashierHighlight, setCashierHighlight] = useState(0);
+  const cashierButtonRef = useRef<HTMLButtonElement | null>(null);
+  const cashierListRef = useRef<HTMLUListElement | null>(null);
 
   // Focus tracking for animated check icons (show only when focused + valid)
   const [focusField, setFocusField] = useState<string | null>(null);
+
+  // Fetch cashiers when role is Staff
+  useEffect(() => {
+    if (role === 'Staff') {
+      setLoadingCashiers(true);
+      console.log('Fetching cashiers from:', `${API_BASE_URL}/RegisterPendingAccount/ExistingCashierAccount`);
+      
+      fetch(`${API_BASE_URL}/RegisterPendingAccount/ExistingCashierAccount`)
+        .then(res => {
+          console.log('Cashier API Response status:', res.status);
+          if (!res.ok) throw new Error(`Failed to fetch cashiers: ${res.status}`);
+          return res.json();
+        })
+        .then((data: CashierAccount[]) => {
+          console.log('Cashiers data received:', data);
+          console.log('Number of cashiers:', data?.length || 0);
+          setCashiers(data || []);
+        })
+        .catch(err => {
+          console.error('Error fetching cashiers:', err);
+          setErrors(prev => ({ ...prev, cashier: 'Failed to load cashiers' }));
+        })
+        .finally(() => setLoadingCashiers(false));
+    } else {
+      setAssignedCashier('');
+      setAssignedCashierId('');
+      setCashiers([]);
+    }
+  }, [role]);
+
+  // Fetch branches on mount (if needed for non-staff roles)
+  useEffect(() => {
+    // You can add branch API endpoint here if you have one
+    // For now, using empty array since staff auto-fills from cashier
+    setBranches([]);
+  }, []);
 
   const validFirst = firstName.trim().length > 0;
   const validMiddle = middleName.trim().length > 0 || middleName.trim().length === 0; // optional
@@ -42,6 +102,7 @@ const Register: React.FC = () => {
   const validPassword = password.length >= 8;
   const validRole = role.trim().length > 0;
   const validBranch = branch.trim().length > 0;
+  const validCashier = role === 'Staff' ? assignedCashier.trim().length > 0 : true;
 
   const validate = () => {
     const next: {[k:string]: string} = {};
@@ -51,34 +112,83 @@ const Register: React.FC = () => {
     if (!validPassword) next.password = password ? 'Min 8 characters' : 'Password required';
     if (!validRole) next.role = 'Select a role';
     if (!validBranch) next.branch = 'Branch required';
+    if (role === 'Staff' && !validCashier) next.assignedCashier = 'Select assigned cashier';
     setErrors(next);
     return Object.keys(next).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
     setIsLoading(true);
-    setTimeout(() => {
+
+    try {
+      const payload = {
+        firstName,
+        middleName: middleName || '',
+        lastName,
+        email,
+        password,
+        role,
+        branchId: branchId,
+        cashierId: role === 'Staff' ? assignedCashierId : ''
+      };
+
+      const response = await fetch(`${API_BASE_URL}/RegisterPendingAccount/RegisterPendingAccount`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Registration failed');
+      }
+
+      const data = await response.json();
+      console.log('Registration successful:', data);
+      
+      // Show success message
+      alert('Registration successful! Please wait for admin approval.');
+      
+      // Reset form
+      setFirstName('');
+      setMiddleName('');
+      setLastName('');
+      setEmail('');
+      setPassword('');
+      setRole('');
+      setBranch('');
+      setBranchId(0);
+      setAssignedCashier('');
+      setAssignedCashierId('');
+      
+    } catch (error: any) {
+      console.error('Registration error:', error);
+      alert(error.message || 'Failed to register. Please try again.');
+    } finally {
       setIsLoading(false);
-      console.log('register', { firstName, middleName, lastName, email, password, role, branch });
-    }, 900);
+    }
   };
 
-  // Close role/branch dropdowns on outside click
+  // Close role/branch/cashier dropdowns on outside click
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
-      if (!roleOpen && !branchOpen) return;
+      if (!roleOpen && !branchOpen && !cashierOpen) return;
       const target = e.target as Node;
       if (roleButtonRef.current?.contains(target) || roleListRef.current?.contains(target)) return;
       if (branchButtonRef.current?.contains(target) || branchListRef.current?.contains(target)) return;
+      if (cashierButtonRef.current?.contains(target) || cashierListRef.current?.contains(target)) return;
       setRoleOpen(false);
       setBranchOpen(false);
+      setCashierOpen(false);
       setFocusField(null);
     };
     document.addEventListener('mousedown', onDown);
     return () => document.removeEventListener('mousedown', onDown);
-  }, [roleOpen, branchOpen]);
+  }, [roleOpen, branchOpen, cashierOpen]);
 
   const errorSummary = Object.keys(errors).length > 1 ? Object.values(errors).join('. ') : null;
 
@@ -369,25 +479,27 @@ const Register: React.FC = () => {
                   </div>
                   {/* Branch combobox */}
                   <div className="relative">
-                    <label htmlFor="branch" className="block text-[13px] font-medium text-neutral-700 dark:text-neutral-300 tracking-wide">Branch</label>
+                    <label htmlFor="branch" className="block text-[13px] font-medium text-neutral-700 dark:text-neutral-300 tracking-wide">
+                      Branch {role === 'Staff' && <span className="text-[10px] text-orange-600 dark:text-orange-400">(Auto-filled)</span>}
+                    </label>
                     <div className="mt-1 relative">
                       <button
                         ref={branchButtonRef}
                         id="branch"
                         type="button"
-                        disabled={isLoading}
+                        disabled={isLoading || role === 'Staff'}
                         onClick={() => {
-                          const idx = Math.max(0, branches.indexOf(branch));
+                          const idx = Math.max(0, branches.findIndex(b => b.id === branchId));
                           setBranchHighlight(idx);
                           setBranchOpen(v => !v);
                           setFocusField('branch');
                         }}
                         onKeyDown={(e) => {
-                          if (isLoading) return;
+                          if (isLoading || role === 'Staff') return;
                           if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
                             e.preventDefault();
                             if (!branchOpen) {
-                              const idx = Math.max(0, branches.indexOf(branch));
+                              const idx = Math.max(0, branches.findIndex(b => b.id === branchId));
                               setBranchHighlight(idx);
                               setBranchOpen(true);
                               setFocusField('branch');
@@ -406,14 +518,15 @@ const Register: React.FC = () => {
                           } else if (e.key === 'Enter' || e.key === ' ') {
                             e.preventDefault();
                             if (!branchOpen) {
-                              const idx = Math.max(0, branches.indexOf(branch));
+                              const idx = Math.max(0, branches.findIndex(b => b.id === branchId));
                               setBranchHighlight(idx);
                               setBranchOpen(true);
                               setFocusField('branch');
                             } else {
                               const next = branches[branchHighlight];
                               if (next) {
-                                setBranch(next);
+                                setBranch(`${next.name} - ${next.location}`);
+                                setBranchId(next.id);
                               }
                               setBranchOpen(false);
                               setFocusField(null);
@@ -426,7 +539,7 @@ const Register: React.FC = () => {
                         }}
                         className={`w-full text-left rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition dark:bg-neutral-900/60 dark:text-neutral-100
                           ${validBranch ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400' : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-neutral-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
-                          ${isLoading ? 'opacity-90' : ''}`}
+                          ${isLoading || role === 'Staff' ? 'opacity-60 cursor-not-allowed' : ''}`}
                         aria-haspopup="listbox"
                         aria-expanded={branchOpen}
                         aria-controls="branch-listbox"
@@ -456,10 +569,10 @@ const Register: React.FC = () => {
                         >
                           {branches.map((b, i) => {
                             const active = i === branchHighlight;
-                            const selected = b === branch;
+                            const selected = b.id === branchId;
                             return (
                               <li
-                                key={b}
+                                key={b.id}
                                 id={`branch-option-${i}`}
                                 role="option"
                                 aria-selected={selected}
@@ -467,12 +580,13 @@ const Register: React.FC = () => {
                                 onMouseEnter={() => setBranchHighlight(i)}
                                 onMouseDown={(e) => { e.preventDefault(); }}
                                 onClick={() => {
-                                  setBranch(b);
+                                  setBranch(`${b.name} - ${b.location}`);
+                                  setBranchId(b.id);
                                   setBranchOpen(false);
                                   setFocusField(null);
                                 }}
                               >
-                                <span className="truncate text-neutral-900 dark:text-neutral-100">{b}</span>
+                                <span className="truncate text-neutral-900 dark:text-neutral-100">{b.name} - {b.location}</span>
                                 {selected && (
                                   <svg viewBox="0 0 20 20" className="h-4 w-4 text-orange-600" fill="none" aria-hidden>
                                     <path d="M6 10.5l2.25 2.25L14 7.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
@@ -487,6 +601,140 @@ const Register: React.FC = () => {
                     {errors.branch && <p id="branch-error" className="mt-1 text-[11px] text-red-600 dark:text-red-200">{errors.branch}</p>}
                   </div>
                 </div>
+                
+                {/* Assigned Cashier - only shown when role is Staff */}
+                {role === 'Staff' && (
+                  <div className="relative">
+                    <label htmlFor="assignedCashier" className="block text-[13px] font-medium text-neutral-700 dark:text-neutral-300 tracking-wide">Assigned Cashier</label>
+                    <div className="mt-1 relative">
+                      <button
+                        ref={cashierButtonRef}
+                        id="assignedCashier"
+                        type="button"
+                        disabled={isLoading || loadingCashiers}
+                        onClick={() => {
+                          const idx = Math.max(0, cashiers.findIndex(c => c.id === assignedCashierId));
+                          setCashierHighlight(idx);
+                          setCashierOpen(v => !v);
+                          setFocusField('assignedCashier');
+                        }}
+                        onKeyDown={(e) => {
+                          if (isLoading || loadingCashiers) return;
+                          if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                            e.preventDefault();
+                            if (!cashierOpen) {
+                              const idx = Math.max(0, cashiers.findIndex(c => c.id === assignedCashierId));
+                              setCashierHighlight(idx);
+                              setCashierOpen(true);
+                              setFocusField('assignedCashier');
+                              return;
+                            }
+                            setCashierHighlight((i) => {
+                              if (e.key === 'ArrowDown') return Math.min(i + 1, cashiers.length - 1);
+                              return Math.max(i - 1, 0);
+                            });
+                          } else if (e.key === 'Home') {
+                            e.preventDefault();
+                            setCashierHighlight(0);
+                          } else if (e.key === 'End') {
+                            e.preventDefault();
+                            setCashierHighlight(cashiers.length - 1);
+                          } else if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            if (!cashierOpen) {
+                              const idx = Math.max(0, cashiers.findIndex(c => c.id === assignedCashierId));
+                              setCashierHighlight(idx);
+                              setCashierOpen(true);
+                              setFocusField('assignedCashier');
+                            } else {
+                              const next = cashiers[cashierHighlight];
+                              if (next) {
+                                setAssignedCashier(next.userName);
+                                setAssignedCashierId(next.id);
+                                setBranch(`${next.branchName} - ${next.location}`);
+                                setBranchId(next.branchId);
+                              }
+                              setCashierOpen(false);
+                              setFocusField(null);
+                            }
+                          } else if (e.key === 'Escape') {
+                            e.preventDefault();
+                            setCashierOpen(false);
+                            setFocusField(null);
+                          }
+                        }}
+                        className={`w-full text-left rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition dark:bg-neutral-900/60 dark:text-neutral-100
+                          ${validCashier ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400' : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-neutral-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
+                          ${isLoading ? 'opacity-90' : ''}`}
+                        aria-haspopup="listbox"
+                        aria-expanded={cashierOpen}
+                        aria-controls="cashier-listbox"
+                        aria-invalid={errors.assignedCashier ? 'true' : 'false'}
+                        aria-describedby={errors.assignedCashier ? 'cashier-error' : undefined}
+                      >
+                        <span className={`block truncate ${!assignedCashier ? 'text-neutral-400 dark:text-neutral-500' : 'text-neutral-900 dark:text-neutral-100'}`}>
+                          {loadingCashiers ? 'Loading cashiers...' : (assignedCashier || 'Select cashier...')}
+                        </span>
+                        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                          <svg className={`h-4 w-4 text-neutral-500 dark:text-neutral-400 transition-transform ${cashierOpen ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="none" aria-hidden>
+                            <path d="M6 8l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </span>
+                      </button>
+                      {/* Success icon bubble when valid + focused */}
+                      <div className={`pointer-events-none absolute right-8 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500/10 transition-all duration-150 ease-out ${focusField==='assignedCashier' && validCashier ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-orange-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                      </div>
+                      {cashierOpen && (
+                        <ul
+                          ref={cashierListRef}
+                          id="cashier-listbox"
+                          role="listbox"
+                          aria-labelledby="assignedCashier"
+                          className="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-xl border border-neutral-200 bg-white shadow-lg focus:outline-none dark:border-neutral-700 dark:bg-neutral-900/90"
+                        >
+                          {cashiers.length === 0 ? (
+                            <li className="px-3.5 py-2.5 text-[14px] text-neutral-500 dark:text-neutral-400 text-center">
+                              {loadingCashiers ? 'Loading...' : 'No cashiers available'}
+                            </li>
+                          ) : (
+                            cashiers.map((c, i) => {
+                            const active = i === cashierHighlight;
+                            const selected = c.id === assignedCashierId;
+                            return (
+                              <li
+                                key={c.id}
+                                id={`cashier-option-${i}`}
+                                role="option"
+                                aria-selected={selected}
+                                className={`flex cursor-pointer items-center justify-between px-3.5 py-2.5 text-[14px] ${active ? 'bg-neutral-100 dark:bg-neutral-800/60' : ''}`}
+                                onMouseEnter={() => setCashierHighlight(i)}
+                                onMouseDown={(e) => { e.preventDefault(); }}
+                                onClick={() => {
+                                  setAssignedCashier(c.userName);
+                                  setAssignedCashierId(c.id);
+                                  setBranch(`${c.branchName} - ${c.location}`);
+                                  setBranchId(c.branchId);
+                                  setCashierOpen(false);
+                                  setFocusField(null);
+                                }}
+                              >
+                                <span className="truncate text-neutral-900 dark:text-neutral-100">{c.userName}</span>
+                                {selected && (
+                                  <svg viewBox="0 0 20 20" className="h-4 w-4 text-orange-600" fill="none" aria-hidden>
+                                    <path d="M6 10.5l2.25 2.25L14 7.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                                  </svg>
+                                )}
+                              </li>
+                            );
+                          })
+                          )}
+                        </ul>
+                      )}
+                    </div>
+                    {errors.assignedCashier && <p id="cashier-error" className="mt-1 text-[11px] text-red-600 dark:text-red-200">{errors.assignedCashier}</p>}
+                  </div>
+                )}
               </div>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 mt-2">
                 <span className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-none order-2 sm:order-1">All fields required except middle name</span>

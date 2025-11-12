@@ -98,8 +98,11 @@ const Sales: React.FC<SalesProps> = ({
   ];
 
   return (
-    <div className={`flex h-screen w-full flex-col bg-white dark:bg-neutral-900 transition-all duration-300 ${sidebarExpanded ? 'lg:ml-64' : 'lg:ml-16'}`}>
-      {/* Top Bar - Search & Filters */}
+    <>
+      {/* Main Content */}
+      <div className={`flex h-screen w-full flex-col bg-white dark:bg-neutral-900 transition-all duration-300 ${sidebarExpanded ? 'lg:ml-72' : 'lg:ml-24'}`}>
+        {/* Top Bar - Minimal Header */}
+        {/* Top Bar - Search & Filters */}
       <div className="sticky top-0 z-10 border-b border-stone-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-4 sm:px-5 md:px-6 py-3 sm:py-4 shadow-sm transition-all duration-300">
         {/* Top Section: Sidebar Toggle | Search Bar | Logout Panel */}
         <div className="flex items-center justify-between gap-3 sm:gap-4 mb-3">
@@ -336,6 +339,7 @@ const Sales: React.FC<SalesProps> = ({
         </div>
       </div>
     </div>
+    </>
   );
 };
 

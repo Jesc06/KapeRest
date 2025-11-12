@@ -110,7 +110,7 @@ const StaffSales: React.FC<StaffSalesProps> = ({
   ];
 
   return (
-    <div className={`flex h-screen flex-col bg-white dark:bg-neutral-900 transition-all duration-300 ${sidebarExpanded ? 'lg:ml-64' : 'lg:ml-16'}`}>
+    <div className={`flex h-screen flex-col bg-white dark:bg-neutral-900 transition-all duration-300 ${sidebarExpanded ? 'lg:ml-72' : 'lg:ml-24'}`}>
       {/* Sidebar */}
       <StaffSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
 
