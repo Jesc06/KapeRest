@@ -1,6 +1,6 @@
 // src/components/Register.tsx
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import TintedBackdrop from './TintedBackdrop';
 import { API_BASE_URL } from '../config/api';
 
@@ -27,6 +27,7 @@ interface Branch {
 }
 
 const Register: React.FC = () => {
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState('');
   const [middleName, setMiddleName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -40,6 +41,7 @@ const Register: React.FC = () => {
   const [capsOn, setCapsOn] = useState(false);
   const [errors, setErrors] = useState<{[k:string]: string}>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [errorSummary, setErrorSummary] = useState<string>('');
   const [cashiers, setCashiers] = useState<CashierAccount[]>([]);
   const [branches, setBranches] = useState<Branch[]>([]);
   const [loadingCashiers, setLoadingCashiers] = useState(false);
@@ -139,6 +141,7 @@ const Register: React.FC = () => {
     e.preventDefault();
     if (!validate()) return;
     setIsLoading(true);
+    setErrorSummary(''); // Clear any previous error summary
 
     try {
       const payload = {
@@ -165,27 +168,25 @@ const Register: React.FC = () => {
         throw new Error(errorData.message || 'Registration failed');
       }
 
-      const data = await response.json();
+      // Handle both JSON and text responses
+      const contentType = response.headers.get('content-type');
+      let data;
+      
+      if (contentType && contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        // Handle text response (like "Successful")
+        data = await response.text();
+      }
+      
       console.log('Registration successful:', data);
       
-      // Show success message
-      alert('Registration successful! Please wait for admin approval.');
-      
-      // Reset form
-      setFirstName('');
-      setMiddleName('');
-      setLastName('');
-      setEmail('');
-      setPassword('');
-      setRole('');
-      setBranch('');
-      setBranchId(0);
-      setAssignedCashier('');
-      setAssignedCashierId('');
+      // Redirect directly to login page on success
+      navigate('/login');
       
     } catch (error: any) {
       console.error('Registration error:', error);
-      alert(error.message || 'Failed to register. Please try again.');
+      setErrorSummary(`Registration failed: ${error.message || 'Please check your information and try again.'}`);
     } finally {
       setIsLoading(false);
     }
@@ -207,8 +208,6 @@ const Register: React.FC = () => {
     document.addEventListener('mousedown', onDown);
     return () => document.removeEventListener('mousedown', onDown);
   }, [roleOpen, branchOpen, cashierOpen]);
-
-  const errorSummary = Object.keys(errors).length > 1 ? Object.values(errors).join('. ') : null;
 
   return (
     <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-amber-50/40 dark:bg-stone-900 font-sans transition-colors duration-300">
@@ -232,7 +231,12 @@ const Register: React.FC = () => {
                 {errors.firstName || errors.lastName || errors.email || errors.password || errors.role || errors.branch || ''}
               </div>
               {errorSummary && (
-                <div className="rounded-lg border border-red-200 bg-red-50 text-red-700 text-[12px] px-3 py-2 dark:border-red-900/40 dark:bg-red-900/20 dark:text-red-200" role="alert">{errorSummary}</div>
+                <div className="rounded-lg border border-red-200 bg-red-50 text-red-700 text-[14px] px-4 py-3 dark:border-red-900/40 dark:bg-red-900/20 dark:text-red-200" role="alert">
+                  <div className="flex items-center gap-2">
+                    <span className="text-red-500">⚠️</span>
+                    <span className="font-medium">{errorSummary}</span>
+                  </div>
+                </div>
               )}
               <div className="space-y-5">
                 {/* Name fields */}
