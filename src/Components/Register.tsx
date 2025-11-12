@@ -10,7 +10,7 @@ import { API_BASE_URL } from '../config/api';
 // Shows green border + check icon when valid (persist after blur). Neutral when invalid.
 
 const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-const roles = ['Admin', 'Staff', 'Cashier'];
+const roles = ['Staff', 'Cashier'];
 
 interface CashierAccount {
   id: string;
@@ -43,6 +43,7 @@ const Register: React.FC = () => {
   const [cashiers, setCashiers] = useState<CashierAccount[]>([]);
   const [branches, setBranches] = useState<Branch[]>([]);
   const [loadingCashiers, setLoadingCashiers] = useState(false);
+  const [loadingBranches, setLoadingBranches] = useState(false);
   const [roleOpen, setRoleOpen] = useState(false);
   const [roleHighlight, setRoleHighlight] = useState(0);
   const roleButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -85,15 +86,32 @@ const Register: React.FC = () => {
       setAssignedCashier('');
       setAssignedCashierId('');
       setCashiers([]);
+      setBranch('');
+      setBranchId(0);
     }
   }, [role]);
 
-  // Fetch branches on mount (if needed for non-staff roles)
+  // Fetch branches on mount or when role is not Staff
   useEffect(() => {
-    // You can add branch API endpoint here if you have one
-    // For now, using empty array since staff auto-fills from cashier
-    setBranches([]);
-  }, []);
+    if (role !== 'Staff' && role !== '') {
+      setLoadingBranches(true);
+      fetch(`${API_BASE_URL}/Branch/GetAllBranch`)
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to fetch branches');
+          return res.json();
+        })
+        .then((data: Branch[]) => {
+          setBranches(data || []);
+        })
+        .catch(err => {
+          console.error('Error fetching branches:', err);
+          setErrors(prev => ({ ...prev, branch: 'Failed to load branches' }));
+        })
+        .finally(() => setLoadingBranches(false));
+    } else {
+      setBranches([]);
+    }
+  }, [role]);
 
   const validFirst = firstName.trim().length > 0;
   const validMiddle = middleName.trim().length > 0 || middleName.trim().length === 0; // optional
@@ -547,7 +565,7 @@ const Register: React.FC = () => {
                         aria-describedby={errors.branch ? 'branch-error' : undefined}
                       >
                         <span className={`block truncate ${!branch ? 'text-neutral-400 dark:text-neutral-500' : 'text-neutral-900 dark:text-neutral-100'}`}>
-                          {branch || 'Select branch...'}
+                          {role !== 'Staff' && loadingBranches ? 'Loading branches...' : (branch || 'Select branch...')}
                         </span>
                         <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
                           <svg className={`h-4 w-4 text-neutral-500 dark:text-neutral-400 transition-transform ${branchOpen ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="none" aria-hidden>
@@ -567,7 +585,12 @@ const Register: React.FC = () => {
                           aria-labelledby="branch"
                           className="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-xl border border-neutral-200 bg-white shadow-lg focus:outline-none dark:border-neutral-700 dark:bg-neutral-900/90"
                         >
-                          {branches.map((b, i) => {
+                          {branches.length === 0 ? (
+                            <li className="px-3.5 py-2.5 text-[14px] text-neutral-500 dark:text-neutral-400 text-center">
+                              {loadingBranches ? 'Loading...' : 'No branches available'}
+                            </li>
+                          ) : (
+                          branches.map((b, i) => {
                             const active = i === branchHighlight;
                             const selected = b.id === branchId;
                             return (
@@ -594,7 +617,8 @@ const Register: React.FC = () => {
                                 )}
                               </li>
                             );
-                          })}
+                          })
+                          )}
                         </ul>
                       )}
                     </div>
