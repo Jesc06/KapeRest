@@ -185,18 +185,13 @@ const branchHighlights = [
 
 const Home: React.FC = () => {
   return (
-    <div className="relative min-h-[100dvh] text-neutral-900 transition-colors duration-300 dark:text-neutral-100 bg-amber-50/40 dark:bg-stone-900">
+    <div className="relative min-h-[100dvh] text-neutral-900 transition-colors duration-300 dark:text-neutral-100 bg-gradient-to-br from-orange-50 via-white to-amber-50 dark:from-neutral-950 dark:via-stone-950 dark:to-neutral-950">
       <TintedBackdrop />
-      {/* Warm Café Theme Background with Coffee Tones */}
-      <div aria-hidden className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-br from-amber-50/60 via-orange-50/40 to-amber-100/30 dark:from-stone-900 dark:via-stone-950/80 dark:to-amber-950/60" />
   <main className="mx-auto relative z-10 flex w-full max-w-7xl flex-col gap-0 px-4 sm:px-6 lg:px-8">
         <section className="milk-hero relative flex min-h-fit items-center justify-center pt-16 pb-8 sm:pt-20 sm:pb-10 lg:pt-24 lg:pb-12">
-          <div className="w-full overflow-hidden rounded-2xl border border-orange-300/50 bg-stone-100/90 px-6 py-10 shadow-lg backdrop-blur-sm transition-colors duration-300 sm:px-8 sm:py-12 lg:px-12 lg:py-14 dark:border-orange-700/30 dark:bg-stone-800/70 dark:shadow-2xl">
+          <div className="w-full overflow-hidden rounded-3xl bg-white px-6 py-12 shadow-sm transition-colors duration-300 sm:px-10 sm:py-16 lg:px-16 lg:py-20 dark:bg-neutral-900 dark:shadow-lg">
             <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-start">
               <div className="space-y-6 flex flex-col justify-center">
-                <span className="inline-flex w-fit items-center gap-2 rounded-full border border-orange-300/70 bg-orange-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.32em] text-orange-700 transition-colors duration-300 dark:border-orange-700/60 dark:bg-orange-950/40 dark:text-orange-300">
-                  Premium POS for Cafés
-                </span>
                 <div className="space-y-5">
                   <h1 className="text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl dark:text-neutral-50">
                     Unified café operations for every location                      
@@ -208,13 +203,13 @@ const Home: React.FC = () => {
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                   <Link
                     to="/register"
-                    className="inline-flex items-center justify-center rounded-lg bg-orange-600 px-8 py-3 text-sm font-semibold text-white shadow-lg transition duration-200 hover:bg-orange-700 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:ring-offset-2 focus:ring-offset-white dark:bg-orange-500 dark:text-neutral-950 dark:hover:bg-orange-400 dark:focus:ring-orange-400 dark:focus:ring-offset-neutral-950"
+                    className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-orange-600 to-orange-500 px-10 py-4 text-base font-bold text-white shadow-lg transition-all duration-200 hover:shadow-2xl hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-orange-500/50 dark:from-orange-500 dark:to-amber-500"
                   >
                     Get started
                   </Link>
                   <Link
                     to="/login"
-                    className="inline-flex items-center justify-center rounded-lg border border-orange-300/70 bg-orange-50 px-8 py-3 text-sm font-semibold text-orange-700 shadow transition duration-200 hover:bg-orange-100 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-white dark:border-orange-700/60 dark:bg-neutral-900 dark:text-orange-300 dark:hover:bg-neutral-800 dark:focus:ring-orange-400 dark:focus:ring-offset-neutral-950"
+                    className="inline-flex items-center justify-center rounded-xl border-2 border-orange-500 bg-transparent px-10 py-4 text-base font-bold text-orange-600 transition-all duration-200 hover:bg-orange-500 hover:text-white hover:scale-105 focus:outline-none focus:ring-4 focus:ring-orange-500/50 dark:border-orange-400 dark:text-orange-400 dark:hover:bg-orange-400 dark:hover:text-neutral-900"
                   >
                     Sign in
                   </Link>
@@ -222,7 +217,7 @@ const Home: React.FC = () => {
                 <ul className="mt-6 grid gap-3 text-sm text-neutral-600 sm:grid-cols-2 dark:text-neutral-300">
                   {heroHighlights.map(item => (
                     <li key={item} className="flex items-start gap-2.5">
-                      <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-orange-100 text-orange-600 dark:bg-orange-950/60 dark:text-orange-300">
+                      <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-orange-500 text-white dark:bg-orange-400">
                         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-3 w-3">
                           <path d="M5 10l3 3 7-7" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
@@ -237,17 +232,17 @@ const Home: React.FC = () => {
                   {heroFeatureBlocks.map(feature => (
                     <article
                       key={feature.title}
-                      className="group rounded-xl border border-orange-300/50 bg-white/60 p-5 shadow transition-all duration-200 hover:border-orange-400/80 hover:bg-white/85 hover:shadow-md sm:p-5 dark:border-orange-700/40 dark:bg-neutral-900/80 dark:hover:border-orange-600/60 dark:hover:bg-neutral-900/90"
+                      className="group rounded-2xl border border-neutral-200/80 bg-gradient-to-br from-white to-orange-50/30 p-6 shadow-sm transition-all duration-300 hover:shadow-xl hover:scale-105 hover:border-orange-300 dark:border-neutral-800 dark:from-neutral-800 dark:to-orange-950/30 dark:hover:border-orange-600"
                     >
-                      <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-orange-300/70 bg-orange-100 text-orange-600 transition-colors duration-200 group-hover:border-orange-400 group-hover:bg-orange-200 group-hover:text-orange-700 dark:border-orange-700/60 dark:bg-orange-950/40 dark:text-orange-300 dark:group-hover:border-orange-600 dark:group-hover:bg-orange-900/50">
+                      <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 text-white shadow-md transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg dark:from-orange-400 dark:to-amber-400">
                         {feature.icon}
-                      </span>
+                      </span>    
                       <p className="mt-3 text-sm font-semibold text-neutral-900 group-hover:text-neutral-800 dark:text-neutral-100 dark:group-hover:text-neutral-50">{feature.title}</p>
                       <p className="mt-1.5 text-xs leading-relaxed text-neutral-600 group-hover:text-neutral-700 dark:text-neutral-400 dark:group-hover:text-neutral-300">{feature.description}</p>
                     </article>
                   ))}
                 </div>
-                <div className="rounded-xl border border-orange-300/50 bg-stone-100/80 p-4 text-xs leading-relaxed text-orange-900 transition-colors duration-300 dark:border-orange-700/30 dark:bg-stone-800/50 dark:text-orange-100">
+                <div className="rounded-2xl border border-orange-200/60 bg-gradient-to-r from-orange-100 to-amber-100 p-5 text-sm leading-relaxed text-orange-900 shadow-sm dark:border-orange-900 dark:from-orange-950/80 dark:to-amber-950/80 dark:text-orange-100">
                   <p className="font-semibold mb-2">✨ Complete Suite</p>
                   Premium inventory management, multi-location synchronization, advanced analytics, automated reporting, and integrated payment processing.
                 </div>
@@ -269,9 +264,9 @@ const Home: React.FC = () => {
             {featureCards.map(feature => (
                   <article
                 key={feature.title}
-                className="group relative flex h-full flex-col gap-4 overflow-hidden rounded-xl border border-orange-300/50 bg-stone-100/80 p-6 shadow transition-all duration-300 hover:-translate-y-1 hover:border-orange-400/70 hover:bg-stone-100 hover:shadow-lg sm:p-6 dark:border-orange-700/30 dark:bg-stone-800/50 dark:hover:bg-stone-800/70 dark:hover:shadow-xl"
+                className="group relative flex h-full flex-col gap-5 overflow-hidden rounded-3xl border border-neutral-200/80 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-orange-300 sm:p-8 dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-orange-600"
               >
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-lg border border-orange-300/70 bg-orange-100 text-orange-600 shadow transition-all duration-200 group-hover:scale-110 group-hover:border-orange-400 group-hover:bg-orange-200 group-hover:text-orange-700 dark:border-orange-700/60 dark:bg-orange-950/40 dark:text-orange-300 dark:group-hover:border-orange-600 dark:group-hover:bg-orange-900/50">
+                <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 text-white shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl dark:from-orange-400 dark:to-amber-400">
                     {feature.icon}
                   </span>
                   <div className="space-y-2">
@@ -281,7 +276,7 @@ const Home: React.FC = () => {
                   <ul className="mt-auto space-y-2 text-xs text-neutral-600 dark:text-neutral-400">
                     {feature.points.map(point => (
                       <li key={point} className="flex items-start gap-2">
-                        <span className="mt-0.5 inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full bg-orange-500 dark:bg-orange-400" aria-hidden />
+                        <span className="mt-0.5 inline-block h-2 w-2 flex-shrink-0 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 dark:from-orange-400 dark:to-amber-400" aria-hidden />
                         <span className="leading-snug">{point}</span>
                       </li>
                     ))}
@@ -301,7 +296,7 @@ const Home: React.FC = () => {
               </p>
               <ul className="space-y-4 text-base text-neutral-600 dark:text-neutral-400">
                 <li className="flex items-start gap-3">
-                  <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-orange-100 text-orange-600 dark:bg-orange-950/60 dark:text-orange-300">
+                  <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-orange-500 text-white dark:bg-orange-400">
                     <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5">
                       <path d="M5 10l3 3 7-7" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -309,7 +304,7 @@ const Home: React.FC = () => {
                   <span className="leading-relaxed">Real-time inventory tracking with elegant alerts for stock adjustments.</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-orange-100 text-orange-600 dark:bg-orange-950/60 dark:text-orange-300">
+                  <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-orange-500 text-white dark:bg-orange-400">
                     <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5">
                       <path d="M4 10h12M10 4v12" strokeLinecap="round" />
                     </svg>
@@ -317,7 +312,7 @@ const Home: React.FC = () => {
                   <span className="leading-relaxed">Multi-location sync with instant menu, pricing, and promotion updates.</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-orange-100 text-orange-600 dark:bg-orange-950/60 dark:text-orange-300">
+                  <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-orange-500 text-white dark:bg-orange-400">
                     <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5">
                       <path d="M5 15l4-4 3 3 3-6" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -330,7 +325,7 @@ const Home: React.FC = () => {
               {branchHighlights.map(highlight => (
                 <article
                   key={highlight.title}
-                  className="group rounded-xl border border-orange-300/50 bg-stone-100/80 p-6 shadow transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-orange-700/30 dark:bg-stone-800/50 dark:hover:shadow-xl"
+                  className="group rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-orange-600"
                 >
                   <p className="text-sm font-semibold text-neutral-900 group-hover:text-neutral-800 dark:text-neutral-100 dark:group-hover:text-neutral-50">{highlight.title}</p>
                   <p className="mt-2 text-sm leading-relaxed text-neutral-600 group-hover:text-neutral-700 dark:text-neutral-400 dark:group-hover:text-neutral-300">{highlight.description}</p>
@@ -341,39 +336,39 @@ const Home: React.FC = () => {
         </section>
 
         <section id="contact" className="scroll-mt-32 py-16 sm:py-20 lg:py-28">
-          <div className="mx-auto flex max-w-5xl flex-col gap-10 rounded-2xl border border-orange-300/50 bg-stone-100/90 p-8 shadow-lg transition-colors duration-300 sm:gap-12 sm:p-10 lg:flex-row lg:items-center dark:border-orange-700/30 dark:bg-stone-800/70 dark:shadow-2xl">
+          <div className="mx-auto flex max-w-5xl flex-col gap-10 rounded-3xl bg-gradient-to-r from-orange-500 to-amber-500 p-10 shadow-2xl transition-all duration-300 sm:gap-12 sm:p-12 lg:flex-row lg:items-center dark:from-orange-600 dark:to-amber-600">
             <div className="flex-1 space-y-5">
-              <h2 className="text-3xl font-bold text-neutral-900 sm:text-4xl dark:text-neutral-50">Ready to elevate your café operations?</h2>
-              <p className="text-base leading-relaxed text-neutral-600 sm:text-lg dark:text-neutral-400">
+              <h2 className="text-3xl font-bold text-white sm:text-4xl">Ready to elevate your café operations?</h2>
+              <p className="text-base leading-relaxed text-white/90 sm:text-lg">
                 Our team guides you through implementation with professionalism and expertise.
               </p>
               <Link
                 to="/register"
-                className="inline-flex w-full max-w-xs items-center justify-center rounded-lg bg-orange-600 px-6 py-3 text-base font-semibold text-white transition duration-200 hover:bg-orange-700 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:ring-offset-2 focus:ring-offset-white dark:bg-orange-500 dark:text-neutral-950 dark:hover:bg-orange-400 dark:focus:ring-orange-400 dark:focus:ring-offset-neutral-950"
+                className="inline-flex w-full max-w-xs items-center justify-center rounded-xl bg-white px-8 py-4 text-base font-bold text-orange-600 shadow-xl transition-all duration-200 hover:shadow-2xl hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-white/50"
               >
                 Schedule Consultation
               </Link>
             </div>
-            <div className="flex-1 space-y-6 border-t lg:border-l lg:border-t-0 pt-8 lg:pt-0 lg:pl-10 border-neutral-300/60 dark:border-neutral-800/70">
+            <div className="flex-1 space-y-6 border-t lg:border-l lg:border-t-0 pt-8 lg:pt-0 lg:pl-10 border-white/30">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">Email</p>
-                <p className="mt-2 text-lg font-semibold text-neutral-900 dark:text-neutral-100">hello@kaperest.io</p>
-                <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">We'll respond within one business day.</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-white/70">Email</p>
+                <p className="mt-2 text-lg font-bold text-white">hello@kaperest.io</p>
+                <p className="mt-2 text-sm text-white/80">We'll respond within one business day.</p>
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">Support</p>
-                <p className="mt-2 text-lg font-semibold text-neutral-900 dark:text-neutral-100">+63 917 000 1234</p>
-                <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">Available 9 AM–6 PM weekdays.</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-white/70">Support</p>
+                <p className="mt-2 text-lg font-bold text-white">+63 917 000 1234</p>
+                <p className="mt-2 text-sm text-white/80">Available 9 AM–6 PM weekdays.</p>
               </div>
             </div>
           </div>
         </section>
       </main>
-      <footer className="mt-16 border-t border-neutral-300/60 bg-white transition-colors duration-300 sm:mt-20 dark:border-neutral-800/70 dark:bg-neutral-950">
+      <footer className="mt-20 border-t border-neutral-200 bg-white transition-colors duration-300 sm:mt-24 dark:border-neutral-800 dark:bg-neutral-950">
               <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
               <div className="flex flex-col gap-10 md:flex-row md:justify-between">
             <div className="max-w-sm">
-              <span className="text-xs font-semibold uppercase tracking-[0.32em] text-orange-700 dark:text-orange-300">KapeRest</span>
+              <span className="text-sm font-black uppercase tracking-wider bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent dark:from-orange-400 dark:to-amber-400">KapeRest</span>
               <p className="mt-3 text-sm text-neutral-600 dark:text-neutral-400">
                 Professional POS management for discerning café operators. Centralized, elegant, and built for scale.
               </p>
@@ -382,17 +377,17 @@ const Home: React.FC = () => {
               <div>
                 <p className="font-semibold text-neutral-900 dark:text-neutral-100">Product</p>
                 <ul className="mt-3 space-y-2">
-                  <li><a href="#features" className="transition-colors duration-200 hover:text-orange-600 dark:hover:text-orange-400">Features</a></li>
-                  <li><a href="#about" className="transition-colors duration-200 hover:text-orange-600 dark:hover:text-orange-400">About</a></li>
-                  <li><Link to="/register" className="transition-colors duration-200 hover:text-orange-600 dark:hover:text-orange-400">Get Started</Link></li>
+                  <li><a href="#features" className="transition-colors duration-200 hover:text-orange-700 dark:hover:text-orange-400">Features</a></li>
+                  <li><a href="#about" className="transition-colors duration-200 hover:text-orange-700 dark:hover:text-orange-400">About</a></li>
+                  <li><Link to="/register" className="transition-colors duration-200 hover:text-orange-700 dark:hover:text-orange-400">Get Started</Link></li>
                 </ul>
               </div>
               <div>
                 <p className="font-semibold text-neutral-900 dark:text-neutral-100">Support</p>
                 <ul className="mt-3 space-y-2">
-                  <li><a href="#contact" className="transition-colors duration-200 hover:text-orange-600 dark:hover:text-orange-400">Contact</a></li>
-                  <li><a href="#contact" className="transition-colors duration-200 hover:text-orange-600 dark:hover:text-orange-400">Support</a></li>
-                  <li><a href="#contact" className="transition-colors duration-200 hover:text-orange-600 dark:hover:text-orange-400">Documentation</a></li>
+                  <li><a href="#contact" className="transition-colors duration-200 hover:text-orange-700 dark:hover:text-orange-400">Contact</a></li>
+                  <li><a href="#contact" className="transition-colors duration-200 hover:text-orange-700 dark:hover:text-orange-400">Support</a></li>
+                  <li><a href="#contact" className="transition-colors duration-200 hover:text-orange-700 dark:hover:text-orange-400">Documentation</a></li>
                 </ul>
               </div>
               <div>
@@ -407,9 +402,9 @@ const Home: React.FC = () => {
                   <div className="mt-10 flex flex-col gap-4 border-t border-neutral-300/60 pt-6 text-xs text-neutral-500 sm:flex-row sm:items-center sm:justify-between dark:border-neutral-800/70 dark:text-neutral-500">
             <p>© {new Date().getFullYear()} KapeRest. All rights reserved.</p>
             <div className="flex items-center gap-4">
-                      <a href="#" className="transition-colors duration-200 hover:text-orange-600 dark:hover:text-orange-400">Privacy</a>
-                      <a href="#" className="transition-colors duration-200 hover:text-orange-600 dark:hover:text-orange-400">Terms</a>
-                      <Link to="/login" className="transition-colors duration-200 hover:text-orange-600 dark:hover:text-orange-400">Login</Link>
+                      <a href="#" className="transition-colors duration-200 hover:text-orange-700 dark:hover:text-orange-400">Privacy</a>
+                      <a href="#" className="transition-colors duration-200 hover:text-orange-700 dark:hover:text-orange-400">Terms</a>
+                      <Link to="/login" className="transition-colors duration-200 hover:text-orange-700 dark:hover:text-orange-400">Login</Link>
             </div>
           </div>
         </div>
