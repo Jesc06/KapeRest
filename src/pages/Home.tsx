@@ -199,7 +199,7 @@ const Home: React.FC = () => {
                 </span>
                 <div className="space-y-5">
                   <h1 className="text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl dark:text-neutral-50">
-                    Unified café operations for every location      
+                    Unified café operations for every location                      
                   </h1>
                   <p className="max-w-2xl text-base leading-relaxed text-neutral-600 sm:text-lg dark:text-neutral-300">
                     KapeRest brings sophisticated POS management to café chains. Centralized inventory, multi-location sync, real-time analytics, and streamlined payments—all in one elegant platform.

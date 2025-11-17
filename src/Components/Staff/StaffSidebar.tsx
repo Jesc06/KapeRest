@@ -135,20 +135,20 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
             </button>
             
             {isExpanded && supplierOpen && (
-              <div className="ml-6 mt-1 space-y-0.5 pl-1 border-l-2 border-orange-200 dark:border-orange-900/30">
+              <div className="ml-8 mt-1 space-y-1">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     navigate('/staff/add-supplier');
                   }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
+                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
                     isAddSupplier
-                      ? "text-orange-600 dark:text-orange-400 font-semibold"
+                      ? "text-orange-600 dark:text-orange-400 font-medium"
                       : "text-neutral-600 dark:text-neutral-400 hover:text-orange-600 dark:hover:text-orange-400"
                   }`}
                 >
                   <FontAwesomeIcon icon={faPlus} className="text-xs" />
-                  <span>Add</span>
+                  <span>Add Supplier</span>
                 </button>
                 
                 <button
@@ -156,14 +156,14 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                     e.stopPropagation();
                     navigate('/staff/suppliers');
                   }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
+                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
                     isSupplierList
-                      ? "text-orange-600 dark:text-orange-400 font-semibold"
+                      ? "text-orange-600 dark:text-orange-400 font-medium"
                       : "text-neutral-600 dark:text-neutral-400 hover:text-orange-600 dark:hover:text-orange-400"
                   }`}
                 >
                   <FontAwesomeIcon icon={faList} className="text-xs" />
-                  <span>List</span>
+                  <span>Supplier List</span>
                 </button>
               </div>
             )}
@@ -195,20 +195,20 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
             </button>
             
             {isExpanded && menuItemOpen && (
-              <div className="ml-6 mt-1 space-y-0.5 pl-1 border-l-2 border-orange-200 dark:border-orange-900/30">
+              <div className="ml-8 mt-1 space-y-1">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     navigate('/staff/add-item');
                   }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
+                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
                     isAddItem
-                      ? "text-orange-600 dark:text-orange-400 font-semibold"
+                      ? "text-orange-600 dark:text-orange-400 font-medium"
                       : "text-neutral-600 dark:text-neutral-400 hover:text-orange-600 dark:hover:text-orange-400"
                   }`}
                 >
                   <FontAwesomeIcon icon={faPlus} className="text-xs" />
-                  <span>Add</span>
+                  <span>Add Item</span>
                 </button>
                 
                 <button
@@ -216,14 +216,14 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                     e.stopPropagation();
                     navigate('/staff/items');
                   }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
+                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
                     isMenuItemList
-                      ? "text-orange-600 dark:text-orange-400 font-semibold"
+                      ? "text-orange-600 dark:text-orange-400 font-medium"
                       : "text-neutral-600 dark:text-neutral-400 hover:text-orange-600 dark:hover:text-orange-400"
                   }`}
                 >
                   <FontAwesomeIcon icon={faList} className="text-xs" />
-                  <span>List</span>
+                  <span>Item List</span>
                 </button>
               </div>
             )}
@@ -255,20 +255,20 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
             </button>
             
             {isExpanded && stocksOpen && (
-              <div className="ml-6 mt-1 space-y-0.5 pl-1 border-l-2 border-orange-200 dark:border-orange-900/30">
+              <div className="ml-8 mt-1 space-y-1">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     navigate('/staff/add-stocks');
                   }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
+                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
                     isAddStocks
-                      ? "text-orange-600 dark:text-orange-400 font-semibold"
+                      ? "text-orange-600 dark:text-orange-400 font-medium"
                       : "text-neutral-600 dark:text-neutral-400 hover:text-orange-600 dark:hover:text-orange-400"
                   }`}
                 >
                   <FontAwesomeIcon icon={faPlus} className="text-xs" />
-                  <span>Add</span>
+                  <span>Add Stocks</span>
                 </button>
                 
                 <button
@@ -276,14 +276,14 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                     e.stopPropagation();
                     navigate('/staff/stocks');
                   }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
+                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
                     isStocksList
-                      ? "text-orange-600 dark:text-orange-400 font-semibold"
+                      ? "text-orange-600 dark:text-orange-400 font-medium"
                       : "text-neutral-600 dark:text-neutral-400 hover:text-orange-600 dark:hover:text-orange-400"
                   }`}
                 >
                   <FontAwesomeIcon icon={faList} className="text-xs" />
-                  <span>List</span>
+                  <span>Stocks List</span>
                 </button>
               </div>
             )}
