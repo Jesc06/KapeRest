@@ -228,13 +228,19 @@ const AdminPage: React.FC = () => {
               {/* Premium Stats Grid */}
               <div className="mb-8">
                 <div className="mb-6">
-                  <h3 className="text-2xl font-black text-neutral-900 dark:text-white flex items-center gap-3 mb-2">
-                    <span className="text-3xl">📊</span>
-                    Performance Metrics
-                  </h3>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
-                    Real-time overview of your business performance
-                  </p>
+                  <div className="flex items-start gap-4">
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg flex-shrink-0">
+                      <FontAwesomeIcon icon={faChartLine} className="h-7 w-7 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-2xl font-black text-neutral-900 dark:text-white mb-2">
+                        Performance Metrics
+                      </h3>
+                      <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
+                        Real-time overview of your business performance
+                      </p>
+                    </div>
+                  </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                   {statsCards.map((stat, index) => (
@@ -270,13 +276,19 @@ const AdminPage: React.FC = () => {
               {/* Premium Quick Actions */}
               <div className="mb-8">
                 <div className="mb-6">
-                  <h3 className="text-2xl font-black text-neutral-900 dark:text-white flex items-center gap-3 mb-2">
-                    <span className="text-3xl">⚡</span>
-                    Quick Actions
-                  </h3>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
-                    Fast access to key management functions
-                  </p>
+                  <div className="flex items-start gap-4">
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                      <FontAwesomeIcon icon={faBars} className="h-7 w-7 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-2xl font-black text-neutral-900 dark:text-white mb-2">
+                        Quick Actions
+                      </h3>
+                      <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
+                        Fast access to key management functions
+                      </p>
+                    </div>
+                  </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                   {quickActions.map((action, index) => (
@@ -329,13 +341,19 @@ const AdminPage: React.FC = () => {
               <div className="mb-8">
                 {/* Header */}
                 <div className="mb-6">
-                  <h3 className="text-2xl font-black text-neutral-900 dark:text-white flex items-center gap-3 mb-2">
-                    <span className="text-3xl">📊</span>
-                    Sales Overview
-                  </h3>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
-                    Monitor your sales performance with real-time analytics and insights
-                  </p>
+                  <div className="flex items-start gap-4">
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg flex-shrink-0">
+                      <FontAwesomeIcon icon={faChartLine} className="h-7 w-7 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-2xl font-black text-neutral-900 dark:text-white mb-2">
+                        Sales Overview
+                      </h3>
+                      <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
+                        Monitor your sales performance with real-time analytics and insights
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Filters Section */}
@@ -653,7 +671,7 @@ const AdminPage: React.FC = () => {
                       <span>Administrator Privileges</span>
                     </h4>
                     <p className="text-sm text-indigo-800 dark:text-indigo-400 leading-relaxed font-medium">
-                      You have full system access. Use the navigation menu to manage accounts, configure settings, monitor inventory, and oversee all branch operations. Remember: with great power comes great responsibility! 🚀
+                      You have full system access. Use the navigation menu to manage accounts, configure settings, monitor inventory, and oversee all branch operations. Remember: with great power comes great responsibility!
                     </p>
                   </div>
                 </div>
