@@ -22,6 +22,7 @@ import StaffSales from "../Components/Staff/StaffSales";
 import StaffChangePassword from "../Components/Staff/StaffChangePassword";
 import { AdminPage } from "../Components/Admin";
 import BranchPage from "../Components/Admin/BranchPage";
+import AccountsPage from "../Components/Admin/AccountsPage";
 
 const App: React.FC = () => {
   const AnimatedRoutes: React.FC = () => {
@@ -52,7 +53,7 @@ const App: React.FC = () => {
             <Route path="/staff/sales" element={<StaffSales />} />
             <Route path="/staff/change-password" element={<StaffChangePassword />} />
             <Route path="/admin" element={<AdminPage />} />
-            <Route path="/admin/accounts" element={<AdminPage />} />
+            <Route path="/admin/accounts" element={<AccountsPage />} />
             <Route path="/admin/tax-discounts" element={<AdminPage />} />
             <Route path="/admin/inventory" element={<AdminPage />} />
             <Route path="/admin/branch" element={<BranchPage />} />

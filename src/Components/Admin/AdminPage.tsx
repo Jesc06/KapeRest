@@ -180,9 +180,9 @@ const AdminPage: React.FC = () => {
 
           {/* Main Content */}
           <main className="flex-1 overflow-y-auto bg-gradient-to-br from-stone-50/50 to-orange-50/30 dark:from-neutral-900 dark:to-neutral-800/50">
-            <div className="w-full px-4 sm:px-5 md:px-6 py-5 sm:py-6">
+            <div className="w-full px-4 sm:px-6 md:px-8 lg:px-10 py-6 sm:py-8 md:py-10">
               {/* Premium Welcome Section */}
-              <div className="mb-6 sm:mb-8">
+              <div className="mb-10 sm:mb-12">
                 <div className="relative bg-gradient-to-r from-amber-500 via-orange-600 to-rose-600 dark:from-amber-600 dark:via-orange-700 dark:to-rose-700 rounded-2xl p-8 sm:p-10 shadow-2xl overflow-hidden group">
                   {/* Animated Premium Background */}
                   <div className="absolute inset-0 opacity-20">
@@ -226,23 +226,23 @@ const AdminPage: React.FC = () => {
               </div>
 
               {/* Premium Stats Grid */}
-              <div className="mb-8">
-                <div className="mb-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg flex-shrink-0">
-                      <FontAwesomeIcon icon={faChartLine} className="h-7 w-7 text-white" />
+              <div className="mb-12">
+                <div className="mb-8">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-sm flex-shrink-0">
+                      <FontAwesomeIcon icon={faChartLine} className="h-3.5 w-3.5 text-white" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-2xl font-black text-neutral-900 dark:text-white mb-2">
+                      <h3 className="text-3xl font-black text-neutral-900 dark:text-white">
                         Performance Metrics
                       </h3>
-                      <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
-                        Real-time overview of your business performance
-                      </p>
                     </div>
                   </div>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium mt-2 ml-11">
+                    Real-time overview of your business performance
+                  </p>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                   {statsCards.map((stat, index) => (
                     <div
                       key={index}
@@ -274,23 +274,23 @@ const AdminPage: React.FC = () => {
               </div>
 
               {/* Premium Quick Actions */}
-              <div className="mb-8">
-                <div className="mb-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-lg flex-shrink-0">
-                      <FontAwesomeIcon icon={faBars} className="h-7 w-7 text-white" />
+              <div className="mb-12">
+                <div className="mb-8">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-sm flex-shrink-0">
+                      <FontAwesomeIcon icon={faBars} className="h-3.5 w-3.5 text-white" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-2xl font-black text-neutral-900 dark:text-white mb-2">
+                      <h3 className="text-3xl font-black text-neutral-900 dark:text-white">
                         Quick Actions
                       </h3>
-                      <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
-                        Fast access to key management functions
-                      </p>
                     </div>
                   </div>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium mt-2 ml-11">
+                    Fast access to key management functions
+                  </p>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                   {quickActions.map((action, index) => (
                     <button
                       key={index}
@@ -307,8 +307,8 @@ const AdminPage: React.FC = () => {
                       <div className="relative z-10 flex flex-col h-full">
                         {/* Icon Section */}
                         <div className="mb-4">
-                          <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${action.color} flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
-                            <FontAwesomeIcon icon={action.icon} className="h-8 w-8 text-white" />
+                          <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${action.color} flex items-center justify-center shadow-md group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
+                            <FontAwesomeIcon icon={action.icon} className="h-4 w-4 text-white" />
                           </div>
                         </div>
                         
@@ -338,22 +338,22 @@ const AdminPage: React.FC = () => {
               </div>
 
               {/* Sales Overview - Premium Section */}
-              <div className="mb-8">
+              <div className="mb-12">
                 {/* Header */}
-                <div className="mb-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg flex-shrink-0">
-                      <FontAwesomeIcon icon={faChartLine} className="h-7 w-7 text-white" />
+                <div className="mb-8">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-sm flex-shrink-0">
+                      <FontAwesomeIcon icon={faChartLine} className="h-3.5 w-3.5 text-white" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-2xl font-black text-neutral-900 dark:text-white mb-2">
+                      <h3 className="text-3xl font-black text-neutral-900 dark:text-white">
                         Sales Overview
                       </h3>
-                      <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
-                        Monitor your sales performance with real-time analytics and insights
-                      </p>
                     </div>
                   </div>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium mt-2 ml-11">
+                    Monitor your sales performance with real-time analytics and insights
+                  </p>
                 </div>
 
                 {/* Filters Section */}
