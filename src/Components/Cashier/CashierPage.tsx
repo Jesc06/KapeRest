@@ -92,13 +92,20 @@ const CashierPage: React.FC = () => {
 
           {/* Main Content Area */}
           <div className="flex-1 overflow-y-auto bg-gradient-to-br from-stone-50/50 to-orange-50/30 dark:from-neutral-900 dark:to-neutral-800/50">
-            <div className="w-full px-4 sm:px-5 md:px-6 py-5 sm:py-6">
+            <div className="w-full px-4 sm:px-6 md:px-8 lg:px-10 py-6 sm:py-8 md:py-10">
               {/* Welcome Section */}
-              <div className="mb-6 sm:mb-7">
-                <div className="relative bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 dark:from-orange-600 dark:via-orange-700 dark:to-orange-600 rounded-xl p-7 sm:p-8 overflow-hidden group shadow-2xl">
-                  {/* Animated Background Pattern */}
-                  <div className="absolute inset-0 opacity-10">
-                    <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] animate-pulse"></div>
+              <div className="mb-10 sm:mb-12">
+                <div className="relative bg-gradient-to-r from-amber-500 via-orange-600 to-rose-600 dark:from-amber-600 dark:via-orange-700 dark:to-rose-700 rounded-2xl p-8 sm:p-10 shadow-2xl overflow-hidden group">
+                  {/* Animated Premium Background */}
+                  <div className="absolute inset-0 opacity-20">
+                    <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] animate-pulse"></div>
+                  </div>
+                  
+                  {/* Floating Particles Effect */}
+                  <div className="absolute inset-0 overflow-hidden">
+                    <div className="absolute top-10 left-10 w-2 h-2 bg-white/40 rounded-full animate-ping"></div>
+                    <div className="absolute top-20 right-20 w-3 h-3 bg-white/30 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
+                    <div className="absolute bottom-10 left-1/3 w-2 h-2 bg-white/40 rounded-full animate-ping" style={{ animationDelay: '2s' }}></div>
                   </div>
                   
                   <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -128,12 +135,23 @@ const CashierPage: React.FC = () => {
               </div>
 
               {/* Quick Stats */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-black text-neutral-900 dark:text-stone-100">Today's Overview</h3>
-                  <div className="h-0.5 flex-1 ml-3 bg-gradient-to-r from-orange-200 to-transparent dark:from-orange-900/30 rounded-full"></div>
+              <div className="mb-12">
+                <div className="mb-8">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-sm flex-shrink-0">
+                      <FontAwesomeIcon icon={faChartLine} className="h-3.5 w-3.5 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-3xl font-black text-neutral-900 dark:text-white">
+                        Today's Overview
+                      </h3>
+                    </div>
+                  </div>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium mt-2 ml-11">
+                    Real-time performance metrics
+                  </p>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {statsCards.map((stat, index) => (
                     <div
                       key={index}
@@ -159,12 +177,23 @@ const CashierPage: React.FC = () => {
               </div>
 
               {/* Quick Actions */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-black text-neutral-900 dark:text-stone-100">Quick Actions</h3>
-                  <div className="h-0.5 flex-1 ml-3 bg-gradient-to-r from-orange-200 to-transparent dark:from-orange-900/30 rounded-full"></div>
+              <div className="mb-12">
+                <div className="mb-8">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-sm flex-shrink-0">
+                      <FontAwesomeIcon icon={faShoppingCart} className="h-3.5 w-3.5 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-3xl font-black text-neutral-900 dark:text-white">
+                        Quick Actions
+                      </h3>
+                    </div>
+                  </div>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium mt-2 ml-11">
+                    Fast access to key functions
+                  </p>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {quickActions.map((action, index) => (
                     <button
                       key={index}
