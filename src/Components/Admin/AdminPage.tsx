@@ -227,6 +227,15 @@ const AdminPage: React.FC = () => {
 
               {/* Premium Stats Grid */}
               <div className="mb-8">
+                <div className="mb-6">
+                  <h3 className="text-2xl font-black text-neutral-900 dark:text-white flex items-center gap-3 mb-2">
+                    <span className="text-3xl">📊</span>
+                    Performance Metrics
+                  </h3>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
+                    Real-time overview of your business performance
+                  </p>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                   {statsCards.map((stat, index) => (
                     <div
@@ -236,17 +245,22 @@ const AdminPage: React.FC = () => {
                       {/* Shine Effect */}
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                       
-                      <div className="relative z-10">
+                      <div className="relative z-10 flex flex-col h-full">
+                        {/* Top Section - Icon and Badge */}
                         <div className="flex items-start justify-between mb-4">
-                          <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}>
-                            <FontAwesomeIcon icon={stat.icon} className="h-7 w-7 text-white" />
+                          <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}>
+                            <FontAwesomeIcon icon={stat.icon} className="h-8 w-8 text-white" />
                           </div>
-                          <span className="text-xs font-bold px-3 py-1 rounded-full bg-white/60 dark:bg-black/20 text-emerald-700 dark:text-emerald-400 backdrop-blur-sm">
+                          <span className="text-xs font-black px-3 py-1.5 rounded-full bg-white/80 dark:bg-black/30 text-emerald-700 dark:text-emerald-400 backdrop-blur-sm shadow-sm">
                             {stat.change}
                           </span>
                         </div>
-                        <h3 className="text-sm font-bold text-neutral-600 dark:text-neutral-400 mb-2 uppercase tracking-wide">{stat.title}</h3>
-                        <p className="text-3xl font-black text-neutral-900 dark:text-white">{stat.value}</p>
+                        
+                        {/* Bottom Section - Label and Value */}
+                        <div className="flex-1 flex flex-col justify-end">
+                          <h3 className="text-xs font-black text-neutral-600 dark:text-neutral-400 mb-2 uppercase tracking-wider">{stat.title}</h3>
+                          <p className="text-3xl font-black text-neutral-900 dark:text-white leading-none">{stat.value}</p>
+                        </div>
                       </div>
                     </div>
                   ))}
