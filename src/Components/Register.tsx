@@ -547,7 +547,7 @@ const Register: React.FC = () => {
                             } else {
                               const next = branches[branchHighlight];
                               if (next) {
-                                setBranch(`${next.name} - ${next.location}`);
+                                setBranch(`${next.branchName} - ${next.location}`);
                                 setBranchId(next.id);
                               }
                               setBranchOpen(false);

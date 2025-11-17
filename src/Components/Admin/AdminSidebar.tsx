@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faChartLine, faTimes, faChevronRight, faUsers, faPercent, faBoxes, faBuilding, faHome, faTruck } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faChartLine, faTimes, faUsers, faPercent, faBoxes, faBuilding, faHome, faTruck } from '@fortawesome/free-solid-svg-icons';
 
 interface AdminSidebarProps {
   isOpen?: boolean;
@@ -68,12 +68,27 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
             )}
           </button>
 
-          {/* Divider */}
+          {/* Divider - Operations */}
           {isExpanded && (
             <div className="py-2.5">
               <div className="border-t border-neutral-200 dark:border-neutral-700"></div>
             </div>
           )}
+
+          {/* Branch */}
+          <button
+            onClick={() => navigate('/admin/branch')}
+            className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
+              isBranch
+                ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
+                : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
+            }`}
+          >
+            <FontAwesomeIcon icon={faBuilding} className="text-xl flex-shrink-0" />
+            {isExpanded && (
+              <span className="flex-1 text-left text-lg font-semibold truncate">Branch</span>
+            )}
+          </button>
 
           {/* Accounts */}
           <button
@@ -90,20 +105,12 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
             )}
           </button>
 
-          {/* Tax & Discounts */}
-          <button
-            onClick={() => navigate('/admin/tax-discounts')}
-            className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
-              isTaxDiscounts
-                ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
-                : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
-            }`}
-          >
-            <FontAwesomeIcon icon={faPercent} className="text-xl flex-shrink-0" />
-            {isExpanded && (
-              <span className="flex-1 text-left text-lg font-semibold truncate">Tax & Discounts</span>
-            )}
-          </button>
+          {/* Divider - Inventory & Products */}
+          {isExpanded && (
+            <div className="py-2.5">
+              <div className="border-t border-neutral-200 dark:border-neutral-700"></div>
+            </div>
+          )}
 
           {/* Inventory */}
           <button
@@ -135,20 +142,12 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
             )}
           </button>
 
-          {/* Branch */}
-          <button
-            onClick={() => navigate('/admin/branch')}
-            className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
-              isBranch
-                ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
-                : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
-            }`}
-          >
-            <FontAwesomeIcon icon={faBuilding} className="text-xl flex-shrink-0" />
-            {isExpanded && (
-              <span className="flex-1 text-left text-lg font-semibold truncate">Branch</span>
-            )}
-          </button>
+          {/* Divider - Financial */}
+          {isExpanded && (
+            <div className="py-2.5">
+              <div className="border-t border-neutral-200 dark:border-neutral-700"></div>
+            </div>
+          )}
 
           {/* Sales */}
           <button
@@ -162,6 +161,21 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
             <FontAwesomeIcon icon={faChartLine} className="text-xl flex-shrink-0" />
             {isExpanded && (
               <span className="flex-1 text-left text-lg font-semibold truncate">Sales</span>
+            )}
+          </button>
+
+          {/* Tax & Discounts */}
+          <button
+            onClick={() => navigate('/admin/tax-discounts')}
+            className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
+              isTaxDiscounts
+                ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
+                : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
+            }`}
+          >
+            <FontAwesomeIcon icon={faPercent} className="text-xl flex-shrink-0" />
+            {isExpanded && (
+              <span className="flex-1 text-left text-lg font-semibold truncate">Tax & Discounts</span>
             )}
           </button>
         </nav>

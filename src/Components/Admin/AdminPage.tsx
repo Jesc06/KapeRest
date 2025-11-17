@@ -255,19 +255,21 @@ const AdminPage: React.FC = () => {
 
               {/* Premium Quick Actions */}
               <div className="mb-8">
-                <div className="flex items-center justify-between mb-5">
-                  <h3 className="text-xl font-black text-neutral-900 dark:text-white flex items-center gap-2">
-                    <span className="text-2xl">⚡</span>
+                <div className="mb-6">
+                  <h3 className="text-2xl font-black text-neutral-900 dark:text-white flex items-center gap-3 mb-2">
+                    <span className="text-3xl">⚡</span>
                     Quick Actions
                   </h3>
-                  <div className="h-1 flex-1 ml-4 bg-gradient-to-r from-orange-300 via-orange-200 to-transparent dark:from-orange-800 dark:via-orange-900/30 rounded-full"></div>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
+                    Fast access to key management functions
+                  </p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                   {quickActions.map((action, index) => (
                     <button
                       key={index}
                       onClick={() => navigate(action.path)}
-                      className="group relative bg-white dark:bg-neutral-800 rounded-2xl p-6 transition-all duration-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-transparent overflow-hidden transform hover:-translate-y-2 hover:shadow-2xl"
+                      className="group relative bg-white dark:bg-neutral-800 rounded-2xl p-6 transition-all duration-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-transparent overflow-hidden transform hover:-translate-y-2 hover:shadow-2xl text-left"
                     >
                       {/* Premium Gradient Border on Hover */}
                       <div className={`absolute inset-0 bg-gradient-to-br ${action.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10`}></div>
@@ -276,16 +278,33 @@ const AdminPage: React.FC = () => {
                       {/* Spotlight Effect */}
                       <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/20 to-transparent dark:from-white/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                       
-                      <div className="relative z-10">
-                        <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 group-hover:rotate-12 transition-all duration-500`}>
-                          <FontAwesomeIcon icon={action.icon} className="h-7 w-7 text-white" />
+                      <div className="relative z-10 flex flex-col h-full">
+                        {/* Icon Section */}
+                        <div className="mb-4">
+                          <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${action.color} flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
+                            <FontAwesomeIcon icon={action.icon} className="h-8 w-8 text-white" />
+                          </div>
                         </div>
-                        <h4 className="text-base font-black text-neutral-900 dark:text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-orange-500 group-hover:to-rose-600 transition-all duration-300">
-                          {action.title}
-                        </h4>
-                        <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-medium">
-                          {action.description}
-                        </p>
+                        
+                        {/* Content Section */}
+                        <div className="flex-1 flex flex-col justify-between">
+                          <div>
+                            <h4 className="text-lg font-black text-neutral-900 dark:text-white mb-2 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-orange-500 group-hover:to-rose-600 transition-all duration-300">
+                              {action.title}
+                            </h4>
+                            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-medium">
+                              {action.description}
+                            </p>
+                          </div>
+                          
+                          {/* Arrow Indicator */}
+                          <div className="mt-4 flex items-center gap-2 text-xs font-bold text-neutral-500 dark:text-neutral-400 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
+                            <span className="uppercase tracking-wider">Manage</span>
+                            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                          </div>
+                        </div>
                       </div>
                     </button>
                   ))}
