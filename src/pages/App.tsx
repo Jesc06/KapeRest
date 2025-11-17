@@ -21,6 +21,7 @@ import ItemList from "../Components/Shared/ItemList";
 import StaffSales from "../Components/Staff/StaffSales";
 import StaffChangePassword from "../Components/Staff/StaffChangePassword";
 import { AdminPage } from "../Components/Admin";
+import BranchPage from "../Components/Admin/BranchPage";
 
 const App: React.FC = () => {
   const AnimatedRoutes: React.FC = () => {
@@ -54,7 +55,7 @@ const App: React.FC = () => {
             <Route path="/admin/accounts" element={<AdminPage />} />
             <Route path="/admin/tax-discounts" element={<AdminPage />} />
             <Route path="/admin/inventory" element={<AdminPage />} />
-            <Route path="/admin/branch" element={<AdminPage />} />
+            <Route path="/admin/branch" element={<BranchPage />} />
             <Route path="/admin/sales" element={<AdminPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
