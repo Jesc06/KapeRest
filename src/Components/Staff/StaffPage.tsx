@@ -130,25 +130,28 @@ const StaffPage: React.FC = () => {
                   
                   <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                     <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30 shadow-lg">
-                          <span className="text-3xl">👋</span>
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border-2 border-white/40 shadow-2xl group-hover:scale-110 transition-transform duration-300">
+                          <FontAwesomeIcon icon={faWarehouse} className="text-4xl text-white" />
                         </div>
                         <div>
-                          <h2 className="text-3xl sm:text-4xl font-black text-white mb-1 tracking-tight">
+                          <h2 className="text-4xl sm:text-5xl font-black text-white mb-1 tracking-tight drop-shadow-lg">
                             {getGreeting()}!
                           </h2>
-                          <p className="text-orange-100 text-sm font-medium">Staff Portal</p>
+                          <p className="text-orange-100 text-base font-bold flex items-center gap-2">
+                            <FontAwesomeIcon icon={faBoxOpen} className="h-4 w-4 text-yellow-300" />
+                            <span>Staff Portal</span>
+                          </p>
                         </div>
                       </div>
-                      <p className="text-orange-50 text-base sm:text-lg leading-relaxed max-w-2xl">
-                        Welcome to your workspace. Ready to manage suppliers, items, and inventory efficiently?
+                      <p className="text-white text-base sm:text-lg leading-relaxed max-w-2xl font-medium">
+                        Welcome to your workspace. Ready to manage suppliers, items, and inventory efficiently.
                       </p>
                     </div>
-                    <div className="bg-white/10 backdrop-blur-md rounded-2xl px-6 py-4 border-2 border-white/20 shadow-xl group-hover:scale-105 transition-transform duration-300">
-                      <p className="text-white/80 text-xs font-bold uppercase tracking-wider mb-1">Today</p>
-                      <p className="text-white text-2xl font-black">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
-                      <p className="text-white/90 text-sm font-semibold">{new Date().toLocaleDateString('en-US', { year: 'numeric' })}</p>
+                    <div className="bg-white/15 backdrop-blur-md rounded-2xl px-8 py-5 border-2 border-white/30 shadow-2xl group-hover:scale-105 transition-transform duration-300">
+                      <p className="text-white/90 text-xs font-black uppercase tracking-widest mb-2">Today</p>
+                      <p className="text-white text-3xl font-black drop-shadow-lg">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                      <p className="text-white/95 text-base font-bold">{new Date().toLocaleDateString('en-US', { year: 'numeric' })}</p>
                     </div>
                   </div>
                 </div>
