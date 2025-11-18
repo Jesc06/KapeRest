@@ -375,7 +375,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
           </div>
 
           {/* Cart Footer with Total - Scrollable when needed */}
-          <div className="flex-shrink-0 border-t-2 border-stone-200 dark:border-neutral-700 bg-gradient-to-br from-stone-50 via-white to-stone-50 dark:from-neutral-850 dark:via-neutral-900 dark:to-neutral-850 max-h-[60vh] overflow-y-auto">
+          <div className="flex-shrink-0 border-t-2 border-stone-200 dark:border-neutral-700 bg-gradient-to-br from-stone-50 via-white to-stone-50 dark:from-neutral-850 dark:via-neutral-900 dark:to-neutral-850">
             <div className="px-5 lg:px-6 py-5 lg:py-6 space-y-4 lg:space-y-5">
               {/* Final Total Amount Section */}
               <div className="relative overflow-hidden rounded-2xl border-2 border-orange-200 dark:border-orange-800/30 bg-gradient-to-br from-orange-50 via-amber-50 to-orange-50 dark:from-orange-950/30 dark:via-amber-950/20 dark:to-orange-950/30 p-5">

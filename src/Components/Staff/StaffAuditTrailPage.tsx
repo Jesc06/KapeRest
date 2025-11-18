@@ -13,6 +13,7 @@ import {
   faBox
 } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from './StaffSidebar';
+import LogoutPanel from '../Shared/LogoutPanel';
 
 interface AuditLog {
   id: number;
@@ -210,7 +211,7 @@ const StaffAuditTrailPage: React.FC = () => {
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <FontAwesomeIcon icon={faClipboardList} className="text-3xl text-orange-500" />
+                <LogoutPanel userRole="Staff" />
               </div>
             </div>
           </div>
