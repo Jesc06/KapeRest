@@ -130,23 +130,40 @@ const MainPanel: React.FC<MainPanelProps> = ({
         {/* Left Section: Products & Filters - Main content area */}
         <div className="flex-1 flex flex-col gap-5 min-w-0 overflow-hidden">
           {/* Category Filter */}
-          <div className="bg-white dark:bg-neutral-900 rounded-xl border border-stone-200 dark:border-neutral-800 px-6 py-5 shadow-sm hover:shadow-md transition-all duration-300">
-            <p className="text-xs font-semibold tracking-widest text-neutral-700 dark:text-neutral-300 mb-4 uppercase">Categories</p>
-            {/* Category Filter Pills */}
-            <div className="flex flex-wrap gap-3 items-center">
-              {categories.map(category => (
-                <button
-                  key={category}
-                  onClick={() => onCategoryChange(category)}
-                  className={`rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 border whitespace-nowrap ${
-                    selectedCategory === category
-                      ? 'border-orange-600 bg-orange-600 text-white shadow-md hover:shadow-lg hover:scale-105 active:scale-95'
-                      : 'border-stone-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white hover:border-orange-400 dark:hover:border-orange-500 hover:bg-stone-50 dark:hover:bg-neutral-800 active:scale-95 hover:scale-105'
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
+          <div className="bg-white dark:bg-neutral-900 rounded-2xl border border-stone-200 dark:border-neutral-800 px-6 py-6 shadow-md hover:shadow-xl transition-all duration-300 relative overflow-hidden">
+            {/* Background Decoration */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-500/10 to-amber-500/10 dark:from-orange-500/5 dark:to-amber-500/5 rounded-full blur-3xl -mr-16 -mt-16"></div>
+            
+            <div className="relative">
+              <div className="flex items-center gap-3 mb-5">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30">
+                  <FontAwesomeIcon icon={faCoffee} className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold tracking-wider text-stone-500 dark:text-stone-400 uppercase">Filter by</p>
+                  <p className="text-sm font-bold text-neutral-900 dark:text-white">Categories</p>
+                </div>
+              </div>
+              
+              {/* Category Filter Pills */}
+              <div className="flex flex-wrap gap-3 items-center">
+                {categories.map(category => (
+                  <button
+                    key={category}
+                    onClick={() => onCategoryChange(category)}
+                    className={`group rounded-full px-6 py-3 text-sm font-bold transition-all duration-300 border-2 whitespace-nowrap relative overflow-hidden ${
+                      selectedCategory === category
+                        ? 'border-transparent bg-gradient-to-r from-orange-600 to-orange-500 text-white shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40 scale-105'
+                        : 'border-stone-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white hover:border-orange-400 dark:hover:border-orange-500 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:scale-105 active:scale-95'
+                    }`}
+                  >
+                    <span className="relative z-10">{category}</span>
+                    {selectedCategory === category && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-orange-600/20 animate-pulse"></div>
+                    )}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -163,68 +180,83 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
             {/* Products Grid (Scrollable) */}
             <div className="flex-1 overflow-y-auto px-6 py-5 scroll-smooth">
-              <div className="grid gap-5 auto-rows-max" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(180px, 100%), 1fr))' }}>
+              <div className="grid gap-6 auto-rows-max" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}>
                 {filteredProducts.length > 0 ? (
                   filteredProducts.map(product => (
                     <div
                       key={product.id}
                       onClick={() => onAddToCart(product)}
-                      className="product-card-motion group cursor-pointer rounded-xl border border-stone-200 dark:border-neutral-800 bg-white dark:bg-neutral-800 transition-all duration-300 hover:shadow-lg hover:border-orange-400 dark:hover:border-orange-500 active:scale-95 hover:-translate-y-1 overflow-hidden flex flex-col"
+                      className="product-card-motion group cursor-pointer rounded-2xl border-2 border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/20 hover:border-orange-400 dark:hover:border-orange-500 active:scale-95 hover:-translate-y-2 overflow-hidden flex flex-col relative"
                     >
                       {/* Product Image */}
-                      <div className="relative w-full aspect-square overflow-hidden bg-gradient-to-br from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-800">
+                      <div className="relative w-full aspect-square overflow-hidden bg-gradient-to-br from-orange-50 via-amber-50 to-stone-100 dark:from-neutral-700 dark:via-neutral-750 dark:to-neutral-800">
                         {product.image ? (
                           <img
                             src={product.image}
                             alt={product.name}
-                            className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
+                            className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:rotate-2"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-stone-50 dark:bg-neutral-700 group-hover:bg-stone-100 dark:group-hover:bg-neutral-600 transition-all duration-300">
-                            <FontAwesomeIcon icon={faCoffee} className="h-8 w-8 text-stone-300 dark:text-neutral-500" />
+                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 to-amber-100 dark:from-neutral-700 dark:to-neutral-600 group-hover:from-orange-100 group-hover:to-amber-200 dark:group-hover:from-neutral-650 dark:group-hover:to-neutral-550 transition-all duration-300">
+                            <FontAwesomeIcon icon={faCoffee} className="h-12 w-12 text-orange-300 dark:text-orange-500/50" />
                           </div>
                         )}
-                        {/* Overlay on Hover */}
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300" />
+                        {/* Gradient Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                        
+                        {/* Category Badge */}
+                        <div className="absolute top-3 right-3 px-3 py-1 rounded-full text-[10px] font-bold bg-white/90 dark:bg-neutral-900/90 backdrop-blur-sm text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-500/30 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                          {product.category}
+                        </div>
                       </div>
 
                       {/* Content - Bottom Section */}
-                      <div className="flex-1 flex flex-col p-4">
-                        <div className="flex-1 min-w-0 mb-3">
-                          <h4 className="font-semibold text-base leading-tight text-neutral-900 dark:text-white line-clamp-2">
+                      <div className="flex-1 flex flex-col p-5 bg-gradient-to-b from-white to-stone-50/50 dark:from-neutral-800 dark:to-neutral-850/50">
+                        <div className="flex-1 min-w-0 mb-4">
+                          <h4 className="font-bold text-base leading-tight text-neutral-900 dark:text-white line-clamp-2 mb-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">
                             {product.name}
                           </h4>
-                          <p className="mt-1.5 text-xs text-stone-600 dark:text-stone-400 line-clamp-1">
-                            {product.category}
-                          </p>
+                          <div className="flex items-center gap-2 text-[11px] text-stone-500 dark:text-stone-400">
+                            <div className="h-1 w-1 rounded-full bg-orange-500"></div>
+                            <span className="font-medium">{product.category}</span>
+                          </div>
                         </div>
 
                         {/* Footer */}
-                        <div className="flex items-center justify-between gap-2 pt-3 border-t border-stone-200 dark:border-neutral-700">
-                          <span className="text-lg font-bold text-orange-600 dark:text-orange-400">
-                            ₱{product.price}
-                          </span>
+                        <div className="flex items-center justify-between gap-3 pt-4 border-t border-stone-200 dark:border-neutral-700">
+                          <div className="flex flex-col">
+                            <span className="text-[10px] text-stone-500 dark:text-stone-400 font-medium uppercase tracking-wider mb-0.5">Price</span>
+                            <span className="text-xl font-black bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-400 dark:to-orange-300 bg-clip-text text-transparent">
+                              ₱{product.price}
+                            </span>
+                          </div>
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               onAddToCart(product);
                             }}
-                            className="inline-flex items-center justify-center rounded-lg bg-orange-600 hover:bg-orange-700 dark:bg-orange-500 dark:hover:bg-orange-600 p-2 text-white transition-all duration-200 hover:shadow-md active:scale-90 shadow-sm"
+                            className="group/btn inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 dark:from-orange-500 dark:to-orange-400 dark:hover:from-orange-600 dark:hover:to-orange-500 p-3 text-white transition-all duration-200 hover:shadow-lg hover:shadow-orange-500/50 active:scale-90 shadow-md hover:scale-110"
                           >
-                            <FontAwesomeIcon icon={faPlus} className="h-4 w-4" />
+                            <FontAwesomeIcon icon={faPlus} className="h-4 w-4 group-hover/btn:rotate-90 transition-transform duration-300" />
                           </button>
                         </div>
                       </div>
+
+                      {/* Shine Effect on Hover */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700 pointer-events-none"></div>
                     </div>
                   ))
                 ) : (
-                  <div className="col-span-full flex items-center justify-center py-20">
+                  <div className="col-span-full flex items-center justify-center py-24">
                     <div className="text-center">
-                      <div className="mb-3 inline-flex h-14 w-14 items-center justify-center rounded-full bg-stone-200 dark:bg-neutral-700">
-                        <FontAwesomeIcon icon={faSearch} className="h-7 w-7 text-stone-500 dark:text-neutral-400" />
+                      <div className="mb-4 inline-flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-100 to-amber-100 dark:from-orange-900/20 dark:to-amber-900/20 border-2 border-orange-200 dark:border-orange-800/30">
+                        <FontAwesomeIcon icon={faSearch} className="h-9 w-9 text-orange-400 dark:text-orange-500" />
                       </div>
-                      <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+                      <p className="text-base font-bold text-neutral-900 dark:text-neutral-100 mb-1">
                         No items found
+                      </p>
+                      <p className="text-sm text-stone-500 dark:text-stone-400">
+                        Try adjusting your search or filters
                       </p>
                     </div>
                   </div>
@@ -246,70 +278,78 @@ const MainPanel: React.FC<MainPanelProps> = ({
           </div>
 
           {/* Cart Items (Scrollable) */}
-          <div className="flex-1 overflow-y-auto px-3 py-3 space-y-2 scroll-smooth min-h-0">
+          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 scroll-smooth min-h-0">
             {cart.length > 0 ? (
               cart.map((item, index) => (
                 <div
                   key={item.id}
-                  className="cart-item-motion group flex items-center gap-2 rounded-lg border border-stone-200 dark:border-neutral-800 bg-stone-50 dark:bg-neutral-800 p-2.5 shadow-sm transition-all duration-300 hover:shadow-md hover:border-orange-400 dark:hover:border-orange-500 min-w-0"
+                  className="cart-item-motion group flex items-center gap-3 rounded-xl border-2 border-stone-200 dark:border-neutral-700 bg-gradient-to-br from-white to-stone-50/50 dark:from-neutral-800 dark:to-neutral-850/50 p-3.5 shadow-md transition-all duration-300 hover:shadow-xl hover:shadow-orange-500/10 hover:border-orange-400 dark:hover:border-orange-500 min-w-0 relative overflow-hidden"
                   style={{ animationDelay: `${index * 0.05}s` }}
                 >
+                  {/* Background Decoration */}
+                  <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-orange-500/5 to-transparent rounded-full blur-2xl"></div>
+                  
                   {/* Icon */}
-                  <div className="flex h-8 w-8 min-w-[32px] items-center justify-center rounded-lg bg-orange-600 text-white font-semibold transition-all duration-300 flex-shrink-0 shadow-sm">
-                    <FontAwesomeIcon icon={faCoffee} className="h-4 w-4" />
+                  <div className="relative flex h-10 w-10 min-w-[40px] items-center justify-center rounded-xl bg-gradient-to-br from-orange-600 to-orange-500 text-white font-bold transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 flex-shrink-0 shadow-lg shadow-orange-500/30">
+                    <FontAwesomeIcon icon={faCoffee} className="h-5 w-5" />
                   </div>
 
                   {/* Item Info */}
-                  <div className="flex-1 min-w-0 max-w-[120px]">
-                    <p className="font-semibold text-xs text-neutral-900 dark:text-white leading-tight line-clamp-1">
+                  <div className="flex-1 min-w-0 max-w-[110px]">
+                    <p className="font-bold text-sm text-neutral-900 dark:text-white leading-tight line-clamp-1 mb-1">
                       {item.name}
                     </p>
-                    <p className="text-[10px] text-stone-600 dark:text-stone-400 mt-0.5">
-                      ₱{item.price} × {item.quantity}
-                    </p>
+                    <div className="flex items-center gap-1.5 text-[11px] text-orange-600 dark:text-orange-400 font-semibold">
+                      <span>₱{item.price}</span>
+                      <span className="text-stone-400 dark:text-stone-500">×</span>
+                      <span>{item.quantity}</span>
+                    </div>
                   </div>
 
                   {/* Quantity Controls */}
-                  <div className="flex items-center gap-1 flex-shrink-0">
+                  <div className="flex items-center gap-1.5 flex-shrink-0 bg-white dark:bg-neutral-900 rounded-lg p-1 border border-stone-200 dark:border-neutral-700">
                     <button
                       onClick={() => onUpdateQuantity(item.id, Math.max(1, item.quantity - 1))}
-                      className="flex h-6 w-6 min-w-[24px] items-center justify-center rounded border border-stone-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white font-semibold text-xs transition-all duration-200 active:scale-90 hover:bg-stone-100 dark:hover:bg-neutral-800 hover:border-orange-400"
+                      className="flex h-7 w-7 min-w-[28px] items-center justify-center rounded-md bg-stone-100 dark:bg-neutral-800 hover:bg-orange-100 dark:hover:bg-orange-900/30 text-neutral-900 dark:text-white font-bold text-sm transition-all duration-200 active:scale-90 hover:text-orange-600 dark:hover:text-orange-400 border border-transparent hover:border-orange-300 dark:hover:border-orange-600"
                     >
-                      <FontAwesomeIcon icon={faMinus} className="h-2.5 w-2.5" />
+                      <FontAwesomeIcon icon={faMinus} className="h-3 w-3" />
                     </button>
-                    <span className="w-5 min-w-[20px] text-center font-semibold text-[10px] text-neutral-900 dark:text-white">
+                    <span className="w-6 min-w-[24px] text-center font-bold text-xs text-neutral-900 dark:text-white">
                       {item.quantity}
                     </span>
                     <button
                       onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
-                      className="flex h-6 w-6 min-w-[24px] items-center justify-center rounded border border-stone-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white font-semibold text-xs transition-all duration-200 active:scale-90 hover:bg-stone-100 dark:hover:bg-neutral-800 hover:border-orange-400"
+                      className="flex h-7 w-7 min-w-[28px] items-center justify-center rounded-md bg-orange-100 dark:bg-orange-900/30 hover:bg-orange-200 dark:hover:bg-orange-900/50 text-orange-600 dark:text-orange-400 font-bold text-sm transition-all duration-200 active:scale-90 border border-transparent hover:border-orange-300 dark:hover:border-orange-600"
                     >
-                      <FontAwesomeIcon icon={faPlus} className="h-2.5 w-2.5" />
+                      <FontAwesomeIcon icon={faPlus} className="h-3 w-3" />
                     </button>
                   </div>
 
                   {/* Remove Button */}
                   <button
                     onClick={() => onRemoveFromCart(item.id)}
-                    className="flex h-6 w-6 min-w-[24px] items-center justify-center rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold text-xs transition-all duration-200 active:scale-90 flex-shrink-0 shadow-sm"
+                    className="flex h-8 w-8 min-w-[32px] items-center justify-center rounded-lg bg-gradient-to-br from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white font-semibold text-xs transition-all duration-200 active:scale-90 hover:scale-110 flex-shrink-0 shadow-md shadow-red-500/30 hover:shadow-lg"
                   >
-                    <FontAwesomeIcon icon={faTrash} className="h-2.5 w-2.5" />
+                    <FontAwesomeIcon icon={faTrash} className="h-3.5 w-3.5" />
                   </button>
 
                   {/* Line Total */}
-                  <div className="text-right text-[10px] font-bold text-orange-600 dark:text-orange-400 whitespace-nowrap min-w-[50px] flex-shrink-0">
+                  <div className="text-right text-xs font-black bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-400 dark:to-orange-300 bg-clip-text text-transparent whitespace-nowrap min-w-[60px] flex-shrink-0">
                     ₱{(item.price * item.quantity).toFixed(2)}
                   </div>
                 </div>
               ))
             ) : (
-              <div className="flex h-full items-center justify-center py-12">
+              <div className="flex h-full items-center justify-center py-16">
                 <div className="text-center">
-                  <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-stone-200 dark:bg-neutral-700">
-                    <FontAwesomeIcon icon={faShoppingCart} className="h-6 w-6 text-stone-500 dark:text-neutral-400" />
+                  <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-100 to-amber-100 dark:from-orange-900/20 dark:to-amber-900/20 border-2 border-orange-200 dark:border-orange-800/30">
+                    <FontAwesomeIcon icon={faShoppingCart} className="h-8 w-8 text-orange-400 dark:text-orange-500" />
                   </div>
-                  <p className="text-xs font-semibold text-stone-600 dark:text-stone-400">
+                  <p className="text-sm font-bold text-neutral-900 dark:text-white mb-1">
                     Cart is empty
+                  </p>
+                  <p className="text-xs text-stone-500 dark:text-stone-400">
+                    Add items to get started
                   </p>
                 </div>
               </div>
