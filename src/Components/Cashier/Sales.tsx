@@ -171,7 +171,7 @@ const Sales: React.FC<SalesProps> = ({
       {/* Main Content */}
       <div className="flex flex-1 overflow-hidden flex-col gap-5 px-4 sm:px-6 md:px-8 py-5 bg-gradient-to-br from-white to-stone-50 dark:from-neutral-900 dark:to-neutral-800">
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {/* Total Transactions Card */}
           <div className="group relative overflow-hidden rounded-xl border border-stone-200 dark:border-neutral-700 bg-gradient-to-br from-orange-50 to-white dark:from-orange-950/20 dark:to-neutral-800 p-5 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
             <div className="flex items-start justify-between mb-3">
@@ -212,20 +212,6 @@ const Sales: React.FC<SalesProps> = ({
               </div>
             </div>
             <div className="h-1 w-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full opacity-30 group-hover:opacity-50 transition-opacity"></div>
-          </div>
-
-          {/* Total Discounts Given Card */}
-          <div className="group relative overflow-hidden rounded-xl border border-stone-200 dark:border-neutral-700 bg-gradient-to-br from-purple-50 to-white dark:from-purple-950/20 dark:to-neutral-800 p-5 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-100 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 shadow-sm">
-                <FontAwesomeIcon icon={faPercentage} className="h-6 w-6" />
-              </div>
-              <div className="text-right">
-                <p className="text-xs font-bold uppercase tracking-wider text-purple-600/70 dark:text-purple-400/70">Discounts Given</p>
-                <p className="text-2xl font-black text-purple-600 dark:text-purple-400 mt-1">₱{totals.discount.toFixed(2)}</p>
-              </div>
-            </div>
-            <div className="h-1 w-full bg-gradient-to-r from-purple-500 to-purple-600 rounded-full opacity-30 group-hover:opacity-50 transition-opacity"></div>
           </div>
         </div>
 
