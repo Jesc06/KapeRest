@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faChartLine, faTimes, faUsers, faPercent, faBoxes, faBuilding, faHome } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faChartLine, faTimes, faUsers, faPercent, faBoxes, faBuilding, faHome, faClipboardList } from '@fortawesome/free-solid-svg-icons';
 
 interface AdminSidebarProps {
   isOpen?: boolean;
@@ -19,6 +19,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
   const isInventory = location.pathname === '/admin/inventory';
   const isBranch = location.pathname === '/admin/branch';
   const isSales = location.pathname === '/admin/sales';
+  const isAuditTrail = location.pathname === '/admin/audit-trail';
 
   return (
     <>
@@ -160,6 +161,28 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
             <FontAwesomeIcon icon={faPercent} className="text-xl flex-shrink-0" />
             {isExpanded && (
               <span className="flex-1 text-left text-lg font-semibold truncate">Tax & Discounts</span>
+            )}
+          </button>
+
+          {/* Divider - System */}
+          {isExpanded && (
+            <div className="py-2.5">
+              <div className="border-t border-neutral-200 dark:border-neutral-700"></div>
+            </div>
+          )}
+
+          {/* Audit Trail */}
+          <button
+            onClick={() => navigate('/admin/audit-trail')}
+            className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
+              isAuditTrail
+                ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
+                : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
+            }`}
+          >
+            <FontAwesomeIcon icon={faClipboardList} className="text-xl flex-shrink-0" />
+            {isExpanded && (
+              <span className="flex-1 text-left text-lg font-semibold truncate">Audit Trail</span>
             )}
           </button>
         </nav>

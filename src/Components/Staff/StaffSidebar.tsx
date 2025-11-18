@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faChartLine, faTimes, faChevronRight, faPlus, faList, faBuilding, faUtensils, faBoxes, faHome, faWarehouse } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faChartLine, faTimes, faChevronRight, faPlus, faList, faBuilding, faUtensils, faBoxes, faHome, faWarehouse, faClipboardList } from '@fortawesome/free-solid-svg-icons';
 
 interface StaffSidebarProps {
   isOpen?: boolean;
@@ -49,11 +49,12 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
   const isAddSupplier = location.pathname === '/staff/add-supplier';
   const isSupplierList = location.pathname === '/staff/suppliers';
   const isAddItem = location.pathname === '/staff/add-item';
-  const isMenuItemList = location.pathname === '/staff/items';
+  const isMenuItemList = location.pathname ==='/staff/items';
   const isSales = location.pathname === '/staff/sales';
   const isAddStocks = location.pathname === '/staff/add-stocks';
   const isStocksList = location.pathname === '/staff/stocks';
   const isHome = location.pathname === '/staff';
+  const isAuditTrail = location.pathname === '/staff/audit-trail';
 
   // Check if any stocks-related route is active (including inventory view)
   const isStocksActive = isAddStocks || isStocksList;
@@ -304,6 +305,29 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
             <FontAwesomeIcon icon={faChartLine} className="text-xl flex-shrink-0" />
             {isExpanded && (
               <span className="flex-1 text-left text-lg font-semibold truncate">Sales</span>
+            )}
+          </button>
+
+          {/* Divider - System Section */}
+          {isExpanded && (
+            <div className="py-2">
+              <div className="border-t border-neutral-200 dark:border-neutral-700"></div>
+              <p className="text-xs font-semibold text-neutral-400 dark:text-neutral-500 px-5 pt-2">SYSTEM</p>
+            </div>
+          )}
+
+          {/* Audit Trail */}
+          <button
+            onClick={() => navigate('/staff/audit-trail')}
+            className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
+              isAuditTrail
+                ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
+                : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
+            }`}
+          >
+            <FontAwesomeIcon icon={faClipboardList} className="text-xl flex-shrink-0" />
+            {isExpanded && (
+              <span className="flex-1 text-left text-lg font-semibold truncate">Audit Trail</span>
             )}
           </button>
         </nav>
