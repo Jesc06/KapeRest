@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faChartLine, faTimes, faChevronRight, faPlus, faList, faBuilding, faUtensils, faBoxes, faHome } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faChartLine, faTimes, faChevronRight, faPlus, faList, faBuilding, faUtensils, faBoxes, faHome, faWarehouse } from '@fortawesome/free-solid-svg-icons';
 
 interface StaffSidebarProps {
   isOpen?: boolean;
@@ -53,6 +53,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
   const isSales = location.pathname === '/staff/sales';
   const isAddStocks = location.pathname === '/staff/add-stocks';
   const isStocksList = location.pathname === '/staff/stocks';
+  const isInventory = location.pathname === '/staff/inventory';
   const isHome = location.pathname === '/staff';
 
   return (
@@ -301,6 +302,21 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
             <FontAwesomeIcon icon={faChartLine} className="text-xl flex-shrink-0" />
             {isExpanded && (
               <span className="flex-1 text-left text-lg font-semibold truncate">Sales</span>
+            )}
+          </button>
+
+          {/* Inventory - Standalone */}
+          <button
+            onClick={() => navigate('/staff/stocks')}
+            className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
+              isInventory || isStocksList
+                ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
+                : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
+            }`}
+          >
+            <FontAwesomeIcon icon={faWarehouse} className="text-xl flex-shrink-0" />
+            {isExpanded && (
+              <span className="flex-1 text-left text-lg font-semibold truncate">Inventory</span>
             )}
           </button>
         </nav>
