@@ -53,8 +53,10 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
   const isSales = location.pathname === '/staff/sales';
   const isAddStocks = location.pathname === '/staff/add-stocks';
   const isStocksList = location.pathname === '/staff/stocks';
-  const isInventory = location.pathname === '/staff/inventory';
   const isHome = location.pathname === '/staff';
+
+  // Check if any stocks-related route is active (including inventory view)
+  const isStocksActive = isAddStocks || isStocksList;
 
   return (
     <>
@@ -71,7 +73,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
         <div className="sticky top-0 flex items-center justify-center border-b border-neutral-200 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-sm px-5 py-6 transition-all duration-300">
           {isExpanded ? (
             <div className="flex items-center gap-4 w-full">
-              <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg">
+              <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg"> 
                 <FontAwesomeIcon icon={faCoffee} className="text-2xl" />
               </div>
               <div className="flex-1 min-w-0">
@@ -109,66 +111,6 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
               <div className="border-t border-neutral-200 dark:border-neutral-700"></div>
             </div>
           )}
-
-          {/* Supplier Section */}
-          <div>
-            <button
-              onClick={() => {
-                if (!isExpanded) return;
-                toggleSupplier();
-              }}
-              className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
-                isAddSupplier || isSupplierList
-                  ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
-                  : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
-              }`}
-            >
-              <FontAwesomeIcon icon={faBuilding} className="text-xl flex-shrink-0" />
-              {isExpanded && (
-                <>
-                  <span className="flex-1 text-left text-lg font-semibold truncate">Supplier</span>
-                  <FontAwesomeIcon 
-                    icon={faChevronRight} 
-                    className={`text-xs transition-transform duration-200 ${supplierOpen ? 'rotate-90' : 'rotate-0'}`}
-                  />
-                </>
-              )}
-            </button>
-            
-            {isExpanded && supplierOpen && (
-              <div className="ml-8 mt-1 space-y-1">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate('/staff/add-supplier');
-                  }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
-                    isAddSupplier
-                      ? "text-orange-600 dark:text-orange-400 font-medium"
-                      : "text-neutral-600 dark:text-neutral-400 hover:text-orange-600 dark:hover:text-orange-400"
-                  }`}
-                >
-                  <FontAwesomeIcon icon={faPlus} className="text-xs" />
-                  <span>Add Supplier</span>
-                </button>
-                
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate('/staff/suppliers');
-                  }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
-                    isSupplierList
-                      ? "text-orange-600 dark:text-orange-400 font-medium"
-                      : "text-neutral-600 dark:text-neutral-400 hover:text-orange-600 dark:hover:text-orange-400"
-                  }`}
-                >
-                  <FontAwesomeIcon icon={faList} className="text-xs" />
-                  <span>Supplier List</span>
-                </button>
-              </div>
-            )}
-          </div>
 
           {/* Menu Item Section */}
           <div>
@@ -230,7 +172,67 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
             )}
           </div>
 
-          {/* Stocks Section */}
+          {/* Supplier Section */}
+          <div>
+            <button
+              onClick={() => {
+                if (!isExpanded) return;
+                toggleSupplier();
+              }}
+              className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
+                isAddSupplier || isSupplierList
+                  ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
+                  : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
+              }`}
+            >
+              <FontAwesomeIcon icon={faBuilding} className="text-xl flex-shrink-0" />
+              {isExpanded && (
+                <>
+                  <span className="flex-1 text-left text-lg font-semibold truncate">Supplier</span>
+                  <FontAwesomeIcon 
+                    icon={faChevronRight} 
+                    className={`text-xs transition-transform duration-200 ${supplierOpen ? 'rotate-90' : 'rotate-0'}`}
+                  />
+                </>
+              )}
+            </button>
+            
+            {isExpanded && supplierOpen && (
+              <div className="ml-8 mt-1 space-y-1">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate('/staff/add-supplier');
+                  }}
+                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
+                    isAddSupplier
+                      ? "text-orange-600 dark:text-orange-400 font-medium"
+                      : "text-neutral-600 dark:text-neutral-400 hover:text-orange-600 dark:hover:text-orange-400"
+                  }`}
+                >
+                  <FontAwesomeIcon icon={faPlus} className="text-xs" />
+                  <span>Add Supplier</span>
+                </button>
+                
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate('/staff/suppliers');
+                  }}
+                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
+                    isSupplierList
+                      ? "text-orange-600 dark:text-orange-400 font-medium"
+                      : "text-neutral-600 dark:text-neutral-400 hover:text-orange-600 dark:hover:text-orange-400"
+                  }`}
+                >
+                  <FontAwesomeIcon icon={faList} className="text-xs" />
+                  <span>Supplier List</span>
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Stocks Section - Renamed as Inventory */}
           <div>
             <button
               onClick={() => {
@@ -238,15 +240,15 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                 toggleStocks();
               }}
               className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
-                isAddStocks || isStocksList
+                isStocksActive
                   ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
                   : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
               }`}
             >
-              <FontAwesomeIcon icon={faBoxes} className="text-xl flex-shrink-0" />
+              <FontAwesomeIcon icon={faWarehouse} className="text-xl flex-shrink-0" />
               {isExpanded && (
                 <>
-                  <span className="flex-1 text-left text-lg font-semibold truncate">Stocks</span>
+                  <span className="flex-1 text-left text-lg font-semibold truncate">Inventory</span>
                   <FontAwesomeIcon 
                     icon={faChevronRight} 
                     className={`text-xs transition-transform duration-200 ${stocksOpen ? 'rotate-90' : 'rotate-0'}`}
@@ -284,7 +286,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                   }`}
                 >
                   <FontAwesomeIcon icon={faList} className="text-xs" />
-                  <span>Stocks List</span>
+                  <span>View Inventory</span>
                 </button>
               </div>
             )}
@@ -302,21 +304,6 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
             <FontAwesomeIcon icon={faChartLine} className="text-xl flex-shrink-0" />
             {isExpanded && (
               <span className="flex-1 text-left text-lg font-semibold truncate">Sales</span>
-            )}
-          </button>
-
-          {/* Inventory - Standalone */}
-          <button
-            onClick={() => navigate('/staff/stocks')}
-            className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
-              isInventory || isStocksList
-                ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
-                : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
-            }`}
-          >
-            <FontAwesomeIcon icon={faWarehouse} className="text-xl flex-shrink-0" />
-            {isExpanded && (
-              <span className="flex-1 text-left text-lg font-semibold truncate">Inventory</span>
             )}
           </button>
         </nav>
