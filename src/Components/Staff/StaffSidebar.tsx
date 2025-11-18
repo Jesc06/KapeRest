@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faChartLine, faTimes, faChevronRight, faPlus, faList, faBuilding, faUtensils, faBoxes, faHome, faWarehouse, faClipboardList } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faChartLine, faTimes, faChevronRight, faPlus, faList, faBuilding, faUtensils, faHome, faWarehouse, faClipboardList } from '@fortawesome/free-solid-svg-icons';
 
 interface StaffSidebarProps {
   isOpen?: boolean;

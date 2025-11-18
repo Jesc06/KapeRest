@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminSidebar from './AdminSidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faUsers, faBuilding, faSearch, faCheck, faTimes, faEye, faUserCircle, faEnvelope, faCalendar, faUserTag, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import LogoutPanel from '../Shared/LogoutPanel';
+import { API_BASE_URL } from '../../config/api';
 
 interface Branch {
-  id: number;
+  id?: number;
   branchName: string;
   location: string;
 }
@@ -16,12 +17,13 @@ interface PendingAccount {
   middleName: string;
   lastName: string;
   email: string;
+  password: string;
   role: string;
   status: 'Pending' | 'Approved' | 'Rejected';
   createdAt: string;
-  branchId?: number;
-  branch?: Branch;
-  cashierId?: string;
+  branchId?: number | null;
+  branch?: Branch | null;
+  cashierId?: string | null;
 }
 
 const AccountsPage: React.FC = () => {
@@ -30,78 +32,48 @@ const AccountsPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterRole, setFilterRole] = useState<string>('all');
   const [filterBranch, setFilterBranch] = useState<string>('all');
+  const [accounts, setAccounts] = useState<PendingAccount[]>([]);
+  const [branches, setBranches] = useState<Branch[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Mock branches data
-  const branches: Branch[] = [
-    { id: 1, branchName: 'Main Branch', location: 'Manila' },
-    { id: 2, branchName: 'SM Mall of Asia', location: 'Pasay' },
-    { id: 3, branchName: 'Bonifacio Global City', location: 'Taguig' },
-    { id: 4, branchName: 'Makati Branch', location: 'Makati' },
-  ];
+  // Fetch pending accounts from API
+  useEffect(() => {
+    const fetchAccounts = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        
+        const response = await fetch(`${API_BASE_URL}/RegisterPendingAccount/GetAllPendingAccounts`);
+        
+        if (!response.ok) {
+          throw new Error(`Failed to fetch accounts: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('Pending accounts received:', data);
+        setAccounts(data || []);
+        
+        // Extract unique branches from accounts
+        const uniqueBranches = Array.from(
+          new Map(
+            data
+              .filter((acc: PendingAccount) => acc.branch)
+              .map((acc: PendingAccount) => [acc.branch!.id, acc.branch!])
+          ).values()
+        ) as Branch[];
+        
+        setBranches(uniqueBranches);
+      } catch (err) {
+        console.error('Error fetching pending accounts:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load accounts');
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  // Mock pending accounts data
-  const [accounts, setAccounts] = useState<PendingAccount[]>([
-    {
-      id: 1,
-      firstName: 'Juan',
-      middleName: 'Santos',
-      lastName: 'Dela Cruz',
-      email: 'juan.delacruz@email.com',
-      role: 'Cashier',
-      status: 'Pending',
-      createdAt: '2024-11-15T10:30:00',
-      branchId: 1,
-      branch: branches[0]
-    },
-    {
-      id: 2,
-      firstName: 'Maria',
-      middleName: 'Garcia',
-      lastName: 'Santos',
-      email: 'maria.santos@email.com',
-      role: 'Staff',
-      status: 'Pending',
-      createdAt: '2024-11-16T14:20:00',
-      branchId: 2,
-      branch: branches[1]
-    },
-    {
-      id: 3,
-      firstName: 'Pedro',
-      middleName: 'Lopez',
-      lastName: 'Reyes',
-      email: 'pedro.reyes@email.com',
-      role: 'Cashier',
-      status: 'Pending',
-      createdAt: '2024-11-17T09:15:00',
-      branchId: 1,
-      branch: branches[0]
-    },
-    {
-      id: 4,
-      firstName: 'Ana',
-      middleName: 'Cruz',
-      lastName: 'Garcia',
-      email: 'ana.garcia@email.com',
-      role: 'Staff',
-      status: 'Pending',
-      createdAt: '2024-11-17T16:45:00',
-      branchId: 3,
-      branch: branches[2]
-    },
-    {
-      id: 5,
-      firstName: 'Carlos',
-      middleName: 'Mendoza',
-      lastName: 'Lopez',
-      email: 'carlos.lopez@email.com',
-      role: 'Admin',
-      status: 'Pending',
-      createdAt: '2024-11-18T08:00:00',
-      branchId: 4,
-      branch: branches[3]
-    },
-  ]);
+    fetchAccounts();
+  }, []);
 
   const roles = ['all', 'Admin', 'Cashier', 'Staff'];
 
@@ -112,22 +84,68 @@ const AccountsPage: React.FC = () => {
       account.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       account.email.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesRole = filterRole === 'all' || account.role === filterRole;
-    const matchesBranch = filterBranch === 'all' || account.branchId?.toString() === filterBranch;
+    const matchesBranch = filterBranch === 'all' || account.branch?.branchName === filterBranch;
     
     return matchesSearch && matchesRole && matchesBranch;
   });
 
   // Handle approve/reject
-  const handleApprove = (id: number) => {
-    setAccounts(accounts.map(acc => 
-      acc.id === id ? { ...acc, status: 'Approved' as const } : acc
-    ));
+  const handleApprove = async (id: number) => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      setError('Authentication token not found. Please log in again.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/RegisterPendingAccount/ApprovePendingAccount/${id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to approve account: ${response.status}`);
+      }
+
+      setAccounts(accounts.map(acc => 
+        acc.id === id ? { ...acc, status: 'Approved' as const } : acc
+      ));
+    } catch (err) {
+      console.error('Error approving account:', err);
+      setError(err instanceof Error ? err.message : 'Failed to approve account');
+    }
   };
 
-  const handleReject = (id: number) => {
-    setAccounts(accounts.map(acc => 
-      acc.id === id ? { ...acc, status: 'Rejected' as const } : acc
-    ));
+  const handleReject = async (id: number) => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      setError('Authentication token not found. Please log in again.');
+      return;
+    }
+    
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/RegisterPendingAccount/RejectPendingAccount/${id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to reject account: ${response.status}`);
+      }
+
+      setAccounts(accounts.map(acc => 
+        acc.id === id ? { ...acc, status: 'Rejected' as const } : acc
+      ));
+    } catch (err) {
+      console.error('Error rejecting account:', err);
+      setError(err instanceof Error ? err.message : 'Failed to reject account');
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -266,7 +284,7 @@ const AccountsPage: React.FC = () => {
                           >
                             <option value="all">All Branches</option>
                             {branches.map(branch => (
-                              <option key={branch.id} value={branch.id.toString()}>
+                              <option key={branch.branchName} value={branch.branchName}>
                                 {branch.branchName}
                               </option>
                             ))}
@@ -323,7 +341,30 @@ const AccountsPage: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-stone-200 dark:divide-neutral-700">
-                      {filteredAccounts.length > 0 ? (
+                      {isLoading ? (
+                        <tr>
+                          <td colSpan={6} className="px-6 py-12 text-center">
+                            <div className="flex flex-col items-center gap-3">
+                              <div className="w-12 h-12 border-4 border-orange-200 dark:border-orange-900 border-t-orange-600 dark:border-t-orange-400 rounded-full animate-spin"></div>
+                              <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Loading accounts...</p>
+                            </div>
+                          </td>
+                        </tr>
+                      ) : error ? (
+                        <tr>
+                          <td colSpan={6} className="px-6 py-12 text-center">
+                            <div className="flex flex-col items-center gap-3">
+                              <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                                <FontAwesomeIcon icon={faTimes} className="h-6 w-6 text-red-600 dark:text-red-400" />
+                              </div>
+                              <div>
+                                <p className="text-sm font-bold text-red-600 dark:text-red-400 mb-1">Failed to load accounts</p>
+                                <p className="text-xs text-neutral-500 dark:text-neutral-400">{error}</p>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      ) : filteredAccounts.length > 0 ? (
                         filteredAccounts.map((account) => (
                           <tr key={account.id} className="group hover:bg-orange-50/50 dark:hover:bg-orange-950/20 transition-colors duration-200">
                             <td className="px-6 py-4">

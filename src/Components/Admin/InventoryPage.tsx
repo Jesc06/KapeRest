@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faSearch, faBox, faEdit, faTrash, faPlus, faFilter, faBoxes, faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faSearch, faEdit, faTrash, faBoxes, faDownload } from '@fortawesome/free-solid-svg-icons';
 import AdminSidebar from './AdminSidebar';
 import LogoutPanel from '../Shared/LogoutPanel';
 
@@ -17,7 +16,6 @@ interface Stock {
 }
 
 const InventoryPage: React.FC = () => {
-  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');

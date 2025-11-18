@@ -1,27 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faSearch, faClipboardList, faUser, faCalendar, faClock } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faSearch, faUser, faCalendar, faClock } from '@fortawesome/free-solid-svg-icons';
 import AdminSidebar from './AdminSidebar';
 import LogoutPanel from '../Shared/LogoutPanel';
 
 interface AuditLog {
   id: number;
-  user: string;
+  username: string;
   role: string;
-  category: string; // Supplier, Product, Login
   action: string; // Add, Delete, Deliver
-  affectedEntity: string; // SupplierName or ProductName
   description?: string; // Delivered 50 units of Latte
   date: string;
 }
 
 const AuditTrailPage: React.FC = () => {
-  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterCategory, setFilterCategory] = useState<string>('all');
   const [filterAction, setFilterAction] = useState<string>('all');
   const [filterRole, setFilterRole] = useState<string>('all');
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
@@ -36,71 +31,57 @@ const AuditTrailPage: React.FC = () => {
         const mockData: AuditLog[] = [
           {
             id: 1,
-            user: "Juan Dela Cruz",
+            username: "Juan Dela Cruz",
             role: "Staff",
-            category: "Product",
             action: "Add",
-            affectedEntity: "Cappuccino",
             description: "Added new product Cappuccino to menu",
             date: "2025-11-18T08:30:00"
           },
           {
             id: 2,
-            user: "Maria Santos",
+            username: "Maria Santos",
             role: "Admin",
-            category: "Supplier",
             action: "Add",
-            affectedEntity: "Coffee Beans Co.",
             description: "Added new supplier Coffee Beans Co.",
             date: "2025-11-18T09:15:00"
           },
           {
             id: 3,
-            user: "Pedro Reyes",
+            username: "Pedro Reyes",
             role: "Staff",
-            category: "Product",
             action: "Deliver",
-            affectedEntity: "Latte",
             description: "Delivered 50 units of Latte",
             date: "2025-11-18T10:00:00"
           },
           {
             id: 4,
-            user: "Ana Garcia",
+            username: "Ana Garcia",
             role: "Cashier",
-            category: "Login",
-            action: "Login",
-            affectedEntity: "System",
-            description: "User logged into the system",
+            action: "Add",
+            description: "Processed new order for customer",
             date: "2025-11-18T11:30:00"
           },
           {
             id: 5,
-            user: "Juan Dela Cruz",
+            username: "Juan Dela Cruz",
             role: "Staff",
-            category: "Product",
             action: "Delete",
-            affectedEntity: "Old Coffee Blend",
-            description: "Deleted discontinued product Old Coffee Blend",
+            description: "Deleted discontinued product: Old Coffee Blend",
             date: "2025-11-18T12:45:00"
           },
           {
             id: 6,
-            user: "Maria Santos",
+            username: "Maria Santos",
             role: "Admin",
-            category: "Supplier",
             action: "Delete",
-            affectedEntity: "Discontinued Supplier Inc.",
-            description: "Removed supplier Discontinued Supplier Inc.",
+            description: "Removed supplier: Discontinued Supplier Inc.",
             date: "2025-11-18T13:20:00"
           },
           {
             id: 7,
-            user: "Pedro Reyes",
+            username: "Pedro Reyes",
             role: "Staff",
-            category: "Product",
             action: "Deliver",
-            affectedEntity: "Espresso",
             description: "Delivered 100 units of Espresso",
             date: "2025-11-18T14:15:00"
           },
@@ -114,7 +95,6 @@ const AuditTrailPage: React.FC = () => {
   }, []);
 
   // Get unique values for filters
-  const categories = ['all', ...Array.from(new Set(auditLogs.map(log => log.category)))];
   const actions = ['all', ...Array.from(new Set(auditLogs.map(log => log.action)))];
   const roles = ['all', ...Array.from(new Set(auditLogs.map(log => log.role)))];
 
@@ -122,15 +102,13 @@ const AuditTrailPage: React.FC = () => {
   const filteredLogs = auditLogs.filter(log => {
     const searchLower = searchTerm.toLowerCase();
     const matchesSearch = 
-      log.user.toLowerCase().includes(searchLower) ||
-      log.affectedEntity.toLowerCase().includes(searchLower) ||
+      log.username.toLowerCase().includes(searchLower) ||
       (log.description?.toLowerCase().includes(searchLower) || false);
     
-    const matchesCategory = filterCategory === 'all' || log.category === filterCategory;
     const matchesAction = filterAction === 'all' || log.action === filterAction;
     const matchesRole = filterRole === 'all' || log.role === filterRole;
     
-    return matchesSearch && matchesCategory && matchesAction && matchesRole;
+    return matchesSearch && matchesAction && matchesRole;
   });
 
   const formatDate = (dateString: string) => {
@@ -150,19 +128,6 @@ const AuditTrailPage: React.FC = () => {
     });
   };
 
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case 'Product':
-        return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
-      case 'Supplier':
-        return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
-      case 'Login':
-        return 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400';
-      default:
-        return 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400';
-    }
-  };
-
   const getActionColor = (action: string) => {
     switch (action) {
       case 'Add':
@@ -171,8 +136,6 @@ const AuditTrailPage: React.FC = () => {
         return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
       case 'Deliver':
         return 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400';
-      case 'Login':
-        return 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400';
       default:
         return 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400';
     }
@@ -232,21 +195,6 @@ const AuditTrailPage: React.FC = () => {
                   />
                 </div>
 
-                {/* Category Filter */}
-                <div className="relative">
-                  <select
-                    value={filterCategory}
-                    onChange={(e) => setFilterCategory(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-lg border border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none cursor-pointer"
-                  >
-                    {categories.map(cat => (
-                      <option key={cat} value={cat}>
-                        {cat === 'all' ? 'All Categories' : cat}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
                 {/* Action Filter */}
                 <div className="relative">
                   <select
@@ -286,24 +234,22 @@ const AuditTrailPage: React.FC = () => {
                   <thead className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
                     <tr>
                       <th className="px-6 py-4 text-left text-sm font-semibold">Date & Time</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold">User</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold">Username</th>
                       <th className="px-6 py-4 text-left text-sm font-semibold">Role</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold">Category</th>
                       <th className="px-6 py-4 text-left text-sm font-semibold">Action</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold">Affected Entity</th>
                       <th className="px-6 py-4 text-left text-sm font-semibold">Description</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-neutral-100 dark:divide-neutral-700">
                     {isLoading ? (
                       <tr>
-                        <td colSpan={7} className="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
+                        <td colSpan={5} className="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
                           Loading audit logs...
                         </td>
                       </tr>
                     ) : filteredLogs.length === 0 ? (
                       <tr>
-                        <td colSpan={7} className="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
+                        <td colSpan={5} className="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
                           No audit logs found
                         </td>
                       </tr>
@@ -322,15 +268,15 @@ const AuditTrailPage: React.FC = () => {
                               </span>
                             </div>
                           </td>
-                          <td className="px-6 py-4 text-sm font-medium text-neutral-900 dark:text-white">{log.user}</td>
+                          <td className="px-6 py-4 text-sm font-medium text-neutral-900 dark:text-white">
+                            <div className="flex items-center gap-2">
+                              <FontAwesomeIcon icon={faUser} className="h-4 w-4 text-orange-500" />
+                              {log.username}
+                            </div>
+                          </td>
                           <td className="px-6 py-4 text-sm">
                             <span className="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400">
                               {log.role}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 text-sm">
-                            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getCategoryColor(log.category)}`}>
-                              {log.category}
                             </span>
                           </td>
                           <td className="px-6 py-4 text-sm">
@@ -338,7 +284,6 @@ const AuditTrailPage: React.FC = () => {
                               {log.action}
                             </span>
                           </td>
-                          <td className="px-6 py-4 text-sm font-medium text-orange-600 dark:text-orange-400">{log.affectedEntity}</td>
                           <td className="px-6 py-4 text-sm text-neutral-600 dark:text-neutral-400">{log.description || '-'}</td>
                         </tr>
                       ))

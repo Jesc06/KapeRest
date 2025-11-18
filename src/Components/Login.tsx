@@ -1,7 +1,11 @@
 // src/components/LoginUI.tsx
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import TintedBackdrop from "./TintedBackdrop";
+import { API_BASE_URL } from "../config/api";
+import { jwtDecode } from "jwt-decode";
+
+
 
 // Clean, professional login without background image.
 // Design goals:
@@ -10,10 +14,11 @@ import TintedBackdrop from "./TintedBackdrop";
 // - Accessible labels and focus states
 // - Reduced visual noise, no decorative shadows or scaling gimmicks
 
-const LoginUI: React.FC = () => {
+const Login: React.FC = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [errors, setErrors] = useState<{ email?: string; password?: string; api?: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [capsOn, setCapsOn] = useState(false);
   const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
@@ -37,18 +42,59 @@ const LoginUI: React.FC = () => {
 
   // (was isValid) kept earlier for gating button; now removed since button stays enabled
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
+    
     setIsLoading(true);
-    // Simulate async auth
-    setTimeout(() => {
+    setErrors({});
+    
+    try {
+      const response = await fetch(`${API_BASE_URL}/Auth/Login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setErrors({ api: data.message || "Login failed. Please check your credentials." });
+        setIsLoading(false);
+        return;
+      }
+
+      // 🔥 Save tokens
+      if (data.token) {
+        localStorage.setItem("accessToken", data.token);
+      }
+      if (data.refreshToken) {
+        localStorage.setItem("refreshToken", data.refreshToken);
+      }
+
+      // DECODE JWT TO GET ROLE
+      const payload: any = jwtDecode(data.token);
+
+      const role =
+        payload?.["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]?.toLowerCase();
+
+      console.log("Decoded Role:", role);
+
+      // 🔥 NAVIGATION BASED ON DECODED ROLE
+      if (role === "admin") navigate("/admin");
+      else if (role === "staff") navigate("/staff");
+      else if (role === "cashier") navigate("/cashier");
+      else navigate("/");
+
+    } catch (error) {
+      console.error("Login error:", error);
+      setErrors({ api: "Network error. Please check your connection and try again." });
+    } finally {
       setIsLoading(false);
-      console.log("login", { email, password });
-    }, 900);
+    }
   };
 
-  const errorSummary = Object.keys(errors).length > 1 ? Object.values(errors).join(". ") : null;
+  const errorSummary = errors.api || (Object.keys(errors).length > 1 ? Object.values(errors).filter(e => e !== errors.api).join(". ") : null);
 
   return (
     <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-amber-50/40 dark:bg-stone-900 font-sans transition-colors duration-300">
@@ -197,4 +243,4 @@ const LoginUI: React.FC = () => {
   );
 };
 
-export default LoginUI;
+export default Login;

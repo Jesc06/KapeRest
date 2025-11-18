@@ -8,21 +8,17 @@ import {
   faClock,
   faUser,
   faUserTag,
-  faTags,
-  faBolt,
-  faBox
+  faBolt
 } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from './StaffSidebar';
 import LogoutPanel from '../Shared/LogoutPanel';
 
 interface AuditLog {
   id: number;
-  user: string;
+  username: string;
   role: string;
-  category: string; // Supplier, Product, Login
-  action: string; // Add, Delete, Deliver, Login
-  affectedEntity: string; // SupplierName or ProductName
-  description?: string;
+  action: string; // Add, Delete, Deliver
+  description?: string; // Delivered 50 units of Latte
   date: string; // DateTime
 }
 
@@ -34,7 +30,6 @@ const StaffAuditTrailPage: React.FC = () => {
   });
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedAction, setSelectedAction] = useState('all');
   const [selectedRole, setSelectedRole] = useState('all');
 
@@ -42,71 +37,57 @@ const StaffAuditTrailPage: React.FC = () => {
   const auditLogs: AuditLog[] = [
     {
       id: 1,
-      user: 'Maria Santos',
+      username: 'Maria Santos',
       role: 'Staff',
-      category: 'Product',
       action: 'Add',
-      affectedEntity: 'Caramel Macchiato',
-      description: 'Added new product to menu with price ₱150',
+      description: 'Added new product to menu: Caramel Macchiato with price ₱150',
       date: '2025-11-18T14:30:00'
     },
     {
       id: 2,
-      user: 'Juan Dela Cruz',
+      username: 'Juan Dela Cruz',
       role: 'Staff',
-      category: 'Supplier',
       action: 'Add',
-      affectedEntity: 'Coffee Beans Co.',
-      description: 'Registered new supplier for coffee beans',
+      description: 'Registered new supplier: Coffee Beans Co.',
       date: '2025-11-18T13:15:00'
     },
     {
       id: 3,
-      user: 'Pedro Reyes',
+      username: 'Pedro Reyes',
       role: 'Staff',
-      category: 'Product',
       action: 'Deliver',
-      affectedEntity: 'Latte',
       description: 'Delivered 50 units of Latte',
       date: '2025-11-18T12:45:00'
     },
     {
       id: 4,
-      user: 'Ana Garcia',
+      username: 'Ana Garcia',
       role: 'Staff',
-      category: 'Product',
       action: 'Delete',
-      affectedEntity: 'Vanilla Frappe',
-      description: 'Removed discontinued product from menu',
+      description: 'Removed discontinued product from menu: Vanilla Frappe',
       date: '2025-11-18T11:20:00'
     },
     {
       id: 5,
-      user: 'Carlos Lopez',
+      username: 'Carlos Lopez',
       role: 'Staff',
-      category: 'Supplier',
       action: 'Delete',
-      affectedEntity: 'Old Milk Supplier',
-      description: 'Removed inactive supplier from system',
+      description: 'Removed inactive supplier from system: Old Milk Supplier',
       date: '2025-11-18T10:00:00'
     },
     {
       id: 6,
-      user: 'Rosa Martinez',
+      username: 'Rosa Martinez',
       role: 'Admin',
-      category: 'Login',
-      action: 'Login',
-      affectedEntity: 'System',
-      description: 'Administrator logged into the system',
+      action: 'Add',
+      description: 'Created new branch: Main Street Branch',
       date: '2025-11-18T09:30:00'
     },
     {
       id: 7,
-      user: 'Miguel Torres',
+      username: 'Miguel Torres',
       role: 'Staff',
-      category: 'Product',
       action: 'Deliver',
-      affectedEntity: 'Espresso',
       description: 'Delivered 100 units of Espresso',
       date: '2025-11-18T08:15:00'
     }
@@ -115,14 +96,13 @@ const StaffAuditTrailPage: React.FC = () => {
   // Filter logs based on search and filters
   const filteredLogs = auditLogs.filter(log => {
     const matchesSearch = 
-      log.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      log.affectedEntity.toLowerCase().includes(searchTerm.toLowerCase());
+      log.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (log.description && log.description.toLowerCase().includes(searchTerm.toLowerCase()));
     
-    const matchesCategory = selectedCategory === 'all' || log.category === selectedCategory;
     const matchesAction = selectedAction === 'all' || log.action === selectedAction;
     const matchesRole = selectedRole === 'all' || log.role === selectedRole;
 
-    return matchesSearch && matchesCategory && matchesAction && matchesRole;
+    return matchesSearch && matchesAction && matchesRole;
   });
 
   const formatDateTime = (dateString: string) => {
@@ -133,19 +113,6 @@ const StaffAuditTrailPage: React.FC = () => {
     };
   };
 
-  const getCategoryBadgeColor = (category: string) => {
-    switch (category) {
-      case 'Product':
-        return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
-      case 'Supplier':
-        return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
-      case 'Login':
-        return 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400';
-      default:
-        return 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-400';
-    }
-  };
-
   const getActionBadgeColor = (action: string) => {
     switch (action) {
       case 'Add':
@@ -154,8 +121,6 @@ const StaffAuditTrailPage: React.FC = () => {
         return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
       case 'Deliver':
         return 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400';
-      case 'Login':
-        return 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400';
       default:
         return 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-400';
     }
@@ -221,7 +186,7 @@ const StaffAuditTrailPage: React.FC = () => {
         <main className="p-6 relative z-0">
           {/* Filters */}
           <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-lg p-6 mb-8 border border-orange-100 dark:border-orange-900/20">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {/* Search */}
               <div className="relative">
                 <FontAwesomeIcon 
@@ -230,29 +195,11 @@ const StaffAuditTrailPage: React.FC = () => {
                 />
                 <input
                   type="text"
-                  placeholder="Search user or entity..."
+                  placeholder="Search username or description..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2.5 bg-neutral-50 dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition-all"
                 />
-              </div>
-
-              {/* Category Filter */}
-              <div className="relative">
-                <FontAwesomeIcon 
-                  icon={faTags} 
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
-                />
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-neutral-50 dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition-all appearance-none cursor-pointer"
-                >
-                  <option value="all">All Categories</option>
-                  <option value="Product">Product</option>
-                  <option value="Supplier">Supplier</option>
-                  <option value="Login">Login</option>
-                </select>
               </div>
 
               {/* Action Filter */}
@@ -270,7 +217,6 @@ const StaffAuditTrailPage: React.FC = () => {
                   <option value="Add">Add</option>
                   <option value="Delete">Delete</option>
                   <option value="Deliver">Deliver</option>
-                  <option value="Login">Login</option>
                 </select>
               </div>
 
@@ -304,19 +250,13 @@ const StaffAuditTrailPage: React.FC = () => {
                       Date & Time
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
-                      User
+                      Username
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                       Role
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
-                      Category
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                       Action
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
-                      Affected Entity
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                       Description
@@ -326,7 +266,7 @@ const StaffAuditTrailPage: React.FC = () => {
                 <tbody className="divide-y divide-neutral-200 dark:divide-neutral-700">
                   {filteredLogs.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
+                      <td colSpan={5} className="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
                         <FontAwesomeIcon icon={faClipboardList} className="text-4xl mb-3 opacity-50" />
                         <p className="text-lg font-medium">No audit logs found</p>
                         <p className="text-sm mt-1">Try adjusting your filters</p>
@@ -356,7 +296,7 @@ const StaffAuditTrailPage: React.FC = () => {
                             <div className="flex items-center gap-2">
                               <FontAwesomeIcon icon={faUser} className="text-orange-500" />
                               <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
-                                {log.user}
+                                {log.username}
                               </span>
                             </div>
                           </td>
@@ -366,25 +306,12 @@ const StaffAuditTrailPage: React.FC = () => {
                             </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getCategoryBadgeColor(log.category)}`}>
-                              {log.category}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
                             <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getActionBadgeColor(log.action)}`}>
                               {log.action}
                             </span>
                           </td>
                           <td className="px-6 py-4">
-                            <div className="flex items-center gap-2">
-                              <FontAwesomeIcon icon={faBox} className="text-neutral-400 text-sm" />
-                              <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
-                                {log.affectedEntity}
-                              </span>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4">
-                            <span className="text-sm text-neutral-600 dark:text-neutral-400 max-w-xs truncate block">
+                            <span className="text-sm text-neutral-600 dark:text-neutral-400">
                               {log.description || '-'}
                             </span>
                           </td>

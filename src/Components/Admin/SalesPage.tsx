@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faSearch, faChartLine, faDownload, faCalendar, faBuilding, faMoneyBill, faClock } from '@fortawesome/free-solid-svg-icons';
 import AdminSidebar from './AdminSidebar';
@@ -19,7 +18,6 @@ interface Sale {
 }
 
 const SalesPage: React.FC = () => {
-  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');

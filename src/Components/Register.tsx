@@ -18,6 +18,7 @@ interface CashierAccount {
   branchId: number;
   branchName: string;
   location: string;
+  role?: string; // Added to filter by role
 }
 
 interface Branch {
@@ -77,7 +78,12 @@ const Register: React.FC = () => {
         .then((data: CashierAccount[]) => {
           console.log('Cashiers data received:', data);
           console.log('Number of cashiers:', data?.length || 0);
-          setCashiers(data || []);
+          // Filter to only include Cashier role
+          const cashierRoleOnly = (data || []).filter(account => 
+            !account.role || account.role.toLowerCase() === 'cashier'
+          );
+          console.log('Filtered cashiers (Cashier role only):', cashierRoleOnly.length);
+          setCashiers(cashierRoleOnly);
         })
         .catch(err => {
           console.error('Error fetching cashiers:', err);
