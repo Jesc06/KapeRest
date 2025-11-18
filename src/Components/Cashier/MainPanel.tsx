@@ -267,14 +267,32 @@ const MainPanel: React.FC<MainPanelProps> = ({
         </div>
 
         {/* Cart Section */}
-        <div className="w-full lg:w-80 lg:min-w-[320px] xl:w-96 xl:min-w-[384px] flex flex-col rounded-xl border border-stone-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-sm overflow-hidden flex-shrink-0 max-h-full">
+        <div className="w-full lg:w-80 lg:min-w-[320px] xl:w-96 xl:min-w-[384px] flex flex-col rounded-2xl border-2 border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 shadow-xl shadow-stone-200/50 dark:shadow-neutral-800/50 overflow-hidden flex-shrink-0 max-h-full">
           {/* Cart Header */}
-          <div className="border-b border-stone-200 dark:border-neutral-800 bg-gradient-to-r from-stone-50 to-white dark:from-neutral-800 dark:to-neutral-900 px-4 py-3.5 flex-shrink-0">
-            <h3 className="text-sm font-bold tracking-tight text-neutral-900 dark:text-white flex items-center gap-2">
-              <FontAwesomeIcon icon={faShoppingCart} className="h-4 w-4 text-orange-600 dark:text-orange-500" />
-              <span>Shopping Cart</span>
-              <span className="ml-auto font-semibold text-stone-600 dark:text-stone-400 text-xs bg-stone-100 dark:bg-neutral-800 px-2 py-0.5 rounded-full border border-stone-200 dark:border-neutral-700">({cart.length})</span>
-            </h3>
+          <div className="border-b-2 border-stone-200 dark:border-neutral-700 bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 dark:from-orange-600 dark:via-orange-700 dark:to-amber-700 px-5 py-4 flex-shrink-0 relative overflow-hidden">
+            {/* Background Pattern */}
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-3xl -mr-16 -mt-16"></div>
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full blur-2xl -ml-12 -mb-12"></div>
+            </div>
+            
+            <div className="relative flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 shadow-lg">
+                  <FontAwesomeIcon icon={faShoppingCart} className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-base font-black text-white tracking-tight">Shopping Cart</h3>
+                  <p className="text-xs text-orange-100 font-medium">{cart.length} {cart.length === 1 ? 'item' : 'items'}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <div className="px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-sm border border-white/30">
+                  <span className="font-black text-sm text-white">{cart.reduce((sum, item) => sum + item.quantity, 0)}</span>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Cart Items (Scrollable) */}
@@ -357,49 +375,83 @@ const MainPanel: React.FC<MainPanelProps> = ({
           </div>
 
           {/* Cart Footer with Total - Scrollable when needed */}
-          <div className="flex-shrink-0 border-t border-stone-200 dark:border-neutral-800 bg-gradient-to-r from-stone-50 to-white dark:from-neutral-800 dark:to-neutral-900 max-h-[60vh] overflow-y-auto">
-            <div className="px-4 lg:px-6 py-4 lg:py-6 space-y-4 lg:space-y-5">
+          <div className="flex-shrink-0 border-t-2 border-stone-200 dark:border-neutral-700 bg-gradient-to-br from-stone-50 via-white to-stone-50 dark:from-neutral-850 dark:via-neutral-900 dark:to-neutral-850 max-h-[60vh] overflow-y-auto">
+            <div className="px-5 lg:px-6 py-5 lg:py-6 space-y-4 lg:space-y-5">
               {/* Final Total Amount Section */}
-              <div className="flex flex-col gap-2">
-                <span className="text-xs lg:text-sm font-bold tracking-widest text-stone-700 dark:text-stone-300 uppercase">Total Amount</span>
-                <span className="text-3xl lg:text-4xl font-black bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-500 dark:to-orange-400 bg-clip-text text-transparent">
-                  ₱{finalTotal.toFixed(2)}
-                </span>
+              <div className="relative overflow-hidden rounded-2xl border-2 border-orange-200 dark:border-orange-800/30 bg-gradient-to-br from-orange-50 via-amber-50 to-orange-50 dark:from-orange-950/30 dark:via-amber-950/20 dark:to-orange-950/30 p-5">
+                {/* Background Decoration */}
+                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-orange-400/20 to-transparent rounded-full blur-2xl"></div>
+                <div className="absolute bottom-0 left-0 w-20 h-20 bg-gradient-to-tr from-amber-400/20 to-transparent rounded-full blur-xl"></div>
+                
+                <div className="relative flex flex-col gap-2">
+                  <div className="flex items-center gap-2">
+                    <div className="h-1.5 w-1.5 rounded-full bg-orange-500 animate-pulse"></div>
+                    <span className="text-xs font-black tracking-widest text-orange-700 dark:text-orange-400 uppercase">Total Amount</span>
+                  </div>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-[2.5rem] lg:text-5xl font-black bg-gradient-to-r from-orange-600 via-orange-500 to-amber-600 dark:from-orange-400 dark:via-orange-300 dark:to-amber-400 bg-clip-text text-transparent leading-none">
+                      ₱{finalTotal.toFixed(2)}
+                    </span>
+                    {discountValue > 0 && (
+                      <span className="text-sm font-bold text-red-500 dark:text-red-400 line-through opacity-75">
+                        ₱{total.toFixed(2)}
+                      </span>
+                    )}
+                  </div>
+                  {discountValue > 0 && (
+                    <div className="flex items-center gap-2 mt-1">
+                      <div className="px-2 py-1 rounded-full bg-red-100 dark:bg-red-900/30 border border-red-200 dark:border-red-800/50">
+                        <span className="text-[10px] font-black text-red-600 dark:text-red-400 uppercase tracking-wider">-{discountValue}% Discount</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
 
-              {/* Discount & Tax Dropdown */}
+              {/* Breakdown Toggle */}
               <button
                 onClick={() => setShowTaxDiscount(!showTaxDiscount)}
-                className="w-full flex items-center justify-between px-3 lg:px-4 py-2.5 lg:py-3 rounded-lg border border-stone-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 hover:bg-stone-50 dark:hover:bg-neutral-800 hover:border-orange-400 dark:hover:border-orange-500 transition-all duration-200 text-xs lg:text-sm"
+                className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl border-2 border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:border-orange-300 dark:hover:border-orange-600 transition-all duration-300 shadow-sm hover:shadow-md group"
               >
-                <span className="font-semibold text-neutral-900 dark:text-white">Breakdown</span>
-                <FontAwesomeIcon icon={faChevronDown} className={`h-3 lg:h-4 w-3 lg:w-4 text-neutral-900 dark:text-white transition-transform duration-300 ${showTaxDiscount ? 'rotate-180' : ''}`} />
+                <div className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-orange-100 to-amber-100 dark:from-orange-900/30 dark:to-amber-900/30 group-hover:from-orange-200 group-hover:to-amber-200 dark:group-hover:from-orange-900/50 dark:group-hover:to-amber-900/50 transition-all duration-300">
+                    <FontAwesomeIcon icon={faChevronDown} className={`h-3.5 w-3.5 text-orange-600 dark:text-orange-400 transition-transform duration-300 ${showTaxDiscount ? 'rotate-180' : ''}`} />
+                  </div>
+                  <span className="font-bold text-sm text-neutral-900 dark:text-white">View Breakdown</span>
+                </div>
+                <div className="px-2.5 py-1 rounded-full bg-orange-100 dark:bg-orange-900/30 border border-orange-200 dark:border-orange-800/50">
+                  <span className="text-[10px] font-black text-orange-600 dark:text-orange-400">{cart.reduce((sum, item) => sum + item.quantity, 0)} ITEMS</span>
+                </div>
               </button>
 
               {/* Tax, Discount Details */}
               {showTaxDiscount && (
-                <div className="space-y-2.5 lg:space-y-3 pt-3 lg:pt-4 border-t border-stone-300 dark:border-neutral-700">
+                <div className="space-y-3 pt-1 animate-in slide-in-from-top duration-300">
                   {/* Base Calculations */}
-                  <div className="space-y-2 lg:space-y-2.5 text-xs lg:text-sm">
-                    <div className="flex items-center justify-between">
-                      <span className="text-stone-600 dark:text-stone-400">Subtotal:</span>
-                      <span className="font-semibold text-neutral-900 dark:text-white">₱{total.toFixed(2)}</span>
+                  <div className="space-y-2.5 px-4 py-3.5 rounded-xl bg-stone-100 dark:bg-neutral-850 border border-stone-200 dark:border-neutral-700">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="font-medium text-stone-600 dark:text-stone-400">Subtotal:</span>
+                      <span className="font-bold text-neutral-900 dark:text-white">₱{total.toFixed(2)}</span>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-stone-600 dark:text-stone-400">Tax (12%):</span>
-                      <span className="font-semibold text-orange-600 dark:text-orange-400">₱{(total * 0.12).toFixed(2)}</span>
+                    <div className="h-px bg-stone-300 dark:bg-neutral-700"></div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="font-medium text-stone-600 dark:text-stone-400">Tax (12%):</span>
+                      <span className="font-bold text-orange-600 dark:text-orange-400">₱{(total * 0.12).toFixed(2)}</span>
                     </div>
                   </div>
 
                   {/* Custom Discount Section */}
-                  <div className="border-t border-stone-300 dark:border-neutral-700 pt-2.5 lg:pt-3">
-                    <label className="text-xs lg:text-sm font-semibold text-neutral-900 dark:text-white block mb-2">Discount:</label>
+                  <div className="px-4 py-3.5 rounded-xl bg-white dark:bg-neutral-900 border-2 border-stone-200 dark:border-neutral-700">
+                    <label className="text-xs font-black text-orange-600 dark:text-orange-400 mb-3 uppercase tracking-wider flex items-center gap-2">
+                      <div className="h-1.5 w-1.5 rounded-full bg-orange-500 animate-pulse"></div>
+                      Apply Discount
+                    </label>
                     <select
                       value={selectedDiscount}
                       onChange={(e) => setSelectedDiscount(e.target.value ? parseFloat(e.target.value) : '')}
-                      className="w-full px-2.5 lg:px-3 py-2 lg:py-2.5 text-xs lg:text-sm bg-white dark:bg-neutral-900 border border-stone-300 dark:border-neutral-700 rounded-lg font-semibold text-neutral-900 dark:text-white hover:border-orange-400 dark:hover:border-orange-500 transition-all focus:outline-none focus:ring-2 focus:ring-orange-600"
+                      className="w-full px-3.5 py-3 text-sm bg-stone-50 dark:bg-neutral-850 border-2 border-stone-200 dark:border-neutral-700 rounded-xl font-bold text-neutral-900 dark:text-white hover:border-orange-400 dark:hover:border-orange-500 transition-all focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent cursor-pointer"
                     >
-                      <option value="">None</option>
+                      <option value="">No Discount</option>
                       {discountOptions.map((option) => (
                         <option key={option.id} value={option.value}>
                           {option.label}
@@ -410,55 +462,55 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
                   {/* Discount Amount Display */}
                   {discountValue > 0 && (
-                    <div className="flex items-center justify-between text-xs lg:text-sm border-t border-stone-300 dark:border-neutral-700 pt-2.5 lg:pt-3">
-                      <span className="text-red-600 dark:text-red-400 font-semibold">Discount:</span>
-                      <span className="font-semibold text-red-600 dark:text-red-400">-₱{discountAmount.toFixed(2)}</span>
+                    <div className="flex items-center justify-between px-4 py-3 rounded-xl bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-950/20 dark:to-pink-950/20 border-2 border-red-200 dark:border-red-800/30">
+                      <div className="flex items-center gap-2">
+                        <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse"></div>
+                        <span className="text-sm font-black text-red-700 dark:text-red-400">Discount Applied:</span>
+                      </div>
+                      <span className="font-black text-base text-red-600 dark:text-red-400">-₱{discountAmount.toFixed(2)}</span>
                     </div>
                   )}
-
-                  {/* Items Count */}
-                  <div className="flex items-center justify-between text-xs lg:text-sm border-t border-stone-300 dark:border-neutral-700 pt-2.5 lg:pt-3">
-                    <span className="text-neutral-900 dark:text-white font-semibold">Items:</span>
-                    <span className="font-semibold text-neutral-900 dark:text-white">{cart.reduce((sum, item) => sum + item.quantity, 0)}</span>
-                  </div>
                 </div>
               )}
             </div>
           </div>
 
           {/* Action Buttons - Always visible at bottom */}
-          <div className="flex-shrink-0 border-t border-stone-200 dark:border-neutral-800 space-y-2.5 lg:space-y-3 bg-stone-50 dark:bg-neutral-800 px-4 lg:px-5 py-4 lg:py-5">
+          <div className="flex-shrink-0 border-t-2 border-stone-200 dark:border-neutral-700 space-y-3 bg-gradient-to-b from-stone-100 to-stone-50 dark:from-neutral-850 dark:to-neutral-900 px-5 py-5">
             {/* Primary Action - Buy */}
             <button
               onClick={onBuy}
               disabled={isLoading || cart.length === 0}
-              className="group w-full flex items-center justify-center gap-2 lg:gap-3 rounded-lg bg-orange-600 hover:bg-orange-700 dark:bg-orange-500 dark:hover:bg-orange-600 px-4 lg:px-5 py-3 lg:py-4 text-sm lg:text-base font-bold text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-orange-600 dark:disabled:hover:bg-orange-500 shadow-md hover:shadow-lg hover:scale-105 disabled:hover:scale-100"
+              className="group w-full flex items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-orange-600 via-orange-500 to-amber-600 hover:from-orange-700 hover:via-orange-600 hover:to-amber-700 dark:from-orange-500 dark:via-orange-400 dark:to-amber-500 dark:hover:from-orange-600 dark:hover:via-orange-500 dark:hover:to-amber-600 px-5 py-4 text-base font-black text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-orange-600 disabled:hover:via-orange-500 disabled:hover:to-amber-600 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:shadow-orange-500/40 hover:scale-105 disabled:hover:scale-100 relative overflow-hidden"
             >
+              {/* Shine Effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"></div>
+              
               {isLoading ? (
                 <>
-                  <svg className="h-4 lg:h-5 w-4 lg:w-5 animate-spin" viewBox="0 0 24 24" aria-hidden="true">
+                  <svg className="h-5 w-5 animate-spin relative z-10" viewBox="0 0 24 24" aria-hidden="true">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"></path>
                   </svg>
-                  <span>Processing...</span>
+                  <span className="relative z-10 tracking-wide">Processing...</span>
                 </>
               ) : (
                 <>
-                  <FontAwesomeIcon icon={faCheck} className="h-4 lg:h-5 w-4 lg:w-5" />
-                  <span>Complete Purchase</span>
+                  <FontAwesomeIcon icon={faCheck} className="h-5 w-5 relative z-10 group-hover:scale-110 transition-transform" />
+                  <span className="relative z-10 tracking-wide">Complete Purchase</span>
                 </>
               )}
             </button>
 
             {/* Secondary Actions - Grid Layout */}
-            <div className="grid grid-cols-2 gap-2.5 lg:gap-3">
+            <div className="grid grid-cols-2 gap-3">
               {/* Hold Button */}
               <button
                 onClick={onHold}
                 disabled={isLoading || cart.length === 0}
-                className="group flex items-center justify-center gap-1.5 lg:gap-2 rounded-lg border border-stone-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 hover:bg-stone-100 dark:hover:bg-neutral-800 hover:border-orange-400 dark:hover:border-orange-500 px-3 lg:px-4 py-2.5 lg:py-3 text-xs lg:text-sm font-semibold text-neutral-900 dark:text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
+                className="group flex items-center justify-center gap-2 rounded-xl border-2 border-stone-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 hover:bg-gradient-to-br hover:from-stone-50 hover:to-stone-100 dark:hover:from-neutral-850 dark:hover:to-neutral-800 hover:border-orange-400 dark:hover:border-orange-500 px-4 py-3.5 text-sm font-black text-neutral-900 dark:text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg hover:scale-105 disabled:hover:scale-100"
               >
-                <FontAwesomeIcon icon={faPause} className="h-3.5 lg:h-4 w-3.5 lg:w-4" />
+                <FontAwesomeIcon icon={faPause} className="h-4 w-4 group-hover:scale-110 transition-transform" />
                 <span>Hold</span>
               </button>
 
@@ -466,10 +518,13 @@ const MainPanel: React.FC<MainPanelProps> = ({
               <button
                 onClick={onGCashPayment}
                 disabled={isLoading || cart.length === 0}
-                className="group flex items-center justify-center gap-1.5 lg:gap-2 rounded-lg border border-blue-600 bg-blue-600 hover:bg-blue-700 px-3 lg:px-4 py-2.5 lg:py-3 text-xs lg:text-sm font-semibold text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600 shadow-sm hover:shadow-md"
+                className="group flex items-center justify-center gap-2 rounded-xl border-2 border-transparent bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 px-4 py-3.5 text-sm font-black text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-blue-600 disabled:hover:to-blue-500 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 hover:scale-105 disabled:hover:scale-100 relative overflow-hidden"
               >
-                <FontAwesomeIcon icon={faCreditCard} className="h-3.5 lg:h-4 w-3.5 lg:w-4" />
-                <span>GCash</span>
+                {/* Shine Effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"></div>
+                
+                <FontAwesomeIcon icon={faCreditCard} className="h-4 w-4 relative z-10 group-hover:scale-110 transition-transform" />
+                <span className="relative z-10">GCash</span>
               </button>
             </div>
           </div>
