@@ -108,27 +108,30 @@ const CashierPage: React.FC = () => {
                     <div className="absolute bottom-10 left-1/3 w-2 h-2 bg-white/40 rounded-full animate-ping" style={{ animationDelay: '2s' }}></div>
                   </div>
                   
-                  <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+                  <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                     <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center border border-white/30">
-                          <span className="text-3xl">👋</span>
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border-2 border-white/40 shadow-2xl group-hover:scale-110 transition-transform duration-300">
+                          <FontAwesomeIcon icon={faCashRegister} className="text-4xl text-white" />
                         </div>
                         <div>
-                          <h2 className="text-3xl sm:text-4xl font-black text-white mb-1 tracking-tight">
+                          <h2 className="text-4xl sm:text-5xl font-black text-white mb-1 tracking-tight drop-shadow-lg">
                             {getGreeting()}!
                           </h2>
-                          <p className="text-orange-100 text-sm font-medium">Cashier Portal</p>
+                          <p className="text-orange-100 text-base font-bold flex items-center gap-2">
+                            <FontAwesomeIcon icon={faShoppingCart} className="h-4 w-4 text-yellow-300" />
+                            <span>Cashier Portal</span>
+                          </p>
                         </div>
                       </div>
-                      <p className="text-orange-50 text-base sm:text-lg leading-relaxed max-w-2xl">
-                        Welcome to your dashboard. Ready to serve customers and process transactions efficiently?
+                      <p className="text-white text-base sm:text-lg leading-relaxed max-w-2xl font-medium">
+                        Welcome to your dashboard. Ready to serve customers and process transactions efficiently.
                       </p>
                     </div>
-                    <div className="bg-white/10 backdrop-blur-md rounded-xl px-6 py-4 border-2 border-white/20">
-                      <p className="text-white/80 text-xs font-bold uppercase tracking-wider mb-1">Today</p>
-                      <p className="text-white text-2xl font-black">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
-                      <p className="text-white/90 text-sm font-semibold">{new Date().toLocaleDateString('en-US', { year: 'numeric' })}</p>
+                    <div className="bg-white/15 backdrop-blur-md rounded-2xl px-8 py-5 border-2 border-white/30 shadow-2xl group-hover:scale-105 transition-transform duration-300">
+                      <p className="text-white/90 text-xs font-black uppercase tracking-widest mb-2">Today</p>
+                      <p className="text-white text-3xl font-black drop-shadow-lg">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                      <p className="text-white/95 text-base font-bold">{new Date().toLocaleDateString('en-US', { year: 'numeric' })}</p>
                     </div>
                   </div>
                 </div>
@@ -155,20 +158,28 @@ const CashierPage: React.FC = () => {
                   {statsCards.map((stat, index) => (
                     <div
                       key={index}
-                      className="bg-white dark:bg-neutral-800 rounded-lg p-5 border border-stone-200 dark:border-neutral-700 hover:border-orange-300 dark:hover:border-orange-700 transition-all duration-300"
+                      className="group relative bg-white dark:bg-neutral-800 rounded-2xl p-6 border-2 border-stone-200 dark:border-neutral-700 hover:border-orange-400 dark:hover:border-orange-600 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1"
                     >
-                      <div className="flex items-start justify-between">
+                      {/* Gradient Background Accent */}
+                      <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-10 blur-3xl transition-opacity duration-300`}></div>
+                      
+                      <div className="relative flex items-start justify-between">
                         <div className="flex-1">
-                          <p className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 mb-2 uppercase tracking-wide">
-                            {stat.title}
-                          </p>
-                          <p className="text-2xl font-bold text-neutral-900 dark:text-stone-100 mb-1">
+                          <div className="flex items-center gap-2 mb-3">
+                            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-md`}>
+                              <FontAwesomeIcon icon={stat.icon} className="h-5 w-5 text-white" />
+                            </div>
+                            <p className="text-xs font-black text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                              {stat.title}
+                            </p>
+                          </div>
+                          <p className="text-3xl font-black text-neutral-900 dark:text-stone-100 mb-2">
                             {stat.value}
                           </p>
-                          <p className="text-xs text-neutral-400 dark:text-neutral-500">Updated just now</p>
-                        </div>
-                        <div className={`w-12 h-12 rounded-lg ${stat.color.includes('green') ? 'bg-green-100 dark:bg-green-900/30' : 'bg-purple-100 dark:bg-purple-900/30'} flex items-center justify-center`}>
-                          <FontAwesomeIcon icon={stat.icon} className={`h-6 w-6 ${stat.color.includes('green') ? 'text-green-600 dark:text-green-400' : 'text-purple-600 dark:text-purple-400'}`} />
+                          <div className="flex items-center gap-1.5">
+                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                            <p className="text-xs text-neutral-500 dark:text-neutral-400 font-semibold">Live update</p>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -198,24 +209,41 @@ const CashierPage: React.FC = () => {
                     <button
                       key={index}
                       onClick={() => navigate(action.path)}
-                      className="group bg-white dark:bg-neutral-800 rounded-lg p-5 border border-stone-200 dark:border-neutral-700 hover:border-orange-300 dark:hover:border-orange-700 transition-all duration-300"
+                      className="group relative bg-white dark:bg-neutral-800 rounded-2xl p-6 transition-all duration-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-transparent overflow-hidden transform hover:-translate-y-2 hover:shadow-2xl text-left"
                     >
-                      <div className="flex items-start gap-4">
-                        <div className={`w-12 h-12 rounded-lg ${action.color.includes('orange') ? 'bg-orange-100 dark:bg-orange-900/30' : 'bg-blue-100 dark:bg-blue-900/30'} flex items-center justify-center flex-shrink-0`}>
-                          <FontAwesomeIcon icon={action.icon} className={`h-6 w-6 ${action.color.includes('orange') ? 'text-orange-600 dark:text-orange-400' : 'text-blue-600 dark:text-blue-400'}`} />
+                      {/* Premium Gradient Border on Hover */}
+                      <div className={`absolute inset-0 bg-gradient-to-br ${action.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10`}></div>
+                      <div className="absolute inset-[2px] bg-white dark:bg-neutral-800 rounded-[14px] z-0"></div>
+                      
+                      {/* Spotlight Effect */}
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/20 to-transparent dark:from-white/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      
+                      <div className="relative z-10 flex flex-col h-full">
+                        {/* Icon Section */}
+                        <div className="mb-4">
+                          <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${action.color} flex items-center justify-center shadow-md group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
+                            <FontAwesomeIcon icon={action.icon} className="h-4 w-4 text-white" />
+                          </div>
                         </div>
-                        <div className="flex-1 text-left">
-                          <h4 className="text-base font-bold text-neutral-900 dark:text-stone-100 mb-1.5 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">
-                            {action.title}
-                          </h4>
-                          <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
-                            {action.description}
-                          </p>
-                        </div>
-                        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </svg>
+                        
+                        {/* Content Section */}
+                        <div className="flex-1 flex flex-col justify-between">
+                          <div>
+                            <h4 className="text-lg font-black text-neutral-900 dark:text-white mb-2 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-orange-500 group-hover:to-rose-600 transition-all duration-300">
+                              {action.title}
+                            </h4>
+                            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-medium">
+                              {action.description}
+                            </p>
+                          </div>
+                          
+                          {/* Arrow Indicator */}
+                          <div className="mt-4 flex items-center gap-2 text-xs font-bold text-neutral-500 dark:text-neutral-400 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
+                            <span className="uppercase tracking-wider">Access</span>
+                            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                          </div>
                         </div>
                       </div>
                     </button>
@@ -224,18 +252,19 @@ const CashierPage: React.FC = () => {
               </div>
 
               {/* Helpful Tips */}
-              <div className="mt-7 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-xl p-5">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <div className="mt-7 relative overflow-hidden bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-900/20 dark:via-indigo-900/20 dark:to-purple-900/20 border-2 border-blue-300 dark:border-blue-700 rounded-2xl p-6 shadow-lg">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-400 opacity-10 blur-3xl"></div>
+                <div className="relative flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500 flex items-center justify-center flex-shrink-0 shadow-md">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
                   <div className="flex-1">
-                    <h4 className="text-sm font-bold text-blue-900 dark:text-blue-300 mb-1.5 flex items-center gap-2">
+                    <h4 className="text-base font-black text-blue-900 dark:text-blue-300 mb-2 flex items-center gap-2">
                       <span>💡 Quick Tip</span>
                     </h4>
-                    <p className="text-sm text-blue-800 dark:text-blue-400 leading-relaxed">
+                    <p className="text-sm text-blue-800 dark:text-blue-400 leading-relaxed font-medium">
                       Use the sidebar to navigate between different sections. Click on "Buy Item" to start processing customer orders. Remember to check sales regularly to track performance!
                     </p>
                   </div>
