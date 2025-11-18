@@ -176,26 +176,42 @@ const StaffPage: React.FC = () => {
                     <button
                       key={index}
                       onClick={() => navigate(action.path)}
-                      className="group relative bg-white dark:bg-neutral-800 rounded-2xl p-5 transition-all duration-300 border-2 border-stone-100 dark:border-neutral-700 hover:border-orange-200 dark:hover:border-orange-900/50 overflow-hidden transform hover:-translate-y-1"
+                      className="group relative bg-white dark:bg-neutral-800 rounded-2xl p-6 transition-all duration-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-transparent overflow-hidden transform hover:-translate-y-2 hover:shadow-2xl text-left"
                     >
-                      {/* Gradient Background on Hover */}
-                      <div className={`absolute inset-0 bg-gradient-to-br ${action.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>
+                      {/* Premium Gradient Border on Hover */}
+                      <div className={`absolute inset-0 bg-gradient-to-br ${action.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10`}></div>
+                      <div className="absolute inset-[2px] bg-white dark:bg-neutral-800 rounded-[14px] z-0"></div>
                       
-                      {/* Decorative Corner */}
-                      <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-orange-100/50 to-transparent dark:from-orange-900/20 rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      {/* Spotlight Effect */}
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/20 to-transparent dark:from-white/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                       
                       <div className="relative z-10 flex flex-col h-full">
+                        {/* Icon Section */}
                         <div className="mb-4">
                           <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${action.color} flex items-center justify-center shadow-md group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
                             <FontAwesomeIcon icon={action.icon} className="h-4 w-4 text-white" />
                           </div>
                         </div>
-                        <h4 className="text-base font-bold text-neutral-900 dark:text-stone-100 mb-1.5 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">
-                          {action.title}
-                        </h4>
-                        <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
-                          {action.description}
-                        </p>
+                        
+                        {/* Content Section */}
+                        <div className="flex-1 flex flex-col justify-between">
+                          <div>
+                            <h4 className="text-lg font-black text-neutral-900 dark:text-white mb-2 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-orange-500 group-hover:to-rose-600 transition-all duration-300">
+                              {action.title}
+                            </h4>
+                            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-medium">
+                              {action.description}
+                            </p>
+                          </div>
+                          
+                          {/* Arrow Indicator */}
+                          <div className="mt-4 flex items-center gap-2 text-xs font-bold text-neutral-500 dark:text-neutral-400 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
+                            <span className="uppercase tracking-wider">Manage</span>
+                            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                          </div>
+                        </div>
                       </div>
                     </button>
                   ))}
