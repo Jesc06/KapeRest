@@ -11,7 +11,7 @@ const AdminPage: React.FC = () => {
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   
   // Sales Chart State
-  const [selectedPeriod, setSelectedPeriod] = useState<'today' | 'week' | 'month' | 'custom'>('week');
+  const [selectedPeriod, setSelectedPeriod] = useState<'today' | 'monthly' | 'yearly' | 'custom'>('today');
   const [customStartDate, setCustomStartDate] = useState('');
   const [customEndDate, setCustomEndDate] = useState('');
   const [selectedBranch, setSelectedBranch] = useState<string>('all');
@@ -116,8 +116,9 @@ const AdminPage: React.FC = () => {
   const statsCards = [
     {
       title: 'Total Users',
-      value: '0',
-      change: '+0%',
+      value: '248',
+      change: '+12.5%',
+      isIncrease: true,
       icon: faUsers,
       color: 'from-purple-500 to-indigo-600',
       bgColor: 'from-purple-50 to-indigo-50 dark:from-purple-950/20 dark:to-indigo-950/20',
@@ -125,8 +126,9 @@ const AdminPage: React.FC = () => {
     },
     {
       title: 'Active Branches',
-      value: '0',
-      change: '+0%',
+      value: '8',
+      change: '+2',
+      isIncrease: true,
       icon: faBuilding,
       color: 'from-blue-500 to-cyan-600',
       bgColor: 'from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20',
@@ -134,8 +136,9 @@ const AdminPage: React.FC = () => {
     },
     {
       title: 'Inventory Items',
-      value: '0',
-      change: '+0%',
+      value: '1,245',
+      change: '-3.2%',
+      isIncrease: false,
       icon: faBoxes,
       color: 'from-orange-500 to-amber-600',
       bgColor: 'from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20',
@@ -143,8 +146,9 @@ const AdminPage: React.FC = () => {
     },
     {
       title: 'Total Revenue',
-      value: '₱0.00',
-      change: '+0%',
+      value: '₱127,850',
+      change: '+18.7%',
+      isIncrease: true,
       icon: faChartLine,
       color: 'from-emerald-500 to-teal-600',
       bgColor: 'from-emerald-50 to-teal-50 dark:from-emerald-950/20 dark:to-teal-950/20',
@@ -257,7 +261,15 @@ const AdminPage: React.FC = () => {
                           <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}>
                             <FontAwesomeIcon icon={stat.icon} className="h-8 w-8 text-white" />
                           </div>
-                          <span className="text-xs font-black px-3 py-1.5 rounded-full bg-white/80 dark:bg-black/30 text-emerald-700 dark:text-emerald-400 backdrop-blur-sm shadow-sm">
+                          <span className={`text-xs font-black px-3 py-1.5 rounded-full backdrop-blur-sm shadow-sm flex items-center gap-1.5 ${
+                            stat.isIncrease 
+                              ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400' 
+                              : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
+                          }`}>
+                            <FontAwesomeIcon 
+                              icon={stat.isIncrease ? faArrowUp : faArrowDown} 
+                              className="h-3 w-3" 
+                            />
                             {stat.change}
                           </span>
                         </div>
@@ -375,24 +387,24 @@ const AdminPage: React.FC = () => {
                         Today
                       </button>
                       <button
-                        onClick={() => setSelectedPeriod('week')}
+                        onClick={() => setSelectedPeriod('monthly')}
                         className={`px-6 py-3 rounded-lg text-sm font-black uppercase tracking-wide transition-all duration-300 ${
-                          selectedPeriod === 'week'
+                          selectedPeriod === 'monthly'
                             ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg scale-105'
                             : 'text-neutral-600 dark:text-neutral-400 hover:bg-orange-50 dark:hover:bg-neutral-800 hover:text-orange-600 dark:hover:text-orange-400'
                         }`}
                       >
-                        Week
+                        Monthly
                       </button>
                       <button
-                        onClick={() => setSelectedPeriod('month')}
+                        onClick={() => setSelectedPeriod('yearly')}
                         className={`px-6 py-3 rounded-lg text-sm font-black uppercase tracking-wide transition-all duration-300 ${
-                          selectedPeriod === 'month'
+                          selectedPeriod === 'yearly'
                             ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg scale-105'
                             : 'text-neutral-600 dark:text-neutral-400 hover:bg-orange-50 dark:hover:bg-neutral-800 hover:text-orange-600 dark:hover:text-orange-400'
                         }`}
                       >
-                        Month
+                        Yearly
                       </button>
                       <button
                         onClick={() => setSelectedPeriod('custom')}
