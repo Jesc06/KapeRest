@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faSearch, faBox, faEdit, faTrash, faPlus, faFilter } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from '../Staff/StaffSidebar';
 import LogoutPanel from './LogoutPanel';
+import { API_BASE_URL } from '../../config/api';
 
 interface Stock {
   id: number;
@@ -13,6 +14,22 @@ interface Stock {
   costPrice: number;
   transactionDate: string;
   supplierName: string;
+  cashierId?: string;
+  branchId?: number;
+}
+
+interface Cashier {
+  id: string;
+  userName: string;
+  branchId: number;
+  branchName: string;
+  location: string;
+}
+
+interface Branch {
+  id: number;
+  branchName: string;
+  location: string;
 }
 
 const StocksList: React.FC = () => {
@@ -23,54 +40,120 @@ const StocksList: React.FC = () => {
   const [filterCategory, setFilterCategory] = useState<'all' | 'product' | 'supplier'>('all');
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [cashiers, setCashiers] = useState<Cashier[]>([]);
+  const [branches, setBranches] = useState<Branch[]>([]);
+  const [currentUserCashierId, setCurrentUserCashierId] = useState<string | null>(null);
+  const [currentUserBranchId, setCurrentUserBranchId] = useState<number | null>(null);
 
-  // Mock data - Replace with actual API call
+  // Decode JWT token to get cashierId and branchId
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      try {
+        // Decode JWT (split by . and decode the payload part)
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        
+        const decoded = JSON.parse(jsonPayload);
+        console.log('Decoded JWT:', decoded);
+        console.log('cashierId from JWT:', decoded.cashierId);
+        console.log('branchId from JWT:', decoded.branchId);
+        
+        if (decoded.cashierId) {
+          setCurrentUserCashierId(decoded.cashierId);
+        }
+        if (decoded.branchId) {
+          const parsedBranchId = parseInt(decoded.branchId);
+          console.log('Parsed branchId:', parsedBranchId);
+          setCurrentUserBranchId(parsedBranchId);
+        }
+      } catch (err) {
+        console.error('Error decoding JWT:', err);
+      }
+    }
+  }, []);
+
+  // Monitor branchId changes
+  useEffect(() => {
+    console.log('currentUserBranchId state updated to:', currentUserBranchId);
+  }, [currentUserBranchId]);
+
+  // Fetch cashiers and branches
+  useEffect(() => {
+    const fetchCashiersAndBranches = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        
+        // Fetch cashiers
+        const cashiersResponse = await fetch(`${API_BASE_URL}/RegisterPendingAccount/ExistingCashierAccount`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (cashiersResponse.ok) {
+          const cashiersData = await cashiersResponse.json();
+          console.log('Cashiers received:', cashiersData);
+          setCashiers(cashiersData);
+        }
+
+        // Fetch branches
+        const branchesResponse = await fetch(`${API_BASE_URL}/Branch/GetAllBranch`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (branchesResponse.ok) {
+          const branchesData = await branchesResponse.json();
+          console.log('Branches received:', branchesData);
+          console.log('Current user branchId from JWT:', currentUserBranchId);
+          setBranches(branchesData);
+        }
+      } catch (err) {
+        console.error('Error fetching cashiers/branches:', err);
+      }
+    };
+
+    fetchCashiersAndBranches();
+  }, []);
+
+  // Fetch stocks from API
   useEffect(() => {
     const fetchStocks = async () => {
-      setIsLoading(true);
-      // Simulate API call
-      setTimeout(() => {
-        const mockData: Stock[] = [
-          {
-            id: 1,
-            productName: "Juice",
-            stocks: 19,
-            units: "Ml",
-            costPrice: 20,
-            transactionDate: "2025-11-03T04:16:44.3716843",
-            supplierName: "Coca-cola"
+      try {
+        setIsLoading(true);
+        setError(null);
+        
+        const token = localStorage.getItem('accessToken');
+        const response = await fetch(`${API_BASE_URL}/Inventory/GetAllProducts`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
           },
-          {
-            id: 2,
-            productName: "Coffee Beans",
-            stocks: 50,
-            units: "Kg",
-            costPrice: 150,
-            transactionDate: "2025-11-05T08:30:00",
-            supplierName: "Coffee Supplier Co."
-          },
-          {
-            id: 3,
-            productName: "Milk",
-            stocks: 30,
-            units: "Liters",
-            costPrice: 45,
-            transactionDate: "2025-11-04T10:15:00",
-            supplierName: "Dairy Fresh"
-          },
-          {
-            id: 4,
-            productName: "Sugar",
-            stocks: 100,
-            units: "Kg",
-            costPrice: 35,
-            transactionDate: "2025-11-02T14:20:00",
-            supplierName: "Sweet Supply Inc."
-          },
-        ];
-        setStocks(mockData);
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch stocks: ${response.status}`);
+        }
+
+        const data: Stock[] = await response.json();
+        console.log('Stocks received:', data);
+        console.log('Sample stock cashierId:', data[0]?.cashierId);
+        console.log('Sample stock branchId:', data[0]?.branchId);
+        setStocks(data);
+      } catch (err) {
+        console.error('Error fetching stocks:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load stocks');
+      } finally {
         setIsLoading(false);
-      }, 500);
+      }
     };
 
     fetchStocks();
@@ -111,6 +194,26 @@ const StocksList: React.FC = () => {
       hour: '2-digit',
       minute: '2-digit'
     });
+  };
+
+  const getCashierName = (cashierId?: string) => {
+    // Use current user's cashierId from JWT
+    const idToUse = cashierId || currentUserCashierId;
+    if (!idToUse) return 'N/A';
+    
+    const cashier = cashiers.find(c => c.id === idToUse);
+    return cashier?.userName || 'N/A';
+  };
+
+  const getBranchName = (branchId?: number) => {
+    // Use current user's branchId from JWT
+    const idToUse = branchId || currentUserBranchId;
+    console.log('getBranchName - idToUse:', idToUse, 'branches:', branches.map(b => ({ id: b.id, name: b.branchName })));
+    if (!idToUse) return 'N/A';
+    
+    const branch = branches.find(b => b.id === idToUse);
+    console.log('getBranchName - found branch:', branch);
+    return branch?.branchName || 'N/A';
   };
 
   return (
@@ -230,6 +333,8 @@ const StocksList: React.FC = () => {
                         <tr className="border-b border-orange-100 dark:border-neutral-800 bg-orange-50/50 dark:bg-neutral-800/50">
                           <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Product Name</th>
                           <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Supplier</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Cashier</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Branch</th>
                           <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Stock Level</th>
                           <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Units</th>
                           <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Cost Price</th>
@@ -245,6 +350,12 @@ const StocksList: React.FC = () => {
                             </td>
                             <td className="px-6 py-4 text-sm text-neutral-600 dark:text-neutral-400">
                               {stock.supplierName}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-neutral-600 dark:text-neutral-400">
+                              {getCashierName(stock.cashierId)}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-neutral-600 dark:text-neutral-400">
+                              {getBranchName(stock.branchId)}
                             </td>
                             <td className="px-6 py-4 text-sm">
                               <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
