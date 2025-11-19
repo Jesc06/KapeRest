@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faSearch, faBox, faEdit, faTrash, faPlus, faFilter } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faSearch, faBox, faEdit, faTrash, faPlus, faFilter, faTimes, faSave } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from '../Staff/StaffSidebar';
 import LogoutPanel from './LogoutPanel';
 import { API_BASE_URL } from '../../config/api';
+import MessageBox from './MessageBox';
 
 interface Stock {
-  id: number;
+  id?: number;
+  productId?: number;
   productName: string;
   stocks: number;
   units: string;
@@ -45,6 +47,13 @@ const StocksList: React.FC = () => {
   const [branches, setBranches] = useState<Branch[]>([]);
   const [currentUserCashierId, setCurrentUserCashierId] = useState<string | null>(null);
   const [currentUserBranchId, setCurrentUserBranchId] = useState<number | null>(null);
+  const [editingStock, setEditingStock] = useState<Stock | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [showMessageBox, setShowMessageBox] = useState(false);
+  const [messageType, setMessageType] = useState<'success' | 'error'>('success');
+  const [messageText, setMessageText] = useState('');
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteId, setDeleteId] = useState<number | string | null>(null);
 
   // Decode JWT token to get cashierId and branchId
   useEffect(() => {
@@ -125,37 +134,39 @@ const StocksList: React.FC = () => {
   }, []);
 
   // Fetch stocks from API
-  useEffect(() => {
-    const fetchStocks = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        
-        const token = localStorage.getItem('accessToken');
-        const response = await fetch(`${API_BASE_URL}/Inventory/GetAllProducts`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
+  const fetchStocks = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      const token = localStorage.getItem('accessToken');
+      const response = await fetch(`${API_BASE_URL}/Inventory/GetAllProducts`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
 
-        if (!response.ok) {
-          throw new Error(`Failed to fetch stocks: ${response.status}`);
-        }
-
-        const data: Stock[] = await response.json();
-        console.log('Stocks received:', data);
-        console.log('Sample stock cashierId:', data[0]?.cashierId);
-        console.log('Sample stock branchId:', data[0]?.branchId);
-        setStocks(data);
-      } catch (err) {
-        console.error('Error fetching stocks:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load stocks');
-      } finally {
-        setIsLoading(false);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch stocks: ${response.status}`);
       }
-    };
 
+      const data: Stock[] = await response.json();
+      console.log('Stocks received:', data);
+      console.log('First stock object keys:', data[0] ? Object.keys(data[0]) : 'No stocks');
+      console.log('First stock full object:', data[0]);
+      console.log('Sample stock cashierId:', data[0]?.cashierId);
+      console.log('Sample stock branchId:', data[0]?.branchId);
+      setStocks(data);
+    } catch (err) {
+      console.error('Error fetching stocks:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load stocks');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchStocks();
   }, []);
 
@@ -175,13 +186,99 @@ const StocksList: React.FC = () => {
     }
   });
 
-  const handleUpdate = (stockId: number) => {
-    navigate(`/staff/update-stock/${stockId}`);
+  const handleEdit = (stock: Stock) => {
+    setEditingStock({ ...stock });
   };
 
-  const handleDelete = (stockId: number) => {
-    if (window.confirm('Are you sure you want to delete this stock entry?')) {
-      setStocks(stocks.filter(s => s.id !== stockId));
+  const handleSaveEdit = async () => {
+    if (!editingStock) return;
+
+    setIsSaving(true);
+    try {
+      const token = localStorage.getItem('accessToken');
+      const response = await fetch(`${API_BASE_URL}/Inventory/UpdateProductOfSuppliers`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editingStock),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update stock');
+      }
+
+      // Update local state
+      const editingId = editingStock.productId || editingStock.id;
+      setStocks(stocks.map(s => (s.productId || s.id) === editingId ? editingStock : s));
+      setEditingStock(null);
+      
+      setMessageType('success');
+      setMessageText('Stock updated successfully!');
+      setShowMessageBox(true);
+    } catch (err) {
+      setMessageType('error');
+      setMessageText('Failed to update stock. Please try again.');
+      setShowMessageBox(true);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleDeleteClick = (stock: Stock) => {
+    console.log('Delete clicked for stock:', stock);
+    // Use productId if available, otherwise use id
+    const stockId = stock.productId || stock.id;
+    if (!stockId) {
+      console.error('No valid ID found for stock:', stock);
+      setMessageType('error');
+      setMessageText('Cannot delete: Stock ID is missing.');
+      setShowMessageBox(true);
+      return;
+    }
+    setDeleteId(stockId);
+    setShowDeleteConfirm(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteId) return;
+
+    try {
+      const token = localStorage.getItem('accessToken');
+      const response = await fetch(`${API_BASE_URL}/Inventory/DeleteProductOfSuppliers/${deleteId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      console.log('Delete response status:', response.status);
+      console.log('Delete response ok:', response.ok);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Delete error response:', errorText);
+        throw new Error('Failed to delete stock');
+      }
+
+      // Refresh the stock list from the database
+      await fetchStocks();
+      
+      setShowDeleteConfirm(false);
+      setDeleteId(null);
+      
+      setMessageType('success');
+      setMessageText('Stock deleted successfully!');
+      setShowMessageBox(true);
+    } catch (err) {
+      console.error('Delete error:', err);
+      setShowDeleteConfirm(false);
+      setDeleteId(null);
+      setMessageType('error');
+      setMessageText('Failed to delete stock. Please try again.');
+      setShowMessageBox(true);
     }
   };
 
@@ -380,14 +477,14 @@ const StocksList: React.FC = () => {
                             <td className="px-6 py-4 text-center">
                               <div className="flex items-center justify-center gap-2">
                                 <button
-                                  onClick={() => handleUpdate(stock.id)}
+                                  onClick={() => handleEdit(stock)}
                                   className="p-2 bg-blue-100 hover:bg-blue-200 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-400 rounded-lg transition-all duration-200 active:scale-95"
-                                  title="Update stock"
+                                  title="Edit stock"
                                 >
                                   <FontAwesomeIcon icon={faEdit} className="h-4 w-4" />
                                 </button>
                                 <button
-                                  onClick={() => handleDelete(stock.id)}
+                                  onClick={() => handleDeleteClick(stock)}
                                   className="p-2 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 rounded-lg transition-all duration-200 active:scale-95"
                                   title="Delete stock"
                                 >
@@ -428,6 +525,159 @@ const StocksList: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Edit Stock Modal */}
+      {editingStock && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-gradient-to-r from-orange-500 to-orange-600 p-6 rounded-t-2xl">
+              <div className="flex items-center justify-between">
+                <h3 className="text-2xl font-bold text-white">Edit Stock</h3>
+                <button
+                  onClick={() => setEditingStock(null)}
+                  className="text-white hover:bg-white/20 rounded-lg p-2 transition-colors"
+                >
+                  <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Product Name</label>
+                <input
+                  type="text"
+                  value={editingStock.productName}
+                  onChange={(e) => setEditingStock({ ...editingStock, productName: e.target.value })}
+                  className="w-full px-4 py-2.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500"
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Stock Level</label>
+                  <input
+                    type="number"
+                    value={editingStock.stocks}
+                    onChange={(e) => setEditingStock({ ...editingStock, stocks: parseInt(e.target.value) || 0 })}
+                    className="w-full px-4 py-2.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Units</label>
+                  <input
+                    type="text"
+                    value={editingStock.units}
+                    onChange={(e) => setEditingStock({ ...editingStock, units: e.target.value })}
+                    className="w-full px-4 py-2.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Cost Price</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={editingStock.costPrice}
+                  onChange={(e) => setEditingStock({ ...editingStock, costPrice: parseFloat(e.target.value) || 0 })}
+                  className="w-full px-4 py-2.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Supplier Name</label>
+                <input
+                  type="text"
+                  value={editingStock.supplierName}
+                  onChange={(e) => setEditingStock({ ...editingStock, supplierName: e.target.value })}
+                  className="w-full px-4 py-2.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500"
+                />
+              </div>
+            </div>
+            
+            <div className="p-6 bg-neutral-50 dark:bg-neutral-800/50 rounded-b-2xl flex gap-3">
+              <button
+                onClick={handleSaveEdit}
+                disabled={isSaving}
+                className="flex-1 px-4 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {isSaving ? (
+                  <>
+                    <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span>Saving...</span>
+                  </>
+                ) : (
+                  <>
+                    <FontAwesomeIcon icon={faSave} className="h-4 w-4" />
+                    <span>Save Changes</span>
+                  </>
+                )}
+              </button>
+              <button
+                onClick={() => setEditingStock(null)}
+                disabled={isSaving}
+                className="px-4 py-2.5 bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 text-neutral-900 dark:text-white font-medium rounded-lg disabled:opacity-50"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Dialog */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl max-w-md w-full">
+            <div className="p-6">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                  <FontAwesomeIcon icon={faTrash} className="h-6 w-6 text-red-600 dark:text-red-400" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-neutral-900 dark:text-white">Delete Stock</h3>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400">This action cannot be undone</p>
+                </div>
+              </div>
+              
+              <p className="text-neutral-700 dark:text-neutral-300 mb-6">
+                Are you sure you want to delete this stock entry? All associated data will be permanently removed.
+              </p>
+              
+              <div className="flex gap-3">
+                <button
+                  onClick={handleDeleteConfirm}
+                  className="flex-1 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors"
+                >
+                  Delete
+                </button>
+                <button
+                  onClick={() => {
+                    setShowDeleteConfirm(false);
+                    setDeleteId(null);
+                  }}
+                  className="flex-1 px-4 py-2.5 bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 text-neutral-900 dark:text-white font-medium rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MessageBox */}
+      {showMessageBox && (
+        <MessageBox
+          isOpen={showMessageBox}
+          type={messageType}
+          title={messageType === 'success' ? 'Success' : 'Error'}
+          message={messageText}
+          onClose={() => setShowMessageBox(false)}
+        />
+      )}
     </div>
   );
 };

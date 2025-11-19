@@ -123,6 +123,35 @@ const SupplierList: React.FC = () => {
 
     try {
       const token = localStorage.getItem('accessToken');
+      
+      // First, check if this supplier has associated stocks
+      const stocksResponse = await fetch(`${API_BASE_URL}/Inventory/GetAllProducts`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (stocksResponse.ok) {
+        const stocks = await stocksResponse.json();
+        const supplierToDelete = suppliers.find(s => s.id === deleteId);
+        
+        // Check if any stock is linked to this supplier
+        const hasLinkedStocks = stocks.some((stock: any) => 
+          stock.supplierName === supplierToDelete?.supplierName
+        );
+
+        if (hasLinkedStocks) {
+          setShowDeleteConfirm(false);
+          setDeleteId(null);
+          setMessageType('error');
+          setMessageText('Cannot delete supplier: There are stock items linked to this supplier. Please remove or reassign the stocks first.');
+          setShowMessageBox(true);
+          return;
+        }
+      }
+
+      // Proceed with deletion if no linked stocks
       const response = await fetch(`${API_BASE_URL}/Supplier/DeleteSupplier/${deleteId}`, {
         method: 'DELETE',
         headers: {
