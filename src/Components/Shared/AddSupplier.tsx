@@ -10,6 +10,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from '../Staff/StaffSidebar';
 import LogoutPanel from './LogoutPanel';
+import { API_BASE_URL } from '../../config/api';
+import MessageBox from './MessageBox';
 
 interface SupplierFormData {
   supplierName: string;
@@ -35,6 +37,9 @@ const AddSupplier: React.FC = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const [showMessageBox, setShowMessageBox] = useState(false);
+  const [messageType, setMessageType] = useState<'success' | 'error'>('success');
+  const [messageText, setMessageText] = useState('');
 
   const [formData, setFormData] = useState<SupplierFormData>({
     supplierName: '',
@@ -157,17 +162,29 @@ const AddSupplier: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // TODO: Replace with actual API call
-      // const response = await fetch('/api/suppliers', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(formData)
-      // });
+      const token = localStorage.getItem('accessToken');
+      const response = await fetch(`${API_BASE_URL}/Supplier/AddSuppliers`, {
+        method: 'POST',
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify(formData)
+      });
 
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      if (!response.ok) {
+        throw new Error('Failed to add supplier');
+      }
 
-      setSuccess('Supplier added successfully!');
+      // Check if response is text or JSON
+      const text = await response.text();
+      
+      // Show success message
+      setMessageType('success');
+      setMessageText('Supplier added successfully!');
+      setShowMessageBox(true);
+      
+      // Reset form
       setFormData({
         supplierName: '',
         contactPerson: '',
@@ -177,10 +194,12 @@ const AddSupplier: React.FC = () => {
       });
 
       setTimeout(() => {
-        navigate('/staff');
+        navigate('/staff/suppliers');
       }, 2000);
     } catch (err) {
-      setError('Failed to add supplier. Please try again.');
+      setMessageType('error');
+      setMessageText('Failed to add supplier. Please try again.');
+      setShowMessageBox(true);
     } finally {
       setIsLoading(false);
     }
@@ -445,6 +464,17 @@ const AddSupplier: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* MessageBox */}
+      {showMessageBox && (
+        <MessageBox
+          isOpen={showMessageBox}
+          type={messageType}
+          title={messageType === 'success' ? 'Success' : 'Error'}
+          message={messageText}
+          onClose={() => setShowMessageBox(false)}
+        />
+      )}
     </div>
   );
 };
