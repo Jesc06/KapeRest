@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faSearch, faTruck, faEdit, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from '../Staff/StaffSidebar';
 import LogoutPanel from './LogoutPanel';
+import { API_BASE_URL } from '../../config/api';
 
 interface Supplier {
   id: number;
@@ -22,54 +23,35 @@ const SupplierList: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Mock data - Replace with actual API call
+  // Fetch suppliers from API
   useEffect(() => {
     const fetchSuppliers = async () => {
-      setIsLoading(true);
-      // Simulate API call
-      setTimeout(() => {
-        const mockData: Supplier[] = [
-          {
-            id: 1,
-            supplierName: "Coca-cola",
-            contactPerson: "Albert",
-            phoneNumber: "09839349321",
-            email: "esc@gmail.com",
-            address: "odiong",
-            transactionDate: "2025-10-31T23:29:05.6902053"
+      try {
+        setIsLoading(true);
+        setError(null);
+        
+        const token = localStorage.getItem('accessToken');
+        const response = await fetch(`${API_BASE_URL}/Supplier/GetAllSuppliers`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
           },
-          {
-            id: 2,
-            supplierName: "Pepsi Co.",
-            contactPerson: "John Doe",
-            phoneNumber: "09123456789",
-            email: "john@pepsi.com",
-            address: "Manila City",
-            transactionDate: "2025-11-01T10:15:30.1234567"
-          },
-          {
-            id: 3,
-            supplierName: "Coffee Beans Inc.",
-            contactPerson: "Maria Santos",
-            phoneNumber: "09876543210",
-            email: "maria@coffeebeans.com",
-            address: "Quezon City",
-            transactionDate: "2025-11-05T14:20:45.9876543"
-          },
-          {
-            id: 4,
-            supplierName: "Fresh Dairy Products",
-            contactPerson: "Pedro Cruz",
-            phoneNumber: "09112233445",
-            email: "pedro@freshdairy.com",
-            address: "Makati City",
-            transactionDate: "2025-11-08T08:30:00.5555555"
-          }
-        ];
-        setSuppliers(mockData);
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch suppliers: ${response.status}`);
+        }
+
+        const data: Supplier[] = await response.json();
+        setSuppliers(data);
+      } catch (err) {
+        console.error('Error fetching suppliers:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load suppliers');
+      } finally {
         setIsLoading(false);
-      }, 500);
+      }
     };
 
     fetchSuppliers();
@@ -191,6 +173,14 @@ const SupplierList: React.FC = () => {
                     <div className="text-center">
                       <div className="inline-block h-12 w-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
                       <p className="text-neutral-600 dark:text-neutral-400">Loading suppliers...</p>
+                    </div>
+                  </div>
+                ) : error ? (
+                  <div className="flex items-center justify-center py-20">
+                    <div className="text-center">
+                      <FontAwesomeIcon icon={faTruck} className="h-16 w-16 text-red-300 dark:text-red-700 mb-4" />
+                      <p className="text-red-600 dark:text-red-400 text-lg font-medium">Error loading suppliers</p>
+                      <p className="text-neutral-500 dark:text-neutral-500 text-sm mt-2">{error}</p>
                     </div>
                   </div>
                 ) : filteredSuppliers.length === 0 ? (
