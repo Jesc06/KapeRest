@@ -1,8 +1,20 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar.tsx';
 import MainPanel from './MainPanel.tsx';
+import { API_BASE_URL } from '../../config/api';
 
+interface MenuItem {
+  id: number;
+  itemName: string;
+  price: number;
+  category: string;
+  description: string;
+  isAvailable: string;
+  image: string | null; // base64 string or null
+  cashierId: string;
+  branchId: number | null;
+}
 
 interface CartItem {
   id: number;
@@ -22,24 +34,53 @@ const BuyItem: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [userRole] = useState<string>('Cashier'); // Mock user role - can be fetched from auth/context
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
-  // Mock product data
-  const products = [
-    { id: 1, name: 'Iced Latte', price: 120, category: 'Drinks', image: 'https://images.unsplash.com/photo-1518432031498-a3bae2b2b2d5?w=300&h=300&fit=crop' },
-    { id: 2, name: 'Iced Americano', price: 100, category: 'Drinks', image: 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=300&h=300&fit=crop' },
-    { id: 3, name: 'Iced Macchiato', price: 130, category: 'Drinks', image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=300&h=300&fit=crop' },
-    { id: 4, name: 'Hot Espresso', price: 80, category: 'Drinks', image: 'https://images.unsplash.com/photo-1559056199-641a0ac8b3f7?w=300&h=300&fit=crop' },
-    { id: 5, name: 'Milk Tea', price: 110, category: 'Drinks', image: 'https://images.unsplash.com/photo-1585518419759-87a89e9b339b?w=300&h=300&fit=crop' },
-    { id: 6, name: 'Brown Sugar Milk Tea', price: 130, category: 'Drinks', image: 'https://images.unsplash.com/photo-1578668473245-8b891e02b484?w=300&h=300&fit=crop' },
-    { id: 7, name: 'Chocolate Cake', price: 150, category: 'Food', image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=300&h=300&fit=crop' },
-    { id: 8, name: 'Croissant', price: 90, category: 'Food', image: 'https://images.unsplash.com/photo-1585080195519-c21a5514f15f?w=300&h=300&fit=crop' },
-    { id: 9, name: 'Sandwich', price: 180, category: 'Food', image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=300&h=300&fit=crop' },
-    { id: 10, name: 'Cookie', price: 60, category: 'Snacks', image: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=300&h=300&fit=crop' },
-    { id: 11, name: 'Donut', price: 70, category: 'Snacks', image: 'https://images.unsplash.com/photo-1631334932583-7acc2b0a1e32?w=300&h=300&fit=crop' },
-    { id: 12, name: 'Pastry', price: 85, category: 'Snacks', image: 'https://images.unsplash.com/photo-1589080876485-3faf44f9cb31?w=300&h=300&fit=crop' },
-  ];
+  // Fetch menu items from API
+  useEffect(() => {
+    const fetchMenuItems = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        
+        const token = localStorage.getItem('accessToken');
+        const response = await fetch(`${API_BASE_URL}/MenuItem/GetAllMenuItems`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
 
-  const categories = ['All', 'Drinks', 'Food', 'Snacks'];
+        if (!response.ok) {
+          throw new Error(`Failed to fetch menu items: ${response.status}`);
+        }
+
+        const data: MenuItem[] = await response.json();
+        console.log('Menu items received:', data);
+        setMenuItems(data.filter(item => item.isAvailable === 'true' || item.isAvailable === '1'));
+      } catch (err) {
+        console.error('Error fetching menu items:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load menu items');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMenuItems();
+  }, []);
+
+  // Convert MenuItem to product format for display
+  const products = menuItems.map(item => ({
+    id: item.id,
+    name: item.itemName,
+    price: Number(item.price),
+    category: item.category,
+    image: item.image ? `data:image/jpeg;base64,${item.image}` : 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=300&h=300&fit=crop', // default coffee image
+  }));
+
+  // Get unique categories from menu items
+  const categories = ['All', ...Array.from(new Set(menuItems.map(item => item.category)))]
 
   // Filter products based on search and category
   const filteredProducts = useMemo(() => {
