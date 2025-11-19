@@ -34,34 +34,34 @@ const SupplierList: React.FC = () => {
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
   // Fetch suppliers from API
-  useEffect(() => {
-    const fetchSuppliers = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        
-        const token = localStorage.getItem('accessToken');
-        const response = await fetch(`${API_BASE_URL}/Supplier/GetAllSuppliers`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
+  const fetchSuppliers = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      const token = localStorage.getItem('accessToken');
+      const response = await fetch(`${API_BASE_URL}/Supplier/GetAllSuppliers`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
 
-        if (!response.ok) {
-          throw new Error(`Failed to fetch suppliers: ${response.status}`);
-        }
-
-        const data: Supplier[] = await response.json();
-        setSuppliers(data);
-      } catch (err) {
-        console.error('Error fetching suppliers:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load suppliers');
-      } finally {
-        setIsLoading(false);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch suppliers: ${response.status}`);
       }
-    };
 
+      const data: Supplier[] = await response.json();
+      setSuppliers(data);
+    } catch (err) {
+      console.error('Error fetching suppliers:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load suppliers');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchSuppliers();
   }, []);
 
@@ -135,8 +135,9 @@ const SupplierList: React.FC = () => {
         throw new Error('Failed to delete supplier');
       }
 
-      // Update local state
-      setSuppliers(suppliers.filter(s => s.id !== deleteId));
+      // Refresh the supplier list from the database
+      await fetchSuppliers();
+      
       setShowDeleteConfirm(false);
       setDeleteId(null);
       
@@ -144,6 +145,7 @@ const SupplierList: React.FC = () => {
       setMessageText('Supplier deleted successfully!');
       setShowMessageBox(true);
     } catch (err) {
+      console.error('Delete error:', err);
       setShowDeleteConfirm(false);
       setDeleteId(null);
       setMessageType('error');
