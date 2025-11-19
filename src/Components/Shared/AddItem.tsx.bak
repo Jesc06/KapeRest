@@ -36,6 +36,7 @@ const AddItem: React.FC = () => {
     imagePreview: null,
   });
 
+  // Product Item and Quantity fields
   const [productItem, setProductItem] = useState('');
   const [quantity, setQuantity] = useState('');
 
@@ -194,7 +195,6 @@ const AddItem: React.FC = () => {
 
               {/* Form - Flat Design */}
               <form onSubmit={handleSubmit} className="space-y-5 bg-white dark:bg-neutral-900 p-6 rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-sm">
-                
                 {/* Item Name */}
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
@@ -248,8 +248,9 @@ const AddItem: React.FC = () => {
                   />
                 </div>
 
-                {/* Product Item and Quantity */}
+                {/* Product Item and Quantity Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {/* Product Item */}
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
                       Product Item
@@ -265,6 +266,7 @@ const AddItem: React.FC = () => {
                     />
                   </div>
 
+                  {/* Quantity */}
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
                       Quantity
@@ -283,7 +285,7 @@ const AddItem: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Image Upload */}
+                {/* Image Upload */
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
                     Item Image <span className="text-red-500">*</span>

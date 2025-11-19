@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -9,17 +9,34 @@ import {
   faImage,
   faCheckCircle,
   faExclamationCircle,
-  faArrowLeft
+  faArrowLeft,
+  faList,
+  faPlus,
+  faTimes
 } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from '../Staff/StaffSidebar';
 import LogoutPanel from './LogoutPanel';
+import { API_BASE_URL } from '../../config/api';
 
 interface ItemFormData {
   itemName: string;
   price: string;
+  category: string;
   description: string;
   image: File | null;
   imagePreview: string | null;
+}
+
+interface Product {
+  id: number;
+  productName: string;
+  stocks: number;
+}
+
+interface SelectedProduct {
+  productOfSupplierId: number;
+  quantityUsed: number;
+  productName: string;
 }
 
 const AddItem: React.FC = () => {
@@ -33,12 +50,46 @@ const AddItem: React.FC = () => {
   const [formData, setFormData] = useState<ItemFormData>({
     itemName: '',
     price: '',
+    category: '',
     description: '',
     image: null,
     imagePreview: null,
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([]);
+  const [showProductModal, setShowProductModal] = useState(false);
+  const [searchProduct, setSearchProduct] = useState('');
+  
+  // New fields for direct input
+  const [productItem, setProductItem] = useState('');
+  const [quantity, setQuantity] = useState('');
+
+  // Fetch products from API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        const response = await fetch(`${API_BASE_URL}/Inventory/GetAllProducts`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setProducts(data);
+        }
+      } catch (err) {
+        console.error('Error fetching products:', err);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -86,47 +137,175 @@ const AddItem: React.FC = () => {
       return;
     }
 
+    if (!formData.category.trim()) {
+      setError('Category is required');
+      return;
+    }
+
     if (!formData.description.trim()) {
       setError('Description is required');
       return;
     }
 
+    if (!formData.image) {
+      setError('Image is required. Please upload an image.');
+      return;
+    }
+
+    console.log('Form validation passed. Submitting...');
+
     setIsLoading(true);
 
     try {
-      // TODO: Replace with actual API call with file upload
-      // const formDataApi = new FormData();
-      // formDataApi.append('itemName', formData.itemName);
-      // formDataApi.append('price', formData.price);
-      // formDataApi.append('description', formData.description);
-      // if (formData.image) {
-      //   formDataApi.append('image', formData.image);
-      // }
-      // const response = await fetch('/api/items', {
-      //   method: 'POST',
-      //   body: formDataApi
-      // });
+      const token = localStorage.getItem('accessToken');
+      
+      if (!token) {
+        throw new Error('No authentication token found. Please login again.');
+      }
+      
+      // Create FormData for file upload
+      const apiFormData = new FormData();
+      apiFormData.append('Item_name', formData.itemName);
+      apiFormData.append('Price', formData.price);
+      apiFormData.append('Category', formData.category);
+      apiFormData.append('Description', formData.description);
+      apiFormData.append('Image', formData.image);
+      apiFormData.append('IsAvailable', 'Yes');
+      
+      // Add products as JSON string (empty array if no products)
+      const productsPayload = selectedProducts.map(p => ({
+        ProductOfSupplierId: p.productOfSupplierId,
+        QuantityUsed: p.quantityUsed
+      }));
+      
+      // If no products selected, send empty array (backend will handle it)
+      const productsJsonString = productsPayload.length > 0 
+        ? JSON.stringify(productsPayload)
+        : '[]';
+      
+      apiFormData.append('ProductsJson', productsJsonString);
+      console.log('ProductsJson being sent:', productsJsonString);
 
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      console.log('Sending menu item data:');
+      console.log('Item Name:', formData.itemName);
+      console.log('Price:', formData.price);
+      console.log('Category:', formData.category);
+      console.log('Description:', formData.description);
+      console.log('Image:', formData.image?.name);
+      console.log('Products:', productsPayload);
+      console.log('Token exists:', !!token);
+      console.log('API URL:', `${API_BASE_URL}/MenuItem/CreateMenuItem`);
 
-      setSuccess('Menu item added successfully!');
-      setFormData({
-        itemName: '',
-        price: '',
-        description: '',
-        image: null,
-        imagePreview: null,
+      // Log all FormData entries
+      console.log('FormData entries:');
+      for (let [key, value] of apiFormData.entries()) {
+        if (value instanceof File) {
+          console.log(`${key}:`, value.name, `(${value.size} bytes)`);
+        } else {
+          console.log(`${key}:`, value);
+        }
+      }
+
+      const response = await fetch(`${API_BASE_URL}/MenuItem/CreateMenuItem`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          // Don't set Content-Type - browser will set it automatically with boundary for FormData
+        },
+        body: apiFormData
       });
 
-      setTimeout(() => {
-        navigate('/staff');
-      }, 2000);
+      console.log('Response status:', response.status);
+      console.log('Response ok:', response.ok);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
+      // Get the response text first
+      const responseText = await response.text();
+      console.log('Raw response text:', responseText);
+
+      if (!response.ok) {
+        console.error('Error response status:', response.status);
+        console.error('Error response text:', responseText);
+        
+        // Try to parse error as JSON
+        let errorMessage = 'Failed to add menu item';
+        try {
+          const errorJson = JSON.parse(responseText);
+          errorMessage = errorJson.message || errorJson.title || errorJson.errors || responseText;
+          console.error('Parsed error:', errorJson);
+        } catch {
+          errorMessage = responseText || 'Unknown error occurred';
+        }
+        
+        throw new Error(errorMessage);
+      }
+
+      let result;
+      try {
+        result = JSON.parse(responseText);
+        console.log('Success result (parsed):', result);
+      } catch (parseErr) {
+        console.log('Could not parse JSON response (might be plain text):', responseText);
+        result = { success: true, message: responseText };
+      }
+
+      // Check if the result has an ID or other confirmation
+      if (result && (result.id || result.itemId || result.success !== false)) {
+        console.log('✅ Menu item created successfully!');
+        console.log('Result data:', result);
+        
+        setSuccess('Menu item added successfully!');
+        setFormData({
+          itemName: '',
+          price: '',
+          category: '',
+          description: '',
+          image: null,
+          imagePreview: null,
+        });
+        setSelectedProducts([]);
+
+        setTimeout(() => {
+          navigate('/staff');
+        }, 2000);
+      } else {
+        console.error('⚠️ Unexpected response format:', result);
+        throw new Error('Menu item may not have been saved properly. Please check the database.');
+      }
     } catch (err) {
-      setError('Failed to add menu item. Please try again.');
+      console.error('❌ Error adding menu item:', err);
+      console.error('Error stack:', err instanceof Error ? err.stack : 'No stack trace');
+      setError(err instanceof Error ? err.message : 'Failed to add menu item. Please try again.');
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleAddProduct = (product: Product, quantity: number) => {
+    if (quantity <= 0) {
+      setError('Quantity must be greater than 0');
+      return;
+    }
+
+    const exists = selectedProducts.find(p => p.productOfSupplierId === product.id);
+    if (exists) {
+      setSelectedProducts(selectedProducts.map(p => 
+        p.productOfSupplierId === product.id 
+          ? { ...p, quantityUsed: quantity }
+          : p
+      ));
+    } else {
+      setSelectedProducts([...selectedProducts, {
+        productOfSupplierId: product.id,
+        quantityUsed: quantity,
+        productName: product.productName
+      }]);
+    }
+    setError('');
+  };
+
+  const handleRemoveProduct = (productId: number) => {
+    setSelectedProducts(selectedProducts.filter(p => p.productOfSupplierId !== productId));
   };
 
   return (
@@ -286,6 +465,42 @@ const AddItem: React.FC = () => {
                       )}
                     </div>
 
+                    {/* Category - Floating Label */}
+                    <div className="relative group">
+                      <div className="absolute left-5 top-4 z-10 flex items-center gap-2 pointer-events-none">
+                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                          formData.category 
+                            ? 'bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/30' 
+                            : 'bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700'
+                        }`}>
+                          <FontAwesomeIcon icon={faList} className={`h-4 w-4 transition-colors duration-300 ${
+                            formData.category ? 'text-white' : 'text-neutral-400 dark:text-neutral-500'
+                          }`} />
+                        </div>
+                      </div>
+                      <select
+                        name="category"
+                        id="category"
+                        value={formData.category}
+                        onChange={handleChange}
+                        className="w-full pl-16 pr-5 py-4 text-base font-medium rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none border-neutral-200 dark:border-neutral-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 hover:border-orange-300 dark:hover:border-orange-600 disabled:opacity-50 disabled:cursor-not-allowed appearance-none cursor-pointer"
+                        disabled={isLoading}
+                      >
+                        <option value="">Select category</option>
+                        <option value="Coffee">Coffee</option>
+                        <option value="Non-Coffee">Non-Coffee</option>
+                        <option value="Food">Food</option>
+                        <option value="Dessert">Dessert</option>
+                        <option value="Beverage">Beverage</option>
+                      </select>
+                      <label 
+                        htmlFor="category"
+                        className="absolute -top-2.5 left-14 px-2 bg-white dark:bg-neutral-900 text-xs font-semibold text-orange-600 dark:text-orange-400"
+                      >
+                        Category <span className="text-red-500">*</span>
+                      </label>
+                    </div>
+
                     {/* Character Count for Description */}
                     <div className="relative group md:col-span-2">
                       <div className="absolute left-5 top-4 z-10 flex items-center gap-2 pointer-events-none">
@@ -320,6 +535,137 @@ const AddItem: React.FC = () => {
                         {formData.description.length}/200
                       </div>
                     </div>
+                  </div>
+
+                  {/* Product Item and Quantity Input Fields */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Product Item - Floating Label */}
+                    <div className="relative group">
+                      <div className="absolute left-5 top-4 z-10 flex items-center gap-2 pointer-events-none">
+                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                          productItem 
+                            ? 'bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/30' 
+                            : 'bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700'
+                        }`}>
+                          <FontAwesomeIcon icon={faBox} className={`h-4 w-4 transition-colors duration-300 ${
+                            productItem ? 'text-white' : 'text-neutral-400 dark:text-neutral-500'
+                          }`} />
+                        </div>
+                      </div>
+                      <input
+                        type="text"
+                        name="productItem"
+                        id="productItem"
+                        value={productItem}
+                        onChange={(e) => setProductItem(e.target.value)}
+                        className="w-full pl-16 pr-5 py-4 text-base font-medium rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none border-neutral-200 dark:border-neutral-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 hover:border-orange-300 dark:hover:border-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                        placeholder="Enter product item name"
+                        disabled={isLoading}
+                      />
+                      <label 
+                        htmlFor="productItem"
+                        className="absolute -top-2.5 left-14 px-2 bg-white dark:bg-neutral-900 text-xs font-semibold text-orange-600 dark:text-orange-400"
+                      >
+                        Product Item
+                      </label>
+                    </div>
+
+                    {/* Quantity - Floating Label */}
+                    <div className="relative group">
+                      <div className="absolute left-5 top-4 z-10 flex items-center gap-2 pointer-events-none">
+                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                          quantity 
+                            ? 'bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/30' 
+                            : 'bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700'
+                        }`}>
+                          <FontAwesomeIcon icon={faList} className={`h-4 w-4 transition-colors duration-300 ${
+                            quantity ? 'text-white' : 'text-neutral-400 dark:text-neutral-500'
+                          }`} />
+                        </div>
+                      </div>
+                      <input
+                        type="number"
+                        name="quantity"
+                        id="quantity"
+                        value={quantity}
+                        onChange={(e) => setQuantity(e.target.value)}
+                        className="w-full pl-16 pr-5 py-4 text-base font-medium rounded-2xl border-2 transition-all duration-300 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none border-neutral-200 dark:border-neutral-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 hover:border-orange-300 dark:hover:border-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                        placeholder="Enter quantity"
+                        min="0"
+                        step="1"
+                        disabled={isLoading}
+                      />
+                      <label 
+                        htmlFor="quantity"
+                        className="absolute -top-2.5 left-14 px-2 bg-white dark:bg-neutral-900 text-xs font-semibold text-orange-600 dark:text-orange-400"
+                      >
+                        Quantity
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Products Section */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <label className="flex items-center gap-2 text-sm font-bold text-neutral-800 dark:text-neutral-200">
+                        <FontAwesomeIcon icon={faBox} className="text-orange-600 dark:text-orange-400" />
+                        Products Used <span className="text-neutral-400 dark:text-neutral-500 font-normal">(Optional)</span>
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => setShowProductModal(true)}
+                        className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm font-semibold rounded-lg transition-all duration-200 flex items-center gap-2"
+                      >
+                        <FontAwesomeIcon icon={faPlus} className="h-3.5 w-3.5" />
+                        Add Product
+                      </button>
+                    </div>
+
+                    {/* Selected Products List */}
+                    {selectedProducts.length > 0 && (
+                      <div className="space-y-3">
+                        {selectedProducts.map((product) => {
+                          const productData = products.find(p => p.id === product.productOfSupplierId);
+                          return (
+                            <div key={product.productOfSupplierId} className="flex items-center gap-4 p-4 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/30 border-2 border-orange-200 dark:border-orange-800/50 rounded-xl shadow-sm hover:shadow-md transition-all duration-200">
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-bold text-neutral-900 dark:text-white truncate">{product.productName}</p>
+                                <div className="flex items-center gap-3 mt-1.5">
+                                  <div className="flex items-center gap-1.5">
+                                    <span className="text-xs font-semibold text-neutral-500 dark:text-neutral-400">Quantity:</span>
+                                    <span className="px-2 py-0.5 bg-orange-600 dark:bg-orange-500 text-white text-xs font-bold rounded-md">
+                                      {product.quantityUsed}
+                                    </span>
+                                  </div>
+                                  {productData && (
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="text-xs font-semibold text-neutral-500 dark:text-neutral-400">Available:</span>
+                                      <span className={`px-2 py-0.5 text-xs font-bold rounded-md ${
+                                        productData.stocks > 10 
+                                          ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                                          : productData.stocks > 0
+                                          ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
+                                          : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
+                                      }`}>
+                                        {productData.stocks}
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveProduct(product.productOfSupplierId)}
+                                className="flex-shrink-0 p-2.5 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 rounded-lg transition-all duration-200 hover:scale-110 active:scale-95"
+                                title="Remove product"
+                              >
+                                <FontAwesomeIcon icon={faTimes} className="h-4 w-4" />
+                              </button>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -435,6 +781,101 @@ const AddItem: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Product Selection Modal */}
+      {showProductModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
+            <div className="sticky top-0 bg-gradient-to-r from-orange-500 to-orange-600 p-6 rounded-t-2xl">
+              <div className="flex items-center justify-between">
+                <h3 className="text-2xl font-bold text-white">Select Products</h3>
+                <button
+                  onClick={() => {
+                    setShowProductModal(false);
+                    setSearchProduct('');
+                  }}
+                  className="text-white hover:bg-white/20 rounded-lg p-2 transition-colors"
+                >
+                  <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
+                </button>
+              </div>
+              
+              {/* Search */}
+              <div className="mt-4">
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchProduct}
+                  onChange={(e) => setSearchProduct(e.target.value)}
+                  className="w-full px-4 py-2.5 bg-white/90 dark:bg-neutral-800/90 border border-white/50 dark:border-neutral-700 rounded-lg text-neutral-900 dark:text-white placeholder-neutral-500 focus:outline-none focus:border-white"
+                />
+              </div>
+            </div>
+            
+            <div className="p-6 overflow-y-auto max-h-[calc(80vh-180px)]">
+              <div className="space-y-3">
+                {products
+                  .filter(p => p.productName.toLowerCase().includes(searchProduct.toLowerCase()))
+                  .map((product) => {
+                    const [quantity, setQuantity] = useState(
+                      selectedProducts.find(sp => sp.productOfSupplierId === product.id)?.quantityUsed || 1
+                    );
+                    
+                    return (
+                      <div key={product.id} className="flex items-center gap-4 p-4 bg-neutral-50 dark:bg-neutral-800 rounded-xl border-2 border-neutral-200 dark:border-neutral-700 hover:border-orange-400 dark:hover:border-orange-600 transition-all duration-200">
+                        <div className="flex-1 min-w-0">
+                          <p className="font-bold text-neutral-900 dark:text-white mb-2">{product.productName}</p>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-semibold text-neutral-500 dark:text-neutral-400">Available Stock:</span>
+                            <span className={`px-2.5 py-1 text-xs font-bold rounded-lg ${
+                              product.stocks > 10 
+                                ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                                : product.stocks > 0
+                                ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
+                                : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
+                            }`}>
+                              {product.stocks} units
+                            </span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex flex-col items-center gap-1">
+                          <label className="text-xs font-semibold text-neutral-600 dark:text-neutral-400">Quantity</label>
+                          <input
+                            type="number"
+                            min="1"
+                            max={product.stocks}
+                            value={quantity}
+                            onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
+                            className="w-24 px-3 py-2.5 bg-white dark:bg-neutral-900 border-2 border-neutral-300 dark:border-neutral-600 rounded-lg text-center text-neutral-900 dark:text-white font-bold focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
+                          />
+                        </div>
+                        
+                        <button
+                          type="button"
+                          onClick={() => {
+                            handleAddProduct(product, quantity);
+                            setShowProductModal(false);
+                            setSearchProduct('');
+                          }}
+                          className="px-5 py-2.5 bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 text-white font-bold rounded-lg transition-all duration-200 shadow-lg shadow-orange-500/30 hover:shadow-xl hover:scale-105 active:scale-95"
+                        >
+                          Add
+                        </button>
+                      </div>
+                    );
+                  })}
+                
+                {products.filter(p => p.productName.toLowerCase().includes(searchProduct.toLowerCase())).length === 0 && (
+                  <div className="text-center py-8">
+                    <p className="text-neutral-600 dark:text-neutral-400">No products found</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
