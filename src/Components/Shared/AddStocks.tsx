@@ -387,7 +387,7 @@ const AddStocks: React.FC = () => {
                       <option value="">Select supplier</option>
                       {suppliers.map((supplier) => (
                         <option key={supplier.id} value={supplier.id.toString()}>
-                          {supplier.name}
+                          {supplier.supplierName}
                         </option>
                       ))}
                     </select>
