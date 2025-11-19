@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -10,6 +10,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from '../Staff/StaffSidebar';
 import LogoutPanel from './LogoutPanel';
+import MessageBox from './MessageBox';
+import { API_BASE_URL } from '../../config/api';
 
 interface StockFormData {
   productName: string;
@@ -31,6 +33,17 @@ const AddStocks: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [messageBox, setMessageBox] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    type: 'success' | 'error';
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    type: 'success',
+  });
 
   const [formData, setFormData] = useState<StockFormData>({
     productName: '',
@@ -40,13 +53,40 @@ const AddStocks: React.FC = () => {
     supplierId: '',
   });
 
-  // Mock supplier data - replace with API call
-  const suppliers: Supplier[] = [
-    { id: 1, name: 'ABC Coffee Supplies Inc.' },
-    { id: 2, name: 'Premium Imports Co.' },
-    { id: 3, name: 'Local Distributors Ltd.' },
-    { id: 4, name: 'International Traders' },
-  ];
+  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+  const [loadingSuppliers, setLoadingSuppliers] = useState(false);
+
+  // Fetch suppliers from API
+  useEffect(() => {
+    const fetchSuppliers = async () => {
+      try {
+        setLoadingSuppliers(true);
+        const token = localStorage.getItem('accessToken');
+        
+        const response = await fetch(`${API_BASE_URL}/Supplier/GetAllSuppliers`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch suppliers: ${response.status}`);
+        }
+
+        const data: Supplier[] = await response.json();
+        console.log('Suppliers received:', data);
+        setSuppliers(data);
+      } catch (err) {
+        console.error('Error fetching suppliers:', err);
+        setError('Failed to load suppliers. Please refresh the page.');
+      } finally {
+        setLoadingSuppliers(false);
+      }
+    };
+
+    fetchSuppliers();
+  }, []);
 
   // Unit options
   const unitOptions = [
@@ -100,17 +140,48 @@ const AddStocks: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // TODO: Replace with actual API call
-      // const response = await fetch('/api/stocks', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(formData)
-      // });
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        setError('Authentication token not found. Please log in again.');
+        setIsLoading(false);
+        return;
+      }
 
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Prepare request body matching API structure
+      const requestBody = {
+        productName: formData.productName,
+        costPrice: parseFloat(formData.costPrice),
+        stocks: parseInt(formData.stocks),
+        units: formData.units,
+        supplierId: parseInt(formData.supplierId),
+      };
+
+      const response = await fetch(`${API_BASE_URL}/Inventory/AddProductsOfSuppliers`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(requestBody)
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text().catch(() => 'Failed to add stock');
+        throw new Error(errorText || `Failed to add stock: ${response.status}`);
+      }
+
+      // Read response as text since API returns plain text
+      const result = await response.text();
+      console.log('Stock added successfully:', result);
 
       setSuccess('Stock added successfully!');
+      setMessageBox({
+        isOpen: true,
+        title: 'Success',
+        message: 'Stock has been added successfully to the inventory!',
+        type: 'success',
+      });
+      
       setFormData({
         productName: '',
         costPrice: '',
@@ -123,7 +194,15 @@ const AddStocks: React.FC = () => {
         navigate('/staff');
       }, 2000);
     } catch (err) {
-      setError('Failed to add stock. Please try again.');
+      console.error('Error adding stock:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to add stock. Please try again.';
+      setError(errorMessage);
+      setMessageBox({
+        isOpen: true,
+        title: 'Error',
+        message: errorMessage,
+        type: 'error',
+      });
     } finally {
       setIsLoading(false);
     }
@@ -355,6 +434,13 @@ const AddStocks: React.FC = () => {
           </div>
         </div>
       </div>
+      <MessageBox
+        isOpen={messageBox.isOpen}
+        onClose={() => setMessageBox({ ...messageBox, isOpen: false })}
+        title={messageBox.title}
+        message={messageBox.message}
+        type={messageBox.type}
+      />
     </div>
   );
 };
