@@ -98,7 +98,7 @@ const AccountsPage: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/RegisterPendingAccount/ApprovePendingAccount/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/RegisterPendingAccount/ApprovePendingAccount/${id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -127,7 +127,7 @@ const AccountsPage: React.FC = () => {
     }
     
     try {
-      const response = await fetch(`${API_BASE_URL}/api/RegisterPendingAccount/RejectPendingAccount/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/RegisterPendingAccount/RejectPendingAccount/${id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
