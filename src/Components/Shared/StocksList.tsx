@@ -8,8 +8,7 @@ import { API_BASE_URL } from '../../config/api';
 import MessageBox from './MessageBox';
 
 interface Stock {
-  id?: number;
-  productId?: number;
+  id: number;
   productName: string;
   stocks: number;
   units: string;
@@ -18,6 +17,15 @@ interface Stock {
   supplierName: string;
   cashierId?: string;
   branchId?: number;
+  branch?: {
+    branchName: string;
+    location: string;
+  } | null;
+  cashier?: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  } | null;
 }
 
 interface Cashier {
@@ -42,7 +50,6 @@ const StocksList: React.FC = () => {
   const [filterCategory, setFilterCategory] = useState<'all' | 'product' | 'supplier'>('all');
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [cashiers, setCashiers] = useState<Cashier[]>([]);
   const [branches, setBranches] = useState<Branch[]>([]);
   const [currentUserCashierId, setCurrentUserCashierId] = useState<string | null>(null);
@@ -60,7 +67,6 @@ const StocksList: React.FC = () => {
     const token = localStorage.getItem('accessToken');
     if (token) {
       try {
-        // Decode JWT (split by . and decode the payload part)
         const base64Url = token.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
         const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
@@ -68,16 +74,11 @@ const StocksList: React.FC = () => {
         }).join(''));
         
         const decoded = JSON.parse(jsonPayload);
-        console.log('Decoded JWT:', decoded);
-        console.log('cashierId from JWT:', decoded.cashierId);
-        console.log('branchId from JWT:', decoded.branchId);
-        
         if (decoded.cashierId) {
           setCurrentUserCashierId(decoded.cashierId);
         }
         if (decoded.branchId) {
           const parsedBranchId = parseInt(decoded.branchId);
-          console.log('Parsed branchId:', parsedBranchId);
           setCurrentUserBranchId(parsedBranchId);
         }
       } catch (err) {
@@ -86,18 +87,12 @@ const StocksList: React.FC = () => {
     }
   }, []);
 
-  // Monitor branchId changes
-  useEffect(() => {
-    console.log('currentUserBranchId state updated to:', currentUserBranchId);
-  }, [currentUserBranchId]);
-
   // Fetch cashiers and branches
   useEffect(() => {
     const fetchCashiersAndBranches = async () => {
       try {
         const token = localStorage.getItem('accessToken');
         
-        // Fetch cashiers
         const cashiersResponse = await fetch(`${API_BASE_URL}/RegisterPendingAccount/ExistingCashierAccount`, {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -107,11 +102,9 @@ const StocksList: React.FC = () => {
 
         if (cashiersResponse.ok) {
           const cashiersData = await cashiersResponse.json();
-          console.log('Cashiers received:', cashiersData);
           setCashiers(cashiersData);
         }
 
-        // Fetch branches
         const branchesResponse = await fetch(`${API_BASE_URL}/Branch/GetAllBranch`, {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -121,8 +114,6 @@ const StocksList: React.FC = () => {
 
         if (branchesResponse.ok) {
           const branchesData = await branchesResponse.json();
-          console.log('Branches received:', branchesData);
-          console.log('Current user branchId from JWT:', currentUserBranchId);
           setBranches(branchesData);
         }
       } catch (err) {
@@ -137,7 +128,6 @@ const StocksList: React.FC = () => {
   const fetchStocks = async () => {
     try {
       setIsLoading(true);
-      setError(null);
       
       const token = localStorage.getItem('accessToken');
       const response = await fetch(`${API_BASE_URL}/Inventory/GetAllProducts`, {
@@ -155,12 +145,12 @@ const StocksList: React.FC = () => {
       console.log('Stocks received:', data);
       console.log('First stock object keys:', data[0] ? Object.keys(data[0]) : 'No stocks');
       console.log('First stock full object:', data[0]);
-      console.log('Sample stock cashierId:', data[0]?.cashierId);
-      console.log('Sample stock branchId:', data[0]?.branchId);
       setStocks(data);
     } catch (err) {
       console.error('Error fetching stocks:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load stocks');
+      setMessageType('error');
+      setMessageText(err instanceof Error ? err.message : 'Failed to load stocks');
+      setShowMessageBox(true);
     } finally {
       setIsLoading(false);
     }
@@ -210,8 +200,7 @@ const StocksList: React.FC = () => {
       }
 
       // Update local state
-      const editingId = editingStock.productId || editingStock.id;
-      setStocks(stocks.map(s => (s.productId || s.id) === editingId ? editingStock : s));
+      setStocks(stocks.map(s => s.id === editingStock.id ? editingStock : s));
       setEditingStock(null);
       
       setMessageType('success');
@@ -228,16 +217,8 @@ const StocksList: React.FC = () => {
 
   const handleDeleteClick = (stock: Stock) => {
     console.log('Delete clicked for stock:', stock);
-    // Use productId if available, otherwise use id
-    const stockId = stock.productId || stock.id;
-    if (!stockId) {
-      console.error('No valid ID found for stock:', stock);
-      setMessageType('error');
-      setMessageText('Cannot delete: Stock ID is missing.');
-      setShowMessageBox(true);
-      return;
-    }
-    setDeleteId(stockId);
+    console.log('Stock ID:', stock.id);
+    setDeleteId(stock.id);
     setShowDeleteConfirm(true);
   };
 
@@ -293,23 +274,27 @@ const StocksList: React.FC = () => {
     });
   };
 
-  const getCashierName = (cashierId?: string) => {
-    // Use current user's cashierId from JWT
-    const idToUse = cashierId || currentUserCashierId;
+  const getCashierName = (stock: Stock) => {
+    // Use new API structure if available, otherwise fallback to old logic
+    if (stock.cashier) {
+      return `${stock.cashier.firstName} ${stock.cashier.lastName}`;
+    }
+    // Fallback to old logic
+    const idToUse = stock.cashierId || currentUserCashierId;
     if (!idToUse) return 'N/A';
-    
     const cashier = cashiers.find(c => c.id === idToUse);
     return cashier?.userName || 'N/A';
   };
 
-  const getBranchName = (branchId?: number) => {
-    // Use current user's branchId from JWT
-    const idToUse = branchId || currentUserBranchId;
-    console.log('getBranchName - idToUse:', idToUse, 'branches:', branches.map(b => ({ id: b.id, name: b.branchName })));
+  const getBranchName = (stock: Stock) => {
+    // Use new API structure if available, otherwise fallback to old logic
+    if (stock.branch) {
+      return stock.branch.branchName;
+    }
+    // Fallback to old logic
+    const idToUse = stock.branchId || currentUserBranchId;
     if (!idToUse) return 'N/A';
-    
     const branch = branches.find(b => b.id === idToUse);
-    console.log('getBranchName - found branch:', branch);
     return branch?.branchName || 'N/A';
   };
 
@@ -449,10 +434,10 @@ const StocksList: React.FC = () => {
                               {stock.supplierName}
                             </td>
                             <td className="px-6 py-4 text-sm text-neutral-600 dark:text-neutral-400">
-                              {getCashierName(stock.cashierId)}
+                              {getCashierName(stock)}
                             </td>
                             <td className="px-6 py-4 text-sm text-neutral-600 dark:text-neutral-400">
-                              {getBranchName(stock.branchId)}
+                              {getBranchName(stock)}
                             </td>
                             <td className="px-6 py-4 text-sm">
                               <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
