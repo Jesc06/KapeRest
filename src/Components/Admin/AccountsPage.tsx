@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faUsers, faBuilding, faSearch, faCheck, faTimes, faEye, faUserCircle, faEnvelope, faCalendar, faUserTag, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import LogoutPanel from '../Shared/LogoutPanel';
 import { API_BASE_URL } from '../../config/api';
+import MessageBox from '../Shared/MessageBox';
+import ConfirmationDialog from '../Shared/ConfirmationDialog';
 
 interface Branch {
   id?: number;
@@ -36,6 +38,21 @@ const AccountsPage: React.FC = () => {
   const [branches, setBranches] = useState<Branch[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [messageBox, setMessageBox] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    type: 'success' | 'error';
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    type: 'success',
+  });
+  const [rejectionDialog, setRejectionDialog] = useState<{ isOpen: boolean; accountId: number | null }>({
+    isOpen: false,
+    accountId: null,
+  });
 
   // Fetch pending accounts from API
   useEffect(() => {
@@ -113,10 +130,34 @@ const AccountsPage: React.FC = () => {
       setAccounts(accounts.map(acc => 
         acc.id === id ? { ...acc, status: 'Approved' as const } : acc
       ));
+      setMessageBox({
+        isOpen: true,
+        title: 'Account Approved',
+        message: 'The user account has been successfully approved.',
+        type: 'success',
+      });
     } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to approve account';
       console.error('Error approving account:', err);
-      setError(err instanceof Error ? err.message : 'Failed to approve account');
+      setError(errorMessage);
+      setMessageBox({
+        isOpen: true,
+        title: 'Approval Failed',
+        message: errorMessage,
+        type: 'error',
+      });
     }
+  };
+
+  const openRejectDialog = (id: number) => {
+    setRejectionDialog({ isOpen: true, accountId: id });
+  };
+
+  const confirmReject = () => {
+    if (rejectionDialog.accountId) {
+      handleReject(rejectionDialog.accountId);
+    }
+    setRejectionDialog({ isOpen: false, accountId: null });
   };
 
   const handleReject = async (id: number) => {
@@ -128,7 +169,7 @@ const AccountsPage: React.FC = () => {
     
     try {
       const response = await fetch(`${API_BASE_URL}/RegisterPendingAccount/RejectPendingAccount/${id}`, {
-        method: 'POST',
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -142,9 +183,22 @@ const AccountsPage: React.FC = () => {
       setAccounts(accounts.map(acc => 
         acc.id === id ? { ...acc, status: 'Rejected' as const } : acc
       ));
+      setMessageBox({
+        isOpen: true,
+        title: 'Account Rejected',
+        message: 'The user account has been successfully rejected.',
+        type: 'success',
+      });
     } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to reject account';
       console.error('Error rejecting account:', err);
-      setError(err instanceof Error ? err.message : 'Failed to reject account');
+      setError(errorMessage);
+      setMessageBox({
+        isOpen: true,
+        title: 'Rejection Failed',
+        message: errorMessage,
+        type: 'error',
+      });
     }
   };
 
@@ -208,6 +262,13 @@ const AccountsPage: React.FC = () => {
                   </div>
                 </div>
               </div>
+
+              {error && (
+                <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-lg shadow-md" role="alert">
+                  <p className="font-bold">Error</p>
+                  <p>{error}</p>
+                </div>
+              )}
 
               {/* Filters and Search */}
               <div className="bg-white dark:bg-neutral-800 rounded-2xl border-2 border-stone-200 dark:border-neutral-700 p-6 mb-6 shadow-lg">
@@ -315,137 +376,136 @@ const AccountsPage: React.FC = () => {
               </div>
 
               {/* Accounts Table */}
-              <div className="bg-white dark:bg-neutral-800 rounded-2xl border-2 border-stone-200 dark:border-neutral-700 shadow-lg overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead className="bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/30 border-b-2 border-stone-200 dark:border-neutral-700">
+              <div className="overflow-x-auto bg-white dark:bg-neutral-800 rounded-2xl border-2 border-stone-200 dark:border-neutral-700 shadow-lg">
+                <table className="w-full text-sm text-left text-neutral-600 dark:text-neutral-300">
+                  <thead className="text-xs text-neutral-700 dark:text-neutral-200 uppercase bg-stone-50 dark:bg-neutral-700/50 border-b-2 border-stone-200 dark:border-neutral-700">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
+                        User
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
+                        Email
+                      </th>
+                      <th className="px-6 py-4 text-center text-xs font-black uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
+                        Role
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
+                        Branch
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
+                        Registered
+                      </th>
+                      <th className="px-6 py-4 text-center text-xs font-black uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-stone-200 dark:divide-neutral-700">
+                    {isLoading ? (
                       <tr>
-                        <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
-                          User
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
-                          Email
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
-                          Role
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
-                          Branch
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
-                          Registered
-                        </th>
-                        <th className="px-6 py-4 text-center text-xs font-black uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
-                          Actions
-                        </th>
+                        <td colSpan={6} className="px-6 py-12 text-center">
+                          <div className="flex flex-col items-center gap-3">
+                            <div className="w-12 h-12 border-4 border-orange-200 dark:border-orange-900 border-t-orange-600 dark:border-t-orange-400 rounded-full animate-spin"></div>
+                            <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Loading accounts...</p>
+                          </div>
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody className="divide-y divide-stone-200 dark:divide-neutral-700">
-                      {isLoading ? (
-                        <tr>
-                          <td colSpan={6} className="px-6 py-12 text-center">
-                            <div className="flex flex-col items-center gap-3">
-                              <div className="w-12 h-12 border-4 border-orange-200 dark:border-orange-900 border-t-orange-600 dark:border-t-orange-400 rounded-full animate-spin"></div>
-                              <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Loading accounts...</p>
+                    ) : error ? (
+                      <tr>
+                        <td colSpan={6} className="px-6 py-12 text-center">
+                          <div className="flex flex-col items-center gap-3">
+                            <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                              <FontAwesomeIcon icon={faTimes} className="h-6 w-6 text-red-600 dark:text-red-400" />
                             </div>
-                          </td>
-                        </tr>
-                      ) : error ? (
-                        <tr>
-                          <td colSpan={6} className="px-6 py-12 text-center">
-                            <div className="flex flex-col items-center gap-3">
-                              <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-                                <FontAwesomeIcon icon={faTimes} className="h-6 w-6 text-red-600 dark:text-red-400" />
+                            <div>
+                              <p className="text-sm font-bold text-red-600 dark:text-red-400 mb-1">Failed to load accounts</p>
+                              <p className="text-xs text-neutral-500 dark:text-neutral-400">{error}</p>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    ) : filteredAccounts.length > 0 ? (
+                      filteredAccounts.map((account) => (
+                        <tr key={account.id} className="group hover:bg-orange-50/50 dark:hover:bg-orange-950/20 transition-colors duration-200">
+                          <td className="px-6 py-4 align-middle">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center shadow-md">
+                                <FontAwesomeIcon icon={faUserCircle} className="h-5 w-5 text-white" />
                               </div>
                               <div>
-                                <p className="text-sm font-bold text-red-600 dark:text-red-400 mb-1">Failed to load accounts</p>
-                                <p className="text-xs text-neutral-500 dark:text-neutral-400">{error}</p>
+                                <p className="text-sm font-black text-neutral-900 dark:text-white">{getFullName(account)}</p>
+                                <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400">ID: {account.id}</p>
                               </div>
                             </div>
                           </td>
-                        </tr>
-                      ) : filteredAccounts.length > 0 ? (
-                        filteredAccounts.map((account) => (
-                          <tr key={account.id} className="group hover:bg-orange-50/50 dark:hover:bg-orange-950/20 transition-colors duration-200">
-                            <td className="px-6 py-4">
-                              <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center shadow-md">
-                                  <FontAwesomeIcon icon={faUserCircle} className="h-5 w-5 text-white" />
+                          <td className="px-6 py-4 align-middle">
+                            <div className="flex items-center gap-2">
+                              <FontAwesomeIcon icon={faEnvelope} className="h-3.5 w-3.5 text-orange-500" />
+                              <span className="text-sm font-bold text-neutral-700 dark:text-neutral-300">{account.email}</span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 align-middle text-center">
+                            <span className={`inline-flex px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider ${
+                              account.role === 'Admin'
+                                ? 'bg-red-100 dark:bg-red-950/40 text-red-700 dark:text-red-400'
+                                : account.role === 'Cashier'
+                                ? 'bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400'
+                                : 'bg-green-100 dark:bg-green-950/40 text-green-700 dark:text-green-400'
+                            }`}>
+                              {account.role}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 align-middle">
+                            {account.branch ? (
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <FontAwesomeIcon icon={faBuilding} className="h-3.5 w-3.5 text-orange-500" />
+                                  <span className="text-sm font-bold text-neutral-700 dark:text-neutral-300">{account.branch.branchName}</span>
                                 </div>
-                                <div>
-                                  <p className="text-sm font-black text-neutral-900 dark:text-white">{getFullName(account)}</p>
-                                  <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400">ID: {account.id}</p>
+                                <div className="flex items-center gap-2 mt-1">
+                                  <FontAwesomeIcon icon={faMapMarkerAlt} className="h-3 w-3 text-neutral-400" />
+                                  <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">{account.branch.location}</span>
                                 </div>
                               </div>
-                            </td>
-                            <td className="px-6 py-4">
-                              <div className="flex items-center gap-2">
-                                <FontAwesomeIcon icon={faEnvelope} className="h-3.5 w-3.5 text-orange-500" />
-                                <span className="text-sm font-bold text-neutral-700 dark:text-neutral-300">{account.email}</span>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4">
-                              <span className={`inline-flex px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider ${
-                                account.role === 'Admin'
-                                  ? 'bg-red-100 dark:bg-red-950/40 text-red-700 dark:text-red-400'
-                                  : account.role === 'Cashier'
-                                  ? 'bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400'
-                                  : 'bg-green-100 dark:bg-green-950/40 text-green-700 dark:text-green-400'
-                              }`}>
-                                {account.role}
-                              </span>
-                            </td>
-                            <td className="px-6 py-4">
-                              {account.branch ? (
-                                <div>
-                                  <div className="flex items-center gap-2">
-                                    <FontAwesomeIcon icon={faBuilding} className="h-3.5 w-3.5 text-orange-500" />
-                                    <span className="text-sm font-bold text-neutral-700 dark:text-neutral-300">{account.branch.branchName}</span>
-                                  </div>
-                                  <div className="flex items-center gap-2 mt-1">
-                                    <FontAwesomeIcon icon={faMapMarkerAlt} className="h-3 w-3 text-neutral-400" />
-                                    <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">{account.branch.location}</span>
-                                  </div>
-                                </div>
-                              ) : (
-                                <span className="text-sm font-medium text-neutral-400 dark:text-neutral-500">No branch</span>
+                            ) : (
+                              <span className="text-sm font-medium text-neutral-400 dark:text-neutral-500">No branch</span>
+                            )}
+                          </td>
+                          <td className="px-6 py-4 align-middle">
+                            <div className="flex items-center gap-2">
+                              <FontAwesomeIcon icon={faCalendar} className="h-3.5 w-3.5 text-orange-500" />
+                              <span className="text-sm font-bold text-neutral-700 dark:text-neutral-300">{formatDate(account.createdAt)}</span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 align-middle">
+                            <div className="flex items-center justify-center gap-2">
+                              {account.status === 'Pending' && (
+                                <>
+                                  <button 
+                                    onClick={() => handleApprove(account.id)}
+                                    className="w-9 h-9 rounded-lg bg-green-100 dark:bg-green-950/40 text-green-600 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/40 transition-colors duration-200 flex items-center justify-center group/btn"
+                                    title="Approve"
+                                  >
+                                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 group-hover/btn:scale-110 transition-transform" />
+                                  </button>
+                                  <button 
+                                    onClick={() => openRejectDialog(account.id)}
+                                    className="w-9 h-9 rounded-lg bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40 transition-colors duration-200 flex items-center justify-center group/btn"
+                                    title="Reject"
+                                  >
+                                    <FontAwesomeIcon icon={faTimes} className="h-4 w-4 group-hover/btn:scale-110 transition-transform" />
+                                  </button>
+                                </>
                               )}
-                            </td>
-                            <td className="px-6 py-4">
-                              <div className="flex items-center gap-2">
-                                <FontAwesomeIcon icon={faCalendar} className="h-3.5 w-3.5 text-orange-500" />
-                                <span className="text-sm font-bold text-neutral-700 dark:text-neutral-300">{formatDate(account.createdAt)}</span>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4">
-                              <div className="flex items-center justify-center gap-2">
-                                {account.status === 'Pending' && (
-                                  <>
-                                    <button 
-                                      onClick={() => handleApprove(account.id)}
-                                      className="w-9 h-9 rounded-lg bg-green-100 dark:bg-green-950/40 text-green-600 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/40 transition-colors duration-200 flex items-center justify-center group/btn"
-                                      title="Approve"
-                                    >
-                                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 group-hover/btn:scale-110 transition-transform" />
-                                    </button>
-                                    <button 
-                                      onClick={() => handleReject(account.id)}
-                                      className="w-9 h-9 rounded-lg bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40 transition-colors duration-200 flex items-center justify-center group/btn"
-                                      title="Reject"
-                                    >
-                                      <FontAwesomeIcon icon={faTimes} className="h-4 w-4 group-hover/btn:scale-110 transition-transform" />
-                                    </button>
-                                  </>
-                                )}
-                                <button className="w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors duration-200 flex items-center justify-center group/btn"
-                                  title="View Details"
-                                >
-                                  <FontAwesomeIcon icon={faEye} className="h-4 w-4 group-hover/btn:scale-110 transition-transform" />
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))
+                              <button className="w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors duration-200 flex items-center justify-center group/btn"
+                                title="View Details"
+                              >
+                                <FontAwesomeIcon icon={faEye} className="h-4 w-4 group-hover/btn:scale-110 transition-transform" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
                       ) : (
                         <tr>
                           <td colSpan={6} className="px-6 py-12 text-center">
@@ -457,14 +517,27 @@ const AccountsPage: React.FC = () => {
                           </td>
                         </tr>
                       )}
-                    </tbody>
-                  </table>
-                </div>
+                  </tbody>
+                </table>
               </div>
             </div>
           </main>
         </div>
       </div>
+      <MessageBox
+        isOpen={messageBox.isOpen}
+        onClose={() => setMessageBox({ ...messageBox, isOpen: false })}
+        title={messageBox.title}
+        message={messageBox.message}
+        type={messageBox.type}
+      />
+      <ConfirmationDialog
+        isOpen={rejectionDialog.isOpen}
+        onClose={() => setRejectionDialog({ isOpen: false, accountId: null })}
+        onConfirm={confirmReject}
+        title="Confirm Rejection"
+        message="Are you sure you want to reject this account? This action cannot be undone."
+      />
     </div>
   );
 };

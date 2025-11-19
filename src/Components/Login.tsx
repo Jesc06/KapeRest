@@ -64,7 +64,7 @@ const Login: React.FC = () => {
         return;
       }
 
-      // 🔥 Save tokens
+      //Save tokens
       if (data.token) {
         localStorage.setItem("accessToken", data.token);
       }
@@ -80,7 +80,7 @@ const Login: React.FC = () => {
 
       console.log("Decoded Role:", role);
 
-      // 🔥 NAVIGATION BASED ON DECODED ROLE
+      //NAVIGATION BASED ON DECODED ROLE
       if (role === "admin") navigate("/admin");
       else if (role === "staff") navigate("/staff");
       else if (role === "cashier") navigate("/cashier");
