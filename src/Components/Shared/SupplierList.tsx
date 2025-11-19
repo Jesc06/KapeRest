@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faSearch, faTruck, faEdit, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faSearch, faTruck, faEdit, faTrash, faPlus, faTimes, faSave } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from '../Staff/StaffSidebar';
 import LogoutPanel from './LogoutPanel';
 import { API_BASE_URL } from '../../config/api';
+import MessageBox from './MessageBox';
 
 interface Supplier {
   id: number;
@@ -24,6 +25,13 @@ const SupplierList: React.FC = () => {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [editingSupplier, setEditingSupplier] = useState<Supplier | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [showMessageBox, setShowMessageBox] = useState(false);
+  const [messageType, setMessageType] = useState<'success' | 'error'>('success');
+  const [messageText, setMessageText] = useState('');
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
 
   // Fetch suppliers from API
   useEffect(() => {
@@ -66,13 +74,81 @@ const SupplierList: React.FC = () => {
     supplier.address.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleEdit = (supplierId: number) => {
-    navigate(`/staff/update-supplier/${supplierId}`);
+  const handleEdit = (supplier: Supplier) => {
+    setEditingSupplier({ ...supplier });
   };
 
-  const handleDelete = (supplierId: number) => {
-    if (window.confirm('Are you sure you want to delete this supplier?')) {
-      setSuppliers(suppliers.filter(s => s.id !== supplierId));
+  const handleSaveEdit = async () => {
+    if (!editingSupplier) return;
+
+    setIsSaving(true);
+    try {
+      const token = localStorage.getItem('accessToken');
+      const response = await fetch(`${API_BASE_URL}/Supplier/UpdateSupplier`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editingSupplier),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update supplier');
+      }
+
+      // Update local state
+      setSuppliers(suppliers.map(s => s.id === editingSupplier.id ? editingSupplier : s));
+      setEditingSupplier(null);
+      
+      setMessageType('success');
+      setMessageText('Supplier updated successfully!');
+      setShowMessageBox(true);
+    } catch (err) {
+      setMessageType('error');
+      setMessageText('Failed to update supplier. Please try again.');
+      setShowMessageBox(true);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleDeleteClick = (supplierId: number) => {
+    setDeleteId(supplierId);
+    setShowDeleteConfirm(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteId) return;
+
+    try {
+      const token = localStorage.getItem('accessToken');
+      const response = await fetch(`${API_BASE_URL}/Supplier/DeleteSupplier/${deleteId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete supplier');
+      }
+
+      // Update local state
+      setSuppliers(suppliers.filter(s => s.id !== deleteId));
+      setShowDeleteConfirm(false);
+      setDeleteId(null);
+      
+      setMessageType('success');
+      setMessageText('Supplier deleted successfully!');
+      setShowMessageBox(true);
+    } catch (err) {
+      setShowDeleteConfirm(false);
+      setDeleteId(null);
+      setMessageType('error');
+      setMessageText('Failed to delete supplier. Please try again.');
+      setShowMessageBox(true);
     }
   };
 
@@ -239,14 +315,14 @@ const SupplierList: React.FC = () => {
                             <td className="px-6 py-4 whitespace-nowrap text-center">
                               <div className="flex items-center justify-center gap-2">
                                 <button
-                                  onClick={() => handleEdit(supplier.id)}
+                                  onClick={() => handleEdit(supplier)}
                                   className="p-2 bg-blue-100 hover:bg-blue-200 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-400 rounded-lg transition-all duration-200 active:scale-95"
                                   title="Edit supplier"
                                 >
                                   <FontAwesomeIcon icon={faEdit} className="h-4 w-4" />
                                 </button>
                                 <button
-                                  onClick={() => handleDelete(supplier.id)}
+                                  onClick={() => handleDeleteClick(supplier.id)}
                                   className="p-2 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 rounded-lg transition-all duration-200 active:scale-95"
                                   title="Delete supplier"
                                 >
@@ -291,6 +367,156 @@ const SupplierList: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Edit Supplier Modal */}
+      {editingSupplier && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-gradient-to-r from-orange-500 to-orange-600 p-6 rounded-t-2xl">
+              <div className="flex items-center justify-between">
+                <h3 className="text-2xl font-bold text-white">Edit Supplier</h3>
+                <button
+                  onClick={() => setEditingSupplier(null)}
+                  className="text-white hover:bg-white/20 rounded-lg p-2 transition-colors"
+                >
+                  <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Supplier Name</label>
+                <input
+                  type="text"
+                  value={editingSupplier.supplierName}
+                  onChange={(e) => setEditingSupplier({ ...editingSupplier, supplierName: e.target.value })}
+                  className="w-full px-4 py-2.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Contact Person</label>
+                <input
+                  type="text"
+                  value={editingSupplier.contactPerson}
+                  onChange={(e) => setEditingSupplier({ ...editingSupplier, contactPerson: e.target.value })}
+                  className="w-full px-4 py-2.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Phone Number</label>
+                <input
+                  type="text"
+                  value={editingSupplier.phoneNumber}
+                  onChange={(e) => setEditingSupplier({ ...editingSupplier, phoneNumber: e.target.value })}
+                  className="w-full px-4 py-2.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Email</label>
+                <input
+                  type="email"
+                  value={editingSupplier.email}
+                  onChange={(e) => setEditingSupplier({ ...editingSupplier, email: e.target.value })}
+                  className="w-full px-4 py-2.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Address</label>
+                <textarea
+                  value={editingSupplier.address}
+                  onChange={(e) => setEditingSupplier({ ...editingSupplier, address: e.target.value })}
+                  rows={3}
+                  className="w-full px-4 py-2.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500"
+                />
+              </div>
+            </div>
+            
+            <div className="p-6 bg-neutral-50 dark:bg-neutral-800/50 rounded-b-2xl flex gap-3">
+              <button
+                onClick={handleSaveEdit}
+                disabled={isSaving}
+                className="flex-1 px-4 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {isSaving ? (
+                  <>
+                    <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span>Saving...</span>
+                  </>
+                ) : (
+                  <>
+                    <FontAwesomeIcon icon={faSave} className="h-4 w-4" />
+                    <span>Save Changes</span>
+                  </>
+                )}
+              </button>
+              <button
+                onClick={() => setEditingSupplier(null)}
+                disabled={isSaving}
+                className="px-4 py-2.5 bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 text-neutral-900 dark:text-white font-medium rounded-lg disabled:opacity-50"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Dialog */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl max-w-md w-full">
+            <div className="p-6">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                  <FontAwesomeIcon icon={faTrash} className="h-6 w-6 text-red-600 dark:text-red-400" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-neutral-900 dark:text-white">Delete Supplier</h3>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400">This action cannot be undone</p>
+                </div>
+              </div>
+              
+              <p className="text-neutral-700 dark:text-neutral-300 mb-6">
+                Are you sure you want to delete this supplier? All associated data will be permanently removed.
+              </p>
+              
+              <div className="flex gap-3">
+                <button
+                  onClick={handleDeleteConfirm}
+                  className="flex-1 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors"
+                >
+                  Delete
+                </button>
+                <button
+                  onClick={() => {
+                    setShowDeleteConfirm(false);
+                    setDeleteId(null);
+                  }}
+                  className="flex-1 px-4 py-2.5 bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 text-neutral-900 dark:text-white font-medium rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MessageBox */}
+      {showMessageBox && (
+        <MessageBox
+          isOpen={showMessageBox}
+          type={messageType}
+          title={messageType === 'success' ? 'Success' : 'Error'}
+          message={messageText}
+          onClose={() => setShowMessageBox(false)}
+        />
+      )}
     </div>
   );
 };
