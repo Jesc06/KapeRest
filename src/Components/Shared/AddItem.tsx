@@ -11,10 +11,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from '../Staff/StaffSidebar';
 import LogoutPanel from './LogoutPanel';
+import { API_BASE_URL } from '../../config/api';
 
 interface ItemFormData {
   itemName: string;
   price: string;
+  category: string;
   description: string;
   image: File | null;
   imagePreview: string | null;
@@ -31,6 +33,7 @@ const AddItem: React.FC = () => {
   const [formData, setFormData] = useState<ItemFormData>({
     itemName: '',
     price: '',
+    category: '',
     description: '',
     image: null,
     imagePreview: null,
@@ -39,7 +42,7 @@ const AddItem: React.FC = () => {
   const [productItem, setProductItem] = useState('');
   const [quantity, setQuantity] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -88,6 +91,11 @@ const AddItem: React.FC = () => {
       return;
     }
 
+    if (!formData.category.trim()) {
+      setError('Category is required');
+      return;
+    }
+
     if (!formData.description.trim()) {
       setError('Description is required');
       return;
@@ -101,22 +109,70 @@ const AddItem: React.FC = () => {
     setIsLoading(true);
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const token = localStorage.getItem('accessToken');
+      
+      if (!token) {
+        throw new Error('No authentication token found. Please login again.');
+      }
+      
+      // Create FormData for file upload
+      const apiFormData = new FormData();
+      apiFormData.append('Item_name', formData.itemName);
+      apiFormData.append('Price', formData.price);
+      apiFormData.append('Category', formData.category);
+      apiFormData.append('Description', formData.description);
+      apiFormData.append('Image', formData.image);
+      apiFormData.append('IsAvailable', 'Yes');
+      
+      // Build Products.Json from productItem and quantity
+      let productsJsonString = '[]'; // Default empty array
+      
+      if (productItem.trim() && quantity.trim()) {
+        const productsPayload = [{
+          ProductOfSupplierId: parseInt(productItem),
+          QuantityUsed: parseInt(quantity)
+        }];
+        productsJsonString = JSON.stringify(productsPayload);
+      }
+      
+      apiFormData.append('ProductsJson', productsJsonString);
+      console.log('ProductsJson being sent:', productsJsonString);
 
+      const response = await fetch(`${API_BASE_URL}/MenuItem/CreateMenuItem`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: apiFormData
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error response:', errorText);
+        throw new Error(errorText || 'Failed to add menu item');
+      }
+
+      const result = await response.json();
+      console.log('Menu item created successfully:', result);
+      
       setSuccess('Item added successfully!');
       setFormData({
         itemName: '',
         price: '',
+        category: '',
         description: '',
         image: null,
         imagePreview: null,
       });
+      setProductItem('');
+      setQuantity('');
 
       setTimeout(() => {
         navigate('/staff');
       }, 2000);
     } catch (err) {
-      setError('Failed to add item. Please try again.');
+      console.error('Error adding menu item:', err);
+      setError(err instanceof Error ? err.message : 'Failed to add item. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -230,6 +286,27 @@ const AddItem: React.FC = () => {
                       disabled={isLoading}
                     />
                   </div>
+                </div>
+
+                {/* Category */}
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    Category <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    name="category"
+                    value={formData.category}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50 appearance-none cursor-pointer"
+                    disabled={isLoading}
+                  >
+                    <option value="">Select category</option>
+                    <option value="Coffee">Coffee</option>
+                    <option value="Non-Coffee">Non-Coffee</option>
+                    <option value="Food">Food</option>
+                    <option value="Dessert">Dessert</option>
+                    <option value="Beverage">Beverage</option>
+                  </select>
                 </div>
 
                 {/* Description */}
