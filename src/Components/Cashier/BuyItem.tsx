@@ -1,20 +1,7 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar.tsx';
 import MainPanel from './MainPanel.tsx';
-import { API_BASE_URL } from '../../config/api';
-
-interface MenuItem {
-  id: number;
-  itemName: string;
-  price: number;
-  category: string;
-  description: string;
-  isAvailable: string;
-  image: string | null; // base64 string or null
-  cashierId: string;
-  branchId: number | null;
-}
 
 interface CartItem {
   id: number;
@@ -22,77 +9,20 @@ interface CartItem {
   price: number;
   quantity: number;
   category: string;
+  description: string;
   image: string;
 }
 
 const BuyItem: React.FC = () => {
   const navigate = useNavigate();
-  const [searchText, setSearchText] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [userRole] = useState<string>('Cashier'); // Mock user role - can be fetched from auth/context
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-  const [_error, setError] = useState<string | null>(null);
-
-  // Fetch menu items from API
-  useEffect(() => {
-    const fetchMenuItems = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        
-        const token = localStorage.getItem('accessToken');
-        const response = await fetch(`${API_BASE_URL}/MenuItem/GetAllMenuItems`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch menu items: ${response.status}`);
-        }
-
-        const data: MenuItem[] = await response.json();
-        console.log('Menu items received:', data);
-        setMenuItems(data.filter(item => item.isAvailable === 'true' || item.isAvailable === '1'));
-      } catch (err) {
-        console.error('Error fetching menu items:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load menu items');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchMenuItems();
-  }, []);
-
-  // Convert MenuItem to product format for display
-  const products = menuItems.map(item => ({
-    id: item.id,
-    name: item.itemName,
-    price: Number(item.price),
-    category: item.category,
-    image: item.image ? `data:image/jpeg;base64,${item.image}` : 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=300&h=300&fit=crop', // default coffee image
-  }));
-
-  // Get unique categories from menu items
-  const categories = ['All', ...Array.from(new Set(menuItems.map(item => item.category)))]
-
-  // Filter products based on search and category
-  const filteredProducts = useMemo(() => {
-    return products.filter(product => {
-      const matchesSearch = product.name.toLowerCase().includes(searchText.toLowerCase());
-      const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
-      return matchesSearch && matchesCategory;
-    });
-  }, [searchText, selectedCategory]);
 
   // Add item to cart
-  const handleAddToCart = (product: typeof products[0]) => {
+  const handleAddToCart = (product: { id: number; name: string; price: number; category: string; description: string; image: string }) => {
     setCart(prevCart => {
       const existingItem = prevCart.find(item => item.id === product.id);
       if (existingItem) {
@@ -176,14 +106,8 @@ const BuyItem: React.FC = () => {
 
         {/* Main Panel */}
         <MainPanel
-          filteredProducts={filteredProducts}
-          categories={categories}
-          searchText={searchText}
-          selectedCategory={selectedCategory}
-          onSearchChange={setSearchText}
-          onCategoryChange={setSelectedCategory}
-          onAddToCart={handleAddToCart}
           cart={cart}
+          onAddToCart={handleAddToCart}
           onRemoveFromCart={handleRemoveFromCart}
           onUpdateQuantity={handleUpdateQuantity}
           total={total}

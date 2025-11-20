@@ -1,13 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoffee, faSearch, faPlus, faMinus, faTrash, faCheck, faPause, faCreditCard, faBars, faShoppingCart, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import LogoutPanel from '../Shared/LogoutPanel';
+import { API_BASE_URL } from '../../config/api';
+
+interface MenuItem {
+  id: number;
+  itemName: string;
+  price: number;
+  category: string;
+  description: string;
+  isAvailable: string;
+  image: string;
+  cashierId?: string;
+  branchId?: number | null;
+}
 
 interface Product {
   id: number;
   name: string;
   price: number;
   category: string;
+  description: string;
   image: string;
 }
 
@@ -16,13 +30,6 @@ interface CartItem extends Product {
 }
 
 interface MainPanelProps {
-  filteredProducts: Product[];
-  categories: string[];
-  searchText: string;
-  selectedCategory: string;
-  onSearchChange: (text: string) => void;
-  onCategoryChange: (category: string) => void;
-  onAddToCart: (product: Product) => void;
   cart: CartItem[];
   onRemoveFromCart: (productId: number) => void;
   onUpdateQuantity: (productId: number, quantity: number) => void;
@@ -36,16 +43,10 @@ interface MainPanelProps {
   onToggleSidebarExpand?: () => void;
   onLogout?: () => void;
   userRole?: string;
+  onAddToCart?: (product: Product) => void;
 }
 
 const MainPanel: React.FC<MainPanelProps> = ({
-  filteredProducts,
-  categories,
-  searchText,
-  selectedCategory,
-  onSearchChange,
-  onCategoryChange,
-  onAddToCart,
   cart,
   onRemoveFromCart,
   onUpdateQuantity,
@@ -58,9 +59,114 @@ const MainPanel: React.FC<MainPanelProps> = ({
   sidebarExpanded = true,
   onToggleSidebarExpand,
   userRole = 'Cashier',
+  onAddToCart,
 }) => {
   const [showTaxDiscount, setShowTaxDiscount] = useState(false);
   const [selectedDiscount, setSelectedDiscount] = useState<number | string>('');
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchText, setSearchText] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [categories, setCategories] = useState<string[]>(['All']);
+
+  // Fetch menu items from API
+  useEffect(() => {
+    const fetchMenuItems = async () => {
+      try {
+        setLoading(true);
+        
+        // Get token and decode to get cashierId
+        const token = localStorage.getItem('accessToken');
+        
+        if (!token) {
+          console.error('No access token found');
+          setLoading(false);
+          return;
+        }
+        
+        // Decode JWT token to get cashierId
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        
+        const decodedToken = JSON.parse(jsonPayload);
+        const cashierId = decodedToken.cashierId || decodedToken.uid;
+        
+        if (!cashierId) {
+          console.error('No cashier ID found in token');
+          setLoading(false);
+          return;
+        }
+        
+        const response = await fetch(`${API_BASE_URL}/MenuItem/GetAllMenuItem?cashierId=${cashierId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch menu items');
+        }
+        const data: MenuItem[] = await response.json();
+        
+        console.log('API Response:', data);
+        console.log('Number of items:', data.length);
+        
+        // Transform API data to Product format
+        const transformedProducts: Product[] = data.map(item => {
+          // Handle base64 image or regular URL
+          let imageUrl = item.image;
+          if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('data:')) {
+            imageUrl = `data:image/jpeg;base64,${imageUrl}`;
+          }
+          
+          return {
+            id: item.id,
+            name: item.itemName,
+            price: item.price,
+            category: item.category,
+            description: item.description,
+            image: imageUrl || '',
+          };
+        });
+        
+        console.log('Transformed products:', transformedProducts);
+        
+        setProducts(transformedProducts);
+        
+        // Extract unique categories
+        const uniqueCategories = ['All', ...Array.from(new Set(data.map(item => item.category)))];
+        setCategories(uniqueCategories);
+        console.log('Categories:', uniqueCategories);
+      } catch (error) {
+        console.error('Error fetching menu items:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMenuItems();
+  }, []);
+
+  // Filter products based on search and category
+  const filteredProducts = products.filter(product => {
+    const matchesSearch = product.name.toLowerCase().includes(searchText.toLowerCase()) ||
+                         product.description.toLowerCase().includes(searchText.toLowerCase());
+    const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  // Add product to cart
+  const handleAddToCart = (product: Product) => {
+    if (onAddToCart) {
+      onAddToCart(product);
+    } else {
+      console.log('Adding to cart:', product);
+    }
+  };
 
   // Sample discount data from database - you can replace this with API call
   const discountOptions = [
@@ -113,7 +219,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
               type="text"
               placeholder="Search items..."
               value={searchText}
-              onChange={e => onSearchChange(e.target.value)}
+              onChange={e => setSearchText(e.target.value)}
               className="flex-1 bg-transparent text-sm font-medium text-neutral-900 dark:text-white placeholder:text-neutral-500 dark:placeholder:text-neutral-400 shadow-none focus:outline-none"
             />
           </div>
@@ -150,7 +256,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
                 {categories.map(category => (
                   <button
                     key={category}
-                    onClick={() => onCategoryChange(category)}
+                    onClick={() => setSelectedCategory(category)}
                     className={`group rounded-full px-6 py-3 text-sm font-bold transition-all duration-300 border-2 whitespace-nowrap relative overflow-hidden ${
                       selectedCategory === category
                         ? 'border-transparent bg-gradient-to-r from-orange-600 to-orange-500 text-white shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40 scale-105'
@@ -180,12 +286,20 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
             {/* Products Grid (Scrollable) */}
             <div className="flex-1 overflow-y-auto px-6 py-5 scroll-smooth">
-              <div className="grid gap-6 auto-rows-max" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}>
-                {filteredProducts.length > 0 ? (
-                  filteredProducts.map(product => (
+              {loading ? (
+                <div className="flex items-center justify-center py-20">
+                  <div className="text-center">
+                    <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-orange-600 border-r-transparent"></div>
+                    <p className="mt-4 text-sm font-medium text-neutral-600 dark:text-neutral-400">Loading menu items...</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid gap-6 auto-rows-max" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}>
+                  {filteredProducts.length > 0 ? (
+                    filteredProducts.map(product => (
                     <div
                       key={product.id}
-                      onClick={() => onAddToCart(product)}
+                      onClick={() => handleAddToCart(product)}
                       className="product-card-motion group cursor-pointer rounded-2xl border-2 border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/20 hover:border-orange-400 dark:hover:border-orange-500 active:scale-95 hover:-translate-y-2 overflow-hidden flex flex-col relative"
                     >
                       {/* Product Image */}
@@ -216,6 +330,11 @@ const MainPanel: React.FC<MainPanelProps> = ({
                           <h4 className="font-bold text-base leading-tight text-neutral-900 dark:text-white line-clamp-2 mb-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">
                             {product.name}
                           </h4>
+                          {product.description && (
+                            <p className="text-xs text-stone-600 dark:text-stone-400 line-clamp-2 mb-2">
+                              {product.description}
+                            </p>
+                          )}
                           <div className="flex items-center gap-2 text-[11px] text-stone-500 dark:text-stone-400">
                             <div className="h-1 w-1 rounded-full bg-orange-500"></div>
                             <span className="font-medium">{product.category}</span>
@@ -233,7 +352,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              onAddToCart(product);
+                              handleAddToCart(product);
                             }}
                             className="group/btn inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 dark:from-orange-500 dark:to-orange-400 dark:hover:from-orange-600 dark:hover:to-orange-500 p-3 text-white transition-all duration-200 hover:shadow-lg hover:shadow-orange-500/50 active:scale-90 shadow-md hover:scale-110"
                           >
@@ -262,6 +381,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
                   </div>
                 )}
               </div>
+              )}
             </div>
           </div>
         </div>
