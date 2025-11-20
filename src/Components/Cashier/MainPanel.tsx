@@ -386,10 +386,10 @@ const MainPanel: React.FC<MainPanelProps> = ({
           </div>
         </div>
 
-        {/* Cart Section */}
-        <div className="w-full lg:w-80 lg:min-w-[320px] xl:w-96 xl:min-w-[384px] flex flex-col rounded-2xl border-2 border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 shadow-xl shadow-stone-200/50 dark:shadow-neutral-800/50 overflow-hidden flex-shrink-0 max-h-full">
-          {/* Cart Header */}
-          <div className="border-b-2 border-stone-200 dark:border-neutral-700 bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 dark:from-orange-600 dark:via-orange-700 dark:to-amber-700 px-5 py-4 flex-shrink-0 relative overflow-hidden">
+        {/* Cart Section - More spacious */}
+        <div className="w-full lg:w-96 lg:min-w-[384px] xl:w-[420px] xl:min-w-[420px] flex flex-col rounded-2xl border-2 border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 shadow-xl shadow-stone-200/50 dark:shadow-neutral-800/50 overflow-hidden flex-shrink-0 h-full">
+          {/* Cart Header - More breathing room */}
+          <div className="border-b-2 border-stone-200 dark:border-neutral-700 bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 dark:from-orange-600 dark:via-orange-700 dark:to-amber-700 px-6 py-5 flex-shrink-0 relative overflow-hidden">
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-10">
               <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-3xl -mr-16 -mt-16"></div>
@@ -397,96 +397,105 @@ const MainPanel: React.FC<MainPanelProps> = ({
             </div>
             
             <div className="relative flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 shadow-lg">
-                  <FontAwesomeIcon icon={faShoppingCart} className="h-5 w-5 text-white" />
+              <div className="flex items-center gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 shadow-lg">
+                  <FontAwesomeIcon icon={faShoppingCart} className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-base font-black text-white tracking-tight">Shopping Cart</h3>
-                  <p className="text-xs text-orange-100 font-medium">{cart.length} {cart.length === 1 ? 'item' : 'items'}</p>
+                  <h3 className="text-lg font-black text-white tracking-tight">Shopping Cart</h3>
+                  <p className="text-sm text-orange-100 font-medium mt-0.5">{cart.length} {cart.length === 1 ? 'item' : 'items'}</p>
                 </div>
               </div>
               
               <div className="flex items-center gap-2">
-                <div className="px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-sm border border-white/30">
-                  <span className="font-black text-sm text-white">{cart.reduce((sum, item) => sum + item.quantity, 0)}</span>
+                <div className="px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30">
+                  <span className="font-black text-base text-white">{cart.reduce((sum, item) => sum + item.quantity, 0)}</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Cart Items (Scrollable) */}
-          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 scroll-smooth min-h-0">
+          {/* Cart Items (Scrollable) - More spacing */}
+          <div className="flex-1 overflow-y-auto px-5 py-5 space-y-4 scroll-smooth min-h-0">
             {cart.length > 0 ? (
               cart.map((item, index) => (
                 <div
                   key={item.id}
-                  className="cart-item-motion group flex items-center gap-3 rounded-xl border-2 border-stone-200 dark:border-neutral-700 bg-gradient-to-br from-white to-stone-50/50 dark:from-neutral-800 dark:to-neutral-850/50 p-3.5 shadow-md transition-all duration-300 hover:shadow-xl hover:shadow-orange-500/10 hover:border-orange-400 dark:hover:border-orange-500 min-w-0 relative overflow-hidden"
+                  className="cart-item-motion group flex flex-col gap-3 rounded-xl border-2 border-stone-200 dark:border-neutral-700 bg-gradient-to-br from-white to-stone-50/50 dark:from-neutral-800 dark:to-neutral-850/50 p-4 shadow-md transition-all duration-300 hover:shadow-xl hover:shadow-orange-500/10 hover:border-orange-400 dark:hover:border-orange-500 relative overflow-hidden"
                   style={{ animationDelay: `${index * 0.05}s` }}
                 >
                   {/* Background Decoration */}
                   <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-orange-500/5 to-transparent rounded-full blur-2xl"></div>
                   
-                  {/* Icon */}
-                  <div className="relative flex h-10 w-10 min-w-[40px] items-center justify-center rounded-xl bg-gradient-to-br from-orange-600 to-orange-500 text-white font-bold transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 flex-shrink-0 shadow-lg shadow-orange-500/30">
-                    <FontAwesomeIcon icon={faCoffee} className="h-5 w-5" />
-                  </div>
-
-                  {/* Item Info */}
-                  <div className="flex-1 min-w-0 max-w-[110px]">
-                    <p className="font-bold text-sm text-neutral-900 dark:text-white leading-tight line-clamp-1 mb-1">
-                      {item.name}
-                    </p>
-                    <div className="flex items-center gap-1.5 text-[11px] text-orange-600 dark:text-orange-400 font-semibold">
-                      <span>₱{item.price}</span>
-                      <span className="text-stone-400 dark:text-stone-500">×</span>
-                      <span>{item.quantity}</span>
+                  {/* Top Row: Icon + Item Info + Remove */}
+                  <div className="relative flex items-start gap-3">
+                    {/* Icon */}
+                    <div className="flex h-11 w-11 min-w-[44px] items-center justify-center rounded-xl bg-gradient-to-br from-orange-600 to-orange-500 text-white font-bold transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 flex-shrink-0 shadow-lg shadow-orange-500/30">
+                      <FontAwesomeIcon icon={faCoffee} className="h-5 w-5" />
                     </div>
+
+                    {/* Item Info */}
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-sm text-neutral-900 dark:text-white leading-tight mb-1.5 line-clamp-2">
+                        {item.name}
+                      </p>
+                      <div className="flex items-center gap-1.5 text-xs text-orange-600 dark:text-orange-400 font-semibold flex-wrap">
+                        <span>₱{item.price.toFixed(2)}</span>
+                        <span className="text-stone-400 dark:text-stone-500">×</span>
+                        <span>{item.quantity}</span>
+                      </div>
+                    </div>
+
+                    {/* Remove Button */}
+                    <button
+                      onClick={() => onRemoveFromCart(item.id)}
+                      className="flex h-8 w-8 min-w-[32px] items-center justify-center rounded-lg bg-gradient-to-br from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white font-semibold transition-all duration-200 active:scale-90 hover:scale-110 flex-shrink-0 shadow-md shadow-red-500/30 hover:shadow-lg"
+                    >
+                      <FontAwesomeIcon icon={faTrash} className="h-3.5 w-3.5" />
+                    </button>
                   </div>
 
-                  {/* Quantity Controls */}
-                  <div className="flex items-center gap-1.5 flex-shrink-0 bg-white dark:bg-neutral-900 rounded-lg p-1 border border-stone-200 dark:border-neutral-700">
-                    <button
-                      onClick={() => onUpdateQuantity(item.id, Math.max(1, item.quantity - 1))}
-                      className="flex h-7 w-7 min-w-[28px] items-center justify-center rounded-md bg-stone-100 dark:bg-neutral-800 hover:bg-orange-100 dark:hover:bg-orange-900/30 text-neutral-900 dark:text-white font-bold text-sm transition-all duration-200 active:scale-90 hover:text-orange-600 dark:hover:text-orange-400 border border-transparent hover:border-orange-300 dark:hover:border-orange-600"
-                    >
-                      <FontAwesomeIcon icon={faMinus} className="h-3 w-3" />
-                    </button>
-                    <span className="w-6 min-w-[24px] text-center font-bold text-xs text-neutral-900 dark:text-white">
-                      {item.quantity}
-                    </span>
-                    <button
-                      onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
-                      className="flex h-7 w-7 min-w-[28px] items-center justify-center rounded-md bg-orange-100 dark:bg-orange-900/30 hover:bg-orange-200 dark:hover:bg-orange-900/50 text-orange-600 dark:text-orange-400 font-bold text-sm transition-all duration-200 active:scale-90 border border-transparent hover:border-orange-300 dark:hover:border-orange-600"
-                    >
-                      <FontAwesomeIcon icon={faPlus} className="h-3 w-3" />
-                    </button>
-                  </div>
+                  {/* Bottom Row: Quantity Controls + Line Total */}
+                  <div className="relative flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-stone-200 dark:border-neutral-700">
+                    {/* Quantity Controls */}
+                    <div className="flex items-center gap-1.5 flex-shrink-0 bg-white dark:bg-neutral-900 rounded-lg p-1 border-2 border-stone-200 dark:border-neutral-700 shadow-sm">
+                      <button
+                        onClick={() => onUpdateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                        className="flex h-8 w-8 min-w-[32px] items-center justify-center rounded-md bg-stone-100 dark:bg-neutral-800 hover:bg-orange-100 dark:hover:bg-orange-900/30 text-neutral-900 dark:text-white font-bold transition-all duration-200 active:scale-90 hover:text-orange-600 dark:hover:text-orange-400 border border-transparent hover:border-orange-300 dark:hover:border-orange-600"
+                      >
+                        <FontAwesomeIcon icon={faMinus} className="h-3.5 w-3.5" />
+                      </button>
+                      <span className="w-9 min-w-[36px] text-center font-bold text-sm text-neutral-900 dark:text-white px-1">
+                        {item.quantity}
+                      </span>
+                      <button
+                        onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
+                        className="flex h-8 w-8 min-w-[32px] items-center justify-center rounded-md bg-orange-100 dark:bg-orange-900/30 hover:bg-orange-200 dark:hover:bg-orange-900/50 text-orange-600 dark:text-orange-400 font-bold transition-all duration-200 active:scale-90 border border-transparent hover:border-orange-300 dark:hover:border-orange-600"
+                      >
+                        <FontAwesomeIcon icon={faPlus} className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
 
-                  {/* Remove Button */}
-                  <button
-                    onClick={() => onRemoveFromCart(item.id)}
-                    className="flex h-8 w-8 min-w-[32px] items-center justify-center rounded-lg bg-gradient-to-br from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white font-semibold text-xs transition-all duration-200 active:scale-90 hover:scale-110 flex-shrink-0 shadow-md shadow-red-500/30 hover:shadow-lg"
-                  >
-                    <FontAwesomeIcon icon={faTrash} className="h-3.5 w-3.5" />
-                  </button>
-
-                  {/* Line Total */}
-                  <div className="text-right text-xs font-black bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-400 dark:to-orange-300 bg-clip-text text-transparent whitespace-nowrap min-w-[60px] flex-shrink-0">
-                    ₱{(item.price * item.quantity).toFixed(2)}
+                    {/* Line Total */}
+                    <div className="flex flex-col items-end flex-shrink-0">
+                      <span className="text-[10px] font-semibold text-stone-500 dark:text-stone-400 uppercase tracking-wider mb-0.5">Total</span>
+                      <span className="text-lg font-black bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-400 dark:to-orange-300 bg-clip-text text-transparent whitespace-nowrap">
+                        ₱{(item.price * item.quantity).toFixed(2)}
+                      </span>
+                    </div>
                   </div>
                 </div>
               ))
             ) : (
-              <div className="flex h-full items-center justify-center py-16">
+              <div className="flex h-full items-center justify-center py-20">
                 <div className="text-center">
-                  <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-100 to-amber-100 dark:from-orange-900/20 dark:to-amber-900/20 border-2 border-orange-200 dark:border-orange-800/30">
-                    <FontAwesomeIcon icon={faShoppingCart} className="h-8 w-8 text-orange-400 dark:text-orange-500" />
+                  <div className="mb-5 inline-flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-100 to-amber-100 dark:from-orange-900/20 dark:to-amber-900/20 border-2 border-orange-200 dark:border-orange-800/30">
+                    <FontAwesomeIcon icon={faShoppingCart} className="h-10 w-10 text-orange-400 dark:text-orange-500" />
                   </div>
-                  <p className="text-sm font-bold text-neutral-900 dark:text-white mb-1">
+                  <p className="text-base font-bold text-neutral-900 dark:text-white mb-2">
                     Cart is empty
                   </p>
-                  <p className="text-xs text-stone-500 dark:text-stone-400">
+                  <p className="text-sm text-stone-500 dark:text-stone-400">
                     Add items to get started
                   </p>
                 </div>
@@ -494,34 +503,34 @@ const MainPanel: React.FC<MainPanelProps> = ({
             )}
           </div>
 
-          {/* Cart Footer with Total - Scrollable when needed */}
-          <div className="flex-shrink-0 border-t-2 border-stone-200 dark:border-neutral-700 bg-gradient-to-br from-stone-50 via-white to-stone-50 dark:from-neutral-850 dark:via-neutral-900 dark:to-neutral-850">
-            <div className="px-5 lg:px-6 py-5 lg:py-6 space-y-4 lg:space-y-5">
+          {/* Cart Footer with Total - Scrollable when breakdown is open */}
+          <div className="flex-shrink min-h-0 border-t-2 border-stone-200 dark:border-neutral-700 bg-gradient-to-br from-stone-50 via-white to-stone-50 dark:from-neutral-850 dark:via-neutral-900 dark:to-neutral-850 overflow-y-auto scrollbar-thin scrollbar-thumb-orange-400 scrollbar-track-stone-200 dark:scrollbar-thumb-orange-600 dark:scrollbar-track-neutral-800">
+            <div className="px-6 py-6 space-y-5">
               {/* Final Total Amount Section */}
-              <div className="relative overflow-hidden rounded-2xl border-2 border-orange-200 dark:border-orange-800/30 bg-gradient-to-br from-orange-50 via-amber-50 to-orange-50 dark:from-orange-950/30 dark:via-amber-950/20 dark:to-orange-950/30 p-5">
+              <div className="relative overflow-hidden rounded-2xl border-2 border-orange-200 dark:border-orange-800/30 bg-gradient-to-br from-orange-50 via-amber-50 to-orange-50 dark:from-orange-950/30 dark:via-amber-950/20 dark:to-orange-950/30 p-6">
                 {/* Background Decoration */}
                 <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-orange-400/20 to-transparent rounded-full blur-2xl"></div>
                 <div className="absolute bottom-0 left-0 w-20 h-20 bg-gradient-to-tr from-amber-400/20 to-transparent rounded-full blur-xl"></div>
                 
-                <div className="relative flex flex-col gap-2">
+                <div className="relative flex flex-col gap-3">
                   <div className="flex items-center gap-2">
-                    <div className="h-1.5 w-1.5 rounded-full bg-orange-500 animate-pulse"></div>
-                    <span className="text-xs font-black tracking-widest text-orange-700 dark:text-orange-400 uppercase">Total Amount</span>
+                    <div className="h-2 w-2 rounded-full bg-orange-500 animate-pulse"></div>
+                    <span className="text-sm font-black tracking-widest text-orange-700 dark:text-orange-400 uppercase">Total Amount</span>
                   </div>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-[2.5rem] lg:text-5xl font-black bg-gradient-to-r from-orange-600 via-orange-500 to-amber-600 dark:from-orange-400 dark:via-orange-300 dark:to-amber-400 bg-clip-text text-transparent leading-none">
+                  <div className="flex items-baseline gap-3">
+                    <span className="text-5xl font-black bg-gradient-to-r from-orange-600 via-orange-500 to-amber-600 dark:from-orange-400 dark:via-orange-300 dark:to-amber-400 bg-clip-text text-transparent leading-none">
                       ₱{finalTotal.toFixed(2)}
                     </span>
                     {discountValue > 0 && (
-                      <span className="text-sm font-bold text-red-500 dark:text-red-400 line-through opacity-75">
+                      <span className="text-base font-bold text-red-500 dark:text-red-400 line-through opacity-75">
                         ₱{total.toFixed(2)}
                       </span>
                     )}
                   </div>
                   {discountValue > 0 && (
-                    <div className="flex items-center gap-2 mt-1">
-                      <div className="px-2 py-1 rounded-full bg-red-100 dark:bg-red-900/30 border border-red-200 dark:border-red-800/50">
-                        <span className="text-[10px] font-black text-red-600 dark:text-red-400 uppercase tracking-wider">-{discountValue}% Discount</span>
+                    <div className="flex items-center gap-2 mt-2">
+                      <div className="px-3 py-1.5 rounded-full bg-red-100 dark:bg-red-900/30 border border-red-200 dark:border-red-800/50">
+                        <span className="text-xs font-black text-red-600 dark:text-red-400 uppercase tracking-wider">-{discountValue}% Discount</span>
                       </div>
                     </div>
                   )}
@@ -531,45 +540,45 @@ const MainPanel: React.FC<MainPanelProps> = ({
               {/* Breakdown Toggle */}
               <button
                 onClick={() => setShowTaxDiscount(!showTaxDiscount)}
-                className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl border-2 border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:border-orange-300 dark:hover:border-orange-600 transition-all duration-300 shadow-sm hover:shadow-md group"
+                className="w-full flex items-center justify-between px-5 py-4 rounded-xl border-2 border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:border-orange-300 dark:hover:border-orange-600 transition-all duration-300 shadow-sm hover:shadow-md group"
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-orange-100 to-amber-100 dark:from-orange-900/30 dark:to-amber-900/30 group-hover:from-orange-200 group-hover:to-amber-200 dark:group-hover:from-orange-900/50 dark:group-hover:to-amber-900/50 transition-all duration-300">
-                    <FontAwesomeIcon icon={faChevronDown} className={`h-3.5 w-3.5 text-orange-600 dark:text-orange-400 transition-transform duration-300 ${showTaxDiscount ? 'rotate-180' : ''}`} />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-orange-100 to-amber-100 dark:from-orange-900/30 dark:to-amber-900/30 group-hover:from-orange-200 group-hover:to-amber-200 dark:group-hover:from-orange-900/50 dark:group-hover:to-amber-900/50 transition-all duration-300">
+                    <FontAwesomeIcon icon={faChevronDown} className={`h-4 w-4 text-orange-600 dark:text-orange-400 transition-transform duration-300 ${showTaxDiscount ? 'rotate-180' : ''}`} />
                   </div>
-                  <span className="font-bold text-sm text-neutral-900 dark:text-white">View Breakdown</span>
+                  <span className="font-bold text-base text-neutral-900 dark:text-white">View Breakdown</span>
                 </div>
-                <div className="px-2.5 py-1 rounded-full bg-orange-100 dark:bg-orange-900/30 border border-orange-200 dark:border-orange-800/50">
-                  <span className="text-[10px] font-black text-orange-600 dark:text-orange-400">{cart.reduce((sum, item) => sum + item.quantity, 0)} ITEMS</span>
+                <div className="px-3 py-1.5 rounded-full bg-orange-100 dark:bg-orange-900/30 border border-orange-200 dark:border-orange-800/50">
+                  <span className="text-xs font-black text-orange-600 dark:text-orange-400">{cart.reduce((sum, item) => sum + item.quantity, 0)} ITEMS</span>
                 </div>
               </button>
 
               {/* Tax, Discount Details */}
               {showTaxDiscount && (
-                <div className="space-y-3 pt-1 animate-in slide-in-from-top duration-300">
+                <div className="space-y-4 pt-1 animate-in slide-in-from-top duration-300">
                   {/* Base Calculations */}
-                  <div className="space-y-2.5 px-4 py-3.5 rounded-xl bg-stone-100 dark:bg-neutral-850 border border-stone-200 dark:border-neutral-700">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="font-medium text-stone-600 dark:text-stone-400">Subtotal:</span>
+                  <div className="space-y-3 px-5 py-4 rounded-xl bg-stone-100 dark:bg-neutral-850 border border-stone-200 dark:border-neutral-700">
+                    <div className="flex items-center justify-between text-base">
+                      <span className="font-semibold text-stone-600 dark:text-stone-400">Subtotal:</span>
                       <span className="font-bold text-neutral-900 dark:text-white">₱{total.toFixed(2)}</span>
                     </div>
                     <div className="h-px bg-stone-300 dark:bg-neutral-700"></div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="font-medium text-stone-600 dark:text-stone-400">Tax (12%):</span>
+                    <div className="flex items-center justify-between text-base">
+                      <span className="font-semibold text-stone-600 dark:text-stone-400">Tax (12%):</span>
                       <span className="font-bold text-orange-600 dark:text-orange-400">₱{(total * 0.12).toFixed(2)}</span>
                     </div>
                   </div>
 
                   {/* Custom Discount Section */}
-                  <div className="px-4 py-3.5 rounded-xl bg-white dark:bg-neutral-900 border-2 border-stone-200 dark:border-neutral-700">
-                    <label className="text-xs font-black text-orange-600 dark:text-orange-400 mb-3 uppercase tracking-wider flex items-center gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-orange-500 animate-pulse"></div>
+                  <div className="px-5 py-4 rounded-xl bg-white dark:bg-neutral-900 border-2 border-stone-200 dark:border-neutral-700">
+                    <label className="text-sm font-black text-orange-600 dark:text-orange-400 mb-3 uppercase tracking-wider flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-orange-500 animate-pulse"></div>
                       Apply Discount
                     </label>
                     <select
                       value={selectedDiscount}
                       onChange={(e) => setSelectedDiscount(e.target.value ? parseFloat(e.target.value) : '')}
-                      className="w-full px-3.5 py-3 text-sm bg-stone-50 dark:bg-neutral-850 border-2 border-stone-200 dark:border-neutral-700 rounded-xl font-bold text-neutral-900 dark:text-white hover:border-orange-400 dark:hover:border-orange-500 transition-all focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent cursor-pointer"
+                      className="w-full px-4 py-3.5 text-base bg-stone-50 dark:bg-neutral-850 border-2 border-stone-200 dark:border-neutral-700 rounded-xl font-bold text-neutral-900 dark:text-white hover:border-orange-400 dark:hover:border-orange-500 transition-all focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent cursor-pointer"
                     >
                       <option value="">No Discount</option>
                       {discountOptions.map((option) => (
@@ -582,12 +591,12 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
                   {/* Discount Amount Display */}
                   {discountValue > 0 && (
-                    <div className="flex items-center justify-between px-4 py-3 rounded-xl bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-950/20 dark:to-pink-950/20 border-2 border-red-200 dark:border-red-800/30">
+                    <div className="flex items-center justify-between px-5 py-4 rounded-xl bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-950/20 dark:to-pink-950/20 border-2 border-red-200 dark:border-red-800/30">
                       <div className="flex items-center gap-2">
                         <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse"></div>
-                        <span className="text-sm font-black text-red-700 dark:text-red-400">Discount Applied:</span>
+                        <span className="text-base font-black text-red-700 dark:text-red-400">Discount Applied:</span>
                       </div>
-                      <span className="font-black text-base text-red-600 dark:text-red-400">-₱{discountAmount.toFixed(2)}</span>
+                      <span className="font-black text-lg text-red-600 dark:text-red-400">-₱{discountAmount.toFixed(2)}</span>
                     </div>
                   )}
                 </div>
@@ -595,20 +604,20 @@ const MainPanel: React.FC<MainPanelProps> = ({
             </div>
           </div>
 
-          {/* Action Buttons - Always visible at bottom */}
-          <div className="flex-shrink-0 border-t-2 border-stone-200 dark:border-neutral-700 space-y-3 bg-gradient-to-b from-stone-100 to-stone-50 dark:from-neutral-850 dark:to-neutral-900 px-5 py-5">
+          {/* Action Buttons - More spacing */}
+          <div className="flex-shrink-0 border-t-2 border-stone-200 dark:border-neutral-700 space-y-4 bg-gradient-to-b from-stone-100 to-stone-50 dark:from-neutral-850 dark:to-neutral-900 px-6 py-6">
             {/* Primary Action - Buy */}
             <button
               onClick={onBuy}
               disabled={isLoading || cart.length === 0}
-              className="group w-full flex items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-orange-600 via-orange-500 to-amber-600 hover:from-orange-700 hover:via-orange-600 hover:to-amber-700 dark:from-orange-500 dark:via-orange-400 dark:to-amber-500 dark:hover:from-orange-600 dark:hover:via-orange-500 dark:hover:to-amber-600 px-5 py-4 text-base font-black text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-orange-600 disabled:hover:via-orange-500 disabled:hover:to-amber-600 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:shadow-orange-500/40 hover:scale-105 disabled:hover:scale-100 relative overflow-hidden"
+              className="group w-full flex items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-orange-600 via-orange-500 to-amber-600 hover:from-orange-700 hover:via-orange-600 hover:to-amber-700 dark:from-orange-500 dark:via-orange-400 dark:to-amber-500 dark:hover:from-orange-600 dark:hover:via-orange-500 dark:hover:to-amber-600 px-6 py-5 text-lg font-black text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-orange-600 disabled:hover:via-orange-500 disabled:hover:to-amber-600 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:shadow-orange-500/40 hover:scale-105 disabled:hover:scale-100 relative overflow-hidden"
             >
               {/* Shine Effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"></div>
               
               {isLoading ? (
                 <>
-                  <svg className="h-5 w-5 animate-spin relative z-10" viewBox="0 0 24 24" aria-hidden="true">
+                  <svg className="h-6 w-6 animate-spin relative z-10" viewBox="0 0 24 24" aria-hidden="true">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"></path>
                   </svg>
@@ -616,21 +625,21 @@ const MainPanel: React.FC<MainPanelProps> = ({
                 </>
               ) : (
                 <>
-                  <FontAwesomeIcon icon={faCheck} className="h-5 w-5 relative z-10 group-hover:scale-110 transition-transform" />
+                  <FontAwesomeIcon icon={faCheck} className="h-6 w-6 relative z-10 group-hover:scale-110 transition-transform" />
                   <span className="relative z-10 tracking-wide">Complete Purchase</span>
                 </>
               )}
             </button>
 
             {/* Secondary Actions - Grid Layout */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               {/* Hold Button */}
               <button
                 onClick={onHold}
                 disabled={isLoading || cart.length === 0}
-                className="group flex items-center justify-center gap-2 rounded-xl border-2 border-stone-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 hover:bg-gradient-to-br hover:from-stone-50 hover:to-stone-100 dark:hover:from-neutral-850 dark:hover:to-neutral-800 hover:border-orange-400 dark:hover:border-orange-500 px-4 py-3.5 text-sm font-black text-neutral-900 dark:text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg hover:scale-105 disabled:hover:scale-100"
+                className="group flex items-center justify-center gap-2.5 rounded-xl border-2 border-stone-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 hover:bg-gradient-to-br hover:from-stone-50 hover:to-stone-100 dark:hover:from-neutral-850 dark:hover:to-neutral-800 hover:border-orange-400 dark:hover:border-orange-500 px-5 py-4 text-base font-black text-neutral-900 dark:text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg hover:scale-105 disabled:hover:scale-100"
               >
-                <FontAwesomeIcon icon={faPause} className="h-4 w-4 group-hover:scale-110 transition-transform" />
+                <FontAwesomeIcon icon={faPause} className="h-5 w-5 group-hover:scale-110 transition-transform" />
                 <span>Hold</span>
               </button>
 
@@ -638,12 +647,12 @@ const MainPanel: React.FC<MainPanelProps> = ({
               <button
                 onClick={onGCashPayment}
                 disabled={isLoading || cart.length === 0}
-                className="group flex items-center justify-center gap-2 rounded-xl border-2 border-transparent bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 px-4 py-3.5 text-sm font-black text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-blue-600 disabled:hover:to-blue-500 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 hover:scale-105 disabled:hover:scale-100 relative overflow-hidden"
+                className="group flex items-center justify-center gap-2.5 rounded-xl border-2 border-transparent bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 px-5 py-4 text-base font-black text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-blue-600 disabled:hover:to-blue-500 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 hover:scale-105 disabled:hover:scale-100 relative overflow-hidden"
               >
                 {/* Shine Effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"></div>
                 
-                <FontAwesomeIcon icon={faCreditCard} className="h-4 w-4 relative z-10 group-hover:scale-110 transition-transform" />
+                <FontAwesomeIcon icon={faCreditCard} className="h-5 w-5 relative z-10 group-hover:scale-110 transition-transform" />
                 <span className="relative z-10">GCash</span>
               </button>
             </div>
