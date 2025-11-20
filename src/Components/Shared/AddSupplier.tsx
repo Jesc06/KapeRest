@@ -177,7 +177,7 @@ const AddSupplier: React.FC = () => {
       }
 
       // Check if response is text or JSON
-      const text = await response.text();
+      await response.text();
       
       // Show success message
       setMessageType('success');

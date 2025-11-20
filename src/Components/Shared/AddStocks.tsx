@@ -54,7 +54,7 @@ const AddStocks: React.FC = () => {
   });
 
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
-  const [loadingSuppliers, setLoadingSuppliers] = useState(false);
+  const [_loadingSuppliers, setLoadingSuppliers] = useState(false);
 
   // Fetch suppliers from API
   useEffect(() => {
@@ -387,7 +387,7 @@ const AddStocks: React.FC = () => {
                       <option value="">Select supplier</option>
                       {suppliers.map((supplier) => (
                         <option key={supplier.id} value={supplier.id.toString()}>
-                          {supplier.supplierName}
+                          {supplier.name}
                         </option>
                       ))}
                     </select>

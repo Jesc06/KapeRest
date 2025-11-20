@@ -35,7 +35,7 @@ const BuyItem: React.FC = () => {
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [userRole] = useState<string>('Cashier'); // Mock user role - can be fetched from auth/context
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [_error, setError] = useState<string | null>(null);
 
   // Fetch menu items from API
   useEffect(() => {
