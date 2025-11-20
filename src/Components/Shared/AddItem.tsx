@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -7,7 +7,9 @@ import {
   faImage,
   faCheckCircle,
   faExclamationCircle,
-  faArrowLeft
+  faArrowLeft,
+  faPlus,
+  faTrash
 } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from '../Staff/StaffSidebar';
 import LogoutPanel from './LogoutPanel';
@@ -20,6 +22,20 @@ interface ItemFormData {
   description: string;
   image: File | null;
   imagePreview: string | null;
+}
+
+interface ProductItem {
+  productOfSupplierId: number;
+  quantityUsed: number;
+}
+
+interface Product {
+  id: number;
+  productName: string;
+  costPrice: number;
+  stocks: number;
+  units: string;
+  supplierId: number;
 }
 
 const AddItem: React.FC = () => {
@@ -39,8 +55,74 @@ const AddItem: React.FC = () => {
     imagePreview: null,
   });
 
-  const [productItem, setProductItem] = useState('');
-  const [quantity, setQuantity] = useState('');
+  const [products, setProducts] = useState<Product[]>([]);
+  const [selectedProducts, setSelectedProducts] = useState<ProductItem[]>([]);
+  const [currentProduct, setCurrentProduct] = useState<string>('');
+  const [currentQuantity, setCurrentQuantity] = useState<string>('');
+
+  // Fetch products from API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        if (!token) return;
+
+        const response = await fetch(`${API_BASE_URL}/Inventory/GetAllProducts`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Products fetched:', data);
+          setProducts(data);
+        } else {
+          console.error('Failed to fetch products:', response.status);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const handleAddProduct = () => {
+    if (!currentProduct || !currentQuantity) {
+      setError('Please select a product and enter quantity');
+      return;
+    }
+
+    const productId = parseInt(currentProduct);
+    const quantity = parseInt(currentQuantity);
+
+    if (quantity <= 0) {
+      setError('Quantity must be greater than 0');
+      return;
+    }
+
+    // Check if product already exists
+    const existingIndex = selectedProducts.findIndex(p => p.productOfSupplierId === productId);
+    if (existingIndex >= 0) {
+      setError('Product already added. Remove it first to change quantity.');
+      return;
+    }
+
+    setSelectedProducts([...selectedProducts, {
+      productOfSupplierId: productId,
+      quantityUsed: quantity
+    }]);
+
+    setCurrentProduct('');
+    setCurrentQuantity('');
+    setError('');
+  };
+
+  const handleRemoveProduct = (productId: number) => {
+    setSelectedProducts(selectedProducts.filter(p => p.productOfSupplierId !== productId));
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -124,16 +206,10 @@ const AddItem: React.FC = () => {
       apiFormData.append('Image', formData.image);
       apiFormData.append('IsAvailable', 'Yes');
       
-      // Build Products.Json from productItem and quantity
-      let productsJsonString = '[]'; // Default empty array
-      
-      if (productItem.trim() && quantity.trim()) {
-        const productsPayload = [{
-          ProductOfSupplierId: parseInt(productItem),
-          QuantityUsed: parseInt(quantity)
-        }];
-        productsJsonString = JSON.stringify(productsPayload);
-      }
+      // Build Products.Json from selectedProducts
+      const productsJsonString = selectedProducts.length > 0 
+        ? JSON.stringify(selectedProducts)
+        : '[]';
       
       apiFormData.append('ProductsJson', productsJsonString);
       console.log('ProductsJson being sent:', productsJsonString);
@@ -164,8 +240,9 @@ const AddItem: React.FC = () => {
         image: null,
         imagePreview: null,
       });
-      setProductItem('');
-      setQuantity('');
+      setSelectedProducts([]);
+      setCurrentProduct('');
+      setCurrentQuantity('');
 
       setTimeout(() => {
         navigate('/staff');
@@ -214,46 +291,46 @@ const AddItem: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex-1 overflow-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8">
-            <div className="w-full max-w-4xl mx-auto">
-              <div className="mb-8">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/25">
-                    <FontAwesomeIcon icon={faBox} className="h-6 w-6 text-white" />
+          <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+            <div className="w-full max-w-5xl mx-auto">
+              <div className="mb-6 sm:mb-8">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/25">
+                    <FontAwesomeIcon icon={faBox} className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                   </div>
-                  <div>
-                    <h2 className="text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300 bg-clip-text text-transparent">Add Menu Item</h2>
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">Create a new menu item for your store</p>
+                  <div className="min-w-0 flex-1">
+                    <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300 bg-clip-text text-transparent truncate">Add Menu Item</h2>
+                    <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mt-1">Create a new menu item for your store</p>
                   </div>
                 </div>
               </div>
 
               {error && (
-                <div className="mb-6 p-4 bg-red-50/80 dark:bg-red-950/30 border border-red-200 dark:border-red-800/50 rounded-2xl flex items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-300 backdrop-blur-sm shadow-lg">
-                  <FontAwesomeIcon icon={faExclamationCircle} className="h-5 w-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm font-semibold text-red-700 dark:text-red-300">Error</p>
-                    <p className="text-sm text-red-600 dark:text-red-400 mt-1">{error}</p>
+                <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50/80 dark:bg-red-950/30 border border-red-200 dark:border-red-800/50 rounded-xl sm:rounded-2xl flex items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-300 backdrop-blur-sm shadow-lg">
+                  <FontAwesomeIcon icon={faExclamationCircle} className="h-4 w-4 sm:h-5 sm:w-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs sm:text-sm font-semibold text-red-700 dark:text-red-300">Error</p>
+                    <p className="text-xs sm:text-sm text-red-600 dark:text-red-400 mt-1 break-words">{error}</p>
                   </div>
                 </div>
               )}
 
               {success && (
-                <div className="mb-6 p-4 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800/50 rounded-lg flex items-start gap-3">
-                  <FontAwesomeIcon icon={faCheckCircle} className="h-5 w-5 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm font-semibold text-green-700 dark:text-green-300">Success!</p>
-                    <p className="text-sm text-green-600 dark:text-green-400 mt-1">Menu item has been added successfully. Redirecting...</p>
+                <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800/50 rounded-xl sm:rounded-2xl flex items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-300 backdrop-blur-sm shadow-lg">
+                  <FontAwesomeIcon icon={faCheckCircle} className="h-4 w-4 sm:h-5 sm:w-5 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs sm:text-sm font-semibold text-green-700 dark:text-green-300">Success!</p>
+                    <p className="text-xs sm:text-sm text-green-600 dark:text-green-400 mt-1">Menu item has been added successfully. Redirecting...</p>
                   </div>
                 </div>
               )}
 
-              {/* Form - Flat Design */}
-              <form onSubmit={handleSubmit} className="space-y-5 bg-white dark:bg-neutral-900 p-6 rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-sm">
+              {/* Form - Improved Design */}
+              <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl border border-neutral-200/50 dark:border-neutral-800/50 shadow-xl shadow-neutral-900/5">
                 
                 {/* Item Name */}
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+                  <label className="block text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
                     Item Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -261,142 +338,204 @@ const AddItem: React.FC = () => {
                     name="itemName"
                     value={formData.itemName}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all text-sm sm:text-base"
                     placeholder="e.g., Iced Latte"
                     disabled={isLoading}
                   />
                 </div>
 
-                {/* Price */}
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
-                    Price <span className="text-red-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <span className="absolute left-3 top-2 text-neutral-500 dark:text-neutral-400">₱</span>
-                    <input
-                      type="number"
-                      name="price"
-                      value={formData.price}
-                      onChange={handleChange}
-                      className="w-full pl-7 pr-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
-                      placeholder="0.00"
-                      step="0.01"
-                      min="0"
-                      disabled={isLoading}
-                    />
+                {/* Price and Category - Grid Layout */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                  {/* Price */}
+                  <div>
+                    <label className="block text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+                      Price <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-neutral-500 dark:text-neutral-400 text-sm sm:text-base font-medium">₱</span>
+                      <input
+                        type="number"
+                        name="price"
+                        value={formData.price}
+                        onChange={handleChange}
+                        className="w-full pl-8 sm:pl-9 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all text-sm sm:text-base"
+                        placeholder="0.00"
+                        step="0.01"
+                        min="0"
+                        disabled={isLoading}
+                      />
+                    </div>
                   </div>
-                </div>
 
-                {/* Category */}
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
-                    Category <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    name="category"
-                    value={formData.category}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50 appearance-none cursor-pointer"
-                    disabled={isLoading}
-                  >
-                    <option value="">Select category</option>
-                    <option value="Coffee">Coffee</option>
-                    <option value="Non-Coffee">Non-Coffee</option>
-                    <option value="Food">Food</option>
-                    <option value="Dessert">Dessert</option>
-                    <option value="Beverage">Beverage</option>
-                  </select>
+                  {/* Category */}
+                  <div>
+                    <label className="block text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+                      Category <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      name="category"
+                      value={formData.category}
+                      onChange={handleChange}
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 appearance-none cursor-pointer transition-all text-sm sm:text-base"
+                      disabled={isLoading}
+                    >
+                      <option value="">Select category</option>
+                      <option value="Coffee">Coffee</option>
+                      <option value="Non-Coffee">Non-Coffee</option>
+                      <option value="Food">Food</option>
+                      <option value="Dessert">Dessert</option>
+                      <option value="Beverage">Beverage</option>
+                    </select>
+                  </div>
                 </div>
 
                 {/* Description */}
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+                  <label className="block text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
                     Description <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     name="description"
                     value={formData.description}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50 resize-none"
-                    rows={3}
-                    placeholder="Brief description"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 resize-none transition-all text-sm sm:text-base"
+                    rows={4}
+                    placeholder="Brief description of the menu item"
                     disabled={isLoading}
                   />
                 </div>
 
-                {/* Product Item and Quantity */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
-                      Product Item
-                    </label>
-                    <input
-                      type="text"
-                      name="productItem"
-                      value={productItem}
-                      onChange={(e) => setProductItem(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
-                      placeholder="Enter product item"
-                      disabled={isLoading}
-                    />
-                  </div>
+                {/* Product Items - Multiple Selection */}
+                <div>
+                  <label className="block text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+                    Product Items (Optional)
+                  </label>
+                  
+                  {/* Add Product Form */}
+                  <div className="space-y-4 p-3 sm:p-4 lg:p-5 bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-800/50 dark:to-neutral-800/30 rounded-xl border border-neutral-200 dark:border-neutral-700">
+                    <div className="flex flex-col gap-3">
+                      <div>
+                        <select
+                          value={currentProduct}
+                          onChange={(e) => setCurrentProduct(e.target.value)}
+                          className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 appearance-none cursor-pointer transition-all text-sm sm:text-base"
+                          disabled={isLoading}
+                        >
+                          <option value="">Select a product</option>
+                          {products.map(product => (
+                            <option key={product.id} value={product.id}>
+                              {product.productName}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      
+                      <div className="flex gap-2 sm:gap-3">
+                        <input
+                          type="number"
+                          value={currentQuantity}
+                          onChange={(e) => setCurrentQuantity(e.target.value)}
+                          className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all text-sm sm:text-base"
+                          placeholder="Quantity"
+                          min="0"
+                          step="1"
+                          disabled={isLoading}
+                        />
+                        <button
+                          type="button"
+                          onClick={handleAddProduct}
+                          className="flex-shrink-0 px-4 sm:px-5 py-2.5 sm:py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg font-semibold transition-all duration-200 active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2 shadow-md hover:shadow-lg min-w-[80px] sm:min-w-[100px]"
+                          disabled={isLoading}
+                        >
+                          <FontAwesomeIcon icon={faPlus} className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                          <span className="text-sm sm:text-base">Add</span>
+                        </button>
+                      </div>
+                    </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
-                      Quantity
-                    </label>
-                    <input
-                      type="number"
-                      name="quantity"
-                      value={quantity}
-                      onChange={(e) => setQuantity(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
-                      placeholder="Enter quantity"
-                      min="0"
-                      step="1"
-                      disabled={isLoading}
-                    />
+                    {/* Selected Products List */}
+                    {selectedProducts.length > 0 && (
+                      <div className="space-y-3">
+                        <p className="text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300 flex items-center gap-2">
+                          <span className="w-2 h-2 bg-orange-500 rounded-full flex-shrink-0"></span>
+                          <span>Selected Products ({selectedProducts.length})</span>
+                        </p>
+                        <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
+                          {selectedProducts.map((item) => {
+                            const product = products.find(p => p.id === item.productOfSupplierId);
+                            return (
+                              <div
+                                key={item.productOfSupplierId}
+                                className="flex items-center justify-between gap-3 p-3 sm:p-4 bg-white dark:bg-neutral-900 rounded-lg sm:rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm hover:shadow-md transition-all"
+                              >
+                              <div className="flex-1 min-w-0">
+                                <p className="text-xs sm:text-sm font-medium text-neutral-900 dark:text-white truncate">
+                                  {product?.productName || `Product #${item.productOfSupplierId}`}
+                                </p>
+                                <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                                  Quantity: {item.quantityUsed}
+                                </p>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveProduct(item.productOfSupplierId)}
+                                className="flex-shrink-0 p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors"
+                                disabled={isLoading}
+                                aria-label="Remove product"
+                              >
+                                <FontAwesomeIcon icon={faTrash} className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                              </button>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
 
                 {/* Image Upload */}
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+                  <label className="block text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
                     Item Image <span className="text-red-500">*</span>
                   </label>
                   
                   {!formData.imagePreview ? (
-                    <div className="relative border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-lg p-6 hover:border-orange-400 cursor-pointer bg-neutral-50 dark:bg-neutral-800/50">
+                    <div className="relative border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-xl p-6 sm:p-8 hover:border-orange-400 dark:hover:border-orange-500 cursor-pointer bg-neutral-50 dark:bg-neutral-800/50 transition-all duration-200">
                       <input
                         type="file"
                         accept="image/*"
                         onChange={handleImageChange}
-                        className="absolute inset-0 opacity-0 cursor-pointer"
+                        className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
                         disabled={isLoading}
                       />
-                      <div className="flex flex-col items-center text-center">
-                        <FontAwesomeIcon icon={faImage} className="h-8 w-8 text-neutral-400 mb-2" />
-                        <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Click to upload</p>
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">PNG, JPG up to 5MB</p>
+                      <div className="flex flex-col items-center text-center pointer-events-none">
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-orange-500/10 to-orange-600/10 flex items-center justify-center mb-3">
+                          <FontAwesomeIcon icon={faImage} className="h-6 w-6 sm:h-7 sm:w-7 text-orange-500" />
+                        </div>
+                        <p className="text-sm sm:text-base font-semibold text-neutral-700 dark:text-neutral-300">Click to upload image</p>
+                        <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-1">PNG, JPG, JPEG up to 5MB</p>
                       </div>
                     </div>
                   ) : (
-                    <div className="relative rounded-lg overflow-hidden border border-neutral-300 dark:border-neutral-700">
+                    <div className="relative rounded-xl overflow-hidden border-2 border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800">
                       <img
                         src={formData.imagePreview}
                         alt="Preview"
-                        className="w-full h-48 object-cover"
+                        className="w-full h-48 sm:h-56 object-cover"
                       />
-                      <div className="absolute top-2 right-2 flex gap-2">
-                        <span className="px-2 py-1 bg-green-500 text-white text-xs font-medium rounded">
-                          ✓ Uploaded
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
+                      <div className="absolute top-3 right-3 flex gap-2">
+                        <span className="px-3 py-1.5 bg-green-500 text-white text-xs font-semibold rounded-lg shadow-lg flex items-center gap-1.5">
+                          <FontAwesomeIcon icon={faCheckCircle} className="h-3 w-3" />
+                          Uploaded
                         </span>
                         <button
                           type="button"
                           onClick={() => setFormData((prev) => ({ ...prev, image: null, imagePreview: null }))}
-                          className="px-2 py-1 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded"
+                          className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-lg shadow-lg transition-colors flex items-center gap-1.5"
                         >
+                          <FontAwesomeIcon icon={faTrash} className="h-3 w-3" />
                           Remove
                         </button>
                       </div>
@@ -405,21 +544,21 @@ const AddItem: React.FC = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-3 pt-2">
+                <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-neutral-200 dark:border-neutral-800">
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="flex-1 px-4 py-2.5 bg-orange-600 hover:bg-orange-700 disabled:bg-neutral-400 text-white font-medium rounded-lg disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="flex-1 px-4 sm:px-6 py-3 sm:py-3.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-neutral-400 disabled:to-neutral-400 text-white font-semibold rounded-xl disabled:cursor-not-allowed flex items-center justify-center gap-2.5 shadow-lg shadow-orange-500/25 hover:shadow-xl hover:shadow-orange-500/30 transition-all duration-200 active:scale-[0.98] text-sm sm:text-base"
                   >
                     {isLoading ? (
                       <>
                         <span className="inline-block h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-                        <span>Adding...</span>
+                        <span>Adding Item...</span>
                       </>
                     ) : (
                       <>
-                        <FontAwesomeIcon icon={faCheckCircle} className="h-4 w-4" />
-                        <span>Add Item</span>
+                        <FontAwesomeIcon icon={faCheckCircle} className="h-4 w-4 sm:h-5 sm:w-5" />
+                        <span>Add Menu Item</span>
                       </>
                     )}
                   </button>
@@ -428,17 +567,19 @@ const AddItem: React.FC = () => {
                     type="button"
                     onClick={() => navigate('/staff')}
                     disabled={isLoading}
-                    className="flex-1 px-4 py-2.5 bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white font-medium rounded-lg disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="flex-1 px-4 sm:px-6 py-3 sm:py-3.5 bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white font-semibold rounded-xl disabled:cursor-not-allowed disabled:opacity-50 flex items-center justify-center gap-2.5 transition-all duration-200 active:scale-[0.98] shadow-sm hover:shadow-md text-sm sm:text-base"
                   >
-                    <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4" />
+                    <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4 sm:h-5 sm:w-5" />
                     <span>Cancel</span>
                   </button>
                 </div>
 
                 {/* Helper Text */}
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 pt-1">
-                  <span className="text-red-500">*</span> Required fields
-                </p>
+                <div className="flex items-center justify-center gap-2 pt-2">
+                  <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 text-center">
+                    <span className="text-red-500 font-semibold">*</span> Required fields
+                  </p>
+                </div>
               </form>
             </div>
           </div>
