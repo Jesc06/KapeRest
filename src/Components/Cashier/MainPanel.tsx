@@ -68,6 +68,9 @@ const MainPanel: React.FC<MainPanelProps> = ({
   const [searchText, setSearchText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [categories, setCategories] = useState<string[]>(['All']);
+  const [processingPurchase, setProcessingPurchase] = useState(false);
+  const [purchaseError, setPurchaseError] = useState<string>('');
+  const [purchaseSuccess, setPurchaseSuccess] = useState(false);
 
   // Fetch menu items from API
   useEffect(() => {
@@ -165,6 +168,107 @@ const MainPanel: React.FC<MainPanelProps> = ({
       onAddToCart(product);
     } else {
       console.log('Adding to cart:', product);
+    }
+  };
+
+  // Handle complete purchase
+  const handleCompletePurchase = async (paymentMethod: string = 'Cash') => {
+    if (cart.length === 0) {
+      setPurchaseError('Cart is empty');
+      return;
+    }
+
+    setProcessingPurchase(true);
+    setPurchaseError('');
+    setPurchaseSuccess(false);
+
+    try {
+      const token = localStorage.getItem('accessToken');
+      
+      if (!token) {
+        throw new Error('No authentication token found. Please login again.');
+      }
+
+      // Calculate discount and tax values
+      const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
+      const taxRate = 12; // 12% tax
+
+      // Process each cart item as a separate purchase
+      const purchasePromises = cart.map(async (item) => {
+        const purchaseData = {
+          menuItemId: item.id,
+          quantity: item.quantity,
+          discountPercent: discountValue,
+          tax: taxRate,
+          paymentMethod: paymentMethod
+        };
+
+        console.log('Sending purchase request:', purchaseData);
+
+        const response = await fetch(`${API_BASE_URL}/Buy/Buy`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(purchaseData)
+        });
+
+        // Get response text first
+        const responseText = await response.text();
+        console.log('Raw response:', responseText);
+        console.log('Response status:', response.status);
+
+        if (!response.ok) {
+          console.error('Purchase error response:', responseText);
+          
+          // Try to parse as JSON, fallback to plain text
+          let errorMessage = responseText;
+          try {
+            const errorJson = JSON.parse(responseText);
+            errorMessage = errorJson.message || errorJson.error || errorJson.title || responseText;
+          } catch (e) {
+            // If not JSON, use the plain text error
+            errorMessage = responseText;
+          }
+          
+          throw new Error(errorMessage || `Failed to purchase ${item.name}`);
+        }
+
+        // Parse successful response as JSON
+        let result;
+        try {
+          result = JSON.parse(responseText);
+        } catch (e) {
+          console.warn('Response is not JSON:', responseText);
+          result = { success: true, message: responseText };
+        }
+        
+        console.log('Purchase successful for item:', item.name, result);
+        return result;
+      });
+
+      // Wait for all purchases to complete
+      await Promise.all(purchasePromises);
+
+      console.log('All purchases completed successfully');
+      setPurchaseSuccess(true);
+      
+      // Clear cart after successful purchase
+      setTimeout(() => {
+        // Call the original onBuy callback if provided (to clear cart)
+        if (onBuy) {
+          onBuy();
+        }
+        setPurchaseSuccess(false);
+        setSelectedDiscount('');
+      }, 2000);
+
+    } catch (err) {
+      console.error('Error completing purchase:', err);
+      setPurchaseError(err instanceof Error ? err.message : 'Failed to complete purchase. Please try again.');
+    } finally {
+      setProcessingPurchase(false);
     }
   };
 
@@ -606,16 +710,29 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
           {/* Action Buttons - More spacing */}
           <div className="flex-shrink-0 border-t-2 border-stone-200 dark:border-neutral-700 space-y-4 bg-gradient-to-b from-stone-100 to-stone-50 dark:from-neutral-850 dark:to-neutral-900 px-6 py-6">
+            {/* Success/Error Messages */}
+            {purchaseError && (
+              <div className="p-4 rounded-xl bg-red-50 dark:bg-red-950/30 border-2 border-red-200 dark:border-red-800/50 animate-in slide-in-from-top duration-300">
+                <p className="text-sm font-bold text-red-600 dark:text-red-400 text-center">{purchaseError}</p>
+              </div>
+            )}
+            
+            {purchaseSuccess && (
+              <div className="p-4 rounded-xl bg-green-50 dark:bg-green-950/30 border-2 border-green-200 dark:border-green-800/50 animate-in slide-in-from-top duration-300">
+                <p className="text-sm font-bold text-green-600 dark:text-green-400 text-center">Purchase completed successfully!</p>
+              </div>
+            )}
+
             {/* Primary Action - Buy */}
             <button
-              onClick={onBuy}
-              disabled={isLoading || cart.length === 0}
+              onClick={() => handleCompletePurchase('Cash')}
+              disabled={processingPurchase || isLoading || cart.length === 0}
               className="group w-full flex items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-orange-600 via-orange-500 to-amber-600 hover:from-orange-700 hover:via-orange-600 hover:to-amber-700 dark:from-orange-500 dark:via-orange-400 dark:to-amber-500 dark:hover:from-orange-600 dark:hover:via-orange-500 dark:hover:to-amber-600 px-6 py-5 text-lg font-black text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-orange-600 disabled:hover:via-orange-500 disabled:hover:to-amber-600 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:shadow-orange-500/40 hover:scale-105 disabled:hover:scale-100 relative overflow-hidden"
             >
               {/* Shine Effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"></div>
               
-              {isLoading ? (
+              {processingPurchase || isLoading ? (
                 <>
                   <svg className="h-6 w-6 animate-spin relative z-10" viewBox="0 0 24 24" aria-hidden="true">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none"></circle>
@@ -645,8 +762,8 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
               {/* GCash Payment Button */}
               <button
-                onClick={onGCashPayment}
-                disabled={isLoading || cart.length === 0}
+                onClick={() => handleCompletePurchase('GCash')}
+                disabled={processingPurchase || isLoading || cart.length === 0}
                 className="group flex items-center justify-center gap-2.5 rounded-xl border-2 border-transparent bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 px-5 py-4 text-base font-black text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-blue-600 disabled:hover:to-blue-500 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 hover:scale-105 disabled:hover:scale-100 relative overflow-hidden"
               >
                 {/* Shine Effect */}
