@@ -71,6 +71,9 @@ const MainPanel: React.FC<MainPanelProps> = ({
   const [processingPurchase, setProcessingPurchase] = useState(false);
   const [purchaseError, setPurchaseError] = useState<string>('');
   const [purchaseSuccess, setPurchaseSuccess] = useState(false);
+  const [processingHold, setProcessingHold] = useState(false);
+  const [holdError, setHoldError] = useState<string>('');
+  const [holdSuccess, setHoldSuccess] = useState(false);
 
   // Fetch menu items from API
   useEffect(() => {
@@ -168,6 +171,105 @@ const MainPanel: React.FC<MainPanelProps> = ({
       onAddToCart(product);
     } else {
       console.log('Adding to cart:', product);
+    }
+  };
+
+  // Handle hold transaction
+  const handleHoldTransaction = async () => {
+    if (cart.length === 0) {
+      setHoldError('Cart is empty');
+      return;
+    }
+
+    setProcessingHold(true);
+    setHoldError('');
+    setHoldSuccess(false);
+
+    try {
+      const token = localStorage.getItem('accessToken');
+      
+      if (!token) {
+        throw new Error('No authentication token found. Please login again.');
+      }
+
+      // Calculate discount and tax values
+      const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
+      const taxRate = 12; // 12% tax
+
+      // Process each cart item as a separate hold transaction
+      const holdPromises = cart.map(async (item) => {
+        const holdData = {
+          menuItemId: item.id,
+          quantity: item.quantity,
+          discountPercent: discountValue,
+          tax: taxRate,
+          paymentMethod: 'Cash'
+        };
+
+        console.log('Sending hold request:', holdData);
+
+        const response = await fetch(`${API_BASE_URL}/Buy/HoldTransaction`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(holdData)
+        });
+
+        // Get response text first
+        const responseText = await response.text();
+        console.log('Hold response:', responseText);
+        console.log('Response status:', response.status);
+
+        if (!response.ok) {
+          console.error('Hold error response:', responseText);
+          
+          // Try to parse as JSON, fallback to plain text
+          let errorMessage = responseText;
+          try {
+            const errorJson = JSON.parse(responseText);
+            errorMessage = errorJson.message || errorJson.error || errorJson.title || responseText;
+          } catch (e) {
+            errorMessage = responseText;
+          }
+          
+          throw new Error(errorMessage || `Failed to hold ${item.name}`);
+        }
+
+        // Parse successful response as JSON
+        let result;
+        try {
+          result = JSON.parse(responseText);
+        } catch (e) {
+          console.warn('Response is not JSON:', responseText);
+          result = { success: true, message: responseText };
+        }
+        
+        console.log('Hold successful for item:', item.name, result);
+        return result;
+      });
+
+      // Wait for all hold transactions to complete
+      await Promise.all(holdPromises);
+
+      console.log('All transactions held successfully');
+      setHoldSuccess(true);
+      
+      // Clear cart after successful hold
+      setTimeout(() => {
+        if (onHold) {
+          onHold();
+        }
+        setHoldSuccess(false);
+        setSelectedDiscount('');
+      }, 2000);
+
+    } catch (err) {
+      console.error('Error holding transaction:', err);
+      setHoldError(err instanceof Error ? err.message : 'Failed to hold transaction. Please try again.');
+    } finally {
+      setProcessingHold(false);
     }
   };
 
@@ -748,16 +850,41 @@ const MainPanel: React.FC<MainPanelProps> = ({
               )}
             </button>
 
+            {/* Hold Error/Success Messages */}
+            {holdError && (
+              <div className="p-4 rounded-xl bg-yellow-50 dark:bg-yellow-950/30 border-2 border-yellow-200 dark:border-yellow-800/50 animate-in slide-in-from-top duration-300">
+                <p className="text-sm font-bold text-yellow-600 dark:text-yellow-400 text-center">{holdError}</p>
+              </div>
+            )}
+            
+            {holdSuccess && (
+              <div className="p-4 rounded-xl bg-blue-50 dark:bg-blue-950/30 border-2 border-blue-200 dark:border-blue-800/50 animate-in slide-in-from-top duration-300">
+                <p className="text-sm font-bold text-blue-600 dark:text-blue-400 text-center">Transaction held successfully!</p>
+              </div>
+            )}
+
             {/* Secondary Actions - Grid Layout */}
             <div className="grid grid-cols-2 gap-4">
               {/* Hold Button */}
               <button
-                onClick={onHold}
-                disabled={isLoading || cart.length === 0}
+                onClick={handleHoldTransaction}
+                disabled={processingHold || isLoading || cart.length === 0}
                 className="group flex items-center justify-center gap-2.5 rounded-xl border-2 border-stone-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 hover:bg-gradient-to-br hover:from-stone-50 hover:to-stone-100 dark:hover:from-neutral-850 dark:hover:to-neutral-800 hover:border-orange-400 dark:hover:border-orange-500 px-5 py-4 text-base font-black text-neutral-900 dark:text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg hover:scale-105 disabled:hover:scale-100"
               >
-                <FontAwesomeIcon icon={faPause} className="h-5 w-5 group-hover:scale-110 transition-transform" />
-                <span>Hold</span>
+                {processingHold ? (
+                  <>
+                    <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24" aria-hidden="true">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"></path>
+                    </svg>
+                    <span>Holding...</span>
+                  </>
+                ) : (
+                  <>
+                    <FontAwesomeIcon icon={faPause} className="h-5 w-5 group-hover:scale-110 transition-transform" />
+                    <span>Hold</span>
+                  </>
+                )}
               </button>
 
               {/* GCash Payment Button */}

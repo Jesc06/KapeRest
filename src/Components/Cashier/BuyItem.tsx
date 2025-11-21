@@ -58,13 +58,11 @@ const BuyItem: React.FC = () => {
   // Handle Buy
   const handleBuy = () => {
     if (cart.length === 0) {
-      alert('Cart is empty');
       return;
     }
     setIsLoading(true);
     setTimeout(() => {
       console.log('Purchase completed:', cart);
-      alert('Purchase completed!');
       setCart([]);
       setIsLoading(false);
     }, 800);
