@@ -7,7 +7,7 @@ import { API_BASE_URL } from '../../config/api';
 
 interface Purchase {
   id: number;
-  receiptNumber: string;
+  menuItemNames: string;
   dateTime: string;
   subtotal: number;
   tax: number;
@@ -73,7 +73,7 @@ const Purchases: React.FC = () => {
   // Filter purchases based on search and status
   const filteredPurchases = purchases.filter(purchase => {
     const matchesSearch = 
-      purchase.receiptNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (purchase.menuItemNames && purchase.menuItemNames.toLowerCase().includes(searchQuery.toLowerCase())) ||
       purchase.id.toString().includes(searchQuery);
     
     const matchesStatus = statusFilter === 'All' || purchase.status === statusFilter;
@@ -177,7 +177,7 @@ const Purchases: React.FC = () => {
                   </div>
                   <input
                     type="text"
-                    placeholder="Search by receipt number or transaction ID..."
+                    placeholder="Search by menu item name or transaction ID..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full pl-11 pr-4 py-3 bg-white dark:bg-neutral-800 border-2 border-stone-200 dark:border-neutral-700 rounded-xl text-neutral-900 dark:text-stone-100 placeholder-neutral-400 focus:outline-none focus:border-orange-500 dark:focus:border-orange-500 transition-colors duration-200"
@@ -241,7 +241,7 @@ const Purchases: React.FC = () => {
                             </div>
                             <div className="flex-1 min-w-0">
                               <h3 className="text-lg font-bold text-neutral-900 dark:text-stone-100 mb-1 truncate">
-                                Receipt #{purchase.receiptNumber}
+                                {purchase.menuItemNames || 'No Items'}
                               </h3>
                               <div className="flex flex-wrap items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
                                 <span className="flex items-center gap-1">
