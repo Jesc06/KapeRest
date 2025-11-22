@@ -69,46 +69,46 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
       {/* Sidebar */}
       <aside className={`fixed left-0 top-0 h-screen flex flex-col border-r border-neutral-200 dark:border-neutral-700 bg-gradient-to-b from-white to-stone-50 dark:from-neutral-900 dark:to-neutral-900 transition-[width] duration-300 ease-in-out z-40 shadow-xl ${
         !isOpen ? '-translate-x-full' : 'translate-x-0'
-      } lg:translate-x-0 ${isExpanded ? 'w-72' : 'w-24'}`}>
+      } lg:translate-x-0 ${isExpanded ? 'w-72' : 'w-20'}`}>
       {/* Header with Branding */}
-        <div className="sticky top-0 flex items-center justify-center border-b border-neutral-200 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-sm px-5 py-6 transition-all duration-300">
+        <div className="sticky top-0 flex items-center justify-center border-b border-neutral-200 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-sm px-4 py-5 transition-all duration-300">
           {isExpanded ? (
-            <div className="flex items-center gap-4 w-full">
-              <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg"> 
-                <FontAwesomeIcon icon={faCoffee} className="text-2xl" />
+            <div className="flex items-center gap-3 w-full">
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg"> 
+                <FontAwesomeIcon icon={faCoffee} className="text-xl" />
               </div>
-              <div className="flex-1 min-w-0">
-                <h2 className="text-xl font-bold text-neutral-900 dark:text-white">KapeRest</h2>
-                <p className="text-sm text-orange-600 dark:text-orange-400 font-medium">Staff Portal</p>
+              <div className="flex-1 min-w-0 flex flex-col justify-center">
+                <h2 className="text-2xl font-black text-neutral-900 dark:text-white tracking-tight leading-tight">KapeRest</h2>
+                <p className="text-sm font-semibold text-orange-600 dark:text-orange-400 uppercase tracking-wide leading-none">Staff Portal</p>
               </div>
             </div>
           ) : (
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg">
-              <FontAwesomeIcon icon={faCoffee} className="text-2xl" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg">
+              <FontAwesomeIcon icon={faCoffee} className="text-xl" />
             </div>
           )}
         </div>
 
         {/* Navigation Items */}
-        <nav className="flex-1 overflow-y-auto px-2 py-3 space-y-1">
+        <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-2">
           {/* Home - First Item */}
           <button
             onClick={() => navigate('/staff')}
-            className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
+            className={`w-full flex items-center justify-center lg:justify-start gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${
               isHome
                 ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
-                : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
+                : "text-neutral-700 dark:text-neutral-300 hover:bg-orange-50/80 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
             }`}
           >
-            <FontAwesomeIcon icon={faHome} className="text-xl flex-shrink-0" />
+            <FontAwesomeIcon icon={faHome} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left text-lg font-semibold truncate">Home</span>
+              <span className="flex-1 text-left font-medium truncate">Home</span>
             )}
           </button>
 
           {/* Divider */}
           {isExpanded && (
-            <div className="py-2">
+            <div className="my-3 pt-1">
               <div className="border-t border-neutral-200 dark:border-neutral-700"></div>
             </div>
           )}
@@ -120,19 +120,19 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                 if (!isExpanded) return;
                 toggleMenuItem();
               }}
-              className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
+              className={`w-full flex items-center justify-center lg:justify-start gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${
                 isAddItem || isMenuItemList
                   ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
-                  : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
+                  : "text-neutral-700 dark:text-neutral-300 hover:bg-orange-50/80 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
               }`}
             >
-              <FontAwesomeIcon icon={faUtensils} className="text-xl flex-shrink-0" />
+              <FontAwesomeIcon icon={faUtensils} className="text-lg flex-shrink-0 w-5 h-5" />
               {isExpanded && (
                 <>
-                  <span className="flex-1 text-left text-lg font-semibold truncate">Menu Item</span>
+                  <span className="flex-1 text-left font-medium truncate">Menu Item</span>
                   <FontAwesomeIcon
                     icon={faChevronRight}
-                    className={`text-sm transition-transform duration-300 ease-in-out ${menuItemOpen ? 'rotate-90' : 'rotate-0'}`}
+                    className={`text-xs transition-transform duration-300 ease-in-out ${menuItemOpen ? 'rotate-90' : 'rotate-0'}`}
                   />
                 </>
               )}
@@ -141,27 +141,21 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
             {/* Dropdown Items */}
             {isExpanded && (
               <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                menuItemOpen ? 'max-h-24 opacity-100' : 'max-h-0 opacity-0'
+                menuItemOpen ? 'max-h-32 opacity-100' : 'max-h-0 opacity-0'
               }`}>
-                <div className="ml-6 mt-2 space-y-1 p-2 rounded-lg bg-stone-50/50 dark:bg-neutral-800/50 border border-stone-200/50 dark:border-neutral-700/50">
+                <div className="ml-3 mt-1 space-y-0.5">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       navigate('/staff/add-item');
                     }}
-                    className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-md text-sm transition-all duration-200 ${
                       isAddItem
-                        ? "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 shadow-sm"
-                        : "text-neutral-600 dark:text-neutral-400 hover:bg-white dark:hover:bg-neutral-700 hover:text-orange-600 dark:hover:text-orange-400 hover:shadow-sm"
+                        ? "text-orange-600 dark:text-orange-400 bg-orange-50/60 dark:bg-orange-950/20 font-medium"
+                        : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-300 hover:bg-neutral-100/50 dark:hover:bg-neutral-800/30"
                     }`}
                   >
-                    <div className={`flex h-6 w-6 items-center justify-center rounded-md ${
-                      isAddItem
-                        ? 'bg-orange-500 text-white'
-                        : 'bg-stone-200 dark:bg-neutral-600 text-neutral-600 dark:text-neutral-400'
-                    }`}>
-                      <FontAwesomeIcon icon={faPlus} className="text-xs" />
-                    </div>
+                    <FontAwesomeIcon icon={faPlus} className="text-xs w-4 flex-shrink-0" />
                     <span>Add Item</span>
                   </button>
 
@@ -170,19 +164,13 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                       e.stopPropagation();
                       navigate('/staff/items');
                     }}
-                    className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-md text-sm transition-all duration-200 ${
                       isMenuItemList
-                        ? "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 shadow-sm"
-                        : "text-neutral-600 dark:text-neutral-400 hover:bg-white dark:hover:bg-neutral-700 hover:text-orange-600 dark:hover:text-orange-400 hover:shadow-sm"
+                        ? "text-orange-600 dark:text-orange-400 bg-orange-50/60 dark:bg-orange-950/20 font-medium"
+                        : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-300 hover:bg-neutral-100/50 dark:hover:bg-neutral-800/30"
                     }`}
                   >
-                    <div className={`flex h-6 w-6 items-center justify-center rounded-md ${
-                      isMenuItemList
-                        ? 'bg-orange-500 text-white'
-                        : 'bg-stone-200 dark:bg-neutral-600 text-neutral-600 dark:text-neutral-400'
-                    }`}>
-                      <FontAwesomeIcon icon={faList} className="text-xs" />
-                    </div>
+                    <FontAwesomeIcon icon={faList} className="text-xs w-4 flex-shrink-0" />
                     <span>Item List</span>
                   </button>
                 </div>
@@ -197,19 +185,19 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                 if (!isExpanded) return;
                 toggleSupplier();
               }}
-              className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
+              className={`w-full flex items-center justify-center lg:justify-start gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${
                 isAddSupplier || isSupplierList
                   ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
-                  : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
+                  : "text-neutral-700 dark:text-neutral-300 hover:bg-orange-50/80 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
               }`}
             >
-              <FontAwesomeIcon icon={faBuilding} className="text-xl flex-shrink-0" />
+              <FontAwesomeIcon icon={faBuilding} className="text-lg flex-shrink-0 w-5 h-5" />
               {isExpanded && (
                 <>
-                  <span className="flex-1 text-left text-lg font-semibold truncate">Supplier</span>
+                  <span className="flex-1 text-left font-medium truncate">Supplier</span>
                   <FontAwesomeIcon
                     icon={faChevronRight}
-                    className={`text-sm transition-transform duration-300 ease-in-out ${supplierOpen ? 'rotate-90' : 'rotate-0'}`}
+                    className={`text-xs transition-transform duration-300 ease-in-out ${supplierOpen ? 'rotate-90' : 'rotate-0'}`}
                   />
                 </>
               )}
@@ -218,27 +206,21 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
             {/* Dropdown Items */}
             {isExpanded && (
               <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                supplierOpen ? 'max-h-24 opacity-100' : 'max-h-0 opacity-0'
+                supplierOpen ? 'max-h-32 opacity-100' : 'max-h-0 opacity-0'
               }`}>
-                <div className="ml-6 mt-2 space-y-1 p-2 rounded-lg bg-stone-50/50 dark:bg-neutral-800/50 border border-stone-200/50 dark:border-neutral-700/50">
+                <div className="ml-3 mt-1 space-y-0.5">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       navigate('/staff/add-supplier');
                     }}
-                    className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-md text-sm transition-all duration-200 ${
                       isAddSupplier
-                        ? "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 shadow-sm"
-                        : "text-neutral-600 dark:text-neutral-400 hover:bg-white dark:hover:bg-neutral-700 hover:text-orange-600 dark:hover:text-orange-400 hover:shadow-sm"
+                        ? "text-orange-600 dark:text-orange-400 bg-orange-50/60 dark:bg-orange-950/20 font-medium"
+                        : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-300 hover:bg-neutral-100/50 dark:hover:bg-neutral-800/30"
                     }`}
                   >
-                    <div className={`flex h-6 w-6 items-center justify-center rounded-md ${
-                      isAddSupplier
-                        ? 'bg-orange-500 text-white'
-                        : 'bg-stone-200 dark:bg-neutral-600 text-neutral-600 dark:text-neutral-400'
-                    }`}>
-                      <FontAwesomeIcon icon={faPlus} className="text-xs" />
-                    </div>
+                    <FontAwesomeIcon icon={faPlus} className="text-xs w-4 flex-shrink-0" />
                     <span>Add Supplier</span>
                   </button>
 
@@ -247,19 +229,13 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                       e.stopPropagation();
                       navigate('/staff/suppliers');
                     }}
-                    className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-md text-sm transition-all duration-200 ${
                       isSupplierList
-                        ? "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 shadow-sm"
-                        : "text-neutral-600 dark:text-neutral-400 hover:bg-white dark:hover:bg-neutral-700 hover:text-orange-600 dark:hover:text-orange-400 hover:shadow-sm"
+                        ? "text-orange-600 dark:text-orange-400 bg-orange-50/60 dark:bg-orange-950/20 font-medium"
+                        : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-300 hover:bg-neutral-100/50 dark:hover:bg-neutral-800/30"
                     }`}
                   >
-                    <div className={`flex h-6 w-6 items-center justify-center rounded-md ${
-                      isSupplierList
-                        ? 'bg-orange-500 text-white'
-                        : 'bg-stone-200 dark:bg-neutral-600 text-neutral-600 dark:text-neutral-400'
-                    }`}>
-                      <FontAwesomeIcon icon={faList} className="text-xs" />
-                    </div>
+                    <FontAwesomeIcon icon={faList} className="text-xs w-4 flex-shrink-0" />
                     <span>Supplier List</span>
                   </button>
                 </div>
@@ -274,19 +250,19 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                 if (!isExpanded) return;
                 toggleStocks();
               }}
-              className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
+              className={`w-full flex items-center justify-center lg:justify-start gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${
                 isStocksActive
                   ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
-                  : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
+                  : "text-neutral-700 dark:text-neutral-300 hover:bg-orange-50/80 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
               }`}
             >
-              <FontAwesomeIcon icon={faWarehouse} className="text-xl flex-shrink-0" />
+              <FontAwesomeIcon icon={faWarehouse} className="text-lg flex-shrink-0 w-5 h-5" />
               {isExpanded && (
                 <>
-                  <span className="flex-1 text-left text-lg font-semibold truncate">Inventory</span>
+                  <span className="flex-1 text-left font-medium truncate">Inventory</span>
                   <FontAwesomeIcon
                     icon={faChevronRight}
-                    className={`text-sm transition-transform duration-300 ease-in-out ${stocksOpen ? 'rotate-90' : 'rotate-0'}`}
+                    className={`text-xs transition-transform duration-300 ease-in-out ${stocksOpen ? 'rotate-90' : 'rotate-0'}`}
                   />
                 </>
               )}
@@ -295,27 +271,21 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
             {/* Dropdown Items */}
             {isExpanded && (
               <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                stocksOpen ? 'max-h-24 opacity-100' : 'max-h-0 opacity-0'
+                stocksOpen ? 'max-h-32 opacity-100' : 'max-h-0 opacity-0'
               }`}>
-                <div className="ml-6 mt-2 space-y-1 p-2 rounded-lg bg-stone-50/50 dark:bg-neutral-800/50 border border-stone-200/50 dark:border-neutral-700/50">
+                <div className="ml-3 mt-1 space-y-0.5">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       navigate('/staff/add-stocks');
                     }}
-                    className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-md text-sm transition-all duration-200 ${
                       isAddStocks
-                        ? "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 shadow-sm"
-                        : "text-neutral-600 dark:text-neutral-400 hover:bg-white dark:hover:bg-neutral-700 hover:text-orange-600 dark:hover:text-orange-400 hover:shadow-sm"
+                        ? "text-orange-600 dark:text-orange-400 bg-orange-50/60 dark:bg-orange-950/20 font-medium"
+                        : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-300 hover:bg-neutral-100/50 dark:hover:bg-neutral-800/30"
                     }`}
                   >
-                    <div className={`flex h-6 w-6 items-center justify-center rounded-md ${
-                      isAddStocks
-                        ? 'bg-orange-500 text-white'
-                        : 'bg-stone-200 dark:bg-neutral-600 text-neutral-600 dark:text-neutral-400'
-                    }`}>
-                      <FontAwesomeIcon icon={faPlus} className="text-xs" />
-                    </div>
+                    <FontAwesomeIcon icon={faPlus} className="text-xs w-4 flex-shrink-0" />
                     <span>Add Stocks</span>
                   </button>
 
@@ -324,19 +294,13 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                       e.stopPropagation();
                       navigate('/staff/stocks');
                     }}
-                    className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-md text-sm transition-all duration-200 ${
                       isStocksList
-                        ? "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 shadow-sm"
-                        : "text-neutral-600 dark:text-neutral-400 hover:bg-white dark:hover:bg-neutral-700 hover:text-orange-600 dark:hover:text-orange-400 hover:shadow-sm"
+                        ? "text-orange-600 dark:text-orange-400 bg-orange-50/60 dark:bg-orange-950/20 font-medium"
+                        : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-300 hover:bg-neutral-100/50 dark:hover:bg-neutral-800/30"
                     }`}
                   >
-                    <div className={`flex h-6 w-6 items-center justify-center rounded-md ${
-                      isStocksList
-                        ? 'bg-orange-500 text-white'
-                        : 'bg-stone-200 dark:bg-neutral-600 text-neutral-600 dark:text-neutral-400'
-                    }`}>
-                      <FontAwesomeIcon icon={faList} className="text-xs" />
-                    </div>
+                    <FontAwesomeIcon icon={faList} className="text-xs w-4 flex-shrink-0" />
                     <span>View Inventory</span>
                   </button>
                 </div>
@@ -347,38 +311,38 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
           {/* Sales - Standalone */}
           <button
             onClick={() => navigate('/staff/sales')}
-            className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
+            className={`w-full flex items-center justify-center lg:justify-start gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${
               isSales
                 ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
-                : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
+                : "text-neutral-700 dark:text-neutral-300 hover:bg-orange-50/80 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
             }`}
           >
-            <FontAwesomeIcon icon={faChartLine} className="text-xl flex-shrink-0" />
+            <FontAwesomeIcon icon={faChartLine} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left text-lg font-semibold truncate">Sales</span>
+              <span className="flex-1 text-left font-medium truncate">Sales</span>
             )}
           </button>
 
           {/* Divider - System Section */}
           {isExpanded && (
-            <div className="py-2">
+            <div className="my-3 pt-1">
               <div className="border-t border-neutral-200 dark:border-neutral-700"></div>
-              <p className="text-xs font-semibold text-neutral-400 dark:text-neutral-500 px-5 pt-2">SYSTEM</p>
+              <p className="text-xs font-semibold text-neutral-400 dark:text-neutral-500 px-4 pt-2">SYSTEM</p>
             </div>
           )}
 
           {/* Audit Trail */}
           <button
             onClick={() => navigate('/staff/audit-trail')}
-            className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
+            className={`w-full flex items-center justify-center lg:justify-start gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${
               isAuditTrail
                 ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
-                : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
+                : "text-neutral-700 dark:text-neutral-300 hover:bg-orange-50/80 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
             }`}
           >
-            <FontAwesomeIcon icon={faClipboardList} className="text-xl flex-shrink-0" />
+            <FontAwesomeIcon icon={faClipboardList} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left text-lg font-semibold truncate">Audit Trail</span>
+              <span className="flex-1 text-left font-medium truncate">Audit Trail</span>
             )}
           </button>
         </nav>

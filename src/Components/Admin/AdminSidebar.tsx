@@ -33,44 +33,44 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
         !isOpen ? '-translate-x-full' : 'translate-x-0'
       } lg:translate-x-0 ${isExpanded ? 'w-72' : 'w-24'}`}>
       {/* Header with Branding */}
-        <div className="sticky top-0 flex items-center justify-center border-b border-neutral-200 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-sm px-5 py-6 transition-all duration-300">
+        <div className="sticky top-0 flex items-center justify-center border-b border-neutral-200 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-sm px-4 py-5 transition-all duration-300">
           {isExpanded ? (
-            <div className="flex items-center gap-4 w-full">
-              <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg">
-                <FontAwesomeIcon icon={faCoffee} className="text-2xl" />
+            <div className="flex items-center gap-3 w-full">
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg">
+                <FontAwesomeIcon icon={faCoffee} className="text-xl" />
               </div>
-              <div className="flex-1 min-w-0">
-                <h2 className="text-xl font-bold text-neutral-900 dark:text-white">KapeRest</h2>
-                <p className="text-sm text-orange-600 dark:text-orange-400 font-medium">Admin Portal</p>
+              <div className="flex-1 min-w-0 flex flex-col justify-center">
+                <h2 className="text-2xl font-black text-neutral-900 dark:text-white tracking-tight leading-tight">KapeRest</h2>
+                <p className="text-sm font-semibold text-orange-600 dark:text-orange-400 uppercase tracking-wide leading-none">Admin Portal</p>
               </div>
             </div>
           ) : (
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg">
-              <FontAwesomeIcon icon={faCoffee} className="text-2xl" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg">
+              <FontAwesomeIcon icon={faCoffee} className="text-xl" />
             </div>
           )}
         </div>
 
         {/* Navigation Items */}
-        <nav className="flex-1 overflow-y-auto px-4 py-5 space-y-2">
+        <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-2">
           {/* Dashboard */}
           <button
             onClick={() => navigate('/admin')}
-            className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
+            className={`w-full flex items-center justify-center lg:justify-start gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${
               isDashboard
                 ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
-                : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
+                : "text-neutral-700 dark:text-neutral-300 hover:bg-orange-50/80 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
             }`}
           >
-            <FontAwesomeIcon icon={faHome} className="text-xl flex-shrink-0" />
+            <FontAwesomeIcon icon={faHome} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left text-lg font-semibold truncate">Dashboard</span>
+              <span className="flex-1 text-left font-medium truncate">Dashboard</span>
             )}
           </button>
 
           {/* Divider - Operations */}
           {isExpanded && (
-            <div className="py-2.5">
+            <div className="my-3 pt-1">
               <div className="border-t border-neutral-200 dark:border-neutral-700"></div>
             </div>
           )}
@@ -78,36 +78,36 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
           {/* Branch */}
           <button
             onClick={() => navigate('/admin/branch')}
-            className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
+            className={`w-full flex items-center justify-center lg:justify-start gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${
               isBranch
                 ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
-                : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
+                : "text-neutral-700 dark:text-neutral-300 hover:bg-orange-50/80 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
             }`}
           >
-            <FontAwesomeIcon icon={faBuilding} className="text-xl flex-shrink-0" />
+            <FontAwesomeIcon icon={faBuilding} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left text-lg font-semibold truncate">Branch</span>
+              <span className="flex-1 text-left font-medium truncate">Branch</span>
             )}
           </button>
 
           {/* Accounts */}
           <button
             onClick={() => navigate('/admin/accounts')}
-            className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
+            className={`w-full flex items-center justify-center lg:justify-start gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${
               isAccounts
                 ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
-                : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
+                : "text-neutral-700 dark:text-neutral-300 hover:bg-orange-50/80 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
             }`}
           >
-            <FontAwesomeIcon icon={faUsers} className="text-xl flex-shrink-0" />
+            <FontAwesomeIcon icon={faUsers} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left text-lg font-semibold truncate">Accounts</span>
+              <span className="flex-1 text-left font-medium truncate">Accounts</span>
             )}
           </button>
 
           {/* Divider - Inventory & Products */}
           {isExpanded && (
-            <div className="py-2.5">
+            <div className="my-3 pt-1">
               <div className="border-t border-neutral-200 dark:border-neutral-700"></div>
             </div>
           )}
@@ -115,21 +115,21 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
           {/* Inventory */}
           <button
             onClick={() => navigate('/admin/inventory')}
-            className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
+            className={`w-full flex items-center justify-center lg:justify-start gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${
               isInventory
                 ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
-                : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
+                : "text-neutral-700 dark:text-neutral-300 hover:bg-orange-50/80 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
             }`}
           >
-            <FontAwesomeIcon icon={faBoxes} className="text-xl flex-shrink-0" />
+            <FontAwesomeIcon icon={faBoxes} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left text-lg font-semibold truncate">Inventory</span>
+              <span className="flex-1 text-left font-medium truncate">Inventory</span>
             )}
           </button>
 
           {/* Divider - Financial */}
           {isExpanded && (
-            <div className="py-2.5">
+            <div className="my-3 pt-1">
               <div className="border-t border-neutral-200 dark:border-neutral-700"></div>
             </div>
           )}
@@ -137,36 +137,36 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
           {/* Sales */}
           <button
             onClick={() => navigate('/admin/sales')}
-            className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
+            className={`w-full flex items-center justify-center lg:justify-start gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${
               isSales
                 ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
-                : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
+                : "text-neutral-700 dark:text-neutral-300 hover:bg-orange-50/80 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
             }`}
           >
-            <FontAwesomeIcon icon={faChartLine} className="text-xl flex-shrink-0" />
+            <FontAwesomeIcon icon={faChartLine} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left text-lg font-semibold truncate">Sales</span>
+              <span className="flex-1 text-left font-medium truncate">Sales</span>
             )}
           </button>
 
           {/* Tax & Discounts */}
           <button
             onClick={() => navigate('/admin/tax-discounts')}
-            className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
+            className={`w-full flex items-center justify-center lg:justify-start gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${
               isTaxDiscounts
                 ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
-                : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
+                : "text-neutral-700 dark:text-neutral-300 hover:bg-orange-50/80 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
             }`}
           >
-            <FontAwesomeIcon icon={faPercent} className="text-xl flex-shrink-0" />
+            <FontAwesomeIcon icon={faPercent} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left text-lg font-semibold truncate">Tax & Discounts</span>
+              <span className="flex-1 text-left font-medium truncate">Tax & Discounts</span>
             )}
           </button>
 
           {/* Divider - System */}
           {isExpanded && (
-            <div className="py-2.5">
+            <div className="my-3 pt-1">
               <div className="border-t border-neutral-200 dark:border-neutral-700"></div>
             </div>
           )}
@@ -174,15 +174,15 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
           {/* Audit Trail */}
           <button
             onClick={() => navigate('/admin/audit-trail')}
-            className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all duration-200 group ${
+            className={`w-full flex items-center justify-center lg:justify-start gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${
               isAuditTrail
                 ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
-                : "text-neutral-600 dark:text-neutral-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-950/20 dark:hover:to-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
+                : "text-neutral-700 dark:text-neutral-300 hover:bg-orange-50/80 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
             }`}
           >
-            <FontAwesomeIcon icon={faClipboardList} className="text-xl flex-shrink-0" />
+            <FontAwesomeIcon icon={faClipboardList} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left text-lg font-semibold truncate">Audit Trail</span>
+              <span className="flex-1 text-left font-medium truncate">Audit Trail</span>
             )}
           </button>
         </nav>
