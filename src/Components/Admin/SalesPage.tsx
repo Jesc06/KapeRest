@@ -292,18 +292,18 @@ const SalesPage: React.FC = () => {
 
                 {/* Right Side - Generate Reports - Compact with Label on Top */}
                 <div className="relative">
-                  {/* Label Badge on Top Edge - Polished Premium */}
-                  <div className="absolute -top-4 left-5 z-10">
-                    <div className="flex items-center gap-2 px-4 py-1.5 rounded-xl bg-gradient-to-r from-orange-500 via-orange-600 to-amber-500 shadow-lg shadow-orange-500/30 border border-orange-400/40">
-                      <FontAwesomeIcon icon={faDownload} className="h-3.5 w-3.5 text-white drop-shadow" />
-                      <span className="text-xs font-extrabold text-white uppercase tracking-wide drop-shadow">Generate Report</span>
+                  {/* Label Badge on Top Edge - Polished & Subtle */}
+                  <div className="absolute -top-3 left-6 z-10">
+                    <div className="px-3 py-1 rounded-md bg-gradient-to-r from-orange-500 to-orange-600 text-white text-xs font-semibold tracking-wide shadow-sm border-2 border-white/25 backdrop-blur-sm">
+                      Generate Report
                     </div>
                   </div>
 
-                  {/* Premium Card - Same as Staff Sales */}
-                  <div className="relative flex items-center gap-2.5 px-5 py-3 pt-7 rounded-xl bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 shadow-xl shadow-orange-500/40 ring-1 ring-orange-400/50 backdrop-blur-sm overflow-hidden">
-                    {/* Animated background shimmer */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"></div>
+                  {/* Cleaned Compact Card */}
+                  <div className="relative flex items-center gap-2 px-4 py-3 pt-6 rounded-xl bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 shadow-md shadow-orange-300/20 ring-1 ring-orange-300/20 backdrop-blur-sm overflow-hidden">
+                    {/* Subtle shimmer layer (reduced) */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/6 to-transparent opacity-60"></div>
+
                     {[
                       { type: 'daily', label: 'Daily', icon: faSun },
                       { type: 'weekly', label: 'Weekly', icon: faCalendarWeek },
@@ -313,14 +313,17 @@ const SalesPage: React.FC = () => {
                         key={type}
                         onClick={() => handleGenerateReport(type as any)}
                         disabled={isGenerating !== null}
-                        className={`group relative flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition-all duration-300 overflow-hidden
+                        className={`group relative flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-semibold transition-colors duration-200 overflow-hidden
                           ${isGenerating === type
-                            ? 'bg-white text-orange-600 shadow-lg scale-105'
-                            : 'bg-white/90 text-orange-700 hover:bg-white hover:scale-105 hover:shadow-lg'}
+                            ? 'bg-white text-orange-600 shadow-sm scale-105 border border-orange-200'
+                            : 'bg-white/95 text-orange-700 hover:bg-white hover:shadow-sm'}
                           disabled:opacity-50 disabled:cursor-not-allowed`}
                       >
-                        <FontAwesomeIcon icon={icon} className={`h-4 w-4 relative z-10 ${isGenerating === type ? '' : 'text-orange-500'}`} />
+                        <FontAwesomeIcon icon={icon} className={`h-3.5 w-3.5 relative z-10 ${isGenerating === type ? '' : 'text-orange-500'}`} />
                         <span className="relative z-10">{label}</span>
+                        {isGenerating === type && (
+                          <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent animate-pulse"></div>
+                        )}
                       </button>
                     ))}
                   </div>
