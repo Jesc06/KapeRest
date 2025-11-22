@@ -181,9 +181,9 @@ const SalesPage: React.FC = () => {
         <div className={`flex h-screen w-full flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-72' : 'lg:ml-24'}`}>
           {/* Premium Header with Glass Morphism */}
           <div className="sticky top-0 z-20 border-b border-orange-200/30 dark:border-neutral-700/50 bg-white/70 dark:bg-neutral-900/70 backdrop-blur-xl shadow-lg shadow-orange-500/5">
-            <div className="px-4 sm:px-6 md:px-8 py-4">
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3 flex-shrink-0">
+            <div className="px-5 sm:px-7 md:px-9 py-5">
+              <div className="flex items-center justify-between gap-5">
+                <div className="flex items-center gap-4 flex-shrink-0">
                   <button
                     onClick={() => setSidebarOpen(!sidebarOpen)}
                     className="lg:hidden flex-shrink-0 h-11 w-11 flex items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white transition-all duration-200 active:scale-95 shadow-lg shadow-orange-500/30"
@@ -193,14 +193,14 @@ const SalesPage: React.FC = () => {
 
                   <button
                     onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                    className="hidden lg:flex flex-shrink-0 h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-orange-700 text-white transition-all duration-200 active:scale-95 shadow-xl shadow-orange-500/30"
+                    className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-orange-700 text-white transition-all duration-200 active:scale-95 shadow-xl shadow-orange-500/30"
                   >
-                    <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
+                    <FontAwesomeIcon icon={faBars} className="h-4 w-4" />
                   </button>
 
                   <div>
                     <h1 className="text-xl font-black text-neutral-900 dark:text-white tracking-tight">Sales Analytics</h1>
-                    <p className="text-xs font-medium text-neutral-600 dark:text-neutral-400">Track and analyze revenue</p>
+                    <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Track and analyze revenue</p>
                   </div>
                 </div>
 
@@ -228,23 +228,25 @@ const SalesPage: React.FC = () => {
                   </div>
                 </div>
 
-                <LogoutPanel />
+                <div className="flex-shrink-0">
+                  <LogoutPanel />
+                </div>
               </div>
             </div>
           </div>
 
           {/* Main Content */}
           <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
-            <div className="flex-1 flex flex-col gap-6 px-4 sm:px-6 md:px-8 py-6 overflow-auto">
+            <div className="flex-1 flex flex-col gap-6 px-5 sm:px-7 md:px-9 py-6 overflow-auto">
               
               {/* Filters and Generate Reports Section - Above Cards */}
-              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
                 {/* Left Side - Period Filters and Branch */}
                 <div className="flex items-center gap-3 flex-wrap">
                   {/* Period Label Badge */}
                   <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-stone-100 to-stone-200 dark:from-neutral-800 dark:to-neutral-700 border border-stone-300 dark:border-neutral-600">
                     <div className="h-2 w-2 rounded-full bg-orange-600 animate-pulse"></div>
-                    <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Period</span>
+                    <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Period</span>
                   </div>
 
                   {/* Period Filter Pills */}
@@ -300,7 +302,7 @@ const SalesPage: React.FC = () => {
                   </div>
 
                   {/* Cleaned Compact Card */}
-                  <div className="relative flex items-center gap-2 px-4 py-3 pt-6 rounded-xl bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 shadow-md shadow-orange-300/20 ring-1 ring-orange-300/20 backdrop-blur-sm overflow-hidden">
+                  <div className="relative flex items-center gap-2 px-4 py-3 pt-6 rounded-xl bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 shadow-lg shadow-orange-300/20 ring-1 ring-orange-300/20 backdrop-blur-sm overflow-hidden">
                     {/* Subtle shimmer layer (reduced) */}
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/6 to-transparent opacity-60"></div>
 
@@ -331,7 +333,7 @@ const SalesPage: React.FC = () => {
               </div>
 
               {/* Premium Stats Cards with Vibrant Gradients */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-7">
                 {/* Total Sales Card - Orange Gradient */}
                 <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 p-6 shadow-2xl shadow-orange-500/30 hover:shadow-orange-500/50 transition-all duration-300 hover:scale-105">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -394,10 +396,10 @@ const SalesPage: React.FC = () => {
                 <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-white via-orange-50/30 to-white dark:from-neutral-800 dark:via-orange-950/20 dark:to-neutral-800">
                   <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-orange-500 to-orange-600"></div>
                   
-                  <div className="px-6 sm:px-8 py-6">
-                    <div className="flex items-center justify-between flex-wrap gap-4">
-                      <div className="flex items-center gap-4">
-                        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/30">
+                  <div className="px-7 sm:px-9 py-7">
+                    <div className="flex items-center justify-between flex-wrap gap-5">
+                      <div className="flex items-center gap-5">
+                        <div className="flex h-15 w-15 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/30">
                           <FontAwesomeIcon icon={faReceipt} className="h-7 w-7 text-white" />
                         </div>
                         <div>
@@ -406,14 +408,14 @@ const SalesPage: React.FC = () => {
                         </div>
                       </div>
                       
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-4">
                         <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500/10 to-orange-600/10 border border-orange-300 dark:border-orange-700/50">
                           <div className="h-2 w-2 rounded-full bg-orange-600 animate-pulse"></div>
-                          <span className="text-xs font-bold uppercase tracking-wider text-orange-700 dark:text-orange-400">Active</span>
+                          <span className="text-sm font-bold uppercase tracking-wider text-orange-700 dark:text-orange-400">Active</span>
                         </div>
-                        <div className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-600 border border-stone-300 dark:border-neutral-600">
+                        <div className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-600 border border-stone-300 dark:border-neutral-600">
                           <div className="flex items-baseline gap-2">
-                            <span className="text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400">Records</span>
+                            <span className="text-sm font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400">Records</span>
                             <span className="text-2xl font-black text-neutral-900 dark:text-white">{filteredSales.length}</span>
                           </div>
                         </div>
@@ -445,35 +447,35 @@ const SalesPage: React.FC = () => {
                     <table className="w-full">
                       <thead className="sticky top-0 z-10">
                         <tr className="bg-gradient-to-r from-stone-50 via-stone-100/80 to-stone-50 dark:from-neutral-800 dark:via-neutral-750 dark:to-neutral-800 border-b-2 border-stone-300 dark:border-neutral-700 backdrop-blur-sm">
-                          <th className="px-6 py-4 text-left">
+                          <th className="px-7 py-4 text-left">
                             <div className="flex items-center gap-2">
                               <div className="h-2 w-2 rounded-full bg-gradient-to-r from-orange-500 to-orange-600"></div>
-                              <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Transaction ID</span>
+                              <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Transaction ID</span>
                             </div>
                           </th>
-                          <th className="px-6 py-4 text-left">
-                            <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Product</span>
+                          <th className="px-7 py-4 text-left">
+                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Product</span>
                           </th>
-                          <th className="px-6 py-4 text-center">
-                            <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Quantity</span>
+                          <th className="px-7 py-4 text-center">
+                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Quantity</span>
                           </th>
-                          <th className="px-6 py-4 text-right">
-                            <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Unit Price</span>
+                          <th className="px-7 py-4 text-right">
+                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Unit Price</span>
                           </th>
-                          <th className="px-6 py-4 text-right">
-                            <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Total Amount</span>
+                          <th className="px-7 py-4 text-right">
+                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Total Amount</span>
                           </th>
-                          <th className="px-6 py-4 text-left">
-                            <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Cashier</span>
+                          <th className="px-7 py-4 text-left">
+                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Cashier</span>
                           </th>
-                          <th className="px-6 py-4 text-left">
-                            <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Branch</span>
+                          <th className="px-7 py-4 text-left">
+                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Branch</span>
                           </th>
-                          <th className="px-6 py-4 text-center">
-                            <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Payment</span>
+                          <th className="px-7 py-4 text-center">
+                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Payment</span>
                           </th>
-                          <th className="px-6 py-4 text-left">
-                            <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Date & Time</span>
+                          <th className="px-7 py-4 text-left">
+                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Date & Time</span>
                           </th>
                         </tr>
                       </thead>
@@ -483,44 +485,44 @@ const SalesPage: React.FC = () => {
                             key={sale.id}
                             className="group relative bg-white dark:bg-neutral-800 hover:bg-gradient-to-r hover:from-orange-50/50 hover:via-orange-50/30 hover:to-transparent dark:hover:from-orange-950/20 dark:hover:via-orange-950/10 dark:hover:to-transparent transition-all duration-300 cursor-pointer"
                           >
-                            <td className="px-6 py-5 relative">
+                            <td className="px-7 py-5 relative">
                               <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-orange-500 to-orange-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                               <span className="text-sm font-black text-orange-600 dark:text-orange-400 group-hover:text-orange-700 dark:group-hover:text-orange-300 transition-colors">
                                 {sale.transactionId}
                               </span>
                             </td>
-                            <td className="px-6 py-5">
+                            <td className="px-7 py-5">
                               <span className="text-sm font-semibold text-neutral-900 dark:text-white">
                                 {sale.productName}
                               </span>
                             </td>
-                            <td className="px-6 py-5 text-center">
+                            <td className="px-7 py-5 text-center">
                               <span className="text-sm font-bold text-neutral-700 dark:text-neutral-300 tabular-nums">
                                 {sale.quantity}
                               </span>
                             </td>
-                            <td className="px-6 py-5 text-right">
+                            <td className="px-7 py-5 text-right">
                               <span className="text-sm font-bold text-neutral-900 dark:text-white tabular-nums">
                                 ₱{sale.unitPrice.toFixed(2)}
                               </span>
                             </td>
-                            <td className="px-6 py-5 text-right">
+                            <td className="px-7 py-5 text-right">
                               <span className="text-base font-black text-green-600 dark:text-green-400 tabular-nums">
                                 ₱{sale.totalAmount.toLocaleString()}
                               </span>
                             </td>
-                            <td className="px-6 py-5">
+                            <td className="px-7 py-5">
                               <span className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
                                 {sale.cashierName}
                               </span>
                             </td>
-                            <td className="px-6 py-5">
+                            <td className="px-7 py-5">
                               <span className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
                                 {sale.branchName}
                               </span>
                             </td>
-                            <td className="px-6 py-5 text-center">
-                              <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs shadow-lg transition-all duration-300 group-hover:scale-105 ${
+                            <td className="px-7 py-5 text-center">
+                              <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-sm shadow-lg transition-all duration-300 group-hover:scale-105 ${
                                 sale.paymentMethod === 'Cash' 
                                   ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-green-500/30'
                                   : sale.paymentMethod === 'Card'
@@ -531,7 +533,7 @@ const SalesPage: React.FC = () => {
                                 {sale.paymentMethod}
                               </span>
                             </td>
-                            <td className="px-6 py-5">
+                            <td className="px-7 py-5">
                               <div className="flex flex-col gap-1">
                                 <span className="text-sm font-semibold text-neutral-900 dark:text-white">
                                   {formatDate(sale.transactionDate).split(',')[0]}

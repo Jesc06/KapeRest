@@ -164,7 +164,7 @@ const Sales: React.FC<SalesProps> = ({
               </div>
 
               {/* Logout Panel */}
-              <LogoutPanel userRole="Cashier" />
+              <LogoutPanel />
             </div>
 
             {/* Period Filter with Premium Design */}

@@ -114,7 +114,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
           )}
 
           {/* Menu Item Section */}
-          <div>
+          <div className="space-y-1">
             <button
               onClick={() => {
                 if (!isExpanded) return;
@@ -130,51 +130,68 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
               {isExpanded && (
                 <>
                   <span className="flex-1 text-left text-lg font-semibold truncate">Menu Item</span>
-                  <FontAwesomeIcon 
-                    icon={faChevronRight} 
-                    className={`text-xs transition-transform duration-200 ${menuItemOpen ? 'rotate-90' : 'rotate-0'}`}
+                  <FontAwesomeIcon
+                    icon={faChevronRight}
+                    className={`text-sm transition-transform duration-300 ease-in-out ${menuItemOpen ? 'rotate-90' : 'rotate-0'}`}
                   />
                 </>
               )}
             </button>
-            
-            {isExpanded && menuItemOpen && (
-              <div className="ml-8 mt-1 space-y-1">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate('/staff/add-item');
-                  }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
-                    isAddItem
-                      ? "text-orange-600 dark:text-orange-400 font-medium"
-                      : "text-neutral-600 dark:text-neutral-400 hover:text-orange-600 dark:hover:text-orange-400"
-                  }`}
-                >
-                  <FontAwesomeIcon icon={faPlus} className="text-xs" />
-                  <span>Add Item</span>
-                </button>
-                
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate('/staff/items');
-                  }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
-                    isMenuItemList
-                      ? "text-orange-600 dark:text-orange-400 font-medium"
-                      : "text-neutral-600 dark:text-neutral-400 hover:text-orange-600 dark:hover:text-orange-400"
-                  }`}
-                >
-                  <FontAwesomeIcon icon={faList} className="text-xs" />
-                  <span>Item List</span>
-                </button>
+
+            {/* Dropdown Items */}
+            {isExpanded && (
+              <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                menuItemOpen ? 'max-h-24 opacity-100' : 'max-h-0 opacity-0'
+              }`}>
+                <div className="ml-6 mt-2 space-y-1 p-2 rounded-lg bg-stone-50/50 dark:bg-neutral-800/50 border border-stone-200/50 dark:border-neutral-700/50">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate('/staff/add-item');
+                    }}
+                    className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                      isAddItem
+                        ? "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 shadow-sm"
+                        : "text-neutral-600 dark:text-neutral-400 hover:bg-white dark:hover:bg-neutral-700 hover:text-orange-600 dark:hover:text-orange-400 hover:shadow-sm"
+                    }`}
+                  >
+                    <div className={`flex h-6 w-6 items-center justify-center rounded-md ${
+                      isAddItem
+                        ? 'bg-orange-500 text-white'
+                        : 'bg-stone-200 dark:bg-neutral-600 text-neutral-600 dark:text-neutral-400'
+                    }`}>
+                      <FontAwesomeIcon icon={faPlus} className="text-xs" />
+                    </div>
+                    <span>Add Item</span>
+                  </button>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate('/staff/items');
+                    }}
+                    className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                      isMenuItemList
+                        ? "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 shadow-sm"
+                        : "text-neutral-600 dark:text-neutral-400 hover:bg-white dark:hover:bg-neutral-700 hover:text-orange-600 dark:hover:text-orange-400 hover:shadow-sm"
+                    }`}
+                  >
+                    <div className={`flex h-6 w-6 items-center justify-center rounded-md ${
+                      isMenuItemList
+                        ? 'bg-orange-500 text-white'
+                        : 'bg-stone-200 dark:bg-neutral-600 text-neutral-600 dark:text-neutral-400'
+                    }`}>
+                      <FontAwesomeIcon icon={faList} className="text-xs" />
+                    </div>
+                    <span>Item List</span>
+                  </button>
+                </div>
               </div>
             )}
           </div>
 
           {/* Supplier Section */}
-          <div>
+          <div className="space-y-1">
             <button
               onClick={() => {
                 if (!isExpanded) return;
@@ -190,51 +207,68 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
               {isExpanded && (
                 <>
                   <span className="flex-1 text-left text-lg font-semibold truncate">Supplier</span>
-                  <FontAwesomeIcon 
-                    icon={faChevronRight} 
-                    className={`text-xs transition-transform duration-200 ${supplierOpen ? 'rotate-90' : 'rotate-0'}`}
+                  <FontAwesomeIcon
+                    icon={faChevronRight}
+                    className={`text-sm transition-transform duration-300 ease-in-out ${supplierOpen ? 'rotate-90' : 'rotate-0'}`}
                   />
                 </>
               )}
             </button>
-            
-            {isExpanded && supplierOpen && (
-              <div className="ml-8 mt-1 space-y-1">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate('/staff/add-supplier');
-                  }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
-                    isAddSupplier
-                      ? "text-orange-600 dark:text-orange-400 font-medium"
-                      : "text-neutral-600 dark:text-neutral-400 hover:text-orange-600 dark:hover:text-orange-400"
-                  }`}
-                >
-                  <FontAwesomeIcon icon={faPlus} className="text-xs" />
-                  <span>Add Supplier</span>
-                </button>
-                
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate('/staff/suppliers');
-                  }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
-                    isSupplierList
-                      ? "text-orange-600 dark:text-orange-400 font-medium"
-                      : "text-neutral-600 dark:text-neutral-400 hover:text-orange-600 dark:hover:text-orange-400"
-                  }`}
-                >
-                  <FontAwesomeIcon icon={faList} className="text-xs" />
-                  <span>Supplier List</span>
-                </button>
+
+            {/* Dropdown Items */}
+            {isExpanded && (
+              <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                supplierOpen ? 'max-h-24 opacity-100' : 'max-h-0 opacity-0'
+              }`}>
+                <div className="ml-6 mt-2 space-y-1 p-2 rounded-lg bg-stone-50/50 dark:bg-neutral-800/50 border border-stone-200/50 dark:border-neutral-700/50">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate('/staff/add-supplier');
+                    }}
+                    className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                      isAddSupplier
+                        ? "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 shadow-sm"
+                        : "text-neutral-600 dark:text-neutral-400 hover:bg-white dark:hover:bg-neutral-700 hover:text-orange-600 dark:hover:text-orange-400 hover:shadow-sm"
+                    }`}
+                  >
+                    <div className={`flex h-6 w-6 items-center justify-center rounded-md ${
+                      isAddSupplier
+                        ? 'bg-orange-500 text-white'
+                        : 'bg-stone-200 dark:bg-neutral-600 text-neutral-600 dark:text-neutral-400'
+                    }`}>
+                      <FontAwesomeIcon icon={faPlus} className="text-xs" />
+                    </div>
+                    <span>Add Supplier</span>
+                  </button>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate('/staff/suppliers');
+                    }}
+                    className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                      isSupplierList
+                        ? "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 shadow-sm"
+                        : "text-neutral-600 dark:text-neutral-400 hover:bg-white dark:hover:bg-neutral-700 hover:text-orange-600 dark:hover:text-orange-400 hover:shadow-sm"
+                    }`}
+                  >
+                    <div className={`flex h-6 w-6 items-center justify-center rounded-md ${
+                      isSupplierList
+                        ? 'bg-orange-500 text-white'
+                        : 'bg-stone-200 dark:bg-neutral-600 text-neutral-600 dark:text-neutral-400'
+                    }`}>
+                      <FontAwesomeIcon icon={faList} className="text-xs" />
+                    </div>
+                    <span>Supplier List</span>
+                  </button>
+                </div>
               </div>
             )}
           </div>
 
-          {/* Stocks Section - Renamed as Inventory */}
-          <div>
+          {/* Inventory Section */}
+          <div className="space-y-1">
             <button
               onClick={() => {
                 if (!isExpanded) return;
@@ -250,45 +284,62 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
               {isExpanded && (
                 <>
                   <span className="flex-1 text-left text-lg font-semibold truncate">Inventory</span>
-                  <FontAwesomeIcon 
-                    icon={faChevronRight} 
-                    className={`text-xs transition-transform duration-200 ${stocksOpen ? 'rotate-90' : 'rotate-0'}`}
+                  <FontAwesomeIcon
+                    icon={faChevronRight}
+                    className={`text-sm transition-transform duration-300 ease-in-out ${stocksOpen ? 'rotate-90' : 'rotate-0'}`}
                   />
                 </>
               )}
             </button>
-            
-            {isExpanded && stocksOpen && (
-              <div className="ml-8 mt-1 space-y-1">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate('/staff/add-stocks');
-                  }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
-                    isAddStocks
-                      ? "text-orange-600 dark:text-orange-400 font-medium"
-                      : "text-neutral-600 dark:text-neutral-400 hover:text-orange-600 dark:hover:text-orange-400"
-                  }`}
-                >
-                  <FontAwesomeIcon icon={faPlus} className="text-xs" />
-                  <span>Add Stocks</span>
-                </button>
-                
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate('/staff/stocks');
-                  }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
-                    isStocksList
-                      ? "text-orange-600 dark:text-orange-400 font-medium"
-                      : "text-neutral-600 dark:text-neutral-400 hover:text-orange-600 dark:hover:text-orange-400"
-                  }`}
-                >
-                  <FontAwesomeIcon icon={faList} className="text-xs" />
-                  <span>View Inventory</span>
-                </button>
+
+            {/* Dropdown Items */}
+            {isExpanded && (
+              <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                stocksOpen ? 'max-h-24 opacity-100' : 'max-h-0 opacity-0'
+              }`}>
+                <div className="ml-6 mt-2 space-y-1 p-2 rounded-lg bg-stone-50/50 dark:bg-neutral-800/50 border border-stone-200/50 dark:border-neutral-700/50">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate('/staff/add-stocks');
+                    }}
+                    className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                      isAddStocks
+                        ? "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 shadow-sm"
+                        : "text-neutral-600 dark:text-neutral-400 hover:bg-white dark:hover:bg-neutral-700 hover:text-orange-600 dark:hover:text-orange-400 hover:shadow-sm"
+                    }`}
+                  >
+                    <div className={`flex h-6 w-6 items-center justify-center rounded-md ${
+                      isAddStocks
+                        ? 'bg-orange-500 text-white'
+                        : 'bg-stone-200 dark:bg-neutral-600 text-neutral-600 dark:text-neutral-400'
+                    }`}>
+                      <FontAwesomeIcon icon={faPlus} className="text-xs" />
+                    </div>
+                    <span>Add Stocks</span>
+                  </button>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate('/staff/stocks');
+                    }}
+                    className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                      isStocksList
+                        ? "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 shadow-sm"
+                        : "text-neutral-600 dark:text-neutral-400 hover:bg-white dark:hover:bg-neutral-700 hover:text-orange-600 dark:hover:text-orange-400 hover:shadow-sm"
+                    }`}
+                  >
+                    <div className={`flex h-6 w-6 items-center justify-center rounded-md ${
+                      isStocksList
+                        ? 'bg-orange-500 text-white'
+                        : 'bg-stone-200 dark:bg-neutral-600 text-neutral-600 dark:text-neutral-400'
+                    }`}>
+                      <FontAwesomeIcon icon={faList} className="text-xs" />
+                    </div>
+                    <span>View Inventory</span>
+                  </button>
+                </div>
               </div>
             )}
           </div>

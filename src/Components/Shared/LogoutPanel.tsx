@@ -1,68 +1,75 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faUser, faSignOutAlt, faLock } from '@fortawesome/free-solid-svg-icons';
 
 interface LogoutPanelProps {
-  userRole?: string;
+  // No props needed - role determined by current route
 }
 
-const LogoutPanel: React.FC<LogoutPanelProps> = ({ userRole = 'Cashier' }) => {
+const LogoutPanel: React.FC<LogoutPanelProps> = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Determine user role based on current route
+  const getUserRole = () => {
+    if (location.pathname.startsWith('/staff')) return 'Staff';
+    if (location.pathname.startsWith('/admin')) return 'Admin';
+    return 'Cashier';
+  };
+
+  const userRole = getUserRole();
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowUserMenu(false);
+      }
+    };
+
+    if (showUserMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showUserMenu]);
 
   const handleLogout = () => {
     navigate('/login');
   };
 
   return (
-    <div className="hidden sm:flex items-center justify-center gap-3 sm:gap-4 px-3 sm:px-4 py-2 rounded-lg bg-stone-100 dark:bg-neutral-800 border border-stone-200 dark:border-neutral-700 shadow-sm backdrop-blur-sm flex-shrink-0">
-      {/* Divider */}
-      <div className="h-7 w-px bg-stone-300 dark:bg-neutral-700" />
-
-      {/* Terminal Info */}
-      <div className="flex flex-col gap-0.5">
-        <span className="text-[10px] font-semibold uppercase tracking-widest text-stone-600 dark:text-stone-400 opacity-75">Terminal</span>
-        <span className="text-sm font-bold text-neutral-900 dark:text-stone-100">Main Counter</span>
-      </div>
-
-      {/* Divider */}
-      <div className="h-7 w-px bg-stone-300 dark:bg-neutral-700" />
-
-      {/* Status Badge */}
-      <div className="flex items-center gap-2">
-        <div className="relative flex items-center justify-center">
-          <div className="absolute h-2 w-2 rounded-full bg-green-400 animate-pulse dark:bg-green-400" />
-          <div className="h-2 w-2 rounded-full bg-green-500 dark:bg-green-500" />
-        </div>
-        <span className="text-sm font-semibold text-green-700 dark:text-green-400">Online</span>
-      </div>
-
-      {/* Divider */}
-      <div className="h-8 w-px bg-stone-300 dark:bg-neutral-700" />
-
+    <div className="hidden sm:flex items-center justify-center flex-shrink-0 px-2">
       {/* User Menu Dropdown */}
-      <div className="relative">
+      <div className="relative" ref={dropdownRef}>
         <button
           onClick={() => setShowUserMenu(!showUserMenu)}
-          className="group flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 hover:bg-stone-200 dark:hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-orange-400/40"
+          className="group flex items-center gap-3 px-4 py-3 rounded-xl bg-white dark:bg-neutral-800 border border-stone-200 dark:border-neutral-700 shadow-sm hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400/40 hover:bg-stone-50 dark:hover:bg-neutral-700 min-w-[140px] sm:min-w-[160px]"
           title="User menu"
         >
-          <div className="h-8 w-8 rounded-full bg-orange-600 flex items-center justify-center text-sm font-bold text-white shadow-md">
-            <FontAwesomeIcon icon={faUser} className="h-4 w-4" />
+          <div className="h-9 w-9 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-sm font-bold text-white shadow-md flex-shrink-0">
+            <FontAwesomeIcon icon={faUser} className="h-4.5 w-4.5" />
           </div>
-          <FontAwesomeIcon icon={faChevronDown} className={`h-3.5 w-3.5 text-neutral-600 dark:text-stone-400 transition-transform duration-300 ${showUserMenu ? 'rotate-180' : ''}`} />
+          <div className="hidden md:flex flex-col items-start flex-1 min-w-0">
+            <p className="text-sm font-bold text-neutral-900 dark:text-white truncate w-full">{userRole}</p>
+            <p className="text-xs font-medium text-neutral-600 dark:text-neutral-400">Account</p>
+          </div>
+          <FontAwesomeIcon icon={faChevronDown} className={`h-4 w-4 text-neutral-600 dark:text-stone-400 transition-transform duration-300 flex-shrink-0 ${showUserMenu ? 'rotate-180' : ''}`} />
         </button>
 
         {/* Dropdown Menu */}
         {showUserMenu && (
-          <div className="absolute right-0 top-full mt-2 w-56 rounded-lg border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 shadow-lg overflow-hidden z-50">
-            <div className="px-4 py-3 border-b border-stone-200 dark:border-neutral-700">
+          <div className="absolute right-0 top-full mt-3 w-64 rounded-xl border border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 shadow-xl overflow-hidden z-[9999] animate-in fade-in-0 zoom-in-95 duration-200">
+            <div className="px-5 py-4 border-b border-stone-200 dark:border-neutral-700">
               <p className="text-xs font-bold uppercase tracking-widest text-neutral-600 dark:text-stone-400">Account</p>
               <p className="text-sm font-semibold text-neutral-900 dark:text-stone-100 mt-1">{userRole}</p>
             </div>
-            
+
             {/* Account Settings Section */}
             <div className="py-2">
               <button
@@ -72,7 +79,7 @@ const LogoutPanel: React.FC<LogoutPanelProps> = ({ userRole = 'Cashier' }) => {
                   navigate(isStaffPage ? '/staff/change-password' : '/cashier/change-password');
                   setShowUserMenu(false);
                 }}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-neutral-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-neutral-700 transition-all duration-200"
+                className="w-full flex items-center gap-3 px-5 py-3 text-sm font-semibold text-neutral-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-neutral-700 transition-all duration-200 rounded-none"
               >
                 <FontAwesomeIcon icon={faLock} className="h-4 w-4 text-orange-600 dark:text-orange-400" />
                 <span>Change Password</span>
@@ -86,7 +93,7 @@ const LogoutPanel: React.FC<LogoutPanelProps> = ({ userRole = 'Cashier' }) => {
             <div className="py-2">
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all duration-200"
+                className="w-full flex items-center gap-3 px-5 py-3 text-sm font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all duration-200 rounded-none"
               >
                 <FontAwesomeIcon icon={faSignOutAlt} className="h-4 w-4" />
                 <span>Logout</span>

@@ -176,7 +176,7 @@ const StaffAuditTrailPage: React.FC = () => {
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <LogoutPanel userRole="Staff" />
+                <LogoutPanel />
               </div>
             </div>
           </div>
