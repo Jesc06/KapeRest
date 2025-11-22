@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faSearch, faBars, faCalendarDays, faWeightScale, faCalendarAlt, faDownload, faReceipt, faMoneyBillWave, faChartLine, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faSearch, faBars, faCalendarDays, faWeightScale, faCalendarAlt, faDownload, faReceipt, faMoneyBillWave, faChartLine, faSpinner, faSun, faCalendarWeek, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import LogoutPanel from '../Shared/LogoutPanel';
 import StaffSidebar from './StaffSidebar';
 
@@ -231,64 +231,67 @@ const StaffSales: React.FC<StaffSalesProps> = ({
             </div>
           </div>
 
-          {/* Generate Reports - Aligned Right */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => handleGenerateReport('daily')}
-              disabled={isGenerating !== null}
-              className={`group relative flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold transition-all duration-300 overflow-hidden ${
-                isGenerating === 'daily'
-                  ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/40 scale-105'
-                  : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-orange-300 dark:hover:border-orange-700 hover:scale-105 active:scale-95'
-              } disabled:opacity-60 disabled:cursor-not-allowed`}
-            >
-              <FontAwesomeIcon 
-                icon={isGenerating === 'daily' ? faSpinner : faDownload} 
-                className={`h-3.5 w-3.5 ${isGenerating === 'daily' ? 'animate-spin' : ''}`} 
-              />
-              <span>Daily</span>
-              {isGenerating !== 'daily' && (
-                <div className="absolute inset-0 bg-gradient-to-r from-orange-500/0 via-orange-500/10 to-orange-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-              )}
-            </button>
+          {/* Generate Reports - Premium & Prominent */}
+          <div className="relative flex items-center gap-2.5 px-5 py-3 rounded-xl bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 shadow-xl shadow-orange-500/40 ring-1 ring-orange-400/50 backdrop-blur-sm overflow-hidden">
+            {/* Animated background shimmer */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"></div>
+            
+            <div className="relative flex items-center gap-2">
+              <FontAwesomeIcon icon={faDownload} className="h-4 w-4 text-white drop-shadow-lg" />
+              <span className="text-sm font-bold text-white tracking-wide uppercase drop-shadow-md">Generate Report</span>
+            </div>
+            
+            <div className="relative h-6 w-px bg-white/30"></div>
+            
+            <div className="relative flex items-center gap-2">
+              <button
+                onClick={() => handleGenerateReport('daily')}
+                disabled={isGenerating !== null}
+                className={`relative flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition-all duration-300 ${
+                  isGenerating === 'daily'
+                    ? 'bg-white text-orange-600 shadow-lg scale-105'
+                    : 'bg-white/90 text-orange-700 hover:bg-white hover:scale-105 hover:shadow-lg'
+                } disabled:opacity-50 disabled:cursor-not-allowed`}
+              >
+                <FontAwesomeIcon 
+                  icon={isGenerating === 'daily' ? faSpinner : faSun} 
+                  className={`h-3.5 w-3.5 ${isGenerating === 'daily' ? 'animate-spin' : ''}`} 
+                />
+                <span>Daily</span>
+              </button>
 
-            <button
-              onClick={() => handleGenerateReport('weekly')}
-              disabled={isGenerating !== null}
-              className={`group relative flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold transition-all duration-300 overflow-hidden ${
-                isGenerating === 'weekly'
-                  ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/40 scale-105'
-                  : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-orange-300 dark:hover:border-orange-700 hover:scale-105 active:scale-95'
-              } disabled:opacity-60 disabled:cursor-not-allowed`}
-            >
-              <FontAwesomeIcon 
-                icon={isGenerating === 'weekly' ? faSpinner : faDownload} 
-                className={`h-3.5 w-3.5 ${isGenerating === 'weekly' ? 'animate-spin' : ''}`} 
-              />
-              <span>Weekly</span>
-              {isGenerating !== 'weekly' && (
-                <div className="absolute inset-0 bg-gradient-to-r from-orange-500/0 via-orange-500/10 to-orange-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-              )}
-            </button>
+              <button
+                onClick={() => handleGenerateReport('weekly')}
+                disabled={isGenerating !== null}
+                className={`relative flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition-all duration-300 ${
+                  isGenerating === 'weekly'
+                    ? 'bg-white text-orange-600 shadow-lg scale-105'
+                    : 'bg-white/90 text-orange-700 hover:bg-white hover:scale-105 hover:shadow-lg'
+                } disabled:opacity-50 disabled:cursor-not-allowed`}
+              >
+                <FontAwesomeIcon 
+                  icon={isGenerating === 'weekly' ? faSpinner : faCalendarWeek} 
+                  className={`h-3.5 w-3.5 ${isGenerating === 'weekly' ? 'animate-spin' : ''}`} 
+                />
+                <span>Weekly</span>
+              </button>
 
-            <button
-              onClick={() => handleGenerateReport('monthly')}
-              disabled={isGenerating !== null}
-              className={`group relative flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold transition-all duration-300 overflow-hidden ${
-                isGenerating === 'monthly'
-                  ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/40 scale-105'
-                  : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-orange-300 dark:hover:border-orange-700 hover:scale-105 active:scale-95'
-              } disabled:opacity-60 disabled:cursor-not-allowed`}
-            >
-              <FontAwesomeIcon 
-                icon={isGenerating === 'monthly' ? faSpinner : faDownload} 
-                className={`h-3.5 w-3.5 ${isGenerating === 'monthly' ? 'animate-spin' : ''}`} 
-              />
-              <span>Monthly</span>
-              {isGenerating !== 'monthly' && (
-                <div className="absolute inset-0 bg-gradient-to-r from-orange-500/0 via-orange-500/10 to-orange-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-              )}
-            </button>
+              <button
+                onClick={() => handleGenerateReport('monthly')}
+                disabled={isGenerating !== null}
+                className={`relative flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition-all duration-300 ${
+                  isGenerating === 'monthly'
+                    ? 'bg-white text-orange-600 shadow-lg scale-105'
+                    : 'bg-white/90 text-orange-700 hover:bg-white hover:scale-105 hover:shadow-lg'
+                } disabled:opacity-50 disabled:cursor-not-allowed`}
+              >
+                <FontAwesomeIcon 
+                  icon={isGenerating === 'monthly' ? faSpinner : faCalendar} 
+                  className={`h-3.5 w-3.5 ${isGenerating === 'monthly' ? 'animate-spin' : ''}`} 
+                />
+                <span>Monthly</span>
+              </button>
+            </div>
           </div>
         </div>
         </div>
