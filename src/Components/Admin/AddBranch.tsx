@@ -1,17 +1,29 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faBuilding, faMapMarkerAlt, faSave } from '@fortawesome/free-solid-svg-icons';
+import { API_BASE_URL } from '../../config/api';
+
+interface BranchResponse {
+  id: number;
+  name: string;
+  location: string;
+  staff: string;
+  status: string;
+}
 
 interface AddBranchProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (branchData: { branchName: string; location: string }) => void;
+  onSubmit: (branchData: BranchResponse) => void;
 }
 
 const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
   const [branchName, setBranchName] = useState('');
   const [location, setLocation] = useState('');
   const [errors, setErrors] = useState<{ branchName?: string; location?: string }>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [apiError, setApiError] = useState<string>('');
+  const [apiSuccess, setApiSuccess] = useState(false);
 
   const validateForm = () => {
     const newErrors: { branchName?: string; location?: string } = {};
@@ -28,20 +40,91 @@ const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (validateForm()) {
-      onSubmit({
-        branchName: branchName.trim(),
-        location: location.trim(),
-      });
+      setIsSubmitting(true);
+      setApiError('');
+      setApiSuccess(false);
 
-      // Reset form
-      setBranchName('');
-      setLocation('');
-      setErrors({});
-      onClose();
+      try {
+        const token = localStorage.getItem('accessToken');
+        
+        if (!token) {
+          throw new Error('No authentication token found. Please login again.');
+        }
+
+        const branchData = {
+          name: branchName.trim(),
+          location: location.trim(),
+        };
+
+        console.log('Sending branch data:', branchData);
+
+        const response = await fetch(`${API_BASE_URL}/Branch/AddBranch`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(branchData)
+        });
+
+        const responseText = await response.text();
+        console.log('API Response:', responseText);
+        console.log('Response status:', response.status);
+
+        if (!response.ok) {
+          console.error('Add branch error response:', responseText);
+          
+          let errorMessage = responseText;
+          try {
+            const errorJson = JSON.parse(responseText);
+            errorMessage = errorJson.message || errorJson.error || errorJson.title || responseText;
+          } catch (e) {
+            errorMessage = responseText;
+          }
+          
+          throw new Error(errorMessage || 'Failed to add branch');
+        }
+
+        let result: BranchResponse;
+        try {
+          result = JSON.parse(responseText);
+        } catch (e) {
+          console.warn('Response is not JSON:', responseText);
+          // If backend returns plain text, create default response
+          result = {
+            id: 0,
+            name: branchName.trim(),
+            location: location.trim(),
+            staff: 'N/A',
+            status: 'N/A'
+          };
+        }
+        
+        console.log('Branch added successfully:', result);
+        setApiSuccess(true);
+
+        // Call parent onSubmit callback with full branch data
+        onSubmit(result);
+
+        // Reset form and close after success
+        setTimeout(() => {
+          setBranchName('');
+          setLocation('');
+          setErrors({});
+          setApiSuccess(false);
+          onClose();
+        }, 1500);
+
+      } catch (err) {
+        console.error('Error adding branch:', err);
+        setApiError(err instanceof Error ? err.message : 'Failed to add branch. Please try again.');
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -49,6 +132,8 @@ const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
     setBranchName('');
     setLocation('');
     setErrors({});
+    setApiError('');
+    setApiSuccess(false);
     onClose();
   };
 
@@ -143,21 +228,51 @@ const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-stone-200 dark:border-neutral-700">
-            <button
-              type="button"
-              onClick={handleClose}
-              className="px-6 py-3 rounded-xl border-2 border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 font-black text-sm uppercase tracking-wide hover:bg-stone-50 dark:hover:bg-neutral-700 transition-all duration-200 active:scale-95"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-black text-sm uppercase tracking-wide hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95"
-            >
-              <FontAwesomeIcon icon={faSave} className="h-4 w-4" />
-              Save Branch
-            </button>
+          <div className="flex flex-col gap-4">
+            {/* API Error Message */}
+            {apiError && (
+              <div className="p-4 rounded-xl bg-red-50 dark:bg-red-950/30 border-2 border-red-200 dark:border-red-800/50 animate-in slide-in-from-top duration-300">
+                <p className="text-sm font-bold text-red-600 dark:text-red-400 text-center">{apiError}</p>
+              </div>
+            )}
+            
+            {/* API Success Message */}
+            {apiSuccess && (
+              <div className="p-4 rounded-xl bg-green-50 dark:bg-green-950/30 border-2 border-green-200 dark:border-green-800/50 animate-in slide-in-from-top duration-300">
+                <p className="text-sm font-bold text-green-600 dark:text-green-400 text-center">Branch added successfully!</p>
+              </div>
+            )}
+
+            <div className="flex items-center justify-end gap-3 pt-4 border-t border-stone-200 dark:border-neutral-700">
+              <button
+                type="button"
+                onClick={handleClose}
+                disabled={isSubmitting}
+                className="px-6 py-3 rounded-xl border-2 border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 font-black text-sm uppercase tracking-wide hover:bg-stone-50 dark:hover:bg-neutral-700 transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-black text-sm uppercase tracking-wide hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? (
+                  <>
+                    <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" aria-hidden="true">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"></path>
+                    </svg>
+                    <span>Saving...</span>
+                  </>
+                ) : (
+                  <>
+                    <FontAwesomeIcon icon={faSave} className="h-4 w-4" />
+                    Save Branch
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </form>
       </div>

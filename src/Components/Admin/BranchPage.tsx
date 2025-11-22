@@ -5,6 +5,14 @@ import { faBars, faBuilding, faUsers, faMapMarkerAlt, faSearch, faPlus, faEdit, 
 import LogoutPanel from '../Shared/LogoutPanel';
 import AddBranch from './AddBranch';
 
+interface BranchResponse {
+  id: number;
+  name: string;
+  location: string;
+  staff: string;
+  status: string;
+}
+
 interface Branch {
   id: number;
   branchName: string;
@@ -32,17 +40,21 @@ const BranchPage: React.FC = () => {
     { id: 5, branchName: 'Quezon City', location: 'Quezon City', manager: 'Carlos Lopez', staffCount: 6, status: 'Inactive', createdDate: '2024-05-12' },
   ]);
 
-  const handleAddBranch = (branchData: { branchName: string; location: string }) => {
+  const handleAddBranch = (branchData: BranchResponse) => {
+    console.log('Received branch data from API:', branchData);
+    
     const newBranch: Branch = {
-      id: branches.length + 1,
-      branchName: branchData.branchName,
+      id: branchData.id || branches.length + 1,
+      branchName: branchData.name,
       location: branchData.location,
-      manager: 'To be assigned',
+      manager: branchData.staff === 'N/A' ? 'To be assigned' : branchData.staff,
       staffCount: 0,
-      status: 'Active',
+      status: (branchData.status === 'N/A' || branchData.status === 'Active') ? 'Active' : 'Inactive',
       createdDate: new Date().toISOString().split('T')[0],
     };
+    
     setBranches([...branches, newBranch]);
+    console.log('Branch added to list:', newBranch);
   };
 
   // Get unique locations for filter
