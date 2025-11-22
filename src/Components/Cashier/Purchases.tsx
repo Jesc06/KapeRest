@@ -1,116 +1,108 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faSearch, faFilter, faReceipt, faCalendar, faCreditCard, faPercentage, faHashtag, faBoxOpen } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faSearch, faFilter, faReceipt, faCalendar, faPercentage, faHashtag } from '@fortawesome/free-solid-svg-icons';
 import Sidebar from './Sidebar';
 import LogoutPanel from '../Shared/LogoutPanel';
+import { API_BASE_URL } from '../../config/api';
 
 interface Purchase {
   id: number;
-  menuItemId: number;
-  menuItemName: string;
-  category: string;
-  quantity: number;
-  discountPercent: number;
+  receiptNumber: string;
+  dateTime: string;
+  subtotal: number;
   tax: number;
-  paymentMethod: string;
-  totalAmount: number;
-  purchaseDate: string;
+  discount: number;
+  total: number;
+  status: string;
 }
 
 const Purchases: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('All');
+  const [statusFilter, setStatusFilter] = useState('All');
+  const [purchases, setPurchases] = useState<Purchase[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Sample data - Replace with actual API call
-  const [purchases] = useState<Purchase[]>([
-    {
-      id: 1,
-      menuItemId: 101,
-      menuItemName: 'Cappuccino',
-      category: 'Coffee',
-      quantity: 2,
-      discountPercent: 10,
-      tax: 12,
-      paymentMethod: 'Cash',
-      totalAmount: 250.00,
-      purchaseDate: '2025-11-11 10:30 AM'
-    },
-    {
-      id: 2,
-      menuItemId: 102,
-      menuItemName: 'Latte',
-      category: 'Coffee',
-      quantity: 1,
-      discountPercent: 0,
-      tax: 12,
-      paymentMethod: 'GCash',
-      totalAmount: 150.00,
-      purchaseDate: '2025-11-11 11:15 AM'
-    },
-    {
-      id: 3,
-      menuItemId: 103,
-      menuItemName: 'Blueberry Cheesecake',
-      category: 'Desserts',
-      quantity: 3,
-      discountPercent: 5,
-      tax: 12,
-      paymentMethod: 'Credit Card',
-      totalAmount: 450.00,
-      purchaseDate: '2025-11-11 12:00 PM'
-    },
-    {
-      id: 4,
-      menuItemId: 104,
-      menuItemName: 'Iced Americano',
-      category: 'Coffee',
-      quantity: 1,
-      discountPercent: 0,
-      tax: 12,
-      paymentMethod: 'Cash',
-      totalAmount: 120.00,
-      purchaseDate: '2025-11-11 01:45 PM'
-    },
-    {
-      id: 5,
-      menuItemId: 105,
-      menuItemName: 'Chicken Sandwich',
-      category: 'Food',
-      quantity: 2,
-      discountPercent: 15,
-      tax: 12,
-      paymentMethod: 'GCash',
-      totalAmount: 340.00,
-      purchaseDate: '2025-11-11 02:30 PM'
+  useEffect(() => {
+    fetchPurchases();
+  }, []);
+
+  const fetchPurchases = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('accessToken');
+
+      if (!token) {
+        console.error('No authentication token found');
+        return;
+      }
+
+      // Decode JWT token to extract cashierId
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const cashierId = payload.cashierId || payload.uid;
+
+      if (!cashierId) {
+        console.error('No cashier ID found in token');
+        return;
+      }
+
+      const response = await fetch(`${API_BASE_URL}/OverAllSales/CashierOverAllSales?cashierId=${cashierId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setPurchases(data);
+      } else {
+        console.error('Failed to fetch purchases:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error fetching purchases:', error);
+    } finally {
+      setLoading(false);
     }
-  ]);
+  };
 
-  // Get unique categories
-  const categories = ['All', ...Array.from(new Set(purchases.map(p => p.category)))];
+  // Get unique statuses
+  const statuses = ['All', ...Array.from(new Set(purchases.map(p => p.status)))];
 
-  // Filter purchases based on search and category
+  // Filter purchases based on search and status
   const filteredPurchases = purchases.filter(purchase => {
     const matchesSearch = 
-      purchase.menuItemName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      purchase.id.toString().includes(searchQuery) ||
-      purchase.menuItemId.toString().includes(searchQuery);
+      purchase.receiptNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      purchase.id.toString().includes(searchQuery);
     
-    const matchesCategory = categoryFilter === 'All' || purchase.category === categoryFilter;
+    const matchesStatus = statusFilter === 'All' || purchase.status === statusFilter;
     
-    return matchesSearch && matchesCategory;
+    return matchesSearch && matchesStatus;
   });
 
-  // Get payment method badge color
-  const getPaymentMethodColor = (method: string) => {
-    switch (method.toLowerCase()) {
-      case 'cash':
+  // Format date and time
+  const formatDateTime = (dateTimeString: string) => {
+    const date = new Date(dateTimeString);
+    return date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+  };
+
+  // Get status badge color
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'completed':
         return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300';
-      case 'gcash':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300';
-      case 'credit card':
-        return 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300';
+      case 'hold':
+        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300';
+      case 'cancelled':
+        return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300';
       default:
         return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300';
     }
@@ -185,26 +177,26 @@ const Purchases: React.FC = () => {
                   </div>
                   <input
                     type="text"
-                    placeholder="Search by item name, purchase ID, or menu item ID..."
+                    placeholder="Search by receipt number or transaction ID..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full pl-11 pr-4 py-3 bg-white dark:bg-neutral-800 border-2 border-stone-200 dark:border-neutral-700 rounded-xl text-neutral-900 dark:text-stone-100 placeholder-neutral-400 focus:outline-none focus:border-orange-500 dark:focus:border-orange-500 transition-colors duration-200"
                   />
                 </div>
 
-                {/* Category Filter */}
+                {/* Status Filter */}
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
                     <FontAwesomeIcon icon={faFilter} className="text-neutral-400" />
                   </div>
                   <select
-                    value={categoryFilter}
-                    onChange={(e) => setCategoryFilter(e.target.value)}
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
                     className="w-full pl-11 pr-4 py-3 bg-white dark:bg-neutral-800 border-2 border-stone-200 dark:border-neutral-700 rounded-xl text-neutral-900 dark:text-stone-100 focus:outline-none focus:border-orange-500 dark:focus:border-orange-500 transition-colors duration-200 appearance-none cursor-pointer"
                   >
-                    {categories.map((category) => (
-                      <option key={category} value={category}>
-                        {category === 'All' ? 'All Categories' : category}
+                    {statuses.map((status) => (
+                      <option key={status} value={status}>
+                        {status === 'All' ? 'All Status' : status}
                       </option>
                     ))}
                   </select>
@@ -218,7 +210,15 @@ const Purchases: React.FC = () => {
 
               {/* Purchases List */}
               <div className="space-y-4">
-                {filteredPurchases.length === 0 ? (
+                {loading ? (
+                  <div className="bg-white dark:bg-neutral-800 rounded-2xl p-12 text-center border border-stone-200 dark:border-neutral-700">
+                    <div className="w-20 h-20 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <FontAwesomeIcon icon={faReceipt} className="text-4xl text-orange-500 animate-pulse" />
+                    </div>
+                    <h3 className="text-xl font-bold text-neutral-900 dark:text-stone-100 mb-2">Loading purchases...</h3>
+                    <p className="text-neutral-600 dark:text-neutral-400">Please wait while we fetch your transaction history</p>
+                  </div>
+                ) : filteredPurchases.length === 0 ? (
                   <div className="bg-white dark:bg-neutral-800 rounded-2xl p-12 text-center border border-stone-200 dark:border-neutral-700">
                     <div className="w-20 h-20 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                       <FontAwesomeIcon icon={faReceipt} className="text-4xl text-orange-500" />
@@ -233,24 +233,24 @@ const Purchases: React.FC = () => {
                       className="bg-white dark:bg-neutral-800 rounded-2xl p-6 border border-stone-200 dark:border-neutral-700 hover:border-orange-300 dark:hover:border-orange-700 transition-all duration-300"
                     >
                       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-                        {/* Left: Purchase Info */}
+                        {/* Left: Receipt Info */}
                         <div className="lg:col-span-5">
                           <div className="flex items-start gap-4">
                             <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
-                              <FontAwesomeIcon icon={faBoxOpen} className="text-orange-600 dark:text-orange-400 text-xl" />
+                              <FontAwesomeIcon icon={faReceipt} className="text-orange-600 dark:text-orange-400 text-xl" />
                             </div>
                             <div className="flex-1 min-w-0">
                               <h3 className="text-lg font-bold text-neutral-900 dark:text-stone-100 mb-1 truncate">
-                                {purchase.menuItemName}
+                                Receipt #{purchase.receiptNumber}
                               </h3>
                               <div className="flex flex-wrap items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
                                 <span className="flex items-center gap-1">
                                   <FontAwesomeIcon icon={faHashtag} className="text-xs" />
-                                  Purchase ID: {purchase.id}
+                                  Transaction ID: {purchase.id}
                                 </span>
                                 <span className="text-neutral-300 dark:text-neutral-600">•</span>
-                                <span className="px-2 py-0.5 bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 rounded-md text-xs font-semibold">
-                                  {purchase.category}
+                                <span className={`px-2 py-0.5 rounded-md text-xs font-semibold ${getStatusColor(purchase.status)}`}>
+                                  {purchase.status}
                                 </span>
                               </div>
                             </div>
@@ -259,11 +259,11 @@ const Purchases: React.FC = () => {
 
                         {/* Middle: Details */}
                         <div className="lg:col-span-5 grid grid-cols-2 gap-4">
-                          {/* Quantity */}
+                          {/* Subtotal */}
                           <div>
-                            <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1 font-semibold">Quantity</p>
+                            <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1 font-semibold">Subtotal</p>
                             <p className="text-base font-bold text-neutral-900 dark:text-stone-100">
-                              {purchase.quantity} {purchase.quantity > 1 ? 'items' : 'item'}
+                              ₱{purchase.subtotal.toFixed(2)}
                             </p>
                           </div>
 
@@ -274,7 +274,7 @@ const Purchases: React.FC = () => {
                               Discount
                             </p>
                             <p className="text-base font-bold text-neutral-900 dark:text-stone-100">
-                              {purchase.discountPercent}%
+                              ₱{purchase.discount.toFixed(2)}
                             </p>
                           </div>
 
@@ -282,41 +282,30 @@ const Purchases: React.FC = () => {
                           <div>
                             <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1 font-semibold">Tax</p>
                             <p className="text-base font-bold text-neutral-900 dark:text-stone-100">
-                              {purchase.tax}%
+                              ₱{purchase.tax.toFixed(2)}
                             </p>
                           </div>
 
-                          {/* Payment Method */}
+                          {/* Date/Time */}
                           <div>
                             <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1 font-semibold flex items-center gap-1">
-                              <FontAwesomeIcon icon={faCreditCard} className="text-xs" />
-                              Payment
+                              <FontAwesomeIcon icon={faCalendar} className="text-xs" />
+                              Date
                             </p>
-                            <span className={`inline-block px-2 py-1 rounded-md text-xs font-bold ${getPaymentMethodColor(purchase.paymentMethod)}`}>
-                              {purchase.paymentMethod}
-                            </span>
+                            <p className="text-xs font-semibold text-neutral-900 dark:text-stone-100">
+                              {formatDateTime(purchase.dateTime)}
+                            </p>
                           </div>
                         </div>
 
-                        {/* Right: Amount & Date */}
-                        <div className="lg:col-span-2 flex flex-col items-end justify-between text-right">
+                        {/* Right: Total Amount */}
+                        <div className="lg:col-span-2 flex flex-col items-end justify-center text-right">
                           <div>
                             <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1 font-semibold">Total Amount</p>
                             <p className="text-2xl font-black text-orange-600 dark:text-orange-400">
-                              ₱{purchase.totalAmount.toFixed(2)}
+                              ₱{purchase.total.toFixed(2)}
                             </p>
                           </div>
-                          <div className="flex items-center gap-1 text-xs text-neutral-500 dark:text-neutral-400">
-                            <FontAwesomeIcon icon={faCalendar} />
-                            <span>{purchase.purchaseDate}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Additional Info Bar */}
-                      <div className="mt-4 pt-4 border-t border-stone-200 dark:border-neutral-700">
-                        <div className="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400">
-                          <span>Menu Item ID: <span className="font-semibold text-neutral-700 dark:text-neutral-300">{purchase.menuItemId}</span></span>
                         </div>
                       </div>
                     </div>
