@@ -92,7 +92,7 @@ const AccountsPage: React.FC = () => {
     fetchAccounts();
   }, []);
 
-  const roles = ['all', 'Admin', 'Cashier', 'Staff'];
+  const roles = ['all','Cashier', 'Staff'];
 
   // Filter accounts
   const filteredAccounts = accounts.filter(account => {

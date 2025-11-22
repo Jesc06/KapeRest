@@ -23,7 +23,13 @@ interface StockFormData {
 
 interface Supplier {
   id: number;
-  name: string;
+  supplierName: string;
+  contactPerson: string;
+  phoneNumber: string;
+  email: string;
+  address: string;
+  transactionDate: string;
+  productOfSupplier: any[];
 }
 
 const AddStocks: React.FC = () => {
@@ -387,7 +393,7 @@ const AddStocks: React.FC = () => {
                       <option value="">Select supplier</option>
                       {suppliers.map((supplier) => (
                         <option key={supplier.id} value={supplier.id.toString()}>
-                          {supplier.name}
+                          {supplier.supplierName}
                         </option>
                       ))}
                     </select>
