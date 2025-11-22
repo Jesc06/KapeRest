@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminSidebar from './AdminSidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faBuilding, faUsers, faMapMarkerAlt, faSearch, faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import LogoutPanel from '../Shared/LogoutPanel';
 import AddBranch from './AddBranch';
+import EditBranch from './EditBranch';
+import { API_BASE_URL } from '../../config/api';
 
 interface BranchResponse {
   id: number;
-  name: string;
+  branchName: string;
   location: string;
   staff: string;
   status: string;
@@ -30,31 +32,156 @@ const BranchPage: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [filterLocation, setFilterLocation] = useState<string>('all');
   const [isAddBranchOpen, setIsAddBranchOpen] = useState(false);
+  const [isEditBranchOpen, setIsEditBranchOpen] = useState(false);
+  const [selectedBranch, setSelectedBranch] = useState<Branch | null>(null);
+  const [branches, setBranches] = useState<Branch[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>('');
 
-  // Mock data - replace with actual API data
-  const [branches, setBranches] = useState<Branch[]>([
-    { id: 1, branchName: 'Main Branch', location: 'Manila', manager: 'Juan Dela Cruz', staffCount: 15, status: 'Active', createdDate: '2024-01-15' },
-    { id: 2, branchName: 'SM Mall of Asia', location: 'Pasay', manager: 'Maria Santos', staffCount: 12, status: 'Active', createdDate: '2024-02-20' },
-    { id: 3, branchName: 'Bonifacio Global City', location: 'Taguig', manager: 'Pedro Reyes', staffCount: 10, status: 'Active', createdDate: '2024-03-10' },
-    { id: 4, branchName: 'Makati Branch', location: 'Makati', manager: 'Ana Garcia', staffCount: 8, status: 'Active', createdDate: '2024-04-05' },
-    { id: 5, branchName: 'Quezon City', location: 'Quezon City', manager: 'Carlos Lopez', staffCount: 6, status: 'Inactive', createdDate: '2024-05-12' },
-  ]);
+  // Fetch branches from API
+  useEffect(() => {
+    const fetchBranches = async () => {
+      try {
+        setLoading(true);
+        setError('');
+        
+        const token = localStorage.getItem('accessToken');
+        
+        if (!token) {
+          throw new Error('No authentication token found. Please login again.');
+        }
+        
+        const response = await fetch(`${API_BASE_URL}/Branch/GetAllBranch`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch branches');
+        }
+        
+        const data: BranchResponse[] = await response.json();
+        console.log('Fetched branches:', data);
+        
+        // Transform API data to Branch format
+        const transformedBranches: Branch[] = data.map(branch => {
+          const manager = branch.staff || 'N/A';
+          const status = manager === 'N/A' ? 'Inactive' : (branch.status === 'Active' ? 'Active' : 'Inactive');
+          
+          return {
+            id: branch.id,
+            branchName: branch.branchName,
+            location: branch.location,
+            manager: manager,
+            staffCount: 0,
+            status: status as 'Active' | 'Inactive',
+            createdDate: new Date().toISOString().split('T')[0],
+          };
+        });
+        
+        setBranches(transformedBranches);
+      } catch (err) {
+        console.error('Error fetching branches:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load branches');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBranches();
+  }, []);
 
   const handleAddBranch = (branchData: BranchResponse) => {
     console.log('Received branch data from API:', branchData);
     
+    const manager = branchData.staff || 'N/A';
+    const status = manager === 'N/A' ? 'Inactive' : (branchData.status === 'Active' ? 'Active' : 'Inactive');
+    
     const newBranch: Branch = {
-      id: branchData.id || branches.length + 1,
-      branchName: branchData.name,
+      id: branchData.id,
+      branchName: branchData.branchName,
       location: branchData.location,
-      manager: branchData.staff === 'N/A' ? 'To be assigned' : branchData.staff,
+      manager: manager,
       staffCount: 0,
-      status: (branchData.status === 'N/A' || branchData.status === 'Active') ? 'Active' : 'Inactive',
+      status: status as 'Active' | 'Inactive',
       createdDate: new Date().toISOString().split('T')[0],
     };
     
     setBranches([...branches, newBranch]);
     console.log('Branch added to list:', newBranch);
+  };
+
+  const handleUpdateBranch = (branchData: BranchResponse) => {
+    console.log('Updating branch:', branchData);
+    
+    const manager = branchData.staff || 'N/A';
+    const status = manager === 'N/A' ? 'Inactive' : (branchData.status === 'Active' ? 'Active' : 'Inactive');
+    
+    setBranches(branches.map(branch => 
+      branch.id === branchData.id 
+        ? {
+            ...branch,
+            branchName: branchData.branchName,
+            location: branchData.location,
+            manager: manager,
+            status: status as 'Active' | 'Inactive',
+          }
+        : branch
+    ));
+    setIsEditBranchOpen(false);
+    setSelectedBranch(null);
+  };
+
+  const handleEditClick = (branch: Branch) => {
+    const branchData: BranchResponse = {
+      id: branch.id,
+      branchName: branch.branchName,
+      location: branch.location,
+      staff: branch.manager,
+      status: branch.status
+    };
+    setSelectedBranch(branch);
+    setIsEditBranchOpen(true);
+  };
+
+  const handleDeleteBranch = async (branchId: number) => {
+    if (!confirm('Are you sure you want to delete this branch?')) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('accessToken');
+      
+      if (!token) {
+        throw new Error('No authentication token found.');
+      }
+
+      const response = await fetch(`${API_BASE_URL}/Branch/DeleteBranch?id=${branchId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const responseText = await response.text();
+      console.log('Delete response:', responseText);
+
+      if (!response.ok) {
+        throw new Error('Failed to delete branch');
+      }
+
+      // Remove branch from list
+      setBranches(branches.filter(branch => branch.id !== branchId));
+      console.log('Branch deleted successfully');
+      alert('Branch deleted successfully!');
+
+    } catch (err) {
+      console.error('Error deleting branch:', err);
+      alert(err instanceof Error ? err.message : 'Failed to delete branch');
+    }
   };
 
   // Get unique locations for filter
@@ -243,9 +370,6 @@ const BranchPage: React.FC = () => {
                           Manager
                         </th>
                         <th className="px-6 py-4 text-center text-xs font-black uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
-                          Staff Count
-                        </th>
-                        <th className="px-6 py-4 text-center text-xs font-black uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
                           Status
                         </th>
                         <th className="px-6 py-4 text-center text-xs font-black uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
@@ -254,7 +378,28 @@ const BranchPage: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-stone-200 dark:divide-neutral-700">
-                      {filteredBranches.length > 0 ? (
+                      {loading ? (
+                        <tr>
+                          <td colSpan={5} className="px-6 py-20 text-center">
+                            <div className="flex flex-col items-center justify-center">
+                              <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-orange-600 border-r-transparent mb-4"></div>
+                              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Loading branches...</p>
+                            </div>
+                          </td>
+                        </tr>
+                      ) : error ? (
+                        <tr>
+                          <td colSpan={5} className="px-6 py-20 text-center">
+                            <div className="flex flex-col items-center justify-center">
+                              <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-red-100 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800/30">
+                                <FontAwesomeIcon icon={faBuilding} className="h-8 w-8 text-red-400 dark:text-red-500" />
+                              </div>
+                              <p className="text-base font-bold text-red-600 dark:text-red-400 mb-2">Failed to load branches</p>
+                              <p className="text-sm text-neutral-500 dark:text-neutral-400">{error}</p>
+                            </div>
+                          </td>
+                        </tr>
+                      ) : filteredBranches.length > 0 ? (
                         filteredBranches.map((branch) => (
                           <tr key={branch.id} className="group hover:bg-orange-50/50 dark:hover:bg-orange-950/20 transition-colors duration-200">
                             <td className="px-6 py-4">
@@ -281,11 +426,6 @@ const BranchPage: React.FC = () => {
                               </div>
                             </td>
                             <td className="px-6 py-4 text-center">
-                              <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400 text-sm font-black">
-                                {branch.staffCount}
-                              </span>
-                            </td>
-                            <td className="px-6 py-4 text-center">
                               <span className={`inline-flex px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider ${
                                 branch.status === 'Active'
                                   ? 'bg-green-100 dark:bg-green-950/40 text-green-700 dark:text-green-400'
@@ -296,13 +436,16 @@ const BranchPage: React.FC = () => {
                             </td>
                             <td className="px-6 py-4">
                               <div className="flex items-center justify-center gap-2">
-                                <button className="w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors duration-200 flex items-center justify-center group/btn">
-                                  <FontAwesomeIcon icon={faEye} className="h-4 w-4 group-hover/btn:scale-110 transition-transform" />
-                                </button>
-                                <button className="w-9 h-9 rounded-lg bg-orange-100 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400 hover:bg-orange-200 dark:hover:bg-orange-900/40 transition-colors duration-200 flex items-center justify-center group/btn">
+                                <button 
+                                  onClick={() => handleEditClick(branch)}
+                                  className="w-9 h-9 rounded-lg bg-orange-100 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400 hover:bg-orange-200 dark:hover:bg-orange-900/40 transition-colors duration-200 flex items-center justify-center group/btn"
+                                >
                                   <FontAwesomeIcon icon={faEdit} className="h-4 w-4 group-hover/btn:scale-110 transition-transform" />
                                 </button>
-                                <button className="w-9 h-9 rounded-lg bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40 transition-colors duration-200 flex items-center justify-center group/btn">
+                                <button 
+                                  onClick={() => handleDeleteBranch(branch.id)}
+                                  className="w-9 h-9 rounded-lg bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40 transition-colors duration-200 flex items-center justify-center group/btn"
+                                >
                                   <FontAwesomeIcon icon={faTrash} className="h-4 w-4 group-hover/btn:scale-110 transition-transform" />
                                 </button>
                               </div>
@@ -311,7 +454,7 @@ const BranchPage: React.FC = () => {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan={6} className="px-6 py-12 text-center">
+                          <td colSpan={5} className="px-6 py-12 text-center">
                             <div className="flex flex-col items-center gap-3">
                               <FontAwesomeIcon icon={faBuilding} className="h-16 w-16 text-neutral-300 dark:text-neutral-600" />
                               <p className="text-lg font-bold text-neutral-500 dark:text-neutral-400">No branches found</p>
@@ -334,6 +477,23 @@ const BranchPage: React.FC = () => {
         isOpen={isAddBranchOpen}
         onClose={() => setIsAddBranchOpen(false)}
         onSubmit={handleAddBranch}
+      />
+
+      {/* Edit Branch Modal */}
+      <EditBranch
+        isOpen={isEditBranchOpen}
+        onClose={() => {
+          setIsEditBranchOpen(false);
+          setSelectedBranch(null);
+        }}
+        onUpdate={handleUpdateBranch}
+        branch={selectedBranch ? {
+          id: selectedBranch.id,
+          branchName: selectedBranch.branchName,
+          location: selectedBranch.location,
+          staff: selectedBranch.manager,
+          status: selectedBranch.status
+        } : null}
       />
     </div>
   );

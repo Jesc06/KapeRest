@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faBuilding, faMapMarkerAlt, faSave } from '@fortawesome/free-solid-svg-icons';
 import { API_BASE_URL } from '../../config/api';
 
-interface BranchResponse {
+interface BranchData {
   id: number;
   branchName: string;
   location: string;
@@ -11,19 +11,27 @@ interface BranchResponse {
   status: string;
 }
 
-interface AddBranchProps {
+interface EditBranchProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (branchData: BranchResponse) => void;
+  onUpdate: (branchData: BranchData) => void;
+  branch: BranchData | null;
 }
 
-const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
+const EditBranch: React.FC<EditBranchProps> = ({ isOpen, onClose, onUpdate, branch }) => {
   const [branchName, setBranchName] = useState('');
   const [location, setLocation] = useState('');
   const [errors, setErrors] = useState<{ branchName?: string; location?: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [apiError, setApiError] = useState<string>('');
   const [apiSuccess, setApiSuccess] = useState(false);
+
+  useEffect(() => {
+    if (branch) {
+      setBranchName(branch.branchName);
+      setLocation(branch.location);
+    }
+  }, [branch]);
 
   const validateForm = () => {
     const newErrors: { branchName?: string; location?: string } = {};
@@ -43,6 +51,8 @@ const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!branch) return;
+
     if (validateForm()) {
       setIsSubmitting(true);
       setApiError('');
@@ -55,20 +65,23 @@ const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
           throw new Error('No authentication token found. Please login again.');
         }
 
-        const branchData = {
+        const updateData = {
+          id: branch.id,
           name: branchName.trim(),
           location: location.trim(),
+          staff: branch.staff,
+          status: branch.status
         };
 
-        console.log('Sending branch data:', branchData);
+        console.log('Sending update data:', updateData);
 
-        const response = await fetch(`${API_BASE_URL}/Branch/AddBranch`, {
-          method: 'POST',
+        const response = await fetch(`${API_BASE_URL}/Branch/UpdateBranch`, {
+          method: 'PUT',
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(branchData)
+          body: JSON.stringify(updateData)
         });
 
         const responseText = await response.text();
@@ -76,7 +89,7 @@ const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
         console.log('Response status:', response.status);
 
         if (!response.ok) {
-          console.error('Add branch error response:', responseText);
+          console.error('Update branch error response:', responseText);
           
           let errorMessage = responseText;
           try {
@@ -86,29 +99,29 @@ const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
             errorMessage = responseText;
           }
           
-          throw new Error(errorMessage || 'Failed to add branch');
+          throw new Error(errorMessage || 'Failed to update branch');
         }
 
-        let result: BranchResponse;
+        let result;
         try {
           result = JSON.parse(responseText);
         } catch (e) {
           console.warn('Response is not JSON:', responseText);
-          // If backend returns plain text, create default response
-          result = {
-            id: 0,
-            branchName: branchName.trim(),
-            location: location.trim(),
-            staff: 'N/A',
-            status: 'N/A'
-          };
+          result = { success: true, message: responseText };
         }
         
-        console.log('Branch added successfully:', result);
+        console.log('Branch updated successfully:', result);
         setApiSuccess(true);
 
-        // Call parent onSubmit callback with full branch data
-        onSubmit(result);
+        // Call parent onUpdate callback
+        const updatedBranch: BranchData = {
+          id: branch.id,
+          branchName: branchName.trim(),
+          location: location.trim(),
+          staff: branch.staff,
+          status: branch.status
+        };
+        onUpdate(updatedBranch);
 
         // Reset form and close after success
         setTimeout(() => {
@@ -120,8 +133,8 @@ const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
         }, 1500);
 
       } catch (err) {
-        console.error('Error adding branch:', err);
-        setApiError(err instanceof Error ? err.message : 'Failed to add branch. Please try again.');
+        console.error('Error updating branch:', err);
+        setApiError(err instanceof Error ? err.message : 'Failed to update branch. Please try again.');
       } finally {
         setIsSubmitting(false);
       }
@@ -137,7 +150,7 @@ const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
     onClose();
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !branch) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
@@ -149,8 +162,8 @@ const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
               <FontAwesomeIcon icon={faBuilding} className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h2 className="text-xl font-black text-white">Add New Branch</h2>
-              <p className="text-sm text-orange-100 font-medium">Create a new branch location</p>
+              <h2 className="text-xl font-black text-white">Edit Branch</h2>
+              <p className="text-sm text-orange-100 font-medium">Update branch information</p>
             </div>
           </div>
           <button
@@ -176,7 +189,7 @@ const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
                 type="text"
                 value={branchName}
                 onChange={(e) => setBranchName(e.target.value)}
-                placeholder="Enter branch name (e.g., Main Branch, SM Mall of Asia)"
+                placeholder="Enter branch name"
                 className={`w-full pl-12 pr-4 py-3.5 rounded-xl border-2 ${
                   errors.branchName
                     ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
@@ -208,7 +221,7 @@ const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
                 type="text"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                placeholder="Enter location (e.g., Manila, Makati, Quezon City)"
+                placeholder="Enter location"
                 className={`w-full pl-12 pr-4 py-3.5 rounded-xl border-2 ${
                   errors.location
                     ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
@@ -239,7 +252,7 @@ const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
             {/* API Success Message */}
             {apiSuccess && (
               <div className="p-4 rounded-xl bg-green-50 dark:bg-green-950/30 border-2 border-green-200 dark:border-green-800/50 animate-in slide-in-from-top duration-300">
-                <p className="text-sm font-bold text-green-600 dark:text-green-400 text-center">Branch added successfully!</p>
+                <p className="text-sm font-bold text-green-600 dark:text-green-400 text-center">Branch updated successfully!</p>
               </div>
             )}
 
@@ -263,12 +276,12 @@ const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"></path>
                     </svg>
-                    <span>Saving...</span>
+                    <span>Updating...</span>
                   </>
                 ) : (
                   <>
                     <FontAwesomeIcon icon={faSave} className="h-4 w-4" />
-                    Save Branch
+                    Update Branch
                   </>
                 )}
               </button>
@@ -280,4 +293,4 @@ const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
   );
 };
 
-export default AddBranch;
+export default EditBranch;
