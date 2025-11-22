@@ -290,66 +290,39 @@ const SalesPage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Right Side - Generate Reports */}
-                <div className="relative flex items-center gap-2.5 px-5 py-3 rounded-xl bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 shadow-xl shadow-orange-500/40 ring-1 ring-orange-400/50 backdrop-blur-sm overflow-hidden">
-                  {/* Animated background shimmer */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"></div>
-                  
-                  <div className="relative flex items-center gap-2">
-                    <FontAwesomeIcon icon={faDownload} className="h-4 w-4 text-white drop-shadow-lg" />
-                    <span className="text-sm font-bold text-white tracking-wide uppercase drop-shadow-md">Generate Report</span>
+                {/* Right Side - Generate Reports - Compact with Label on Top */}
+                <div className="relative">
+                  {/* Label Badge on Top Edge - Polished Premium */}
+                  <div className="absolute -top-4 left-5 z-10">
+                    <div className="flex items-center gap-2 px-4 py-1.5 rounded-xl bg-gradient-to-r from-orange-500 via-orange-600 to-amber-500 shadow-lg shadow-orange-500/30 border border-orange-400/40">
+                      <FontAwesomeIcon icon={faDownload} className="h-3.5 w-3.5 text-white drop-shadow" />
+                      <span className="text-xs font-extrabold text-white uppercase tracking-wide drop-shadow">Generate Report</span>
+                    </div>
                   </div>
-                  
-                  <div className="relative h-6 w-px bg-white/30"></div>
-                  
-                  <div className="relative flex items-center gap-2">
-                    <button
-                      onClick={() => handleGenerateReport('daily')}
-                      disabled={isGenerating !== null}
-                      className={`relative flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition-all duration-300 ${
-                        isGenerating === 'daily'
-                          ? 'bg-white text-orange-600 shadow-lg scale-105'
-                          : 'bg-white/90 text-orange-700 hover:bg-white hover:scale-105 hover:shadow-lg'
-                      } disabled:opacity-50 disabled:cursor-not-allowed`}
-                    >
-                      <FontAwesomeIcon 
-                        icon={isGenerating === 'daily' ? faSpinner : faSun} 
-                        className={`h-3.5 w-3.5 ${isGenerating === 'daily' ? 'animate-spin' : ''}`} 
-                      />
-                      <span>Daily</span>
-                    </button>
 
-                    <button
-                      onClick={() => handleGenerateReport('weekly')}
-                      disabled={isGenerating !== null}
-                      className={`relative flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition-all duration-300 ${
-                        isGenerating === 'weekly'
-                          ? 'bg-white text-orange-600 shadow-lg scale-105'
-                          : 'bg-white/90 text-orange-700 hover:bg-white hover:scale-105 hover:shadow-lg'
-                      } disabled:opacity-50 disabled:cursor-not-allowed`}
-                    >
-                      <FontAwesomeIcon 
-                        icon={isGenerating === 'weekly' ? faSpinner : faCalendarWeek} 
-                        className={`h-3.5 w-3.5 ${isGenerating === 'weekly' ? 'animate-spin' : ''}`} 
-                      />
-                      <span>Weekly</span>
-                    </button>
-
-                    <button
-                      onClick={() => handleGenerateReport('monthly')}
-                      disabled={isGenerating !== null}
-                      className={`relative flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition-all duration-300 ${
-                        isGenerating === 'monthly'
-                          ? 'bg-white text-orange-600 shadow-lg scale-105'
-                          : 'bg-white/90 text-orange-700 hover:bg-white hover:scale-105 hover:shadow-lg'
-                      } disabled:opacity-50 disabled:cursor-not-allowed`}
-                    >
-                      <FontAwesomeIcon 
-                        icon={isGenerating === 'monthly' ? faSpinner : faCalendar} 
-                        className={`h-3.5 w-3.5 ${isGenerating === 'monthly' ? 'animate-spin' : ''}`} 
-                      />
-                      <span>Monthly</span>
-                    </button>
+                  {/* Premium Card - Same as Staff Sales */}
+                  <div className="relative flex items-center gap-2.5 px-5 py-3 pt-7 rounded-xl bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 shadow-xl shadow-orange-500/40 ring-1 ring-orange-400/50 backdrop-blur-sm overflow-hidden">
+                    {/* Animated background shimmer */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"></div>
+                    {[
+                      { type: 'daily', label: 'Daily', icon: faSun },
+                      { type: 'weekly', label: 'Weekly', icon: faCalendarWeek },
+                      { type: 'monthly', label: 'Monthly', icon: faCalendar }
+                    ].map(({ type, label, icon }) => (
+                      <button
+                        key={type}
+                        onClick={() => handleGenerateReport(type as any)}
+                        disabled={isGenerating !== null}
+                        className={`group relative flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition-all duration-300 overflow-hidden
+                          ${isGenerating === type
+                            ? 'bg-white text-orange-600 shadow-lg scale-105'
+                            : 'bg-white/90 text-orange-700 hover:bg-white hover:scale-105 hover:shadow-lg'}
+                          disabled:opacity-50 disabled:cursor-not-allowed`}
+                      >
+                        <FontAwesomeIcon icon={icon} className={`h-4 w-4 relative z-10 ${isGenerating === type ? '' : 'text-orange-500'}`} />
+                        <span className="relative z-10">{label}</span>
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
