@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar.tsx';
 import MainPanel from './MainPanel.tsx';
@@ -20,6 +20,36 @@ const BuyItem: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [userRole] = useState<string>('Cashier'); // Mock user role - can be fetched from auth/context
+
+  // ✅ Load resume cart from sessionStorage on component mount
+  useEffect(() => {
+    const resumeCartData = sessionStorage.getItem('resumeCart');
+    const resumeDiscountData = sessionStorage.getItem('resumeDiscount');
+    
+    if (resumeCartData) {
+      try {
+        const parsedCart = JSON.parse(resumeCartData);
+        console.log('📦 Loading resumed cart:', parsedCart);
+        
+        // Set cart with resumed items
+        setCart(parsedCart);
+        
+        // Log discount info (can be used by MainPanel if needed)
+        if (resumeDiscountData) {
+          console.log('💰 Resume discount:', resumeDiscountData + '%');
+        }
+        
+        // Clean up sessionStorage
+        sessionStorage.removeItem('resumeCart');
+        sessionStorage.removeItem('resumeDiscount');
+        sessionStorage.removeItem('resumeTax');
+        
+        console.log('✅ Cart resumed successfully with', parsedCart.length, 'items');
+      } catch (error) {
+        console.error('❌ Error loading resume cart:', error);
+      }
+    }
+  }, []);
 
   // Add item to cart
   const handleAddToCart = (product: { id: number; name: string; price: number; category: string; description: string; image: string }) => {

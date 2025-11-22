@@ -291,67 +291,95 @@ const MainPanel: React.FC<MainPanelProps> = ({
         throw new Error('No authentication token found. Please login again.');
       }
 
-      // Calculate discount and tax values
-      const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
-      const taxRate = 12; // 12% tax
+      // ✅ Check if this is a resumed hold transaction
+      const resumeHoldId = sessionStorage.getItem('resumeHoldId');
 
-      // Process each cart item as a separate purchase
-      const purchasePromises = cart.map(async (item) => {
-        const purchaseData = {
-          menuItemId: item.id,
-          quantity: item.quantity,
-          discountPercent: discountValue,
-          tax: taxRate,
-          paymentMethod: paymentMethod
-        };
+      if (resumeHoldId) {
+        // ✅ This is a resumed hold - Call ResumeHold API to deduct stock
+        console.log('Completing resumed hold transaction:', resumeHoldId);
 
-        console.log('Sending purchase request:', purchaseData);
-
-        const response = await fetch(`${API_BASE_URL}/Buy/Buy`, {
+        const response = await fetch(`${API_BASE_URL}/Buy/ResumeHold?saleId=${resumeHoldId}`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(purchaseData)
         });
 
-        // Get response text first
         const responseText = await response.text();
-        console.log('Raw response:', responseText);
-        console.log('Response status:', response.status);
+        console.log('Resume hold response:', responseText);
 
         if (!response.ok) {
-          console.error('Purchase error response:', responseText);
-          
-          // Try to parse as JSON, fallback to plain text
-          let errorMessage = responseText;
+          throw new Error(responseText || 'Failed to complete hold transaction');
+        }
+
+        console.log('Hold transaction completed successfully');
+        
+        // Clear resume data
+        sessionStorage.removeItem('resumeHoldId');
+        sessionStorage.removeItem('resumeCart');
+        sessionStorage.removeItem('resumeDiscount');
+        sessionStorage.removeItem('resumeTax');
+
+      } else {
+        // ✅ Regular purchase - Use normal Buy endpoint
+        const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
+        const taxRate = 12; // 12% tax
+
+        // Process each cart item as a separate purchase
+        const purchasePromises = cart.map(async (item) => {
+          const purchaseData = {
+            menuItemId: item.id,
+            quantity: item.quantity,
+            discountPercent: discountValue,
+            tax: taxRate,
+            paymentMethod: paymentMethod
+          };
+
+          console.log('Sending purchase request:', purchaseData);
+
+          const response = await fetch(`${API_BASE_URL}/Buy/Buy`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(purchaseData)
+          });
+
+          const responseText = await response.text();
+          console.log('Raw response:', responseText);
+          console.log('Response status:', response.status);
+
+          if (!response.ok) {
+            console.error('Purchase error response:', responseText);
+            
+            let errorMessage = responseText;
+            try {
+              const errorJson = JSON.parse(responseText);
+              errorMessage = errorJson.message || errorJson.error || errorJson.title || responseText;
+            } catch (e) {
+              errorMessage = responseText;
+            }
+            
+            throw new Error(errorMessage || `Failed to purchase ${item.name}`);
+          }
+
+          let result;
           try {
-            const errorJson = JSON.parse(responseText);
-            errorMessage = errorJson.message || errorJson.error || errorJson.title || responseText;
+            result = JSON.parse(responseText);
           } catch (e) {
-            // If not JSON, use the plain text error
-            errorMessage = responseText;
+            console.warn('Response is not JSON:', responseText);
+            result = { success: true, message: responseText };
           }
           
-          throw new Error(errorMessage || `Failed to purchase ${item.name}`);
-        }
+          console.log('Purchase successful for item:', item.name, result);
+          return result;
+        });
 
-        // Parse successful response as JSON
-        let result;
-        try {
-          result = JSON.parse(responseText);
-        } catch (e) {
-          console.warn('Response is not JSON:', responseText);
-          result = { success: true, message: responseText };
-        }
-        
-        console.log('Purchase successful for item:', item.name, result);
-        return result;
-      });
-
-      // Wait for all purchases to complete
-      await Promise.all(purchasePromises);
+        // Wait for all purchases to complete
+        await Promise.all(purchasePromises);
+      }
 
       console.log('All purchases completed successfully');
       setPurchaseSuccess(true);

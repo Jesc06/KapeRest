@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faSearch, faFilter, faPause, faPlay, faCalendar, faCreditCard, faPercentage, faHashtag, faBoxOpen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Sidebar from './Sidebar';
 import LogoutPanel from '../Shared/LogoutPanel';
+import { API_BASE_URL } from '../../config/api';
 
 interface CartItem {
   id: number;
@@ -11,6 +12,36 @@ interface CartItem {
   quantity: number;
   category: string;
   image: string;
+}
+
+interface SalesItem {
+  id: number;
+  salesTransactionId: number;
+  menuItemId: number;
+  quantity: number;
+  unitPrice: number;
+  menuItem: {
+    id: number;
+    itemName: string;
+    price: number;
+    category: string;
+    image: string;
+  };
+}
+
+interface HoldTransaction {
+  id: number;
+  cashierId: string;
+  branchId: number;
+  subtotal: number;
+  tax: number;
+  discount: number;
+  total: number;
+  paymentMethod: string;
+  status: string;
+  transactionDate: string;
+  receiptNumber: string;
+  salesItems: SalesItem[];
 }
 
 interface HoldItem {
@@ -32,12 +63,86 @@ const HoldItems: React.FC = () => {
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
+  const [holdItems, setHoldItems] = useState<HoldItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>('');
 
-  // Load hold items from localStorage
-  const [holdItems, setHoldItems] = useState<HoldItem[]>(() => {
-    const savedHoldItems = localStorage.getItem('holdItems');
-    return savedHoldItems ? JSON.parse(savedHoldItems) : [];
-  });
+  // Fetch hold transactions from API
+  useEffect(() => {
+    const fetchHoldTransactions = async () => {
+      try {
+        setLoading(true);
+        setError('');
+        
+        const token = localStorage.getItem('accessToken');
+        
+        if (!token) {
+          throw new Error('No authentication token found.');
+        }
+        
+        // Get cashier ID from token
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        
+        const decodedToken = JSON.parse(jsonPayload);
+        const cashierId = decodedToken.cashierId || decodedToken.uid;
+        
+        const response = await fetch(`${API_BASE_URL}/Buy/GetHoldTransactions?cashierId=${cashierId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch hold transactions');
+        }
+        
+        const data: HoldTransaction[] = await response.json();
+        console.log('Hold transactions received:', data);
+        
+        // Transform API data to HoldItem format
+        const transformedItems: HoldItem[] = data.map(transaction => {
+          const salesItem = transaction.salesItems[0]; // Assuming one item per hold for now
+          const taxPercent = transaction.subtotal > 0 ? (transaction.tax / transaction.subtotal) * 100 : 0;
+          const discountPercent = transaction.subtotal > 0 ? (transaction.discount / transaction.subtotal) * 100 : 0;
+          
+          return {
+            id: transaction.id,
+            menuItemId: salesItem?.menuItemId || 0,
+            menuItemName: salesItem?.menuItem?.itemName || 'Unknown Item',
+            category: salesItem?.menuItem?.category || 'General',
+            quantity: salesItem?.quantity || 0,
+            discountPercent: Math.round(discountPercent),
+            tax: Math.round(taxPercent),
+            paymentMethod: transaction.paymentMethod,
+            totalAmount: transaction.total,
+            holdDate: new Date(transaction.transactionDate).toLocaleDateString(),
+            cartItems: transaction.salesItems.map(item => ({
+              id: item.menuItemId,
+              name: item.menuItem.itemName,
+              price: item.unitPrice,
+              quantity: item.quantity,
+              category: item.menuItem.category,
+              image: item.menuItem.image || ''
+            }))
+          };
+        });
+        
+        setHoldItems(transformedItems);
+      } catch (err) {
+        console.error('Error fetching hold transactions:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load hold transactions');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHoldTransactions();
+  }, []);
 
   // Get unique categories
   const categories = ['All', ...Array.from(new Set(holdItems.map(p => p.category)))];
@@ -68,26 +173,66 @@ const HoldItems: React.FC = () => {
     }
   };
 
-  // Handle resume item - Navigate back to POS with item data
-  const handleResumeItem = (item: HoldItem) => {
-    // Store item in sessionStorage to be picked up by BuyItem component
-    sessionStorage.setItem('resumeItem', JSON.stringify(item));
-    
-    // Remove from hold items
-    const updatedHoldItems = holdItems.filter(holdItem => holdItem.id !== item.id);
-    localStorage.setItem('holdItems', JSON.stringify(updatedHoldItems));
-    setHoldItems(updatedHoldItems);
-    
-    // Navigate to buy-item page
-    window.location.href = '/cashier/buy-item';
+  // Handle resume item - Just load to cart, NO stock deduction yet
+  const handleResumeItem = async (item: HoldItem) => {
+    try {
+      // ✅ NO API CALL - Just load data to sessionStorage
+      console.log('Loading hold transaction to cart:', item.id);
+
+      // Store cart items in sessionStorage to be picked up by BuyItem component
+      sessionStorage.setItem('resumeCart', JSON.stringify(item.cartItems));
+      sessionStorage.setItem('resumeDiscount', item.discountPercent.toString());
+      sessionStorage.setItem('resumeTax', item.tax.toString());
+      sessionStorage.setItem('resumeHoldId', item.id.toString()); // Store hold ID for later
+      
+      console.log('✅ Hold data loaded to cart, redirecting to POS...');
+      
+      // Keep item in hold list (will be removed when purchase completes)
+      // DON'T remove from list yet
+      
+      // Navigate to buy-item page
+      window.location.href = '/cashier/buy-item';
+    } catch (err) {
+      console.error('Error loading hold to cart:', err);
+      alert(err instanceof Error ? err.message : 'Failed to load hold transaction');
+    }
   };
 
-  // Handle delete item
-  const handleDeleteItem = (id: number) => {
-    if (window.confirm('Are you sure you want to remove this hold item?')) {
-      const updatedHoldItems = holdItems.filter(item => item.id !== id);
-      localStorage.setItem('holdItems', JSON.stringify(updatedHoldItems));
-      setHoldItems(updatedHoldItems);
+  // Handle delete item - Call CancelHold API
+  const handleDeleteItem = async (id: number) => {
+    if (!window.confirm('Are you sure you want to cancel this hold transaction?')) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('accessToken');
+      
+      if (!token) {
+        throw new Error('No authentication token found.');
+      }
+
+      const response = await fetch(`${API_BASE_URL}/Buy/CancelHold?saleId=${id}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const responseText = await response.text();
+      console.log('Cancel response:', responseText);
+
+      if (!response.ok) {
+        throw new Error('Failed to cancel hold transaction');
+      }
+
+      // Remove from list
+      setHoldItems(holdItems.filter(item => item.id !== id));
+      alert('Hold transaction cancelled successfully!');
+
+    } catch (err) {
+      console.error('Error cancelling hold:', err);
+      alert(err instanceof Error ? err.message : 'Failed to cancel hold transaction');
     }
   };
 
@@ -193,7 +338,20 @@ const HoldItems: React.FC = () => {
 
               {/* Hold Items List */}
               <div className="space-y-4">
-                {filteredHoldItems.length === 0 ? (
+                {loading ? (
+                  <div className="bg-white dark:bg-neutral-800 rounded-2xl p-12 text-center border border-stone-200 dark:border-neutral-700">
+                    <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-yellow-600 border-r-transparent mb-4"></div>
+                    <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Loading hold transactions...</p>
+                  </div>
+                ) : error ? (
+                  <div className="bg-white dark:bg-neutral-800 rounded-2xl p-12 text-center border border-red-200 dark:border-red-800">
+                    <div className="w-20 h-20 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <FontAwesomeIcon icon={faPause} className="text-4xl text-red-500" />
+                    </div>
+                    <h3 className="text-xl font-bold text-red-600 dark:text-red-400 mb-2">Failed to load hold items</h3>
+                    <p className="text-neutral-600 dark:text-neutral-400">{error}</p>
+                  </div>
+                ) : filteredHoldItems.length === 0 ? (
                   <div className="bg-white dark:bg-neutral-800 rounded-2xl p-12 text-center border border-stone-200 dark:border-neutral-700">
                     <div className="w-20 h-20 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                       <FontAwesomeIcon icon={faPause} className="text-4xl text-yellow-500" />
