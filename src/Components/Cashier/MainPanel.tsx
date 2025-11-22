@@ -295,10 +295,10 @@ const MainPanel: React.FC<MainPanelProps> = ({
       const resumeHoldId = sessionStorage.getItem('resumeHoldId');
 
       if (resumeHoldId) {
-        // ✅ This is a resumed hold - Call ResumeHold API to deduct stock
+        // ✅ This is a resumed hold - Call ResumeTransaction API to deduct stock
         console.log('Completing resumed hold transaction:', resumeHoldId);
 
-        const response = await fetch(`${API_BASE_URL}/Buy/ResumeHold?saleId=${resumeHoldId}`, {
+        const response = await fetch(`${API_BASE_URL}/Buy/ResumeTransaction?saleId=${resumeHoldId}`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -308,12 +308,23 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
         const responseText = await response.text();
         console.log('Resume hold response:', responseText);
+        console.log('Resume hold status:', response.status);
 
         if (!response.ok) {
-          throw new Error(responseText || 'Failed to complete hold transaction');
+          // Parse error message
+          let errorMessage = responseText;
+          try {
+            const errorJson = JSON.parse(responseText);
+            errorMessage = errorJson.message || errorJson.error || errorJson.title || responseText;
+          } catch (e) {
+            errorMessage = responseText;
+          }
+          
+          console.error('Resume hold error:', errorMessage);
+          throw new Error(errorMessage || 'Failed to complete hold transaction');
         }
 
-        console.log('Hold transaction completed successfully');
+        console.log('Hold transaction completed successfully:', responseText);
         
         // Clear resume data
         sessionStorage.removeItem('resumeHoldId');
