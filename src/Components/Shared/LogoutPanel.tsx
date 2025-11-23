@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faUser, faSignOutAlt, faLock } from '@fortawesome/free-solid-svg-icons';
+import { API_BASE_URL } from '../../config/api';
 
 interface LogoutPanelProps {
   // No props needed - role determined by current route
@@ -39,8 +40,39 @@ const LogoutPanel: React.FC<LogoutPanelProps> = () => {
     };
   }, [showUserMenu]);
 
-  const handleLogout = () => {
-    navigate('/login');
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      
+      if (token) {
+        // Call logout API
+        const response = await fetch(`${API_BASE_URL}/Auth/Logout`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        // Log the response but don't block logout on API failure
+        if (response.ok) {
+          console.log('Logout API called successfully');
+        } else {
+          console.warn('Logout API call failed, but proceeding with local logout');
+        }
+      }
+
+      // Clear token and navigate regardless of API response
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      navigate('/login');
+    } catch (error) {
+      console.error('Error during logout:', error);
+      // Still clear token and navigate even if API call fails
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      navigate('/login');
+    }
   };
 
   return (
