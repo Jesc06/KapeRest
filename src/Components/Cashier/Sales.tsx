@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoffee, faSearch, faBars, faCalendarDays, faCalendarAlt, faReceipt, faMoneyBillWave, faChartLine } from '@fortawesome/free-solid-svg-icons';
 import LogoutPanel from '../Shared/LogoutPanel';
@@ -24,6 +24,8 @@ interface SalesProps {
   onToggleSidebar?: () => void;
   sidebarExpanded?: boolean;
   onToggleSidebarExpand?: () => void;
+  selectedPeriod?: PeriodFilter;
+  onPeriodChange?: (period: PeriodFilter) => void;
 }
 
 type PeriodFilter = 'daily' | 'monthly' | 'yearly';
@@ -33,9 +35,18 @@ const Sales: React.FC<SalesProps> = ({
   onToggleSidebar,
   sidebarExpanded = true,
   onToggleSidebarExpand,
+  selectedPeriod: propSelectedPeriod,
+  onPeriodChange,
 }) => {
   const [searchText, setSearchText] = useState('');
-  const [selectedPeriod, setSelectedPeriod] = useState<PeriodFilter>('daily');
+  const [selectedPeriod, setSelectedPeriod] = useState<PeriodFilter>(propSelectedPeriod || 'daily');
+
+  // Sync with prop
+  useEffect(() => {
+    if (propSelectedPeriod) {
+      setSelectedPeriod(propSelectedPeriod);
+    }
+  }, [propSelectedPeriod]);
 
   // Helper function to get date range based on period
   const getDateRange = (period: PeriodFilter): { start: Date; end: Date } => {
@@ -183,7 +194,13 @@ const Sales: React.FC<SalesProps> = ({
                 {periodFilters.map(filter => (
                   <button
                     key={filter.value}
-                    onClick={() => setSelectedPeriod(filter.value)}
+                    onClick={() => {
+                      if (onPeriodChange) {
+                        onPeriodChange(filter.value);
+                      } else {
+                        setSelectedPeriod(filter.value);
+                      }
+                    }}
                     className={`group relative flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-all duration-300 overflow-hidden ${
                       selectedPeriod === filter.value
                         ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/40 scale-105'

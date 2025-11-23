@@ -36,13 +36,16 @@ interface ApiSalesRecord {
   status: string;
 }
 
+type PeriodFilter = 'daily' | 'monthly' | 'yearly';
+
 const SalesPage: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [sales, setSales] = useState<SalesRecord[]>([]);
+  const [selectedPeriod, setSelectedPeriod] = useState<PeriodFilter>('daily');
 
   useEffect(() => {
-    const fetchSalesData = async () => {
+    const fetchSalesData = async (period: PeriodFilter) => {
       try {
         const token = localStorage.getItem('accessToken');
         if (!token) {
@@ -65,7 +68,21 @@ const SalesPage: React.FC = () => {
           return;
         }
 
-        const response = await fetch(`${API_BASE_URL}/CashierSalesReport/CashierDailySales?cashierId=${cashierId}`, {
+        // Choose API endpoint based on period
+        let endpoint = '';
+        switch (period) {
+          case 'daily':
+            endpoint = 'CashierDailySales';
+            break;
+          case 'monthly':
+            endpoint = 'CashierMonthlySales';
+            break;
+          case 'yearly':
+            endpoint = 'CashierYearlySales';
+            break;
+        }
+
+        const response = await fetch(`${API_BASE_URL}/CashierSalesReport/${endpoint}?cashierId=${cashierId}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -101,8 +118,8 @@ const SalesPage: React.FC = () => {
       }
     };
 
-    fetchSalesData();
-  }, []);
+    fetchSalesData(selectedPeriod);
+  }, [selectedPeriod]);
 
   return (
     <div className="relative min-h-screen bg-transparent text-neutral-800 transition-colors duration-300 dark:text-neutral-200 overflow-hidden">
@@ -119,6 +136,8 @@ const SalesPage: React.FC = () => {
           onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
           sidebarExpanded={sidebarExpanded}
           onToggleSidebarExpand={() => setSidebarExpanded(!sidebarExpanded)}
+          selectedPeriod={selectedPeriod}
+          onPeriodChange={setSelectedPeriod}
         />
       </div>
     </div>
