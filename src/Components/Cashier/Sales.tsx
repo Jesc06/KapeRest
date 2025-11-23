@@ -69,13 +69,9 @@ const Sales: React.FC<SalesProps> = ({
     return { start, end: new Date() };
   };
 
-  // Filter sales data
+  // Filter sales data (only by search, since API already filters by period)
   const filteredSales = useMemo(() => {
-    const { start, end } = getDateRange(selectedPeriod);
-
     return sales.filter(record => {
-      const recordDate = new Date(record.dateTime);
-      const matchesDate = recordDate >= start && recordDate <= end;
       const matchesSearch =
         record.id.toString().toLowerCase().includes(searchText.toLowerCase()) ||
         record.username.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -83,9 +79,9 @@ const Sales: React.FC<SalesProps> = ({
         record.menuItemName.toLowerCase().includes(searchText.toLowerCase()) ||
         record.status.toLowerCase().includes(searchText.toLowerCase());
 
-      return matchesDate && matchesSearch;
+      return matchesSearch;
     });
-  }, [sales, searchText, selectedPeriod]);
+  }, [sales, searchText]);
 
   // Calculate totals
   const totals = useMemo(() => {
