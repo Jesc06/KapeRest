@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faSearch, faCoffee, faEdit, faTrash, faPlus, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from '../Staff/StaffSidebar';
 import LogoutPanel from './LogoutPanel';
+import { API_BASE_URL } from '../../config/api';
 
 interface Item {
   id: number;
@@ -22,65 +23,52 @@ const ItemList: React.FC = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Mock data - Replace with actual API call
+  // Fetch items from API
   useEffect(() => {
     const fetchItems = async () => {
       setIsLoading(true);
-      // Simulate API call
-      setTimeout(() => {
-        const mockData: Item[] = [
-          {
-            id: 1,
-            itemName: "Espresso",
-            price: 120,
-            description: "Strong and bold coffee shot",
-            isAvailable: true,
-            image: "/images/espresso.jpg"
+      try {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+          console.error('No access token found');
+          setIsLoading(false);
+          return;
+        }
+
+        // Decode JWT to get cashierId
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        
+        const decoded = JSON.parse(jsonPayload);
+        const cashierId = decoded.cashierId;
+
+        if (!cashierId) {
+          console.error('Cashier ID not found in token');
+          setIsLoading(false);
+          return;
+        }
+
+        const response = await fetch(`${API_BASE_URL}/MenuItem/GetAllMenuItem?cashierId=${cashierId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
           },
-          {
-            id: 2,
-            itemName: "Cappuccino",
-            price: 150,
-            description: "Espresso with steamed milk foam",
-            isAvailable: true,
-            image: "/images/cappuccino.jpg"
-          },
-          {
-            id: 3,
-            itemName: "Latte",
-            price: 140,
-            description: "Smooth espresso with steamed milk",
-            isAvailable: true,
-            image: "/images/latte.jpg"
-          },
-          {
-            id: 4,
-            itemName: "Mocha",
-            price: 160,
-            description: "Coffee with chocolate and milk",
-            isAvailable: false,
-            image: "/images/mocha.jpg"
-          },
-          {
-            id: 5,
-            itemName: "Americano",
-            price: 110,
-            description: "Espresso diluted with hot water",
-            isAvailable: true,
-            image: "/images/americano.jpg"
-          },
-          {
-            id: 6,
-            itemName: "Iced Coffee",
-            price: 130,
-            description: "Cold brewed coffee with ice",
-            isAvailable: false,
-            image: "/images/iced-coffee.jpg"
-          }
-        ];
-        setItems(mockData);
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data: Item[] = await response.json();
+        setItems(data);
         setIsLoading(false);
-      }, 500);
+      } catch (err) {
+        console.error('Error fetching menu items:', err);
+        setIsLoading(false);
+      }
     };
 
     fetchItems();
