@@ -224,7 +224,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
         if (!response.ok) {
           console.error('Hold error response:', responseText);
-          
+
           // Try to parse as JSON, fallback to plain text
           let errorMessage = responseText;
           try {
@@ -233,7 +233,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
           } catch (e) {
             errorMessage = responseText;
           }
-          
+
           throw new Error(errorMessage || `Failed to hold ${item.name}`);
         }
 
@@ -242,18 +242,16 @@ const MainPanel: React.FC<MainPanelProps> = ({
         try {
           result = JSON.parse(responseText);
         } catch (e) {
-          console.warn('Response is not JSON:', responseText);
+            console.warn('Response is not JSON:', responseText);
           result = { success: true, message: responseText };
         }
-        
+
         console.log('Hold successful for item:', item.name, result);
         return result;
       });
 
       // Wait for all hold transactions to complete
-      await Promise.all(holdPromises);
-
-      console.log('All transactions held successfully');
+      await Promise.all(holdPromises);console.log('All transactions held successfully');
       setHoldSuccess(true);
       
       // Clear cart after successful hold
@@ -364,7 +362,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
           if (!response.ok) {
             console.error('Purchase error response:', responseText);
-            
+
             let errorMessage = responseText;
             try {
               const errorJson = JSON.parse(responseText);
@@ -372,7 +370,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
             } catch (e) {
               errorMessage = responseText;
             }
-            
+
             throw new Error(errorMessage || `Failed to purchase ${item.name}`);
           }
 
@@ -383,7 +381,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
             console.warn('Response is not JSON:', responseText);
             result = { success: true, message: responseText };
           }
-          
+
           console.log('Purchase successful for item:', item.name, result);
           return result;
         });
