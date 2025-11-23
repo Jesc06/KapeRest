@@ -1,10 +1,16 @@
 import React, { useState, useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faSearch, faBars, faCalendarDays, faWeightScale, faCalendarAlt, faReceipt, faMoneyBillWave, faChartLine, faArrowTrendUp, faPercentage } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faSearch, faBars, faCalendarDays, faCalendarAlt, faReceipt, faMoneyBillWave, faChartLine } from '@fortawesome/free-solid-svg-icons';
 import LogoutPanel from '../Shared/LogoutPanel';
 
 interface SalesRecord {
-  receiptNumber: string;
+  id: number;
+  username: string;
+  fullName: string;
+  email: string;
+  branchName: string;
+  branchLocation: string;
+  menuItemName: string;
   dateTime: string;
   subtotal: number;
   tax: number;
@@ -20,7 +26,7 @@ interface SalesProps {
   onToggleSidebarExpand?: () => void;
 }
 
-type PeriodFilter = 'daily' | 'weekly' | 'monthly';
+type PeriodFilter = 'daily' | 'monthly' | 'yearly';
 
 const Sales: React.FC<SalesProps> = ({
   sales,
@@ -33,19 +39,18 @@ const Sales: React.FC<SalesProps> = ({
 
   // Helper function to get date range based on period
   const getDateRange = (period: PeriodFilter): { start: Date; end: Date } => {
-    const now = new Date();
     const start = new Date();
 
     switch (period) {
       case 'daily':
         start.setHours(0, 0, 0, 0);
         break;
-      case 'weekly':
-        start.setDate(now.getDate() - now.getDay());
-        start.setHours(0, 0, 0, 0);
-        break;
       case 'monthly':
         start.setDate(1);
+        start.setHours(0, 0, 0, 0);
+        break;
+      case 'yearly':
+        start.setMonth(0, 1);
         start.setHours(0, 0, 0, 0);
         break;
     }
@@ -61,7 +66,10 @@ const Sales: React.FC<SalesProps> = ({
       const recordDate = new Date(record.dateTime);
       const matchesDate = recordDate >= start && recordDate <= end;
       const matchesSearch =
-        record.receiptNumber.toLowerCase().includes(searchText.toLowerCase()) ||
+        record.id.toString().toLowerCase().includes(searchText.toLowerCase()) ||
+        record.username.toLowerCase().includes(searchText.toLowerCase()) ||
+        record.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
+        record.menuItemName.toLowerCase().includes(searchText.toLowerCase()) ||
         record.status.toLowerCase().includes(searchText.toLowerCase());
 
       return matchesDate && matchesSearch;
@@ -93,8 +101,8 @@ const Sales: React.FC<SalesProps> = ({
 
   const periodFilters: { label: string; value: PeriodFilter; icon: any }[] = [
     { label: 'Daily', value: 'daily', icon: faCalendarDays },
-    { label: 'Weekly', value: 'weekly', icon: faWeightScale },
     { label: 'Monthly', value: 'monthly', icon: faCalendarAlt },
+    { label: 'Yearly', value: 'yearly', icon: faCalendarAlt },
   ];
 
   return (
@@ -323,8 +331,17 @@ const Sales: React.FC<SalesProps> = ({
                     <th className="px-6 py-4 text-left">
                       <div className="flex items-center gap-2">
                         <div className="h-2 w-2 rounded-full bg-gradient-to-r from-orange-500 to-orange-600"></div>
-                        <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Receipt #</span>
+                        <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">ID</span>
                       </div>
+                    </th>
+                    <th className="px-6 py-4 text-left">
+                      <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Full Name</span>
+                    </th>
+                    <th className="px-6 py-4 text-left">
+                      <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Branch</span>
+                    </th>
+                    <th className="px-6 py-4 text-left">
+                      <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Items</span>
                     </th>
                     <th className="px-6 py-4 text-left">
                       <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Date & Time</span>
@@ -356,7 +373,22 @@ const Sales: React.FC<SalesProps> = ({
                       <td className="px-6 py-5 relative">
                         <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-orange-500 to-orange-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         <span className="text-sm font-black text-orange-600 dark:text-orange-400 group-hover:text-orange-700 dark:group-hover:text-orange-300 transition-colors">
-                          #{record.receiptNumber}
+                          #{record.id}
+                        </span>
+                      </td>
+                      <td className="px-6 py-5">
+                        <span className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+                          {record.fullName}
+                        </span>
+                      </td>
+                      <td className="px-6 py-5">
+                        <span className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+                          {record.branchName}
+                        </span>
+                      </td>
+                      <td className="px-6 py-5">
+                        <span className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+                          {record.menuItemName}
                         </span>
                       </td>
                       <td className="px-6 py-5">
