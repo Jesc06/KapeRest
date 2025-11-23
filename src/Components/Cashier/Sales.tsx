@@ -128,9 +128,6 @@ const Sales: React.FC<SalesProps> = ({
 
                 {/* Page Title with Icon */}
                 <div className="hidden sm:flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/30">
-                    <FontAwesomeIcon icon={faChartLine} className="h-6 w-6 text-white" />
-                  </div>
                   <div>
                     <h1 className="text-xl font-black text-neutral-900 dark:text-white tracking-tight">Sales Analytics</h1>
                     <p className="text-xs font-medium text-neutral-600 dark:text-neutral-400">Track and analyze revenue</p>

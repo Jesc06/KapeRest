@@ -431,15 +431,15 @@ const MainPanel: React.FC<MainPanelProps> = ({
   return (
     <div className={`flex h-screen w-full flex-col bg-white dark:bg-neutral-900 transition-all duration-300 ${sidebarExpanded ? 'lg:ml-72' : 'lg:ml-24'}`}>
       {/* Top Bar - Search & Filters */}
-      <div className="sticky top-0 z-10 border-b border-stone-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-6 sm:px-8 md:px-10 py-5 shadow-sm transition-all duration-300">
+      <div className="sticky top-0 z-10 border-b border-stone-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-6 sm:px-8 md:px-10 py-6 shadow-sm transition-all duration-300">
         {/* Top Section: Sidebar Toggle | Search Bar | Logout Panel */}
-        <div className="flex items-center justify-between gap-5 sm:gap-6">
-          {/* Left & Center Section: Sidebar Toggle + Search Bar (ends where cart starts) */}
-          <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="flex items-center justify-between gap-4 sm:gap-5">
+          {/* Left: Sidebar Toggle + Search Bar */}
+          <div className="flex items-center gap-3 flex-1 min-w-0">
             {/* Hamburger Menu - Mobile Only */}
             <button
               onClick={onToggleSidebar}
-              className="lg:hidden flex h-10 w-10 items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 shadow-sm hover:shadow-md active:scale-95"
+              className="lg:hidden flex h-10 w-10 items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 shadow-sm hover:shadow-md active:scale-95 flex-shrink-0"
             >
               <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
             </button>
@@ -452,25 +452,33 @@ const MainPanel: React.FC<MainPanelProps> = ({
             >
               <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
             </button>
+
+            {/* Premium Search Bar - Left Aligned */}
+            <div className="flex items-center gap-3 relative group flex-1 min-w-0">
+              <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-amber-500/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="relative flex items-center gap-3 bg-white dark:bg-neutral-800 rounded-xl border-2 border-stone-200 dark:border-neutral-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-4 shadow-lg hover:shadow-xl transition-all duration-300 w-full">
+                <FontAwesomeIcon 
+                  icon={faSearch} 
+                  className="h-5 w-5 text-neutral-400 dark:text-neutral-500 group-focus-within:text-orange-500 transition-colors flex-shrink-0"
+                />
+                <input
+                  type="text"
+                  placeholder="Search items..."
+                  value={searchText}
+                  onChange={e => setSearchText(e.target.value)}
+                  className="flex-1 bg-transparent text-sm font-medium text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 shadow-none focus:outline-none min-w-0"
+                />
+                {searchText && (
+                  <span className="text-xs font-bold text-orange-600 dark:text-orange-400 px-2 py-1 rounded-md bg-orange-100 dark:bg-orange-900/30 flex-shrink-0">
+                    {filteredProducts.length} found
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
 
-          {/* Center Section: Minimalist Search Bar - ends where cart begins */}
-          <div className="flex-1 flex items-center gap-3 bg-stone-100 dark:bg-neutral-800 rounded-lg border border-stone-300 dark:border-neutral-700 px-4 py-3 shadow-sm transition-all duration-300 hover:shadow-md focus-within:shadow-md hover:border-stone-400 dark:hover:border-neutral-600">
-            <FontAwesomeIcon 
-              icon={faSearch} 
-              className="h-5 w-5 text-neutral-600 dark:text-neutral-400 flex-shrink-0"
-            />
-            <input
-              type="text"
-              placeholder="Search items..."
-              value={searchText}
-              onChange={e => setSearchText(e.target.value)}
-              className="flex-1 bg-transparent text-sm font-medium text-neutral-900 dark:text-white placeholder:text-neutral-500 dark:placeholder:text-neutral-400 shadow-none focus:outline-none"
-            />
-          </div>
-
-          {/* Right Section: Logout Panel - match cart width */}
-          <div className="w-full lg:w-80 xl:w-96 flex-shrink-0">
+          {/* Right Section: Logout Panel */}
+          <div className="flex-shrink-0">
             <LogoutPanel userRole={userRole} />
           </div>
         </div>
