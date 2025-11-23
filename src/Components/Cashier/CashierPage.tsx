@@ -121,7 +121,7 @@ const CashierPage: React.FC = () => {
 
           {/* Main Content Area */}
           <div className="flex-1 overflow-y-auto bg-gradient-to-br from-white via-stone-50 to-orange-50/20 dark:from-neutral-900 dark:via-neutral-900 dark:to-neutral-800">
-            <div className="w-full px-6 sm:px-8 md:px-10 lg:px-12 py-8 sm:py-10 md:py-12 max-w-7xl mx-auto">
+            <div className="w-full px-4 sm:px-6 md:px-8 lg:px-10 py-8 sm:py-10 md:py-12">
               {/* Welcome Section */}
               <div className="mb-16 sm:mb-20">
                 <div className="relative bg-gradient-to-br from-amber-500 via-orange-600 to-rose-600 dark:from-amber-600 dark:via-orange-700 dark:to-rose-700 rounded-3xl p-10 sm:p-12 md:p-16 shadow-2xl overflow-hidden group border border-orange-400/30">
@@ -223,7 +223,7 @@ const CashierPage: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 gap-6">
                   {statsCards.map((stat, index) => {
                     const maxValue = Math.max(...stat.chartData);
                     const normalizedData = stat.chartData.map(val => (val / maxValue) * 100);

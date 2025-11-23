@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faTruck, faBoxOpen, faChartLine, faPlus, faList, faWarehouse } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faBoxOpen, faPlus, faList, faWarehouse, faArrowUp, faArrowDown, faChartLine, faCalendarDays, faX } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from './StaffSidebar';
 import LogoutPanel from '../Shared/LogoutPanel';
 
@@ -9,6 +9,10 @@ const StaffPage: React.FC = () => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
+  const [dateRange, setDateRange] = useState<'1d' | '7d' | '30d' | 'custom'>('7d');
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [customStartDate, setCustomStartDate] = useState(new Date(new Date().setDate(new Date().getDate() - 7)).toISOString().split('T')[0]);
+  const [customEndDate, setCustomEndDate] = useState(new Date().toISOString().split('T')[0]);
 
   // Get current time for greeting
   const getGreeting = () => {
@@ -18,15 +22,34 @@ const StaffPage: React.FC = () => {
     return 'Good Evening';
   };
 
+  // Sales revenue trend data
+  const getSalesRevenueTrendData = () => {
+    const baseRevenue = 5000;
+    return [
+      baseRevenue - 500,
+      baseRevenue - 200,
+      baseRevenue,
+      baseRevenue + 300,
+      baseRevenue + 800,
+      baseRevenue + 1200,
+      baseRevenue + 1500,
+      baseRevenue + 1800,
+      baseRevenue + 2000,
+      baseRevenue + 2200
+    ];
+  };
+
+  const getPriceChangePercentage = (data: number[]) => {
+    const startPrice = data[0];
+    const endPrice = data[data.length - 1];
+    return (((endPrice - startPrice) / startPrice) * 100).toFixed(1);
+  };
+
+  const salesRevenueData = getSalesRevenueTrendData();
+  const salesRevenueChange = getPriceChangePercentage(salesRevenueData);
+
   // Quick action cards
   const quickActions = [
-    {
-      title: 'Add Supplier',
-      description: 'Register new suppliers',
-      icon: faTruck,
-      color: 'from-orange-500 to-orange-600',
-      path: '/staff/add-supplier'
-    },
     {
       title: 'Add Item',
       description: 'Add new products',
@@ -40,13 +63,20 @@ const StaffPage: React.FC = () => {
       icon: faWarehouse,
       color: 'from-green-500 to-green-600',
       path: '/staff/add-stocks'
-    },
+    }
+  ];
+
+  // Quick stats cards - Sales Overview
+  const statsCards = [
     {
-      title: 'View Sales',
-      description: 'Check sales records',
+      title: 'Sales Overview',
+      value: `₱${(Math.max(...salesRevenueData)).toLocaleString()}`,
       icon: faChartLine,
       color: 'from-purple-500 to-purple-600',
-      path: '/staff/sales'
+      trend: parseFloat(salesRevenueChange) >= 0 ? 'up' : 'down',
+      trendValue: `${parseFloat(salesRevenueChange) >= 0 ? '+' : ''}${salesRevenueChange}%`,
+      chartData: salesRevenueData,
+      label: 'Revenue Trend'
     }
   ];
 
@@ -111,11 +141,11 @@ const StaffPage: React.FC = () => {
           </div>
 
           {/* Main Content Area */}
-          <div className="flex-1 overflow-y-auto bg-gradient-to-br from-stone-50/50 to-orange-50/30 dark:from-neutral-900 dark:to-neutral-800/50">
+          <div className="flex-1 overflow-y-auto bg-white dark:bg-neutral-900">
             <div className="w-full px-4 sm:px-6 md:px-8 lg:px-10 py-6 sm:py-8 md:py-10">
               {/* Welcome Section */}
-              <div className="mb-10 sm:mb-12">
-                <div className="relative bg-gradient-to-r from-amber-500 via-orange-600 to-rose-600 dark:from-amber-600 dark:via-orange-700 dark:to-rose-700 rounded-2xl p-8 sm:p-10 shadow-2xl overflow-hidden group">
+              <div className="mb-16 sm:mb-20">
+                <div className="relative bg-gradient-to-br from-amber-500 via-orange-600 to-rose-600 dark:from-amber-600 dark:via-orange-700 dark:to-rose-700 rounded-3xl p-10 sm:p-12 md:p-16 shadow-2xl overflow-hidden group border border-orange-400/30">
                   {/* Animated Premium Background */}
                   <div className="absolute inset-0 opacity-20">
                     <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] animate-pulse"></div>
@@ -128,93 +158,248 @@ const StaffPage: React.FC = () => {
                     <div className="absolute bottom-10 left-1/3 w-2 h-2 bg-white/40 rounded-full animate-ping" style={{ animationDelay: '2s' }}></div>
                   </div>
                   
-                  <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                  <div className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-12 lg:gap-16">
                     <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border-2 border-white/40 shadow-2xl group-hover:scale-110 transition-transform duration-300">
-                          <FontAwesomeIcon icon={faWarehouse} className="text-4xl text-white" />
+                      <div className="flex items-start gap-6 mb-8">
+                        <div className="w-20 h-20 bg-white/25 backdrop-blur-md rounded-2xl flex items-center justify-center border-2 border-white/50 shadow-2xl group-hover:scale-110 group-hover:rotate-2 transition-all duration-300 flex-shrink-0">
+                          <FontAwesomeIcon icon={faWarehouse} className="text-5xl text-white drop-shadow-lg" />
                         </div>
-                        <div>
-                          <h2 className="text-4xl sm:text-5xl font-black text-white mb-1 tracking-tight drop-shadow-lg">
+                        <div className="flex-1">
+                          <h2 className="text-5xl sm:text-6xl font-black text-white mb-3 tracking-tighter drop-shadow-lg leading-tight">
                             {getGreeting()}!
                           </h2>
-                          <p className="text-orange-100 text-base font-bold flex items-center gap-2">
-                            <FontAwesomeIcon icon={faBoxOpen} className="h-4 w-4 text-yellow-300" />
+                          <p className="text-orange-50 text-sm font-bold uppercase tracking-widest flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-yellow-300 flex-shrink-0"></div>
                             <span>Staff Portal</span>
                           </p>
                         </div>
                       </div>
-                      <p className="text-white text-base sm:text-lg leading-relaxed max-w-2xl font-medium">
+                      <p className="text-white/95 text-base sm:text-lg leading-relaxed max-w-2xl font-medium">
                         Welcome to your workspace. Ready to manage suppliers, items, and inventory efficiently.
                       </p>
                     </div>
-                    <div className="bg-white/15 backdrop-blur-md rounded-2xl px-8 py-5 border-2 border-white/30 shadow-2xl group-hover:scale-105 transition-transform duration-300">
-                      <p className="text-white/90 text-xs font-black uppercase tracking-widest mb-2">Today</p>
-                      <p className="text-white text-3xl font-black drop-shadow-lg">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
-                      <p className="text-white/95 text-base font-bold">{new Date().toLocaleDateString('en-US', { year: 'numeric' })}</p>
+                    <div className="w-full lg:w-auto bg-white/20 backdrop-blur-lg rounded-2xl px-8 py-6 border-2 border-white/40 shadow-2xl group-hover:scale-110 group-hover:shadow-3xl transition-all duration-300">
+                      <p className="text-white/90 text-xs font-black uppercase tracking-widest mb-4">📅 Today's Date</p>
+                      <p className="text-white text-4xl font-black drop-shadow-lg leading-none mb-2">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                      <p className="text-white/95 text-lg font-bold drop-shadow-lg">{new Date().toLocaleDateString('en-US', { year: 'numeric' })}</p>
                     </div>
                   </div>
+                </div>
+              </div>
+
+              {/* Quick Stats */}
+              <div className="mb-16 sm:mb-20">
+                <div className="mb-8">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 className="text-2xl sm:text-3xl font-black text-neutral-900 dark:text-white tracking-tight mb-1">
+                        {dateRange === '7d' ? "Today's Overview" : "Sales Overview"}
+                      </h3>
+                      <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
+                        Sales data for selected period
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 bg-neutral-50 dark:bg-neutral-700/50 rounded-xl p-2">
+                      {(['1d', '7d', '30d'] as const).map((range) => (
+                        <button
+                          key={range}
+                          onClick={() => setDateRange(range)}
+                          className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+                            dateRange === range
+                              ? 'bg-orange-500 text-white shadow-md'
+                              : 'text-neutral-600 dark:text-neutral-300 hover:bg-white dark:hover:bg-neutral-600 active:scale-95'
+                          }`}
+                        >
+                          {range === '1d' ? '1 Day' : range === '7d' ? '7 Days' : '30 Days'}
+                        </button>
+                      ))}
+                      <div className="w-px h-6 bg-neutral-300 dark:bg-neutral-600 mx-1"></div>
+                      <div className="relative">
+                        <button
+                          onClick={() => setShowCalendar(!showCalendar)}
+                          className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 ${
+                            dateRange === 'custom'
+                              ? 'bg-orange-500 text-white shadow-md'
+                              : 'text-neutral-600 dark:text-neutral-300 hover:bg-white dark:hover:bg-neutral-600 active:scale-95'
+                          }`}
+                        >
+                          <FontAwesomeIcon icon={faCalendarDays} className="h-4 w-4" />
+                          Custom
+                        </button>
+
+                        {/* Calendar Picker Dropdown */}
+                        {showCalendar && (
+                          <div className="absolute top-full right-0 mt-2 bg-white dark:bg-neutral-800 rounded-xl shadow-2xl p-4 z-50 border border-neutral-200 dark:border-neutral-700 w-80">
+                            <div className="flex items-center justify-between mb-4">
+                              <h4 className="font-bold text-neutral-900 dark:text-white">Select Date Range</h4>
+                              <button
+                                onClick={() => setShowCalendar(false)}
+                                className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded transition-all"
+                              >
+                                <FontAwesomeIcon icon={faX} className="h-4 w-4 text-neutral-600 dark:text-neutral-300" />
+                              </button>
+                            </div>
+
+                            <div className="space-y-3 mb-4">
+                              <div>
+                                <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-2">From</label>
+                                <input
+                                  type="date"
+                                  value={customStartDate}
+                                  onChange={(e) => setCustomStartDate(e.target.value)}
+                                  className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white text-sm"
+                                />
+                              </div>
+                              <div>
+                                <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-2">To</label>
+                                <input
+                                  type="date"
+                                  value={customEndDate}
+                                  onChange={(e) => setCustomEndDate(e.target.value)}
+                                  className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white text-sm"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => {
+                                  setDateRange('custom');
+                                  setShowCalendar(false);
+                                }}
+                                className="flex-1 px-3 py-2 rounded-lg bg-orange-500 text-white font-bold text-sm hover:bg-orange-600 transition-all"
+                              >
+                                Apply
+                              </button>
+                              <button
+                                onClick={() => setShowCalendar(false)}
+                                className="flex-1 px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 text-neutral-600 dark:text-neutral-300 font-bold text-sm hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-all"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 gap-6">
+                  {statsCards.map((stat, index) => {
+                    const minValue = Math.min(...stat.chartData);
+                    const maxValue = Math.max(...stat.chartData);
+                    const range = maxValue - minValue;
+                    const normalizedData = stat.chartData.map((val: number) => ((val - minValue) / range) * 100);
+                    
+                    return (
+                    <div
+                      key={index}
+                      className="group relative bg-white dark:bg-neutral-800 rounded-2xl p-6 border border-neutral-200 dark:border-neutral-700 hover:border-orange-400 dark:hover:border-orange-500 shadow-sm hover:shadow-md transition-all duration-200"
+                    >
+                      <div className="flex items-start justify-between mb-4">
+                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-md`}>
+                          <FontAwesomeIcon icon={stat.icon} className="h-6 w-6 text-white" />
+                        </div>
+                        <div className={`flex items-center gap-1 px-2 py-1 rounded-lg ${stat.trend === 'up' ? 'bg-green-100 dark:bg-green-900/30' : 'bg-red-100 dark:bg-red-900/30'}`}>
+                          <FontAwesomeIcon 
+                            icon={stat.trend === 'up' ? faArrowUp : faArrowDown} 
+                            className={`h-3 w-3 ${stat.trend === 'up' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}
+                          />
+                          <span className={`text-xs font-bold ${stat.trend === 'up' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                            {stat.trendValue}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div className="mb-4">
+                        <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mb-1">{stat.title}</p>
+                        <p className="text-3xl font-black text-neutral-900 dark:text-white">{stat.value}</p>
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">{stat.label}</p>
+                      </div>
+
+                      <div className="mb-4">
+                        <div className="relative h-32 bg-gradient-to-b from-neutral-50 to-neutral-100 dark:from-neutral-700/50 dark:to-neutral-700 rounded-lg p-3 overflow-hidden">
+                          {/* Grid lines */}
+                          <div className="absolute inset-0 opacity-20">
+                            {[...Array(5)].map((_, i) => (
+                              <div key={i} className="absolute w-full border-t border-neutral-300 dark:border-neutral-600" style={{ top: `${i * 20}%` }}></div>
+                            ))}
+                          </div>
+
+                          {/* Line chart bars */}
+                          <div className="flex items-end justify-between h-full gap-0.5 relative z-10">
+                            {normalizedData.map((height, i) => {
+                              const prevValue = i === 0 ? stat.chartData[0] : stat.chartData[i - 1];
+                              const currentValue = stat.chartData[i];
+                              const percentChange = (((currentValue - prevValue) / prevValue) * 100).toFixed(0);
+                              const isIncrease = currentValue >= prevValue;
+                              
+                              return (
+                                <div key={i} className="flex-1 flex flex-col items-center justify-end group relative">
+                                  {/* Percentage label */}
+                                  <div className="absolute -top-6 text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span className={isIncrease ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}>
+                                      {isIncrease ? '+' : ''}{percentChange}%
+                                    </span>
+                                  </div>
+                                  
+                                  <div
+                                    className={`w-full rounded-t transition-all duration-300 ${
+                                      stat.trend === 'up' 
+                                        ? 'bg-gradient-to-t from-green-500 to-green-400 hover:from-green-600 hover:to-green-500 shadow-lg' 
+                                        : 'bg-gradient-to-t from-red-500 to-red-400 hover:from-red-600 hover:to-red-500 shadow-lg'
+                                    }`}
+                                    style={{ height: `${Math.max(height, 5)}%` }}
+                                    title={`₱${stat.chartData[i]} (${isIncrease ? '+' : ''}${percentChange}%)`}
+                                  ></div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2 text-center">
+                          From ₱{Math.min(...stat.chartData)} to ₱{Math.max(...stat.chartData)}
+                        </p>
+                      </div>
+
+                      <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                        {dateRange === '7d' ? 'Last 7 days' : dateRange === '1d' ? 'Last 24 hours' : dateRange === '30d' ? 'Last 30 days' : 'Custom period'} • {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                      </p>
+                    </div>
+                    );
+                  })}
                 </div>
               </div>
 
               {/* Quick Actions */}
               <div className="mb-12">
                 <div className="mb-8">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-sm flex-shrink-0">
-                      <FontAwesomeIcon icon={faPlus} className="h-3.5 w-3.5 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-3xl font-black text-neutral-900 dark:text-white">
-                        Quick Actions
-                      </h3>
-                    </div>
-                  </div>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium mt-2 ml-11">
-                    Fast access to key management functions
+                  <h3 className="text-2xl sm:text-3xl font-black text-neutral-900 dark:text-white tracking-tight mb-1">
+                    Quick Actions
+                  </h3>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
+                    Fast access to key functions
                   </p>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {quickActions.map((action, index) => (
                     <button
                       key={index}
                       onClick={() => navigate(action.path)}
-                      className="group relative bg-white dark:bg-neutral-800 rounded-2xl p-6 transition-all duration-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-transparent overflow-hidden transform hover:-translate-y-2 hover:shadow-2xl text-left"
+                      className="group relative bg-white dark:bg-neutral-800 rounded-2xl p-6 transition-all duration-300 border border-neutral-200 dark:border-neutral-700 hover:border-orange-400 dark:hover:border-orange-500 hover:shadow-md text-left"
                     >
-                      {/* Premium Gradient Border on Hover */}
-                      <div className={`absolute inset-0 bg-gradient-to-br ${action.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10`}></div>
-                      <div className="absolute inset-[2px] bg-white dark:bg-neutral-800 rounded-[14px] z-0"></div>
-                      
-                      {/* Spotlight Effect */}
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/20 to-transparent dark:from-white/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                      
-                      <div className="relative z-10 flex flex-col h-full">
-                        {/* Icon Section */}
-                        <div className="mb-4">
-                          <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${action.color} flex items-center justify-center shadow-md group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
-                            <FontAwesomeIcon icon={action.icon} className="h-4 w-4 text-white" />
-                          </div>
+                      <div className="flex items-start justify-between mb-4">
+                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center shadow-md`}>
+                          <FontAwesomeIcon icon={action.icon} className="h-6 w-6 text-white" />
                         </div>
-                        
-                        {/* Content Section */}
-                        <div className="flex-1 flex flex-col justify-between">
-                          <div>
-                            <h4 className="text-lg font-black text-neutral-900 dark:text-white mb-2 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-orange-500 group-hover:to-rose-600 transition-all duration-300">
-                              {action.title}
-                            </h4>
-                            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-medium">
-                              {action.description}
-                            </p>
-                          </div>
-                          
-                          {/* Arrow Indicator */}
-                          <div className="mt-4 flex items-center gap-2 text-xs font-bold text-neutral-500 dark:text-neutral-400 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
-                            <span className="uppercase tracking-wider">Manage</span>
-                            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                            </svg>
-                          </div>
-                        </div>
+                      </div>
+                      <div>
+                        <h4 className="text-lg font-bold text-neutral-900 dark:text-white mb-1.5 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
+                          {action.title}
+                        </h4>
+                        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                          {action.description}
+                        </p>
                       </div>
                     </button>
                   ))}
@@ -222,19 +407,12 @@ const StaffPage: React.FC = () => {
               </div>
 
               {/* Management Section */}
-              <div className="mb-12">
+              <div>
                 <div className="mb-8">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-sm flex-shrink-0">
-                      <FontAwesomeIcon icon={faList} className="h-3.5 w-3.5 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-3xl font-black text-neutral-900 dark:text-white">
-                        Management
-                      </h3>
-                    </div>
-                  </div>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium mt-2 ml-11">
+                  <h3 className="text-2xl sm:text-3xl font-black text-neutral-900 dark:text-white tracking-tight mb-1">
+                    Management
+                  </h3>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
                     View and manage all records
                   </p>
                 </div>
@@ -243,25 +421,20 @@ const StaffPage: React.FC = () => {
                     <button
                       key={index}
                       onClick={() => navigate(card.path)}
-                      className="group bg-white dark:bg-neutral-800 rounded-2xl p-5 transition-all duration-300 border-2 border-stone-100 dark:border-neutral-700 text-left hover:border-orange-200 dark:hover:border-orange-900/50 transform hover:-translate-y-1"
+                      className="group bg-white dark:bg-neutral-800 rounded-2xl p-6 transition-all duration-300 border border-neutral-200 dark:border-neutral-700 hover:border-orange-400 dark:hover:border-orange-500 hover:shadow-md text-left"
                     >
-                      <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-600 flex items-center justify-center group-hover:from-orange-100 group-hover:to-orange-200 dark:group-hover:from-orange-900/40 dark:group-hover:to-orange-800/40 transition-all duration-300">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="w-12 h-12 rounded-xl bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center group-hover:bg-orange-100 dark:group-hover:bg-orange-900/30 transition-colors">
                           <FontAwesomeIcon icon={card.icon} className="h-6 w-6 text-orange-600 dark:text-orange-400" />
                         </div>
-                        <div className="flex-1">
-                          <h4 className="text-base font-bold text-neutral-900 dark:text-stone-100 mb-1.5 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">
-                            {card.title}
-                          </h4>
-                          <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
-                            {card.description}
-                          </p>
-                        </div>
-                        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </svg>
-                        </div>
+                      </div>
+                      <div>
+                        <h4 className="text-lg font-bold text-neutral-900 dark:text-white mb-1.5 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
+                          {card.title}
+                        </h4>
+                        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                          {card.description}
+                        </p>
                       </div>
                     </button>
                   ))}
