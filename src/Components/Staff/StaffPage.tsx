@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faBoxOpen, faPlus, faList, faWarehouse, faArrowUp, faArrowDown, faChartLine, faCalendarDays, faX } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from './StaffSidebar';
 import LogoutPanel from '../Shared/LogoutPanel';
+import { API_BASE_URL } from '../../config/api';
+
+interface StaffSalesData {
+  date: string;
+  totalSales: number;
+  transactionCount: number;
+}
 
 const StaffPage: React.FC = () => {
   const navigate = useNavigate();
@@ -13,6 +20,59 @@ const StaffPage: React.FC = () => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [customStartDate, setCustomStartDate] = useState(new Date(new Date().setDate(new Date().getDate() - 7)).toISOString().split('T')[0]);
   const [customEndDate, setCustomEndDate] = useState(new Date().toISOString().split('T')[0]);
+  const [salesData, setSalesData] = useState<StaffSalesData[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch sales data based on dateRange
+  const fetchSalesData = async (range: '1d' | '7d' | '30d' | 'custom', startDate?: string, endDate?: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const token = localStorage.getItem('accessToken');
+      let endpoint = '';
+      let params = '';
+
+      switch (range) {
+        case '1d':
+          endpoint = 'Daily';
+          break;
+        case '7d':
+          endpoint = 'Weekly';
+          break;
+        case '30d':
+          endpoint = 'Monthly';
+          break;
+        case 'custom':
+          endpoint = 'Custom';
+          params = `?startDate=${startDate}&endDate=${endDate}`;
+          break;
+      }
+
+      const response = await fetch(`${API_BASE_URL}/StaffSalesReport/${endpoint}${params}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch sales data');
+      const data: StaffSalesData[] = await response.json();
+      setSalesData(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Effect to fetch data when dateRange or custom dates change
+  useEffect(() => {
+    if (dateRange === 'custom') {
+      fetchSalesData('custom', customStartDate, customEndDate);
+    } else {
+      fetchSalesData(dateRange);
+    }
+  }, [dateRange, customStartDate, customEndDate]);
 
   // Get current time for greeting
   const getGreeting = () => {
@@ -22,31 +82,34 @@ const StaffPage: React.FC = () => {
     return 'Good Evening';
   };
 
-  // Sales revenue trend data
-  const getSalesRevenueTrendData = () => {
-    const baseRevenue = 5000;
-    return [
-      baseRevenue - 500,
-      baseRevenue - 200,
-      baseRevenue,
-      baseRevenue + 300,
-      baseRevenue + 800,
-      baseRevenue + 1200,
-      baseRevenue + 1500,
-      baseRevenue + 1800,
-      baseRevenue + 2000,
-      baseRevenue + 2200
-    ];
+  // Process sales data for chart and stats
+  const processSalesData = () => {
+    if (salesData.length === 0) return null;
+
+    const chartData = salesData.map(d => d.totalSales);
+    const totalSales = chartData.reduce((sum, val) => sum + val, 0);
+    const totalTransactions = salesData.reduce((sum, d) => sum + d.transactionCount, 0);
+
+    // Calculate percentage change (trend)
+    const firstValue = chartData[0];
+    const lastValue = chartData[chartData.length - 1];
+    const percentChange = firstValue ? ((lastValue - firstValue) / firstValue) * 100 : 0;
+    const trend: 'up' | 'down' = percentChange >= 0 ? 'up' : 'down';
+
+    return {
+      title: 'Sales Overview',
+      value: `₱${totalSales.toLocaleString()}`,
+      icon: faChartLine,
+      color: 'from-purple-500 to-purple-600',
+      trend,
+      trendValue: `${percentChange >= 0 ? '+' : ''}${percentChange.toFixed(1)}%`,
+      chartData,
+      label: 'Revenue Trend',
+      totalTransactions,
+    };
   };
 
-  const getPriceChangePercentage = (data: number[]) => {
-    const startPrice = data[0];
-    const endPrice = data[data.length - 1];
-    return (((endPrice - startPrice) / startPrice) * 100).toFixed(1);
-  };
-
-  const salesRevenueData = getSalesRevenueTrendData();
-  const salesRevenueChange = getPriceChangePercentage(salesRevenueData);
+  const salesOverview = processSalesData();
 
   // Quick action cards
   const quickActions = [
@@ -67,18 +130,7 @@ const StaffPage: React.FC = () => {
   ];
 
   // Quick stats cards - Sales Overview
-  const statsCards = [
-    {
-      title: 'Sales Overview',
-      value: `₱${(Math.max(...salesRevenueData)).toLocaleString()}`,
-      icon: faChartLine,
-      color: 'from-purple-500 to-purple-600',
-      trend: parseFloat(salesRevenueChange) >= 0 ? 'up' : 'down',
-      trendValue: `${parseFloat(salesRevenueChange) >= 0 ? '+' : ''}${salesRevenueChange}%`,
-      chartData: salesRevenueData,
-      label: 'Revenue Trend'
-    }
-  ];
+  const statsCards = salesOverview ? [salesOverview] : [];
 
   // Management cards
   const managementCards = [
@@ -168,10 +220,10 @@ const StaffPage: React.FC = () => {
                           <h2 className="text-5xl sm:text-6xl font-black text-white mb-3 tracking-tighter drop-shadow-lg leading-tight">
                             {getGreeting()}!
                           </h2>
-                          <p className="text-orange-50 text-sm font-bold uppercase tracking-widest flex items-center gap-2">
+                          <div className="text-orange-50 text-sm font-bold uppercase tracking-widest flex items-center gap-2">
                             <div className="w-2 h-2 rounded-full bg-yellow-300 flex-shrink-0"></div>
                             <span>Staff Portal</span>
-                          </p>
+                          </div>
                         </div>
                       </div>
                       <p className="text-white/95 text-base sm:text-lg leading-relaxed max-w-2xl font-medium">
@@ -285,17 +337,26 @@ const StaffPage: React.FC = () => {
                   </div>
                 </div>
                 <div className="grid grid-cols-1 gap-6">
-                  {statsCards.map((stat, index) => {
-                    const minValue = Math.min(...stat.chartData);
-                    const maxValue = Math.max(...stat.chartData);
-                    const range = maxValue - minValue;
-                    const normalizedData = stat.chartData.map((val: number) => ((val - minValue) / range) * 100);
-                    
-                    return (
-                    <div
-                      key={index}
-                      className="group relative bg-white dark:bg-neutral-800 rounded-2xl p-6 border border-neutral-200 dark:border-neutral-700 hover:border-orange-400 dark:hover:border-orange-500 shadow-sm hover:shadow-md transition-all duration-200"
-                    >
+                  {loading ? (
+                    <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 border border-neutral-200 dark:border-neutral-700">
+                      <p className="text-center text-neutral-600 dark:text-neutral-400">Loading sales data...</p>
+                    </div>
+                  ) : error ? (
+                    <div className="bg-red-50 dark:bg-red-900/20 rounded-2xl p-6 border border-red-200 dark:border-red-800">
+                      <p className="text-center text-red-600 dark:text-red-400">Error: {error}</p>
+                    </div>
+                  ) : statsCards.length > 0 ? (
+                    statsCards.map((stat, index) => {
+                      const minValue = Math.min(...stat.chartData);
+                      const maxValue = Math.max(...stat.chartData);
+                      const range = maxValue - minValue;
+                      const normalizedData = stat.chartData.map((val: number) => ((val - minValue) / range) * 100);
+                      
+                      return (
+                      <div
+                        key={index}
+                        className="group relative bg-white dark:bg-neutral-800 rounded-2xl p-6 border border-neutral-200 dark:border-neutral-700 hover:border-orange-400 dark:hover:border-orange-500 shadow-sm hover:shadow-md transition-all duration-200"
+                      >
                       <div className="flex items-start justify-between mb-4">
                         <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-md`}>
                           <FontAwesomeIcon icon={stat.icon} className="h-6 w-6 text-white" />
@@ -367,7 +428,12 @@ const StaffPage: React.FC = () => {
                       </p>
                     </div>
                     );
-                  })}
+                  })
+                  ) : (
+                    <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 border border-neutral-200 dark:border-neutral-700">
+                      <p className="text-center text-neutral-600 dark:text-neutral-400">No sales data available for the selected period.</p>
+                    </div>
+                  )}
                 </div>
               </div>
 
