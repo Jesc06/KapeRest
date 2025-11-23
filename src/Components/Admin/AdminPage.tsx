@@ -173,7 +173,7 @@ const AdminPage: React.FC = () => {
 
         <div className={`flex h-screen w-full flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-72' : 'lg:ml-24'}`}>
           {/* Premium Header with Glass Morphism */}
-          <div className="sticky top-0 z-20 border-b border-orange-200/30 dark:border-orange-700/20 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-2xl shadow-2xl shadow-orange-500/10 overflow-hidden">
+          <div className="sticky top-0 z-20 border-b border-orange-200/30 dark:border-orange-700/20 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-2xl shadow-2xl shadow-orange-500/10">
             {/* Premium accent line */}
             <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-orange-400/50 to-transparent"></div>
             <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-300/30 to-transparent"></div>
