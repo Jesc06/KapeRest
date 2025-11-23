@@ -1,15 +1,71 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faShoppingCart, faChartLine, faCashRegister, faReceipt, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faShoppingCart, faChartLine, faCashRegister, faMoneyBillWave, faReceipt } from '@fortawesome/free-solid-svg-icons';
 import Sidebar from './Sidebar.tsx';
 import LogoutPanel from '../Shared/LogoutPanel';
+import { API_BASE_URL } from '../../config/api';
 
 const CashierPage: React.FC = () => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [todaySales, setTodaySales] = useState(0);
+  const [todayTransactions, setTodayTransactions] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTodayMetrics = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+          setLoading(false);
+          return;
+        }
+
+        // Decode JWT to get cashierId
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        
+        const decoded = JSON.parse(jsonPayload);
+        const cashierId = decoded.cashierId;
+
+        if (!cashierId) {
+          setLoading(false);
+          return;
+        }
+
+        const response = await fetch(`${API_BASE_URL}/CashierSalesReport/CashierDailySales?cashierId=${cashierId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // Calculate totals
+        const totalSales = data.reduce((sum: number, item: any) => sum + item.total, 0);
+        const totalTransactions = data.length;
+
+        setTodaySales(totalSales);
+        setTodayTransactions(totalTransactions);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching today metrics:', err);
+        setLoading(false);
+      }
+    };
+
+    fetchTodayMetrics();
+  }, []);
 
   // Get current time for greeting
   const getGreeting = () => {
@@ -18,28 +74,6 @@ const CashierPage: React.FC = () => {
     if (hour < 18) return 'Good Afternoon';
     return 'Good Evening';
   };
-
-  // Get sample data based on selected date
-  const getChartDataForDate = (date: Date) => {
-    // In a real app, this would fetch from API based on date
-    const dayOfWeek = date.getDay();
-    const baseMultiplier = dayOfWeek === 0 ? 1.5 : dayOfWeek === 6 ? 1.3 : 1; // Higher on weekends
-    return [
-      Math.round(2 * baseMultiplier),
-      Math.round(5 * baseMultiplier),
-      Math.round(4 * baseMultiplier),
-      Math.round(7 * baseMultiplier),
-      Math.round(9 * baseMultiplier),
-      Math.round(8 * baseMultiplier),
-      Math.round(11 * baseMultiplier),
-      Math.round(12 * baseMultiplier),
-      Math.round(10 * baseMultiplier),
-      Math.round(14 * baseMultiplier)
-    ];
-  };
-
-  const salesChartData = getChartDataForDate(selectedDate);
-  const transactionsChartData = [Math.round(5 / (Math.abs((new Date().getTime() - selectedDate.getTime()) / (1000 * 60 * 60 * 24)) + 1)), 6, 7, 5, 4, 6, 3, 2, 1, 0];
 
   // Quick action cards
   const quickActions = [
@@ -56,28 +90,6 @@ const CashierPage: React.FC = () => {
       icon: faChartLine,
       color: 'from-blue-500 to-blue-600',
       path: '/cashier/sales'
-    }
-  ];
-
-  // Quick stats cards
-  const statsCards = [
-    {
-      title: 'Today\'s Sales',
-      value: '₱0.00',
-      icon: faCashRegister,
-      color: 'from-green-500 to-green-600',
-      trend: 'up',
-      trendValue: '+5.2%',
-      chartData: salesChartData
-    },
-    {
-      title: 'Transactions',
-      value: '0',
-      icon: faReceipt,
-      color: 'from-purple-500 to-purple-600',
-      trend: 'down',
-      trendValue: '-2.1%',
-      chartData: transactionsChartData
     }
   ];
 
@@ -166,118 +178,69 @@ const CashierPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Quick Stats */}
+              {/* Today's Metrics */}
               <div className="mb-16 sm:mb-20">
                 <div className="mb-8">
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <h3 className="text-2xl sm:text-3xl font-black text-neutral-900 dark:text-white tracking-tight mb-1">
-                        {selectedDate.toDateString() === new Date().toDateString() ? "Today's Overview" : "Sales Overview"}
-                      </h3>
-                      <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
-                        {selectedDate.toDateString() === new Date().toDateString() 
-                          ? 'Real-time performance metrics' 
-                          : `Viewing: ${selectedDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}`}
-                      </p>
+                  <h3 className="text-2xl sm:text-3xl font-black text-neutral-900 dark:text-white tracking-tight mb-1">
+                    Today's Performance
+                  </h3>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
+                    Real-time sales metrics
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {/* Total Sales Today */}
+                  <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-green-500 via-emerald-600 to-teal-700 p-6 shadow-xl shadow-green-500/20 hover:shadow-2xl hover:shadow-green-500/30 transition-all duration-500 hover:-translate-y-2">
+                    <div className="absolute inset-0 opacity-10">
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-3xl transform translate-x-8 -translate-y-8"></div>
+                      <div className="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full blur-2xl transform -translate-x-4 translate-y-4"></div>
                     </div>
-                    <div className="flex items-center gap-2 bg-neutral-50 dark:bg-neutral-700/50 rounded-xl p-2">
-                      <button
-                        onClick={() => {
-                          const newDate = new Date(selectedDate);
-                          newDate.setDate(newDate.getDate() - 1);
-                          setSelectedDate(newDate);
-                        }}
-                        className="p-3 rounded-lg transition-all text-neutral-700 dark:text-neutral-200 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-white dark:hover:bg-neutral-600 active:scale-95 font-bold text-2xl"
-                        title="Previous day"
-                      >
-                        ← 
-                      </button>
-                      <button
-                        onClick={() => setSelectedDate(new Date())}
-                        className={`px-6 py-3 rounded-lg text-base font-bold transition-all ${
-                          selectedDate.toDateString() === new Date().toDateString()
-                            ? 'bg-orange-500 text-white shadow-md'
-                            : 'text-neutral-600 dark:text-neutral-300 hover:bg-white dark:hover:bg-neutral-600 active:scale-95'
-                        }`}
-                      >
-                        Today
-                      </button>
-                      <button
-                        onClick={() => {
-                          const newDate = new Date(selectedDate);
-                          newDate.setDate(newDate.getDate() + 1);
-                          if (newDate <= new Date()) {
-                            setSelectedDate(newDate);
-                          }
-                        }}
-                        className={`p-3 rounded-lg transition-all ${
-                          selectedDate.toDateString() === new Date().toDateString()
-                            ? 'text-neutral-300 dark:text-neutral-600 cursor-not-allowed'
-                            : 'text-neutral-700 dark:text-neutral-200 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-white dark:hover:bg-neutral-600 active:scale-95 font-bold text-2xl'
-                        }`}
-                        disabled={selectedDate.toDateString() === new Date().toDateString()}
-                        title="Next day"
-                      >
-                        →
-                      </button>
+                    
+                    <div className="relative z-10">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm shadow-lg">
+                          <FontAwesomeIcon icon={faMoneyBillWave} className="h-7 w-7 text-white" />
+                        </div>
+                        <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/20 backdrop-blur-sm">
+                          <div className="h-1.5 w-1.5 rounded-full bg-white animate-pulse"></div>
+                          <span className="text-xs font-bold text-white">Live</span>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-1">
+                        <p className="text-xs font-bold uppercase tracking-wider text-white/80">Total Sales Today</p>
+                        <p className="text-4xl font-black text-white">
+                          {loading ? '...' : `₱${todaySales.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                        </p>
+                        <p className="text-xs font-medium text-white/70">revenue generated</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="grid grid-cols-1 gap-6">
-                  {statsCards.map((stat, index) => {
-                    const maxValue = Math.max(...stat.chartData);
-                    const normalizedData = stat.chartData.map(val => (val / maxValue) * 100);
+
+                  {/* Total Transactions Today */}
+                  <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-700 p-6 shadow-xl shadow-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/30 transition-all duration-500 hover:-translate-y-2">
+                    <div className="absolute inset-0 opacity-10">
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-3xl transform translate-x-8 -translate-y-8"></div>
+                      <div className="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full blur-2xl transform -translate-x-4 translate-y-4"></div>
+                    </div>
                     
-                    return (
-                    <div
-                      key={index}
-                      className="group relative bg-white dark:bg-neutral-800 rounded-2xl p-6 border border-neutral-200 dark:border-neutral-700 hover:border-orange-400 dark:hover:border-orange-500 shadow-sm hover:shadow-md transition-all duration-200"
-                    >
+                    <div className="relative z-10">
                       <div className="flex items-start justify-between mb-4">
-                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-md`}>
-                          <FontAwesomeIcon icon={stat.icon} className="h-6 w-6 text-white" />
+                        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm shadow-lg">
+                          <FontAwesomeIcon icon={faReceipt} className="h-7 w-7 text-white" />
                         </div>
-                        <div className={`flex items-center gap-1 px-2 py-1 rounded-lg ${stat.trend === 'up' ? 'bg-green-100 dark:bg-green-900/30' : 'bg-red-100 dark:bg-red-900/30'}`}>
-                          <FontAwesomeIcon 
-                            icon={stat.trend === 'up' ? faArrowUp : faArrowDown} 
-                            className={`h-3 w-3 ${stat.trend === 'up' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`} 
-                          />
-                          <span className={`text-xs font-bold ${stat.trend === 'up' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                            {stat.trendValue}
-                          </span>
+                        <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/20 backdrop-blur-sm">
+                          <FontAwesomeIcon icon={faChartLine} className="h-3 w-3 text-white" />
                         </div>
                       </div>
                       
-                      <p className="text-xs font-black text-neutral-600 dark:text-neutral-400 uppercase tracking-wider mb-1">
-                        {stat.title}
-                      </p>
-                      <p className="text-3xl font-black text-neutral-900 dark:text-white mb-4">
-                        {stat.value}
-                      </p>
-                      
-                      {/* Sparkline Chart */}
-                      <div className="mb-4 h-12 flex items-end gap-1 rounded-lg bg-neutral-50 dark:bg-neutral-700/30 p-3">
-                        {normalizedData.map((height, i) => (
-                          <div
-                            key={i}
-                            className={`flex-1 rounded-sm transition-all duration-300 ${
-                              stat.trend === 'up' 
-                                ? 'bg-gradient-to-t from-green-400 to-green-300 hover:from-green-500 hover:to-green-400' 
-                                : 'bg-gradient-to-t from-red-400 to-red-300 hover:from-red-500 hover:to-red-400'
-                            }`}
-                            style={{ height: `${height}%`, minHeight: '2px' }}
-                            title={`${stat.chartData[i]}`}
-                          />
-                        ))}
-                      </div>
-                      
-                      <div className="flex items-center gap-1.5">
-                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                        <p className="text-xs text-neutral-600 dark:text-neutral-400 font-medium">Live update</p>
+                      <div className="space-y-1">
+                        <p className="text-xs font-bold uppercase tracking-wider text-white/80">Total Transactions Today</p>
+                        <p className="text-4xl font-black text-white">{loading ? '...' : todayTransactions}</p>
+                        <p className="text-xs font-medium text-white/70">orders processed</p>
                       </div>
                     </div>
-                    );
-                  })}
+                  </div>
                 </div>
               </div>
 
