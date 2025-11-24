@@ -163,6 +163,20 @@ const AddItem: React.FC = () => {
         throw new Error('No authentication token found. Please login again.');
       }
       
+      // Decode JWT to get cashierId
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      
+      const decoded = JSON.parse(jsonPayload);
+      const cashierId = decoded.cashierId;
+
+      if (!cashierId) {
+        throw new Error('Cashier ID not found in token. Please login again.');
+      }
+      
       // Create FormData for file upload
       const apiFormData = new FormData();
       apiFormData.append('Item_name', formData.itemName);
@@ -170,7 +184,8 @@ const AddItem: React.FC = () => {
       apiFormData.append('Category', formData.category);
       apiFormData.append('Description', formData.description);
       apiFormData.append('Image', formData.image);
-      apiFormData.append('IsAvailable', 'Yes');
+      apiFormData.append('IsAvailable', 'true');
+      apiFormData.append('cashierId', cashierId.toString());
       
       // Add products as JSON string (empty array if no products)
       const productsPayload = selectedProducts.map(p => ({

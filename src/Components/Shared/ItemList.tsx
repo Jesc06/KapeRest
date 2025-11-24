@@ -11,7 +11,7 @@ interface Item {
   itemName: string;
   price: number;
   description: string;
-  isAvailable: boolean;
+  isAvailable: string;
   image: string;
 }
 
@@ -85,9 +85,59 @@ const ItemList: React.FC = () => {
     navigate(`/staff/update-item/${itemId}`);
   };
 
-  const handleDelete = (itemId: number) => {
-    if (window.confirm('Are you sure you want to delete this item?')) {
-      setItems(items.filter(i => i.id !== itemId));
+  const handleDelete = async (itemId: number) => {
+    if (!window.confirm('Are you sure you want to delete this item?')) return;
+
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        console.error('No access token found');
+        return;
+      }
+
+      // Decode JWT to get cashierId
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      
+      const decoded = JSON.parse(jsonPayload);
+      const cashierId = decoded.cashierId;
+
+      if (!cashierId) {
+        console.error('Cashier ID not found in token');
+        return;
+      }
+
+      const response = await fetch(`${API_BASE_URL}/MenuItem/DeleteMenuItem`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cashierId: cashierId,
+          id: itemId
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to delete item: ${errorText}`);
+      }
+
+      const result = await response.text();
+      if (result.includes('Successfully deleted')) {
+        // Remove from local state
+        setItems(items.filter(i => i.id !== itemId));
+        alert('Item deleted successfully');
+      } else {
+        alert(result); // Show the error message from backend
+      }
+    } catch (err) {
+      console.error('Error deleting menu item:', err);
+      alert('Failed to delete item. Please try again.');
     }
   };
 
@@ -195,7 +245,6 @@ const ItemList: React.FC = () => {
                           <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Item Name</th>
                           <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Price</th>
                           <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Description</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Image</th>
                           <th className="px-6 py-4 text-center text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Availability</th>
                           <th className="px-6 py-4 text-center text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Actions</th>
                         </tr>
@@ -208,9 +257,14 @@ const ItemList: React.FC = () => {
                           >
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="flex items-center">
-                                <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-orange-100 dark:bg-orange-900/30 mr-3">
-                                  <FontAwesomeIcon icon={faCoffee} className="h-4 w-4 text-orange-600 dark:text-orange-400" />
-                                </div>
+                                <img
+                                  src={item.image.startsWith('data:') ? item.image : `data:image/jpeg;base64,${item.image}`}
+                                  alt={item.itemName}
+                                  className="w-10 h-10 object-cover rounded-lg border border-neutral-200 dark:border-neutral-700 mr-3"
+                                  onError={(e) => {
+                                    e.currentTarget.src = '/images/placeholder.jpg'; // Fallback image
+                                  }}
+                                />
                                 <div className="text-sm font-semibold text-neutral-900 dark:text-white">
                                   {item.itemName}
                                 </div>
@@ -226,13 +280,8 @@ const ItemList: React.FC = () => {
                                 {item.description}
                               </div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-xs text-neutral-500 dark:text-neutral-500 font-mono truncate max-w-[150px]">
-                                {item.image}
-                              </div>
-                            </td>
                             <td className="px-6 py-4 whitespace-nowrap text-center">
-                              {item.isAvailable ? (
+                              {item.isAvailable === "Available" ? (
                                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
                                   <FontAwesomeIcon icon={faCheckCircle} className="h-3 w-3" />
                                   Available
@@ -240,7 +289,7 @@ const ItemList: React.FC = () => {
                               ) : (
                                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400">
                                   <FontAwesomeIcon icon={faTimesCircle} className="h-3 w-3" />
-                                  Unavailable
+                                  Out of Stock
                                 </span>
                               )}
                             </td>
@@ -280,13 +329,13 @@ const ItemList: React.FC = () => {
                   <div className="bg-white dark:bg-neutral-900 p-4 rounded-lg border border-neutral-200 dark:border-neutral-800">
                     <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">Available Items</p>
                     <p className="text-2xl font-bold text-green-600 dark:text-green-400">
-                      {filteredItems.filter(item => item.isAvailable).length}
+                      {filteredItems.filter(item => item.isAvailable === "Available").length}
                     </p>
                   </div>
                   <div className="bg-white dark:bg-neutral-900 p-4 rounded-lg border border-neutral-200 dark:border-neutral-800">
                     <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">Unavailable Items</p>
                     <p className="text-2xl font-bold text-red-600 dark:text-red-400">
-                      {filteredItems.filter(item => !item.isAvailable).length}
+                      {filteredItems.filter(item => item.isAvailable !== "Available").length}
                     </p>
                   </div>
                 </div>
