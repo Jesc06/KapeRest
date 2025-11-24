@@ -1,11 +1,18 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoffee, faSearch, faBars, faCalendarDays, faWeightScale, faCalendarAlt, faReceipt, faMoneyBillWave, faChartLine, faSpinner, faSun, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import LogoutPanel from '../Shared/LogoutPanel';
 import StaffSidebar from './StaffSidebar';
 
 interface SalesRecord {
-  receiptNumber: string;
+  id: number | string;
+  receiptNumber: string; // derived string version of id
+  username?: string;
+  fullName?: string;
+  email?: string;
+  branchName?: string;
+  branchLocation?: string;
+  menuItemName?: string;
   dateTime: string;
   subtotal: number;
   tax: number;
@@ -20,9 +27,14 @@ interface StaffSalesProps {
 
 type PeriodFilter = 'daily' | 'monthly' | 'yearly';
 
+import { API_BASE_URL } from '../../config/api';
+
 const StaffSales: React.FC<StaffSalesProps> = ({
   sales = [],
 }) => {
+  const [salesState, setSalesState] = useState<SalesRecord[]>(sales);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [searchText, setSearchText] = useState('');
   const [selectedPeriod, setSelectedPeriod] = useState<PeriodFilter>('daily');
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -54,16 +66,105 @@ const StaffSales: React.FC<StaffSalesProps> = ({
   const filteredSales = useMemo(() => {
     const { start, end } = getDateRange(selectedPeriod);
 
-    return sales.filter(record => {
+    return salesState.filter(record => {
       const recordDate = new Date(record.dateTime);
       const matchesDate = recordDate >= start && recordDate <= end;
       const matchesSearch =
-        record.receiptNumber.toLowerCase().includes(searchText.toLowerCase()) ||
-        record.status.toLowerCase().includes(searchText.toLowerCase());
+        (record.receiptNumber ?? '').toString().toLowerCase().includes(searchText.toLowerCase()) ||
+        (record.status ?? '').toLowerCase().includes(searchText.toLowerCase()) ||
+        (record.menuItemName ?? '').toLowerCase().includes(searchText.toLowerCase()) ||
+        (record.username ?? '').toLowerCase().includes(searchText.toLowerCase()) ||
+        (record.fullName ?? '').toLowerCase().includes(searchText.toLowerCase()) ||
+        (record.branchName ?? '').toLowerCase().includes(searchText.toLowerCase());
 
       return matchesDate && matchesSearch;
     });
-  }, [sales, searchText, selectedPeriod]);
+  }, [salesState, searchText, selectedPeriod]);
+
+  // Fetch sales data for current cashier and period
+  useEffect(() => {
+    const fetchSalesData = async (period: PeriodFilter) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+          setLoading(false);
+          return;
+        }
+
+        // Decode JWT to get cashierId (similar to other pages)
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        const decoded = JSON.parse(jsonPayload);
+        const cashierId = decoded.cashierId as string | undefined;
+
+        if (!cashierId) {
+          setLoading(false);
+          return;
+        }
+
+        let endpoint = '';
+        switch (period) {
+          case 'daily':
+            endpoint = 'CashierDailySales';
+            break;
+          case 'monthly':
+            endpoint = 'CashierMonthlySales';
+            break;
+          case 'yearly':
+            endpoint = 'CashierYearlySales';
+            break;
+          default:
+            endpoint = 'CashierDailySales';
+            break;
+        }
+
+        const response = await fetch(`${API_BASE_URL}/CashierSalesReport/${endpoint}?cashierId=${cashierId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch sales: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // Map the API DTO into our sales record shape
+        const mapped: SalesRecord[] = data.map((item: any) => ({
+          id: item.id ?? item.Id ?? '',
+          receiptNumber: `${item.id ?? item.Id ?? ''}`,
+          username: item.username ?? item.email ?? '',
+          fullName: item.fullName ?? `${item.username ?? ''}`,
+          email: item.email ?? '',
+          branchName: item.branchName ?? '',
+          branchLocation: item.branchLocation ?? '',
+          menuItemName: item.menuItemName ?? item.menuItem ?? '',
+          dateTime: item.dateTime ?? item.date ?? '',
+          subtotal: item.subtotal ?? 0,
+          tax: item.tax ?? 0,
+          discount: item.discount ?? 0,
+          total: item.total ?? 0,
+          status: item.status ?? 'Pending',
+        }));
+
+        setSalesState(mapped);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Unknown error fetching sales');
+        console.error('Error fetching sales data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSalesData(selectedPeriod);
+  }, [selectedPeriod]);
 
   // Calculate totals
   const totals = useMemo(() => {
@@ -379,16 +480,49 @@ const StaffSales: React.FC<StaffSalesProps> = ({
 
           {/* Table Content */}
           <div className="flex-1 overflow-auto">
-            {filteredSales.length > 0 ? (
+            {loading ? (
+              <div className="flex h-full items-center justify-center py-24">
+                <div className="text-center px-4 max-w-md">
+                  <div className="relative mb-8 inline-block">
+                    <div className="relative flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-2xl shadow-orange-500/40">
+                      <FontAwesomeIcon icon={faSpinner} className="h-12 w-12 text-white animate-spin" />
+                    </div>
+                  </div>
+                  <h4 className="text-2xl font-black text-neutral-900 dark:text-white mb-3">Loading sales...</h4>
+                  <p className="text-base font-medium text-neutral-600 dark:text-neutral-400 leading-relaxed mb-6">Please wait while we retrieve sales data.</p>
+                </div>
+              </div>
+            ) : error ? (
+              <div className="flex h-full items-center justify-center py-24">
+                <div className="text-center px-4 max-w-md">
+                  <div className="relative mb-8 inline-block">
+                    <div className="relative flex h-24 w-24 items-center justify-center rounded-2xl bg-red-500/20 shadow-2xl shadow-red-500/20">
+                      <FontAwesomeIcon icon={faSpinner} className="h-12 w-12 text-red-600" />
+                    </div>
+                  </div>
+                  <h4 className="text-2xl font-black text-neutral-900 dark:text-white mb-3">Error loading sales</h4>
+                  <p className="text-base font-medium text-neutral-600 dark:text-neutral-400 leading-relaxed mb-6">{error}</p>
+                </div>
+              </div>
+            ) : filteredSales.length > 0 ? (
               <table className="w-full">
                 <thead className="sticky top-0 z-10">
                   <tr className="bg-gradient-to-r from-stone-50 via-stone-100/80 to-stone-50 dark:from-neutral-800 dark:via-neutral-750 dark:to-neutral-800 border-b-2 border-stone-300 dark:border-neutral-700 backdrop-blur-sm">
-                    <th className="px-6 py-4 text-left">
-                      <div className="flex items-center gap-2">
-                        <div className="h-2 w-2 rounded-full bg-gradient-to-r from-orange-500 to-orange-600"></div>
-                        <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Receipt #</span>
-                      </div>
-                    </th>
+                        <th className="px-6 py-4 text-left">
+                          <div className="flex items-center gap-2">
+                            <div className="h-2 w-2 rounded-full bg-gradient-to-r from-orange-500 to-orange-600"></div>
+                            <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Receipt #</span>
+                          </div>
+                        </th>
+                        <th className="px-6 py-4 text-left">
+                          <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Item</span>
+                        </th>
+                        <th className="px-6 py-4 text-left hidden sm:table-cell">
+                          <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Cashier</span>
+                        </th>
+                        <th className="px-6 py-4 text-left hidden lg:table-cell">
+                          <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Branch</span>
+                        </th>
                     <th className="px-6 py-4 text-left">
                       <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Date & Time</span>
                     </th>
@@ -412,7 +546,7 @@ const StaffSales: React.FC<StaffSalesProps> = ({
                 <tbody className="divide-y divide-stone-200 dark:divide-neutral-700">
                   {filteredSales.map((record, index) => (
                     <tr
-                      key={index}
+                      key={record.id ?? record.receiptNumber ?? index}
                       className="group relative bg-white dark:bg-neutral-800 hover:bg-gradient-to-r hover:from-orange-50/50 hover:via-orange-50/30 hover:to-transparent dark:hover:from-orange-950/20 dark:hover:via-orange-950/10 dark:hover:to-transparent transition-all duration-300 cursor-pointer"
                     >
                       <td className="px-6 py-5 relative">
@@ -421,10 +555,17 @@ const StaffSales: React.FC<StaffSalesProps> = ({
                           #{record.receiptNumber}
                         </span>
                       </td>
+                      <td className="px-6 py-5 text-left">
+                        <span className="text-sm font-bold text-neutral-900 dark:text-white">{record.menuItemName || '—'}</span>
+                      </td>
+                      <td className="px-6 py-5 text-left hidden sm:table-cell">
+                        <span className="text-sm text-neutral-700 dark:text-neutral-300">{record.fullName ?? record.username ?? '—'}</span>
+                      </td>
+                      <td className="px-6 py-5 text-left hidden lg:table-cell">
+                        <span className="text-sm text-neutral-700 dark:text-neutral-300">{record.branchName ?? '—'}</span>
+                      </td>
                       <td className="px-6 py-5">
-                        <span className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
-                          {formatDate(record.dateTime)}
-                        </span>
+                        <span className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">{formatDate(record.dateTime)}</span>
                       </td>
                       <td className="px-6 py-5 text-right">
                         <span className="text-sm font-bold text-neutral-900 dark:text-white tabular-nums">
