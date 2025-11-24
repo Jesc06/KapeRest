@@ -7,13 +7,17 @@ import { API_BASE_URL } from '../../config/api';
 
 interface Purchase {
   id: number;
-  menuItemNames: string;
+  menuItemName: string;
   dateTime: string;
+  cashierId: string;
+  branchId: number;
   subtotal: number;
   tax: number;
   discount: number;
   total: number;
+  paymentMethod: string;
   status: string;
+  salesItems: any[];
 }
 
 const Purchases: React.FC = () => {
@@ -41,13 +45,18 @@ const Purchases: React.FC = () => {
       // Decode JWT token to extract cashierId
       const payload = JSON.parse(atob(token.split('.')[1]));
       const cashierId = payload.cashierId || payload.uid;
+      const branchId = payload.branchId;
+      console.log('Decoded token payload:', payload);
+      console.log('Using cashierId:', cashierId, 'branchId:', branchId);
 
       if (!cashierId) {
         console.error('No cashier ID found in token');
         return;
       }
 
-      const response = await fetch(`${API_BASE_URL}/OverAllSales/CashierOverAllSales?cashierId=${cashierId}`, {
+      const apiUrl = `${API_BASE_URL}/Purchases/SalesPurchases?cashierId=${cashierId}&branchId=${branchId}`;
+      console.log('Fetching from URL:', apiUrl);
+      const response = await fetch(apiUrl, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -56,9 +65,18 @@ const Purchases: React.FC = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setPurchases(data);
+        // Handle different response formats
+        let purchasesData = [];
+        if (Array.isArray(data)) {
+          purchasesData = data;
+        } else if (data && Array.isArray(data.data)) {
+          purchasesData = data.data;
+        } else if (data && typeof data === 'object') {
+          purchasesData = [data];
+        }
+        setPurchases(purchasesData);
       } else {
-        console.error('Failed to fetch purchases:', response.statusText);
+        console.error('Failed to fetch purchases:', response.statusText, response.status);
       }
     } catch (error) {
       console.error('Error fetching purchases:', error);
@@ -73,7 +91,7 @@ const Purchases: React.FC = () => {
   // Filter purchases based on search and status
   const filteredPurchases = purchases.filter(purchase => {
     const matchesSearch = 
-      (purchase.menuItemNames && purchase.menuItemNames.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (purchase.menuItemName && purchase.menuItemName.toLowerCase().includes(searchQuery.toLowerCase())) ||
       purchase.id.toString().includes(searchQuery);
     
     const matchesStatus = statusFilter === 'All' || purchase.status === statusFilter;
@@ -241,7 +259,7 @@ const Purchases: React.FC = () => {
                             </div>
                             <div className="flex-1 min-w-0">
                               <h3 className="text-lg font-bold text-neutral-900 dark:text-stone-100 mb-1 truncate">
-                                {purchase.menuItemNames || 'No Items'}
+                                {purchase.menuItemName || 'No Items'}
                               </h3>
                               <div className="flex flex-wrap items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
                                 <span className="flex items-center gap-1">
