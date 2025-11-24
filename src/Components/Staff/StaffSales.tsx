@@ -189,18 +189,92 @@ const StaffSales: React.FC<StaffSalesProps> = ({
     });
   };
 
-  // Handle report generation
+  // Handle report generation - connect to PDF endpoints
   const handleGenerateReport = async (period: PeriodFilter) => {
     setIsGenerating(period);
-    
-    // Simulate report generation
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // Here you would typically fetch or generate the report
-    // For now, we'll just show a success message
-    console.log(`${period.charAt(0).toUpperCase() + period.slice(1)} report generated`);
-    
-    setIsGenerating(null);
+    setError(null);
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        setError('You must be logged in to generate reports.');
+        setIsGenerating(null);
+        return;
+      }
+
+      // decode JWT to get cashierId similar to other components
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      const decoded = JSON.parse(jsonPayload);
+      const cashierId = decoded.cashierId as string | undefined;
+      if (!cashierId) {
+        setError('Unable to determine cashier id for report generation.');
+        setIsGenerating(null);
+        return;
+      }
+
+      // Map UI periods to API endpoints
+      let endpoint = '';
+      switch (period) {
+        case 'daily':
+          endpoint = 'CashierGenerateDailyPdfReports';
+          break;
+        case 'monthly':
+          endpoint = 'CashierGenerateMonthlyPdfReports';
+          break;
+        case 'yearly':
+          endpoint = 'CashierGenerateYearlyPdfReports';
+          break;
+      }
+
+      const response = await fetch(`${API_BASE_URL}/CashierSalesReport/${endpoint}?cashierId=${cashierId}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        // server returned an error
+        throw new Error(`Failed to generate report: ${response.status}`);
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      // Try to get filename from content-disposition if present
+      const contentDisposition = response.headers.get('content-disposition');
+      let fileName = 'report.pdf';
+      if (contentDisposition) {
+        const match = /filename="?([^";]+)"?/.exec(contentDisposition);
+        if (match && match[1]) fileName = match[1];
+      } else {
+        // fallback to endpoint-based name
+        if (endpoint.includes('Daily')) fileName = 'CashierDailySalesReport.pdf';
+        if (endpoint.includes('Yearly')) fileName = 'CashierYearlySalesReport.pdf';
+        if (endpoint.includes('Monthly')) fileName = 'CashierMonthlySalesReport.pdf';
+      }
+
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Unknown error generating report';
+      // Add actionable hint in case of connection/refused errors
+      if (msg.includes('Failed to fetch') || msg.includes('NetworkError') || msg.includes('NetworkError when attempting to fetch resource.')) {
+        setError('Failed to connect to the backend API. Ensure the backend is running (dotnet run) and the base URL is correct.');
+      } else {
+        setError(msg);
+      }
+      console.error('Generate report error:', err);
+    } finally {
+      setIsGenerating(null);
+    }
   };
 
   const periodFilters: { label: string; value: PeriodFilter; icon: any }[] = [
@@ -237,9 +311,9 @@ const StaffSales: React.FC<StaffSalesProps> = ({
                 icon={faSearch}
                 className="h-5 w-5 text-neutral-400 dark:text-neutral-500 group-focus-within:text-orange-500 transition-colors"
               />
-              <input
+                <input
                 type="text"
-                placeholder="Search receipts, status..."
+                placeholder="Search receipts, item, cashier, status..."
                 value={searchText}
                 onChange={e => setSearchText(e.target.value)}
                 className="flex-1 bg-transparent text-sm font-medium text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none"
@@ -280,7 +354,7 @@ const StaffSales: React.FC<StaffSalesProps> = ({
                 />
                 <input
                   type="text"
-                  placeholder="Search receipts, status..."
+                  placeholder="Search receipts, item, cashier, status..."
                   value={searchText}
                   onChange={e => setSearchText(e.target.value)}
                   className="flex-1 bg-transparent text-sm font-medium text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none"
