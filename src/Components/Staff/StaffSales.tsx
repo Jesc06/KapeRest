@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faSearch, faBars, faCalendarDays, faWeightScale, faCalendarAlt, faDownload, faReceipt, faMoneyBillWave, faChartLine, faSpinner, faSun, faCalendarWeek, faCalendar } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faSearch, faBars, faCalendarDays, faWeightScale, faCalendarAlt, faReceipt, faMoneyBillWave, faChartLine, faSpinner, faSun, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import LogoutPanel from '../Shared/LogoutPanel';
 import StaffSidebar from './StaffSidebar';
 
@@ -18,7 +18,7 @@ interface StaffSalesProps {
   sales?: SalesRecord[];
 }
 
-type PeriodFilter = 'daily' | 'weekly' | 'monthly';
+type PeriodFilter = 'daily' | 'monthly' | 'yearly';
 
 const StaffSales: React.FC<StaffSalesProps> = ({
   sales = [],
@@ -31,19 +31,18 @@ const StaffSales: React.FC<StaffSalesProps> = ({
 
   // Helper function to get date range based on period
   const getDateRange = (period: PeriodFilter): { start: Date; end: Date } => {
-    const now = new Date();
     const start = new Date();
 
     switch (period) {
       case 'daily':
         start.setHours(0, 0, 0, 0);
         break;
-      case 'weekly':
-        start.setDate(now.getDate() - now.getDay());
-        start.setHours(0, 0, 0, 0);
-        break;
       case 'monthly':
         start.setDate(1);
+        start.setHours(0, 0, 0, 0);
+        break;
+      case 'yearly':
+        start.setMonth(0, 1);
         start.setHours(0, 0, 0, 0);
         break;
     }
@@ -105,8 +104,8 @@ const StaffSales: React.FC<StaffSalesProps> = ({
 
   const periodFilters: { label: string; value: PeriodFilter; icon: any }[] = [
     { label: 'Daily', value: 'daily', icon: faCalendarDays },
-    { label: 'Weekly', value: 'weekly', icon: faWeightScale },
-    { label: 'Monthly', value: 'monthly', icon: faCalendarAlt },
+    { label: 'Monthly', value: 'monthly', icon: faWeightScale },
+    { label: 'Yearly', value: 'yearly', icon: faCalendarAlt },
   ];
 
   return (
@@ -239,7 +238,7 @@ const StaffSales: React.FC<StaffSalesProps> = ({
             <div className="relative flex items-center gap-2 px-5 py-3 pt-6 rounded-xl bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 shadow-md shadow-orange-300/20 ring-1 ring-orange-300/20 backdrop-blur-sm overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/6 to-transparent opacity-60"></div>
 
-              {[{ t: 'daily', icon: faSun, label: 'Daily' }, { t: 'weekly', icon: faCalendarWeek, label: 'Weekly' }, { t: 'monthly', icon: faCalendar, label: 'Monthly' }].map(({ t, icon, label }) => (
+              {[{ t: 'daily', icon: faSun, label: 'Daily' }, { t: 'monthly', icon: faWeightScale, label: 'Monthly' }, { t: 'yearly', icon: faCalendar, label: 'Yearly' }].map(({ t, icon, label }) => (
                 <button
                   key={t}
                   onClick={() => handleGenerateReport(t as any)}

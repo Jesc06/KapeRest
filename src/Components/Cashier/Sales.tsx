@@ -5,11 +5,6 @@ import LogoutPanel from '../Shared/LogoutPanel';
 
 interface SalesRecord {
   id: number;
-  username: string;
-  fullName: string;
-  email: string;
-  branchName: string;
-  branchLocation: string;
   menuItemName: string;
   dateTime: string;
   subtotal: number;
@@ -74,8 +69,6 @@ const Sales: React.FC<SalesProps> = ({
     return sales.filter(record => {
       const matchesSearch =
         record.id.toString().toLowerCase().includes(searchText.toLowerCase()) ||
-        record.username.toLowerCase().includes(searchText.toLowerCase()) ||
-        record.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
         record.menuItemName.toLowerCase().includes(searchText.toLowerCase()) ||
         record.status.toLowerCase().includes(searchText.toLowerCase());
 
@@ -348,12 +341,6 @@ const Sales: React.FC<SalesProps> = ({
                       </div>
                     </th>
                     <th className="px-6 py-4 text-left">
-                      <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Full Name</span>
-                    </th>
-                    <th className="px-6 py-4 text-left">
-                      <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Branch</span>
-                    </th>
-                    <th className="px-6 py-4 text-left">
                       <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Items</span>
                     </th>
                     <th className="px-6 py-4 text-left">
@@ -387,16 +374,6 @@ const Sales: React.FC<SalesProps> = ({
                         <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-orange-500 to-orange-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         <span className="text-sm font-black text-orange-600 dark:text-orange-400 group-hover:text-orange-700 dark:group-hover:text-orange-300 transition-colors">
                           #{record.id}
-                        </span>
-                      </td>
-                      <td className="px-6 py-5">
-                        <span className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
-                          {record.fullName}
-                        </span>
-                      </td>
-                      <td className="px-6 py-5">
-                        <span className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
-                          {record.branchName}
                         </span>
                       </td>
                       <td className="px-6 py-5">

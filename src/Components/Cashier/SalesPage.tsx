@@ -6,11 +6,6 @@ import { API_BASE_URL } from '../../config/api';
 
 interface SalesRecord {
   id: number;
-  username: string;
-  fullName: string;
-  email: string;
-  branchName: string;
-  branchLocation: string;
   menuItemName: string;
   dateTime: string;
   subtotal: number;
@@ -98,11 +93,6 @@ const SalesPage: React.FC = () => {
         // Map API response to SalesRecord
         const mappedSales: SalesRecord[] = data.map(item => ({
           id: item.id,
-          username: item.username,
-          fullName: item.fullName,
-          email: item.email,
-          branchName: item.branchName,
-          branchLocation: item.branchLocation,
           menuItemName: item.menuItemName,
           dateTime: item.dateTime,
           subtotal: item.subtotal,
