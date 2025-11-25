@@ -286,6 +286,9 @@ const MainPanel: React.FC<MainPanelProps> = ({
         throw new Error('No authentication token found. Please login again.');
       }
 
+      // Calculate discount value for logging
+      const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
+
       // ✅ Check if this is a resumed hold transaction
       const resumeHoldId = sessionStorage.getItem('resumeHoldId');
 
@@ -329,7 +332,6 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
       } else {
         // ✅ Regular purchase - Use normal Buy endpoint
-        const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
         const taxRate = 12; // 12% tax
 
         // Decode token to get cashierId for debugging
@@ -340,21 +342,32 @@ const MainPanel: React.FC<MainPanelProps> = ({
         }).join(''));
         const decodedToken = JSON.parse(jsonPayload);
         const cashierId = decodedToken.cashierId || decodedToken.uid;
-        console.log('Current cashier ID:', cashierId);
-        console.log('Cart items:', cart);
+        
+        console.log('=== TOKEN & USER INFO ===');
+        console.log('Full decoded token:', JSON.stringify(decodedToken, null, 2));
+        console.log('Extracted cashier ID:', cashierId);
+        console.log('Token claims:', Object.keys(decodedToken));
+        console.log('========================');
+        console.log('Cart items:', JSON.stringify(cart, null, 2));
 
         // Process each cart item as a separate purchase
         const purchasePromises = cart.map(async (item) => {
+          // Ensure proper data types
           const purchaseData = {
-            menuItemId: item.id,
-            quantity: item.quantity,
-            discountPercent: discountValue,
-            tax: taxRate,
-            paymentMethod: paymentMethod
+            menuItemId: Number(item.id), // Ensure it's a number
+            quantity: Number(item.quantity), // Ensure it's a number
+            discountPercent: Number(discountValue), // Ensure it's a number
+            tax: Number(taxRate), // Ensure it's a number
+            paymentMethod: String(paymentMethod) // Ensure it's a string
           };
 
-          console.log('Sending purchase request:', purchaseData);
-          console.log('Item details:', { id: item.id, name: item.name, price: item.price });
+          console.log('=== PURCHASE REQUEST START ===');
+          console.log('Sending purchase request:', JSON.stringify(purchaseData, null, 2));
+          console.log('Item details:', JSON.stringify({ id: item.id, name: item.name, price: item.price, category: item.category }, null, 2));
+          console.log('API URL:', `${API_BASE_URL}/Buy/Buy`);
+          console.log('Authorization token present:', !!token);
+          console.log('Request body:', JSON.stringify(purchaseData));
+          console.log('==============================');
 
           const response = await fetch(`${API_BASE_URL}/Buy/Buy`, {
             method: 'POST',
@@ -371,14 +384,17 @@ const MainPanel: React.FC<MainPanelProps> = ({
           console.log('Response headers:', response.headers);
 
           if (!response.ok) {
+            console.error('=== PURCHASE ERROR DETAILS ===');
             console.error('Purchase error response:', responseText);
-            console.error('Failed item:', item);
-            console.error('Request payload:', purchaseData);
+            console.error('Failed item:', JSON.stringify(item, null, 2));
+            console.error('Request payload:', JSON.stringify(purchaseData, null, 2));
+            console.error('Response status code:', response.status);
+            console.error('Response status text:', response.statusText);
 
-            let errorMessage = responseText;
+            let errorMessage = 'Purchase failed';
             try {
               const errorJson = JSON.parse(responseText);
-              console.error('Parsed error:', errorJson);
+              console.error('Parsed error JSON:', JSON.stringify(errorJson, null, 2));
               
               // Try to extract more specific error message
               if (errorJson.error) {
@@ -394,17 +410,51 @@ const MainPanel: React.FC<MainPanelProps> = ({
                 const errorDetails = Object.entries(errorJson.errors).map(([key, value]) => `${key}: ${value}`).join(', ');
                 errorMessage += ` - ${errorDetails}`;
               }
+              
+              // Check for inner exception details
+              if (errorJson.innerException) {
+                console.error('Inner exception:', errorJson.innerException);
+                errorMessage += ` (Inner: ${errorJson.innerException})`;
+              }
+              
+              // Check for validation errors
+              if (errorJson.validationErrors) {
+                console.error('Validation errors:', errorJson.validationErrors);
+              }
+              
+              // Check for message field (common in backend errors)
+              if (errorJson.message && !errorMessage.includes(errorJson.message)) {
+                errorMessage = errorJson.message;
+              }
             } catch (e) {
+              console.error('Failed to parse error JSON:', e);
               errorMessage = responseText;
             }
 
-            throw new Error(`Failed to purchase ${item.name}: ${errorMessage}`);
+            // More descriptive error message
+            throw new Error(`${item.name}: ${errorMessage}`);
           }
 
-          // Backend now returns plain text receipt format
+          // Success - Backend returns JSON with message field containing receipt
+          console.log('=== PURCHASE SUCCESS ===');
           console.log('Purchase successful for item:', item.name);
-          console.log('Receipt:', responseText);
-          return { success: true, receipt: responseText, itemName: item.name };
+          console.log('Response:', responseText);
+          
+          // Try to parse as JSON (backend returns { message: "receipt text" })
+          let receiptText = responseText;
+          try {
+            const successJson = JSON.parse(responseText);
+            if (successJson.message) {
+              receiptText = successJson.message;
+            }
+          } catch (e) {
+            // If not JSON, use plain text
+            receiptText = responseText;
+          }
+          
+          console.log('Receipt:', receiptText);
+          console.log('========================');
+          return { success: true, receipt: receiptText, itemName: item.name };
         });
 
         // Wait for all purchases to complete
@@ -431,8 +481,17 @@ const MainPanel: React.FC<MainPanelProps> = ({
       }, 2000);
 
     } catch (err) {
+      console.error('=== PURCHASE ERROR ===');
       console.error('Error completing purchase:', err);
-      setPurchaseError(err instanceof Error ? err.message : 'Failed to complete purchase. Please try again.');
+      console.error('Cart at time of error:', cart);
+      console.error('Discount at time of error:', discountValue);
+      console.error('======================');
+      
+      const errorMsg = err instanceof Error ? err.message : 'Failed to complete purchase. Please try again.';
+      setPurchaseError(errorMsg);
+      
+      // Show alert for immediate user feedback
+      alert(`Purchase Failed\n\n${errorMsg}\n\nPlease check the console for more details or contact support.`);
     } finally {
       setProcessingPurchase(false);
     }

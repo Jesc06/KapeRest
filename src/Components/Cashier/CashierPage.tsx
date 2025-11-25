@@ -157,12 +157,12 @@ const CashierPage: React.FC = () => {
                         </div>
                         <div className="flex-1">
                           <h2 className="text-5xl sm:text-6xl font-black text-white mb-3 tracking-tighter drop-shadow-lg leading-tight">
-                            {getGreeting()}!
-                          </h2>
-                          <p className="text-orange-50 text-sm font-bold uppercase tracking-widest flex items-center gap-2">
-                            <div className="w-2 h-2 rounded-full bg-yellow-300 flex-shrink-0"></div>
-                            <span>Cashier Portal</span>
-                          </p>
+                          {getGreeting()}!
+                        </h2>
+                        <div className="text-orange-50 text-sm font-bold uppercase tracking-widest flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full bg-yellow-300 flex-shrink-0"></div>
+                          <span>Cashier Portal</span>
+                        </div>
                         </div>
                       </div>
                       <p className="text-white/95 text-base sm:text-lg leading-relaxed max-w-2xl font-medium">

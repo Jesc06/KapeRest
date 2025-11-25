@@ -165,16 +165,11 @@ const ItemList: React.FC = () => {
         return;
       }
 
-      const response = await fetch(`${API_BASE_URL}/MenuItem/DeleteMenuItem`, {
-        method: 'POST',
+      const response = await fetch(`${API_BASE_URL}/MenuItem/DeleteMenuItem?cashierId=${encodeURIComponent(cashierId)}&id=${encodeURIComponent(itemId.toString())}`, {
+        method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          cashierId: cashierId,
-          id: itemId
-        }),
       });
 
       if (!response.ok) {
