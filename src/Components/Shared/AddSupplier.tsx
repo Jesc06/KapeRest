@@ -12,6 +12,7 @@ import StaffSidebar from '../Staff/StaffSidebar';
 import LogoutPanel from './LogoutPanel';
 import { API_BASE_URL } from '../../config/api';
 import MessageBox from './MessageBox';
+import { jwtDecode } from 'jwt-decode';
 
 interface SupplierFormData {
   supplierName: string;
@@ -48,6 +49,32 @@ const AddSupplier: React.FC = () => {
     email: '',
     address: '',
   });
+
+  // Get userId from JWT token (cashierId)
+  const getUserId = () => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        console.error('No access token found');
+        return null;
+      }
+      
+      const payload: any = jwtDecode(token);
+      console.log('Full JWT payload:', payload);
+      
+      // Extract userId from cashierId claim
+      const userId = payload?.cashierId || 
+                     payload?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"] || 
+                     payload?.uid || 
+                     payload?.sub;
+      
+      console.log('Extracted userId:', userId);
+      return userId;
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return null;
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -163,13 +190,31 @@ const AddSupplier: React.FC = () => {
 
     try {
       const token = localStorage.getItem('accessToken');
+      const userId = getUserId();
+
+      if (!userId) {
+        throw new Error('User ID not found. Please login again.');
+      }
+
+      const requestBody = {
+        supplierName: formData.supplierName,
+        contactPerson: formData.contactPerson,
+        phoneNumber: formData.phoneNumber,
+        email: formData.email,
+        address: formData.address,
+        userId: userId
+      };
+
+      console.log('Sending supplier data:', requestBody);
+      console.log('UserId being sent:', userId);
+
       const response = await fetch(`${API_BASE_URL}/Supplier/AddSuppliers`, {
         method: 'POST',
         headers: { 
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json' 
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(requestBody)
       });
 
       if (!response.ok) {
@@ -198,7 +243,7 @@ const AddSupplier: React.FC = () => {
       }, 2000);
     } catch (err) {
       setMessageType('error');
-      setMessageText('Failed to add supplier. Please try again.');
+      setMessageText(err instanceof Error ? err.message : 'Failed to add supplier. Please try again.');
       setShowMessageBox(true);
     } finally {
       setIsLoading(false);

@@ -6,6 +6,7 @@ import StaffSidebar from '../Staff/StaffSidebar';
 import LogoutPanel from './LogoutPanel';
 import { API_BASE_URL } from '../../config/api';
 import MessageBox from './MessageBox';
+import { jwtDecode } from 'jwt-decode';
 
 interface Supplier {
   id: number;
@@ -33,6 +34,26 @@ const SupplierList: React.FC = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
+  // Get userId from JWT token (cashierId)
+  const getUserId = () => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) return null;
+      
+      const payload: any = jwtDecode(token);
+      // Extract userId from cashierId claim
+      const userId = payload?.cashierId || 
+                     payload?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"] || 
+                     payload?.uid || 
+                     payload?.sub;
+      
+      return userId;
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return null;
+    }
+  };
+
   // Fetch suppliers from API
   const fetchSuppliers = async () => {
     try {
@@ -40,7 +61,13 @@ const SupplierList: React.FC = () => {
       setError(null);
       
       const token = localStorage.getItem('accessToken');
-      const response = await fetch(`${API_BASE_URL}/Supplier/GetAllSuppliers`, {
+      const userId = getUserId();
+
+      if (!userId) {
+        throw new Error('User ID not found. Please login again.');
+      }
+
+      const response = await fetch(`${API_BASE_URL}/Supplier/GetAllSuppliers?userId=${userId}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -84,7 +111,13 @@ const SupplierList: React.FC = () => {
     setIsSaving(true);
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch(`${API_BASE_URL}/Supplier/UpdateSupplier`, {
+      const userId = getUserId();
+
+      if (!userId) {
+        throw new Error('User ID not found. Please login again.');
+      }
+
+      const response = await fetch(`${API_BASE_URL}/Supplier/UpdateSupplier?userId=${userId}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -106,7 +139,7 @@ const SupplierList: React.FC = () => {
       setShowMessageBox(true);
     } catch (err) {
       setMessageType('error');
-      setMessageText('Failed to update supplier. Please try again.');
+      setMessageText(err instanceof Error ? err.message : 'Failed to update supplier. Please try again.');
       setShowMessageBox(true);
     } finally {
       setIsSaving(false);
@@ -123,6 +156,11 @@ const SupplierList: React.FC = () => {
 
     try {
       const token = localStorage.getItem('accessToken');
+      const userId = getUserId();
+
+      if (!userId) {
+        throw new Error('User ID not found. Please login again.');
+      }
       
       // First, check if this supplier has associated stocks
       const stocksResponse = await fetch(`${API_BASE_URL}/Inventory/GetAllProducts`, {
@@ -178,7 +216,7 @@ const SupplierList: React.FC = () => {
       setShowDeleteConfirm(false);
       setDeleteId(null);
       setMessageType('error');
-      setMessageText('Failed to delete supplier. Please try again.');
+      setMessageText(err instanceof Error ? err.message : 'Failed to delete supplier. Please try again.');
       setShowMessageBox(true);
     }
   };
