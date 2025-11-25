@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faSearch, faShoppingCart, faBan, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faSearch, faShoppingCart, faBan, faCheckCircle, faTimesCircle, faBell } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from './StaffSidebar';
 import LogoutPanel from '../Shared/LogoutPanel';
 import { API_BASE_URL } from '../../config/api';
@@ -14,6 +15,7 @@ interface SalesItem {
 
 interface Purchase {
   id: number;
+  receiptNumber: string;
   menuItemName: string;
   dateTime: string;
   cashierId: string;
@@ -28,15 +30,58 @@ interface Purchase {
 }
 
 const StaffPurchases: React.FC = () => {
+  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [voidRequestCount, setVoidRequestCount] = useState(0);
 
   // Fetch purchases from API
   useEffect(() => {
     fetchPurchases();
+  }, []);
+
+  // Fetch void request count
+  useEffect(() => {
+    const fetchVoidRequestCount = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        if (!token) return;
+
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        
+        const decoded = JSON.parse(jsonPayload);
+        const cashierId = decoded.cashierId;
+
+        if (!cashierId) return;
+
+        const response = await fetch(`${API_BASE_URL}/Purchases/SalesPurchases?cashierId=${cashierId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const pendingCount = data.filter((item: any) => item.status === 'PendingVoid').length;
+          setVoidRequestCount(pendingCount);
+        }
+      } catch (err) {
+        console.error('Error fetching void request count:', err);
+      }
+    };
+
+    fetchVoidRequestCount();
+    // Refresh count every 30 seconds
+    const interval = setInterval(fetchVoidRequestCount, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   const fetchPurchases = async () => {
@@ -92,6 +137,7 @@ const StaffPurchases: React.FC = () => {
     purchase.menuItemName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     purchase.paymentMethod.toLowerCase().includes(searchTerm.toLowerCase()) ||
     purchase.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    purchase.receiptNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
     purchase.id.toString().includes(searchTerm)
   );
 
@@ -199,14 +245,30 @@ const StaffPurchases: React.FC = () => {
             <div className="w-full">
               {/* Header Section */}
               <div className="mb-6">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/25">
-                    <FontAwesomeIcon icon={faShoppingCart} className="h-6 w-6 text-white" />
+                <div className="flex items-center justify-between gap-4 mb-4">
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/25">
+                      <FontAwesomeIcon icon={faShoppingCart} className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300 bg-clip-text text-transparent">Purchases History</h2>
+                      <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">View and manage all purchase transactions</p>
+                    </div>
                   </div>
-                  <div>
-                    <h2 className="text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300 bg-clip-text text-transparent">Purchases History</h2>
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">View and manage all purchase transactions</p>
-                  </div>
+                  
+                  {/* Notification Bell - Minimalist */}
+                  <button
+                    onClick={() => navigate('/staff/void-requests')}
+                    className="relative flex-shrink-0 p-2.5 text-orange-500 hover:text-orange-600 dark:text-orange-400 dark:hover:text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-950/20 rounded-lg transition-all duration-200 hover:scale-110 active:scale-95"
+                    title="Void Requests"
+                  >
+                    <FontAwesomeIcon icon={faBell} className="h-6 w-6 drop-shadow-md" />
+                    {voidRequestCount > 0 && (
+                      <span className="absolute -top-0.5 -right-0.5 min-w-[22px] h-[22px] px-1.5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg animate-pulse border-2 border-white dark:border-neutral-900">
+                        {voidRequestCount > 9 ? '9+' : voidRequestCount}
+                      </span>
+                    )}
+                  </button>
                 </div>
               </div>
 
@@ -247,6 +309,7 @@ const StaffPurchases: React.FC = () => {
                       <thead>
                         <tr className="border-b border-orange-100 dark:border-neutral-800 bg-orange-50/50 dark:bg-neutral-800/50">
                           <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Sale ID</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Receipt No.</th>
                           <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Item Name</th>
                           <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Date & Time</th>
                           <th className="px-6 py-4 text-right text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Subtotal</th>
@@ -267,6 +330,11 @@ const StaffPurchases: React.FC = () => {
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="text-sm font-semibold text-neutral-900 dark:text-white">
                                 #{purchase.id}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm font-medium text-orange-600 dark:text-orange-400">
+                                {purchase.receiptNumber}
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">

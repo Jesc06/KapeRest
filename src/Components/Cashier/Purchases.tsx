@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faSearch, faFilter, faReceipt, faCalendar, faPercentage, faHashtag } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faSearch, faFilter, faReceipt, faCalendar, faPercentage, faHashtag, faBan, faTimes } from '@fortawesome/free-solid-svg-icons';
 import Sidebar from './Sidebar';
 import LogoutPanel from '../Shared/LogoutPanel';
 import { API_BASE_URL } from '../../config/api';
@@ -28,6 +28,10 @@ const Purchases: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState('All');
   const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showVoidModal, setShowVoidModal] = useState(false);
+  const [selectedSaleId, setSelectedSaleId] = useState<number | null>(null);
+  const [voidReason, setVoidReason] = useState('');
+  const [submittingVoid, setSubmittingVoid] = useState(false);
 
   useEffect(() => {
     fetchPurchases();
@@ -121,9 +125,65 @@ const Purchases: React.FC = () => {
       case 'hold':
         return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300';
       case 'cancelled':
+      case 'voided':
         return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300';
+      case 'pendingvoid':
+        return 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300';
       default:
         return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300';
+    }
+  };
+
+  // Handle request void
+  const handleRequestVoid = (saleId: number) => {
+    setSelectedSaleId(saleId);
+    setVoidReason('');
+    setShowVoidModal(true);
+  };
+
+  // Submit void request
+  const submitVoidRequest = async () => {
+    if (!voidReason.trim()) {
+      alert('Please provide a reason for void request');
+      return;
+    }
+
+    if (!selectedSaleId) return;
+
+    setSubmittingVoid(true);
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        alert('Authentication error. Please log in again.');
+        return;
+      }
+
+      const response = await fetch(`${API_BASE_URL}/Buy/RequestVoid?saleId=${selectedSaleId}&reason=${encodeURIComponent(voidReason)}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Failed to submit void request');
+      }
+
+      const result = await response.text();
+      alert(result);
+      
+      // Close modal and refresh purchases
+      setShowVoidModal(false);
+      setVoidReason('');
+      setSelectedSaleId(null);
+      fetchPurchases();
+    } catch (err) {
+      console.error('Error submitting void request:', err);
+      alert(`Failed to submit void request. ${err instanceof Error ? err.message : 'Please try again.'}`);
+    } finally {
+      setSubmittingVoid(false);
     }
   };
 
@@ -318,13 +378,28 @@ const Purchases: React.FC = () => {
                         </div>
 
                         {/* Right: Total Amount */}
-                        <div className="lg:col-span-2 flex flex-col items-end justify-center text-right">
+                        <div className="lg:col-span-2 flex flex-col items-end justify-between text-right">
                           <div>
                             <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1 font-semibold">Total Amount</p>
                             <p className="text-2xl font-black text-orange-600 dark:text-orange-400">
                               ₱{purchase.total.toFixed(2)}
                             </p>
                           </div>
+                          {/* Request Void Button */}
+                          {purchase.status === 'Completed' && (
+                            <button
+                              onClick={() => handleRequestVoid(purchase.id)}
+                              className="mt-2 px-4 py-2 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 rounded-lg transition-all duration-200 active:scale-95 text-sm font-medium flex items-center gap-2"
+                            >
+                              <FontAwesomeIcon icon={faBan} className="h-3.5 w-3.5" />
+                              Request Void
+                            </button>
+                          )}
+                          {purchase.status === 'PendingVoid' && (
+                            <div className="mt-2 px-4 py-2 bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 rounded-lg text-sm font-medium">
+                              Void Pending
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -335,6 +410,62 @@ const Purchases: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Void Request Modal */}
+      {showVoidModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-bold text-neutral-900 dark:text-white">Request Void</h3>
+              <button
+                onClick={() => setShowVoidModal(false)}
+                className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 transition-colors"
+              >
+                <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
+              </button>
+            </div>
+            
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+              Please provide a reason for requesting to void this transaction. This will be sent to staff for approval.
+            </p>
+
+            <textarea
+              value={voidReason}
+              onChange={(e) => setVoidReason(e.target.value)}
+              placeholder="Enter reason for void request..."
+              rows={4}
+              className="w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-lg text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:border-orange-500 transition-colors duration-200 resize-none"
+            />
+
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => setShowVoidModal(false)}
+                disabled={submittingVoid}
+                className="flex-1 px-4 py-2.5 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-neutral-700 dark:text-neutral-200 rounded-lg transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={submitVoidRequest}
+                disabled={submittingVoid || !voidReason.trim()}
+                className="flex-1 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {submittingVoid ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Submitting...
+                  </>
+                ) : (
+                  <>
+                    <FontAwesomeIcon icon={faBan} />
+                    Submit Request
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
