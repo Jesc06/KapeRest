@@ -12,6 +12,7 @@ import StaffSidebar from '../Staff/StaffSidebar';
 import LogoutPanel from './LogoutPanel';
 import MessageBox from './MessageBox';
 import { API_BASE_URL } from '../../config/api';
+import { jwtDecode } from 'jwt-decode';
 
 interface StockFormData {
   productName: string;
@@ -62,14 +63,39 @@ const AddStocks: React.FC = () => {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [_loadingSuppliers, setLoadingSuppliers] = useState(false);
 
+  // Get userId from JWT token
+  const getUserId = () => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) return null;
+      
+      const payload: any = jwtDecode(token);
+      // Extract userId from cashierId claim
+      const userId = payload?.cashierId || 
+                     payload?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"] || 
+                     payload?.uid || 
+                     payload?.sub;
+      
+      return userId;
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return null;
+    }
+  };
+
   // Fetch suppliers from API
   useEffect(() => {
     const fetchSuppliers = async () => {
       try {
         setLoadingSuppliers(true);
         const token = localStorage.getItem('accessToken');
+        const userId = getUserId();
+
+        if (!userId) {
+          throw new Error('User ID not found. Please login again.');
+        }
         
-        const response = await fetch(`${API_BASE_URL}/Supplier/GetAllSuppliers`, {
+        const response = await fetch(`${API_BASE_URL}/Supplier/GetAllSuppliers?userId=${userId}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
