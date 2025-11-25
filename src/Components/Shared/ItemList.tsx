@@ -4,12 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faSearch, faCoffee, faEdit, faTrash, faPlus, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from '../Staff/StaffSidebar';
 import LogoutPanel from './LogoutPanel';
+import UpdateItem from './UpdateItem';
 import { API_BASE_URL } from '../../config/api';
 
 interface Item {
   id: number;
   itemName: string;
   price: number;
+  category?: string;
   description: string;
   isAvailable: string;
   image: string;
@@ -22,6 +24,8 @@ const ItemList: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [items, setItems] = useState<Item[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
 
   // Fetch items from API
   useEffect(() => {
@@ -82,7 +86,58 @@ const ItemList: React.FC = () => {
   );
 
   const handleEdit = (itemId: number) => {
-    navigate(`/staff/update-item/${itemId}`);
+    setSelectedItemId(itemId);
+    setIsUpdateModalOpen(true);
+  };
+
+  const handleUpdateSuccess = () => {
+    // Refresh the items list after successful update
+    const fetchItems = async () => {
+      setIsLoading(true);
+      try {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+          console.error('No access token found');
+          setIsLoading(false);
+          return;
+        }
+
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        
+        const decoded = JSON.parse(jsonPayload);
+        const cashierId = decoded.cashierId;
+
+        if (!cashierId) {
+          console.error('Cashier ID not found in token');
+          setIsLoading(false);
+          return;
+        }
+
+        const response = await fetch(`${API_BASE_URL}/MenuItem/GetAllMenuItem?cashierId=${cashierId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data: Item[] = await response.json();
+        setItems(data);
+        setIsLoading(false);
+      } catch (err) {
+        console.error('Error fetching menu items:', err);
+        setIsLoading(false);
+      }
+    };
+
+    fetchItems();
   };
 
   const handleDelete = async (itemId: number) => {
@@ -343,6 +398,19 @@ const ItemList: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Update Item Modal */}
+        {isUpdateModalOpen && selectedItemId && (
+          <UpdateItem
+            isOpen={isUpdateModalOpen}
+            onClose={() => {
+              setIsUpdateModalOpen(false);
+              setSelectedItemId(null);
+            }}
+            itemId={selectedItemId}
+            onSuccess={handleUpdateSuccess}
+          />
+        )}
       </div>
     </div>
   );
