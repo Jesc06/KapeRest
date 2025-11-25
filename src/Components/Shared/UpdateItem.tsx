@@ -161,6 +161,7 @@ const UpdateItem: React.FC<UpdateItemProps> = ({ isOpen, onClose, itemId, onSucc
 
       if (response.ok) {
         const data = await response.json();
+        console.log('All products loaded:', data.length);
         setProducts(data);
       }
     } catch (error) {
