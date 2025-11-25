@@ -43,27 +43,6 @@ const Sales: React.FC<SalesProps> = ({
     }
   }, [propSelectedPeriod]);
 
-  // Helper function to get date range based on period
-  const getDateRange = (period: PeriodFilter): { start: Date; end: Date } => {
-    const start = new Date();
-
-    switch (period) {
-      case 'daily':
-        start.setHours(0, 0, 0, 0);
-        break;
-      case 'monthly':
-        start.setDate(1);
-        start.setHours(0, 0, 0, 0);
-        break;
-      case 'yearly':
-        start.setMonth(0, 1);
-        start.setHours(0, 0, 0, 0);
-        break;
-    }
-
-    return { start, end: new Date() };
-  };
-
   // Filter sales data (only by search, since API already filters by period)
   const filteredSales = useMemo(() => {
     return sales.filter(record => {

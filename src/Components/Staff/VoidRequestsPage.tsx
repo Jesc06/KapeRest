@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faSearch, faBan, faCheck, faTimes, faReceipt, faCalendar } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faSearch, faBan, faReceipt, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from './StaffSidebar';
 import LogoutPanel from '../Shared/LogoutPanel';
 import { API_BASE_URL } from '../../config/api';

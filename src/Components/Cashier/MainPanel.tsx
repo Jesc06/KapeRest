@@ -42,7 +42,6 @@ interface MainPanelProps {
   sidebarExpanded?: boolean;
   onToggleSidebarExpand?: () => void;
   onLogout?: () => void;
-  userRole?: string;
   onAddToCart?: (product: Product) => void;
 }
 
@@ -53,12 +52,10 @@ const MainPanel: React.FC<MainPanelProps> = ({
   total,
   onBuy,
   onHold,
-  onGCashPayment,
   isLoading,
   onToggleSidebar,
   sidebarExpanded = true,
   onToggleSidebarExpand,
-  userRole = 'Cashier',
   onAddToCart,
 }) => {
   const [showTaxDiscount, setShowTaxDiscount] = useState(false);
@@ -335,6 +332,17 @@ const MainPanel: React.FC<MainPanelProps> = ({
         const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
         const taxRate = 12; // 12% tax
 
+        // Decode token to get cashierId for debugging
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        const decodedToken = JSON.parse(jsonPayload);
+        const cashierId = decodedToken.cashierId || decodedToken.uid;
+        console.log('Current cashier ID:', cashierId);
+        console.log('Cart items:', cart);
+
         // Process each cart item as a separate purchase
         const purchasePromises = cart.map(async (item) => {
           const purchaseData = {
@@ -346,6 +354,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
           };
 
           console.log('Sending purchase request:', purchaseData);
+          console.log('Item details:', { id: item.id, name: item.name, price: item.price });
 
           const response = await fetch(`${API_BASE_URL}/Buy/Buy`, {
             method: 'POST',
@@ -359,19 +368,37 @@ const MainPanel: React.FC<MainPanelProps> = ({
           const responseText = await response.text();
           console.log('Raw response:', responseText);
           console.log('Response status:', response.status);
+          console.log('Response headers:', response.headers);
 
           if (!response.ok) {
             console.error('Purchase error response:', responseText);
+            console.error('Failed item:', item);
+            console.error('Request payload:', purchaseData);
 
             let errorMessage = responseText;
             try {
               const errorJson = JSON.parse(responseText);
-              errorMessage = errorJson.message || errorJson.error || errorJson.title || responseText;
+              console.error('Parsed error:', errorJson);
+              
+              // Try to extract more specific error message
+              if (errorJson.error) {
+                errorMessage = errorJson.error;
+              } else if (errorJson.message) {
+                errorMessage = errorJson.message;
+              } else if (errorJson.title) {
+                errorMessage = errorJson.title;
+              }
+              
+              // If there's an inner exception or details, show it
+              if (errorJson.errors) {
+                const errorDetails = Object.entries(errorJson.errors).map(([key, value]) => `${key}: ${value}`).join(', ');
+                errorMessage += ` - ${errorDetails}`;
+              }
             } catch (e) {
               errorMessage = responseText;
             }
 
-            throw new Error(errorMessage || `Failed to purchase ${item.name}`);
+            throw new Error(`Failed to purchase ${item.name}: ${errorMessage}`);
           }
 
           // Backend now returns plain text receipt format
@@ -477,7 +504,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
           {/* Right Section: Logout Panel */}
           <div className="flex-shrink-0">
-            <LogoutPanel userRole={userRole} />
+            <LogoutPanel />
           </div>
         </div>
       </div>

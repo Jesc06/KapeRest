@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AdminSidebar from './AdminSidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faBuilding, faUsers, faMapMarkerAlt, faSearch, faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faBuilding, faUsers, faMapMarkerAlt, faSearch, faPlus, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import LogoutPanel from '../Shared/LogoutPanel';
 import AddBranch from './AddBranch';
 import EditBranch from './EditBranch';
@@ -135,13 +135,6 @@ const BranchPage: React.FC = () => {
   };
 
   const handleEditClick = (branch: Branch) => {
-    const branchData: BranchResponse = {
-      id: branch.id,
-      branchName: branch.branchName,
-      location: branch.location,
-      staff: branch.manager,
-      status: branch.status
-    };
     setSelectedBranch(branch);
     setIsEditBranchOpen(true);
   };
