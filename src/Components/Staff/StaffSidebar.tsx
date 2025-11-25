@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faChartLine, faTimes, faChevronRight, faPlus, faList, faBuilding, faUtensils, faHome, faWarehouse, faClipboardList } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faChartLine, faTimes, faChevronRight, faPlus, faList, faBuilding, faUtensils, faHome, faWarehouse, faClipboardList, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 interface StaffSidebarProps {
   isOpen?: boolean;
@@ -51,6 +51,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
   const isAddItem = location.pathname === '/staff/add-item';
   const isMenuItemList = location.pathname ==='/staff/items';
   const isSales = location.pathname === '/staff/sales';
+  const isPurchases = location.pathname === '/staff/purchases';
   const isAddStocks = location.pathname === '/staff/add-stocks';
   const isStocksList = location.pathname === '/staff/stocks';
   const isHome = location.pathname === '/staff';
@@ -320,6 +321,21 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
             <FontAwesomeIcon icon={faChartLine} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
               <span className="flex-1 text-left font-medium truncate">Sales</span>
+            )}
+          </button>
+
+          {/* Purchases - Standalone */}
+          <button
+            onClick={() => navigate('/staff/purchases')}
+            className={`w-full flex items-center justify-center lg:justify-start gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${
+              isPurchases
+                ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
+                : "text-neutral-700 dark:text-neutral-300 hover:bg-orange-50/80 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
+            }`}
+          >
+            <FontAwesomeIcon icon={faShoppingCart} className="text-lg flex-shrink-0 w-5 h-5" />
+            {isExpanded && (
+              <span className="flex-1 text-left font-medium truncate">Purchases</span>
             )}
           </button>
 
