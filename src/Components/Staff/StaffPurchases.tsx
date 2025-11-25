@@ -322,18 +322,19 @@ const StaffPurchases: React.FC = () => {
                               )}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-center">
-                              {purchase.status !== "Voided" ? (
-                                <button
-                                  onClick={() => handleVoid(purchase.id)}
-                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 rounded-lg transition-all duration-200 active:scale-95 text-sm font-medium"
-                                  title="Void this purchase"
-                                >
-                                  <FontAwesomeIcon icon={faBan} className="h-3.5 w-3.5" />
-                                  Void
-                                </button>
-                              ) : (
-                                <span className="text-xs text-neutral-400 dark:text-neutral-600">-</span>
-                              )}
+                              <button
+                                onClick={() => purchase.status !== "Voided" && handleVoid(purchase.id)}
+                                disabled={purchase.status === "Voided"}
+                                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all duration-200 text-sm font-medium ${
+                                  purchase.status === "Voided"
+                                    ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-600 cursor-not-allowed opacity-50"
+                                    : "bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 active:scale-95 cursor-pointer"
+                                }`}
+                                title={purchase.status === "Voided" ? "Already voided" : "Void this purchase"}
+                              >
+                                <FontAwesomeIcon icon={faBan} className="h-3.5 w-3.5" />
+                                Void
+                              </button>
                             </td>
                           </tr>
                         ))}

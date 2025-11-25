@@ -7,6 +7,7 @@ import { API_BASE_URL } from '../../config/api';
 
 interface Purchase {
   id: number;
+  receiptNumber: string;
   menuItemName: string;
   dateTime: string;
   cashierId: string;
@@ -262,9 +263,9 @@ const Purchases: React.FC = () => {
                                 {purchase.menuItemName || 'No Items'}
                               </h3>
                               <div className="flex flex-wrap items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
-                                <span className="flex items-center gap-1">
-                                  <FontAwesomeIcon icon={faHashtag} className="text-xs" />
-                                  Transaction ID: {purchase.id}
+                                <span className="flex items-center gap-1 font-mono text-xs bg-orange-50 dark:bg-orange-900/20 px-2 py-0.5 rounded">
+                                  <FontAwesomeIcon icon={faReceipt} className="text-xs" />
+                                  {purchase.receiptNumber || `#${purchase.id}`}
                                 </span>
                                 <span className="text-neutral-300 dark:text-neutral-600">•</span>
                                 <span className={`px-2 py-0.5 rounded-md text-xs font-semibold ${getStatusColor(purchase.status)}`}>

@@ -374,20 +374,20 @@ const MainPanel: React.FC<MainPanelProps> = ({
             throw new Error(errorMessage || `Failed to purchase ${item.name}`);
           }
 
-          let result;
-          try {
-            result = JSON.parse(responseText);
-          } catch (e) {
-            console.warn('Response is not JSON:', responseText);
-            result = { success: true, message: responseText };
-          }
-
-          console.log('Purchase successful for item:', item.name, result);
-          return result;
+          // Backend now returns plain text receipt format
+          console.log('Purchase successful for item:', item.name);
+          console.log('Receipt:', responseText);
+          return { success: true, receipt: responseText, itemName: item.name };
         });
 
         // Wait for all purchases to complete
-        await Promise.all(purchasePromises);
+        const results = await Promise.all(purchasePromises);
+        
+        // Display all receipts
+        if (results.length > 0) {
+          const receipts = results.map(r => r.receipt).join('\n\n---\n\n');
+          alert(`Purchase Successful!\n\n${receipts}`);
+        }
       }
 
       console.log('All purchases completed successfully');
