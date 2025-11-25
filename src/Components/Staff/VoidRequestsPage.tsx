@@ -251,66 +251,72 @@ const VoidRequestsPage: React.FC = () => {
                   filteredRequests.map((request) => (
                     <div
                       key={request.id}
-                      className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 overflow-hidden hover:border-orange-300 dark:hover:border-orange-700 transition-all duration-300"
+                      className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-neutral-800 overflow-hidden hover:border-orange-300 dark:hover:border-orange-700 hover:shadow-lg transition-all duration-300"
                     >
                       <div className="p-6">
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                          {/* Left: Transaction Info */}
-                          <div className="lg:col-span-2">
-                            <div className="flex items-start gap-4 mb-4">
-                              <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
-                                <FontAwesomeIcon icon={faReceipt} className="text-orange-600 dark:text-orange-400 text-xl" />
-                              </div>
-                              <div className="flex-1">
-                                <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-1">
-                                  {request.menuItemName}
-                                </h3>
-                                <div className="flex flex-wrap items-center gap-2 text-sm">
-                                  <span className="font-mono text-xs bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 px-2 py-0.5 rounded">
-                                    {request.receiptNumber || `#${request.id}`}
-                                  </span>
-                                  <span className="text-neutral-400">•</span>
-                                  <span className="text-neutral-600 dark:text-neutral-400 flex items-center gap-1">
-                                    <FontAwesomeIcon icon={faCalendar} className="text-xs" />
-                                    {formatDate(request.dateTime)}
-                                  </span>
+                        <div className="flex flex-col">
+                          {/* Transaction Info */}
+                          <div className="flex-1">
+                            {/* Header with Receipt */}
+                            <div className="flex items-start justify-between mb-4 pb-4 border-b border-neutral-100 dark:border-neutral-800">
+                              <div className="flex items-start gap-3">
+                                <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
+                                  <FontAwesomeIcon icon={faReceipt} className="text-white text-lg" />
+                                </div>
+                                <div className="flex-1">
+                                  <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">
+                                    {request.menuItemName}
+                                  </h3>
+                                  <div className="flex flex-wrap items-center gap-2 text-sm">
+                                    <span className="font-mono text-xs bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 px-3 py-1 rounded-md font-semibold">
+                                      {request.receiptNumber || `#${request.id}`}
+                                    </span>
+                                    <span className="text-neutral-300 dark:text-neutral-700">•</span>
+                                    <span className="text-neutral-600 dark:text-neutral-400 flex items-center gap-1.5">
+                                      <FontAwesomeIcon icon={faCalendar} className="text-xs" />
+                                      {formatDate(request.dateTime)}
+                                    </span>
+                                  </div>
                                 </div>
                               </div>
                             </div>
 
-                            {/* Reason */}
-                            <div className="bg-orange-50 dark:bg-orange-900/20 rounded-lg p-4">
-                              <p className="text-xs font-semibold text-orange-700 dark:text-orange-400 uppercase tracking-wide mb-2">Void Reason</p>
-                              <p className="text-sm text-neutral-800 dark:text-neutral-200">{request.reason || 'No reason provided'}</p>
+                            {/* Transaction Details Grid */}
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+                              <div className="bg-neutral-50 dark:bg-neutral-800/50 rounded-lg p-3">
+                                <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase mb-1 font-medium">Subtotal</p>
+                                <p className="text-base font-bold text-neutral-900 dark:text-white">₱{request.subtotal.toFixed(2)}</p>
+                              </div>
+                              <div className="bg-neutral-50 dark:bg-neutral-800/50 rounded-lg p-3">
+                                <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase mb-1 font-medium">Tax</p>
+                                <p className="text-base font-bold text-neutral-900 dark:text-white">₱{request.tax.toFixed(2)}</p>
+                              </div>
+                              <div className="bg-neutral-50 dark:bg-neutral-800/50 rounded-lg p-3">
+                                <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase mb-1 font-medium">Discount</p>
+                                <p className="text-base font-bold text-neutral-900 dark:text-white">₱{request.discount.toFixed(2)}</p>
+                              </div>
+                              <div className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/30 dark:to-orange-900/20 rounded-lg p-3 border border-orange-200 dark:border-orange-800/50">
+                                <p className="text-xs text-orange-700 dark:text-orange-400 uppercase mb-1 font-semibold">Total</p>
+                                <p className="text-base font-bold text-orange-600 dark:text-orange-400">₱{request.total.toFixed(2)}</p>
+                              </div>
                             </div>
 
-                            {/* Transaction Details */}
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-                              <div>
-                                <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase mb-1">Subtotal</p>
-                                <p className="text-sm font-semibold text-neutral-900 dark:text-white">₱{request.subtotal.toFixed(2)}</p>
+                            {/* Reason */}
+                            <div className="bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/10 rounded-lg p-4 border border-orange-100 dark:border-orange-900/30">
+                              <div className="flex items-center gap-2 mb-2">
+                                <FontAwesomeIcon icon={faBan} className="text-orange-600 dark:text-orange-400 text-sm" />
+                                <p className="text-xs font-bold text-orange-700 dark:text-orange-400 uppercase tracking-wide">Void Reason</p>
                               </div>
-                              <div>
-                                <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase mb-1">Tax</p>
-                                <p className="text-sm font-semibold text-neutral-900 dark:text-white">₱{request.tax.toFixed(2)}</p>
-                              </div>
-                              <div>
-                                <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase mb-1">Discount</p>
-                                <p className="text-sm font-semibold text-neutral-900 dark:text-white">₱{request.discount.toFixed(2)}</p>
-                              </div>
-                              <div>
-                                <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase mb-1">Total</p>
-                                <p className="text-sm font-bold text-orange-600 dark:text-orange-400">₱{request.total.toFixed(2)}</p>
-                              </div>
+                              <p className="text-sm text-neutral-800 dark:text-neutral-200 leading-relaxed">{request.reason || 'No reason provided'}</p>
                             </div>
                           </div>
 
-                          {/* Right: Actions */}
-                          <div className="flex flex-col justify-center gap-3">
+                          {/* Actions - Bottom Right */}
+                          <div className="flex items-center justify-end gap-3 mt-4 pt-4 border-t border-neutral-100 dark:border-neutral-800">
                             <button
                               onClick={() => handleApprove(request.id)}
                               disabled={processing === request.id}
-                              className="w-full px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-all duration-200 active:scale-95 font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                              className="px-5 py-2.5 text-sm font-semibold text-white bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 rounded-lg transition-all duration-200 active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
                             >
                               {processing === request.id ? (
                                 <>
@@ -318,19 +324,15 @@ const VoidRequestsPage: React.FC = () => {
                                   Processing...
                                 </>
                               ) : (
-                                <>
-                                  <FontAwesomeIcon icon={faCheck} />
-                                  Approve Void
-                                </>
+                                'Approve'
                               )}
                             </button>
                             <button
                               onClick={() => handleReject(request.id)}
                               disabled={processing === request.id}
-                              className="w-full px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-all duration-200 active:scale-95 font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                              className="px-5 py-2.5 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700 rounded-lg transition-all duration-200 active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
                             >
-                              <FontAwesomeIcon icon={faTimes} />
-                              Reject Request
+                              Reject
                             </button>
                           </div>
                         </div>
