@@ -37,6 +37,8 @@ const StaffPurchases: React.FC = () => {
   const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [voidRequestCount, setVoidRequestCount] = useState(0);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('all');
+  const [selectedStatus, setSelectedStatus] = useState('all');
 
   // Fetch purchases from API
   useEffect(() => {
@@ -132,14 +134,19 @@ const StaffPurchases: React.FC = () => {
     }
   };
 
-  // Filter purchases based on search term
-  const filteredPurchases = purchases.filter(purchase =>
-    purchase.menuItemName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    purchase.paymentMethod.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    purchase.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    purchase.receiptNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    purchase.id.toString().includes(searchTerm)
-  );
+  // Filter purchases based on search term, payment method, and status
+  const filteredPurchases = purchases.filter(purchase => {
+    const matchesSearch = purchase.menuItemName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      purchase.paymentMethod.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      purchase.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      purchase.receiptNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      purchase.id.toString().includes(searchTerm);
+    
+    const matchesPayment = selectedPaymentMethod === 'all' || purchase.paymentMethod === selectedPaymentMethod;
+    const matchesStatus = selectedStatus === 'all' || purchase.status === selectedStatus;
+    
+    return matchesSearch && matchesPayment && matchesStatus;
+  });
 
   const handleVoid = async (saleId: number) => {
     if (!window.confirm('Are you sure you want to void this purchase? This action will restore the stock.')) return;
@@ -281,6 +288,77 @@ const StaffPurchases: React.FC = () => {
           {/* Main Content */}
           <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
             <div className="flex-1 flex flex-col gap-6 px-4 sm:px-6 md:px-8 py-6 overflow-auto">
+
+              {/* Filter Buttons */}
+              <div className="flex flex-wrap items-center gap-3">
+                {/* Payment Method Filters */}
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setSelectedPaymentMethod('all')}
+                    className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
+                      selectedPaymentMethod === 'all'
+                        ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30'
+                        : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-orange-500 dark:hover:border-orange-500'
+                    }`}
+                  >
+                    All Payments
+                  </button>
+                  <button
+                    onClick={() => setSelectedPaymentMethod('Cash')}
+                    className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
+                      selectedPaymentMethod === 'Cash'
+                        ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30'
+                        : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-orange-500 dark:hover:border-orange-500'
+                    }`}
+                  >
+                    Cash
+                  </button>
+                  <button
+                    onClick={() => setSelectedPaymentMethod('GCash')}
+                    className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
+                      selectedPaymentMethod === 'GCash'
+                        ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30'
+                        : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-orange-500 dark:hover:border-orange-500'
+                    }`}
+                  >
+                    GCash
+                  </button>
+                </div>
+
+                {/* Status Filters */}
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setSelectedStatus('all')}
+                    className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
+                      selectedStatus === 'all'
+                        ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/30'
+                        : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-green-500 dark:hover:border-green-500'
+                    }`}
+                  >
+                    All Status
+                  </button>
+                  <button
+                    onClick={() => setSelectedStatus('Completed')}
+                    className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
+                      selectedStatus === 'Completed'
+                        ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/30'
+                        : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-green-500 dark:hover:border-green-500'
+                    }`}
+                  >
+                    Completed
+                  </button>
+                  <button
+                    onClick={() => setSelectedStatus('Voided')}
+                    className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
+                      selectedStatus === 'Voided'
+                        ? 'bg-gradient-to-r from-red-500 to-rose-600 text-white shadow-lg shadow-red-500/30'
+                        : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-red-500 dark:hover:border-red-500'
+                    }`}
+                  >
+                    Voided
+                  </button>
+                </div>
+              </div>
 
               {/* Table Section */}
               <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-white dark:bg-neutral-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-neutral-700">

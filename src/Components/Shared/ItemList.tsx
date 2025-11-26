@@ -26,6 +26,7 @@ const ItemList: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+  const [selectedAvailability, setSelectedAvailability] = useState('all');
 
   // Fetch items from API
   useEffect(() => {
@@ -78,12 +79,18 @@ const ItemList: React.FC = () => {
     fetchItems();
   }, []);
 
-  // Filter items based on search term
-  const filteredItems = items.filter(item =>
-    item.itemName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.price.toString().includes(searchTerm)
-  );
+  // Filter items based on search term and availability
+  const filteredItems = items.filter(item => {
+    const matchesSearch = item.itemName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.price.toString().includes(searchTerm);
+    
+    const matchesAvailability = selectedAvailability === 'all' || 
+      (selectedAvailability === 'available' && item.isAvailable === 'Available') ||
+      (selectedAvailability === 'unavailable' && item.isAvailable !== 'Available');
+    
+    return matchesSearch && matchesAvailability;
+  });
 
   const handleEdit = (itemId: number) => {
     setSelectedItemId(itemId);
@@ -256,6 +263,40 @@ const ItemList: React.FC = () => {
           {/* Main Content */}
           <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
             <div className="flex-1 flex flex-col gap-6 px-4 sm:px-6 md:px-8 py-6 overflow-auto">
+
+              {/* Availability Filter Buttons */}
+              <div className="flex flex-wrap items-center gap-3">
+                <button
+                  onClick={() => setSelectedAvailability('all')}
+                  className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
+                    selectedAvailability === 'all'
+                      ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30'
+                      : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-orange-500 dark:hover:border-orange-500'
+                  }`}
+                >
+                  All Items
+                </button>
+                <button
+                  onClick={() => setSelectedAvailability('available')}
+                  className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
+                    selectedAvailability === 'available'
+                      ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/30'
+                      : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-green-500 dark:hover:border-green-500'
+                  }`}
+                >
+                  Available
+                </button>
+                <button
+                  onClick={() => setSelectedAvailability('unavailable')}
+                  className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
+                    selectedAvailability === 'unavailable'
+                      ? 'bg-gradient-to-r from-red-500 to-rose-600 text-white shadow-lg shadow-red-500/30'
+                      : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-red-500 dark:hover:border-red-500'
+                  }`}
+                >
+                  Out of Stock
+                </button>
+              </div>
 
               {/* Premium Stats Cards */}
               {!isLoading && filteredItems.length > 0 && (

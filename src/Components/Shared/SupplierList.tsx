@@ -424,77 +424,105 @@ const SupplierList: React.FC = () => {
 
       {/* Edit Supplier Modal */}
       {editingSupplier && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-gradient-to-r from-orange-500 to-orange-600 p-6 rounded-t-2xl">
-              <div className="flex items-center justify-between">
-                <h3 className="text-2xl font-bold text-white">Edit Supplier</h3>
-                <button
-                  onClick={() => setEditingSupplier(null)}
-                  className="text-white hover:bg-white/20 rounded-lg p-2 transition-colors"
-                >
-                  <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
-                </button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="relative w-full max-w-4xl max-h-[90vh] bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl overflow-hidden">
+            {/* Header */}
+            <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg">
+                  <FontAwesomeIcon icon={faTruck} className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-neutral-900 dark:text-white">Edit Supplier</h2>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400">Update supplier information</p>
+                </div>
               </div>
-            </div>
-            
-            <div className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Supplier Name</label>
-                <input
-                  type="text"
-                  value={editingSupplier.supplierName}
-                  onChange={(e) => setEditingSupplier({ ...editingSupplier, supplierName: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Contact Person</label>
-                <input
-                  type="text"
-                  value={editingSupplier.contactPerson}
-                  onChange={(e) => setEditingSupplier({ ...editingSupplier, contactPerson: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Phone Number</label>
-                <input
-                  type="text"
-                  value={editingSupplier.phoneNumber}
-                  onChange={(e) => setEditingSupplier({ ...editingSupplier, phoneNumber: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Email</label>
-                <input
-                  type="email"
-                  value={editingSupplier.email}
-                  onChange={(e) => setEditingSupplier({ ...editingSupplier, email: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Address</label>
-                <textarea
-                  value={editingSupplier.address}
-                  onChange={(e) => setEditingSupplier({ ...editingSupplier, address: e.target.value })}
-                  rows={3}
-                  className="w-full px-4 py-2.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500"
-                />
-              </div>
-            </div>
-            
-            <div className="p-6 bg-neutral-50 dark:bg-neutral-800/50 rounded-b-2xl flex gap-3">
               <button
+                onClick={() => setEditingSupplier(null)}
+                className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
+                disabled={isSaving}
+              >
+                <FontAwesomeIcon icon={faTimes} className="h-5 w-5 text-neutral-600 dark:text-neutral-400" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="overflow-y-auto max-h-[calc(90vh-80px)] p-6">
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-2">Supplier Name</label>
+                  <input
+                    type="text"
+                    value={editingSupplier.supplierName}
+                    onChange={(e) => setEditingSupplier({ ...editingSupplier, supplierName: e.target.value })}
+                    className="w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-800 border-2 border-neutral-200 dark:border-neutral-700 rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                    placeholder="Enter supplier name"
+                  />
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-2">Contact Person</label>
+                    <input
+                      type="text"
+                      value={editingSupplier.contactPerson}
+                      onChange={(e) => setEditingSupplier({ ...editingSupplier, contactPerson: e.target.value })}
+                      className="w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-800 border-2 border-neutral-200 dark:border-neutral-700 rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                      placeholder="Contact person name"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-2">Phone Number</label>
+                    <input
+                      type="text"
+                      value={editingSupplier.phoneNumber}
+                      onChange={(e) => setEditingSupplier({ ...editingSupplier, phoneNumber: e.target.value })}
+                      className="w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-800 border-2 border-neutral-200 dark:border-neutral-700 rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                      placeholder="Phone number"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-2">Email</label>
+                  <input
+                    type="email"
+                    value={editingSupplier.email}
+                    onChange={(e) => setEditingSupplier({ ...editingSupplier, email: e.target.value })}
+                    className="w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-800 border-2 border-neutral-200 dark:border-neutral-700 rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                    placeholder="Email address"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-2">Address</label>
+                  <textarea
+                    value={editingSupplier.address}
+                    onChange={(e) => setEditingSupplier({ ...editingSupplier, address: e.target.value })}
+                    rows={4}
+                    className="w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-800 border-2 border-neutral-200 dark:border-neutral-700 rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all resize-none"
+                    placeholder="Full address"
+                  />
+                </div>
+              </div>
+            </div>
+            
+            {/* Footer */}
+            <div className="sticky bottom-0 px-6 py-4 bg-neutral-50 dark:bg-neutral-800/50 border-t border-neutral-200 dark:border-neutral-800 flex gap-3">
+              <button
+                type="button"
+                onClick={() => setEditingSupplier(null)}
+                disabled={isSaving}
+                className="flex-1 px-6 py-3 bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 text-neutral-900 dark:text-white font-bold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
                 onClick={handleSaveEdit}
                 disabled={isSaving}
-                className="flex-1 px-4 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="flex-1 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-95"
               >
                 {isSaving ? (
                   <>
@@ -507,13 +535,6 @@ const SupplierList: React.FC = () => {
                     <span>Save Changes</span>
                   </>
                 )}
-              </button>
-              <button
-                onClick={() => setEditingSupplier(null)}
-                disabled={isSaving}
-                className="px-4 py-2.5 bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 text-neutral-900 dark:text-white font-medium rounded-lg disabled:opacity-50"
-              >
-                Cancel
               </button>
             </div>
           </div>
