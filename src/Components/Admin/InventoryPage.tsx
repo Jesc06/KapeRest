@@ -3,6 +3,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faSearch, faEdit, faTrash, faBoxes, faDownload } from '@fortawesome/free-solid-svg-icons';
 import AdminSidebar from './AdminSidebar';
 import LogoutPanel from '../Shared/LogoutPanel';
+import { API_BASE_URL } from '../../config/api';
+
+interface Branch {
+  branchName: string;
+  location: string;
+}
+
+interface Cashier {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+}
 
 interface Stock {
   id: number;
@@ -12,7 +24,8 @@ interface Stock {
   costPrice: number;
   transactionDate: string;
   supplierName: string;
-  branchName: string;
+  branch: Branch;
+  cashier: Cashier | null;
 }
 
 const InventoryPage: React.FC = () => {
@@ -20,88 +33,54 @@ const InventoryPage: React.FC = () => {
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterBranch, setFilterBranch] = useState<string>('all');
+  const [filterStaff, setFilterStaff] = useState<string>('all');
   const [filterUnit, setFilterUnit] = useState<string>('all');
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Mock data - Replace with actual API call
+  // Fetch inventory from API
   useEffect(() => {
     const fetchStocks = async () => {
       setIsLoading(true);
-      // Simulate API call
-      setTimeout(() => {
-        const mockData: Stock[] = [
-          {
-            id: 1,
-            productName: "Juice",
-            stocks: 850,
-            units: "ml",
-            costPrice: 20,
-            transactionDate: "2025-11-03T04:16:44",
-            supplierName: "Coca-cola",
-            branchName: "Main Branch"
+      try {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+          console.error('No access token found');
+          setIsLoading(false);
+          return;
+        }
+
+        const response = await fetch(`${API_BASE_URL}/Inventory/GetAllProducts_Admin`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
           },
-          {
-            id: 2,
-            productName: "Coffee Beans",
-            stocks: 50,
-            units: "kg",
-            costPrice: 150,
-            transactionDate: "2025-11-05T08:30:00",
-            supplierName: "Coffee Supplier Co.",
-            branchName: "Main Branch"
-          },
-          {
-            id: 3,
-            productName: "Milk",
-            stocks: 300,
-            units: "ml",
-            costPrice: 45,
-            transactionDate: "2025-11-04T10:15:00",
-            supplierName: "Dairy Fresh",
-            branchName: "Downtown Branch"
-          },
-          {
-            id: 4,
-            productName: "Sugar",
-            stocks: 100,
-            units: "kg",
-            costPrice: 35,
-            transactionDate: "2025-11-02T14:20:00",
-            supplierName: "Sweet Supply Inc.",
-            branchName: "Main Branch"
-          },
-          {
-            id: 5,
-            productName: "Cups",
-            stocks: 1500,
-            units: "pcs",
-            costPrice: 2,
-            transactionDate: "2025-11-01T09:00:00",
-            supplierName: "PackSupply Co.",
-            branchName: "Downtown Branch"
-          },
-          {
-            id: 6,
-            productName: "Tea Bags",
-            stocks: 80,
-            units: "pcs",
-            costPrice: 5,
-            transactionDate: "2025-11-06T11:45:00",
-            supplierName: "Tea Masters Ltd.",
-            branchName: "Uptown Branch"
-          },
-        ];
-        setStocks(mockData);
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data: Stock[] = await response.json();
+        setStocks(data);
         setIsLoading(false);
-      }, 500);
+      } catch (err) {
+        console.error('Error fetching inventory:', err);
+        setIsLoading(false);
+      }
     };
 
     fetchStocks();
   }, []);
 
-  // Get unique branches for filter
-  const branches = ['all', ...Array.from(new Set(stocks.map(s => s.branchName)))];
+  // Get unique branches and staff for filters
+  const branches = ['all', ...Array.from(new Set(stocks.map(s => s.branch.branchName)))];
+  const staff = ['all', 'unassigned', ...Array.from(new Set(
+    stocks
+      .filter(s => s.cashier !== null)
+      .map(s => s.cashier ? `${s.cashier.firstName || ''} ${s.cashier.lastName || ''}`.trim() : '')
+      .filter(name => name !== '')
+  ))];
   const units = ['all', 'ml', 'kg', 'pcs'];
 
   // Filter stocks
@@ -109,12 +88,20 @@ const InventoryPage: React.FC = () => {
     const searchLower = searchTerm.toLowerCase();
     const matchesSearch = 
       stock.productName.toLowerCase().includes(searchLower) ||
-      stock.supplierName.toLowerCase().includes(searchLower);
+      stock.supplierName.toLowerCase().includes(searchLower) ||
+      stock.branch.branchName.toLowerCase().includes(searchLower) ||
+      (stock.cashier && `${stock.cashier.firstName || ''} ${stock.cashier.lastName || ''}`.toLowerCase().includes(searchLower));
     
-    const matchesBranch = filterBranch === 'all' || stock.branchName === filterBranch;
+    const matchesBranch = filterBranch === 'all' || stock.branch.branchName === filterBranch;
+    
+    const staffName = stock.cashier ? `${stock.cashier.firstName || ''} ${stock.cashier.lastName || ''}`.trim() : '';
+    const matchesStaff = filterStaff === 'all' || 
+      (filterStaff === 'unassigned' && stock.cashier === null) ||
+      (staffName === filterStaff);
+    
     const matchesUnit = filterUnit === 'all' || stock.units === filterUnit;
     
-    return matchesSearch && matchesBranch && matchesUnit;
+    return matchesSearch && matchesBranch && matchesStaff && matchesUnit;
   });
 
   // Calculate stats
@@ -231,13 +218,13 @@ const InventoryPage: React.FC = () => {
 
             {/* Search and Filters */}
             <div className="bg-white dark:bg-neutral-800 rounded-2xl p-4 sm:p-6 shadow-lg mb-6 border border-neutral-100 dark:border-neutral-700">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {/* Search */}
                 <div className="relative">
                   <FontAwesomeIcon icon={faSearch} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
                   <input
                     type="text"
-                    placeholder="Search products or suppliers..."
+                    placeholder="Search products, suppliers, branch, staff..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
@@ -254,6 +241,21 @@ const InventoryPage: React.FC = () => {
                     {branches.map(branch => (
                       <option key={branch} value={branch}>
                         {branch === 'all' ? 'All Branches' : branch}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Staff Filter */}
+                <div className="relative">
+                  <select
+                    value={filterStaff}
+                    onChange={(e) => setFilterStaff(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-lg border border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none cursor-pointer"
+                  >
+                    {staff.map(s => (
+                      <option key={s} value={s}>
+                        {s === 'all' ? 'All Staff' : s === 'unassigned' ? 'Unassigned' : s}
                       </option>
                     ))}
                   </select>
@@ -289,6 +291,7 @@ const InventoryPage: React.FC = () => {
                       <th className="px-6 py-4 text-left text-sm font-semibold">Total Value</th>
                       <th className="px-6 py-4 text-left text-sm font-semibold">Supplier</th>
                       <th className="px-6 py-4 text-left text-sm font-semibold">Branch</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold">Staff</th>
                       <th className="px-6 py-4 text-left text-sm font-semibold">Date</th>
                       <th className="px-6 py-4 text-center text-sm font-semibold">Actions</th>
                     </tr>
@@ -296,14 +299,17 @@ const InventoryPage: React.FC = () => {
                   <tbody className="divide-y divide-neutral-100 dark:divide-neutral-700">
                     {isLoading ? (
                       <tr>
-                        <td colSpan={9} className="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
-                          Loading inventory...
+                        <td colSpan={10} className="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
+                          <div className="inline-block h-12 w-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                          <p className="text-lg font-medium">Loading inventory...</p>
                         </td>
                       </tr>
                     ) : filteredStocks.length === 0 ? (
                       <tr>
-                        <td colSpan={9} className="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
-                          No inventory items found
+                        <td colSpan={10} className="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
+                          <FontAwesomeIcon icon={faBoxes} className="text-4xl mb-3 opacity-50" />
+                          <p className="text-lg font-medium">No inventory items found</p>
+                          <p className="text-sm mt-1">Try adjusting your filters</p>
                         </td>
                       </tr>
                     ) : (
@@ -319,7 +325,14 @@ const InventoryPage: React.FC = () => {
                           <td className="px-6 py-4 text-sm text-neutral-600 dark:text-neutral-400">₱{stock.costPrice.toFixed(2)}</td>
                           <td className="px-6 py-4 text-sm font-semibold text-neutral-900 dark:text-white">₱{(stock.stocks * stock.costPrice).toLocaleString()}</td>
                           <td className="px-6 py-4 text-sm text-neutral-600 dark:text-neutral-400">{stock.supplierName}</td>
-                          <td className="px-6 py-4 text-sm text-neutral-600 dark:text-neutral-400">{stock.branchName}</td>
+                          <td className="px-6 py-4 text-sm text-neutral-600 dark:text-neutral-400">{stock.branch.branchName}</td>
+                          <td className="px-6 py-4 text-sm text-neutral-600 dark:text-neutral-400">
+                            {stock.cashier ? (
+                              <span>{stock.cashier.firstName || ''} {stock.cashier.lastName || ''}</span>
+                            ) : (
+                              <span className="text-neutral-400 italic">Unassigned</span>
+                            )}
+                          </td>
                           <td className="px-6 py-4 text-sm text-neutral-600 dark:text-neutral-400">{formatDate(stock.transactionDate)}</td>
                           <td className="px-6 py-4 text-sm">
                             <div className="flex items-center justify-center gap-2">

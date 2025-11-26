@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faClipboardList, 
@@ -7,11 +7,11 @@ import {
   faCalendarAlt,
   faClock,
   faUser,
-  faUserTag,
   faBolt
 } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from './StaffSidebar';
 import LogoutPanel from '../Shared/LogoutPanel';
+import { API_BASE_URL } from '../../config/api';
 
 interface AuditLog {
   id: number;
@@ -31,67 +31,45 @@ const StaffAuditTrailPage: React.FC = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedAction, setSelectedAction] = useState('all');
-  const [selectedRole, setSelectedRole] = useState('all');
+  const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Mock audit log data
-  const auditLogs: AuditLog[] = [
-    {
-      id: 1,
-      username: 'Maria Santos',
-      role: 'Staff',
-      action: 'Add',
-      description: 'Added new product to menu: Caramel Macchiato with price ₱150',
-      date: '2025-11-18T14:30:00'
-    },
-    {
-      id: 2,
-      username: 'Juan Dela Cruz',
-      role: 'Staff',
-      action: 'Add',
-      description: 'Registered new supplier: Coffee Beans Co.',
-      date: '2025-11-18T13:15:00'
-    },
-    {
-      id: 3,
-      username: 'Pedro Reyes',
-      role: 'Staff',
-      action: 'Deliver',
-      description: 'Delivered 50 units of Latte',
-      date: '2025-11-18T12:45:00'
-    },
-    {
-      id: 4,
-      username: 'Ana Garcia',
-      role: 'Staff',
-      action: 'Delete',
-      description: 'Removed discontinued product from menu: Vanilla Frappe',
-      date: '2025-11-18T11:20:00'
-    },
-    {
-      id: 5,
-      username: 'Carlos Lopez',
-      role: 'Staff',
-      action: 'Delete',
-      description: 'Removed inactive supplier from system: Old Milk Supplier',
-      date: '2025-11-18T10:00:00'
-    },
-    {
-      id: 6,
-      username: 'Rosa Martinez',
-      role: 'Admin',
-      action: 'Add',
-      description: 'Created new branch: Main Street Branch',
-      date: '2025-11-18T09:30:00'
-    },
-    {
-      id: 7,
-      username: 'Miguel Torres',
-      role: 'Staff',
-      action: 'Deliver',
-      description: 'Delivered 100 units of Espresso',
-      date: '2025-11-18T08:15:00'
-    }
-  ];
+  // Fetch audit logs from API
+  useEffect(() => {
+    const fetchAuditLogs = async () => {
+      setIsLoading(true);
+      try {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+          console.error('No access token found');
+          setIsLoading(false);
+          return;
+        }
+
+        const response = await fetch(`${API_BASE_URL}/Audit/GetALlAudit`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data: AuditLog[] = await response.json();
+        // Filter to show only Cashier role for staff view
+        const cashierLogs = data.filter(log => log.role === 'Cashier');
+        setAuditLogs(cashierLogs);
+        setIsLoading(false);
+      } catch (err) {
+        console.error('Error fetching audit logs:', err);
+        setIsLoading(false);
+      }
+    };
+
+    fetchAuditLogs();
+  }, []);
 
   // Filter logs based on search and filters
   const filteredLogs = auditLogs.filter(log => {
@@ -100,9 +78,8 @@ const StaffAuditTrailPage: React.FC = () => {
       (log.description && log.description.toLowerCase().includes(searchTerm.toLowerCase()));
     
     const matchesAction = selectedAction === 'all' || log.action === selectedAction;
-    const matchesRole = selectedRole === 'all' || log.role === selectedRole;
 
-    return matchesSearch && matchesAction && matchesRole;
+    return matchesSearch && matchesAction;
   });
 
   const formatDateTime = (dateString: string) => {
@@ -121,6 +98,10 @@ const StaffAuditTrailPage: React.FC = () => {
         return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
       case 'Deliver':
         return 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400';
+      case 'Login':
+        return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
+      case 'Logout':
+        return 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400';
       default:
         return 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-400';
     }
@@ -186,7 +167,7 @@ const StaffAuditTrailPage: React.FC = () => {
         <main className="p-6 relative z-0">
           {/* Filters */}
           <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-lg p-6 mb-8 border border-orange-100 dark:border-orange-900/20">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Search */}
               <div className="relative">
                 <FontAwesomeIcon 
@@ -217,24 +198,8 @@ const StaffAuditTrailPage: React.FC = () => {
                   <option value="Add">Add</option>
                   <option value="Delete">Delete</option>
                   <option value="Deliver">Deliver</option>
-                </select>
-              </div>
-
-              {/* Role Filter */}
-              <div className="relative">
-                <FontAwesomeIcon 
-                  icon={faUserTag} 
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
-                />
-                <select
-                  value={selectedRole}
-                  onChange={(e) => setSelectedRole(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-neutral-50 dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition-all appearance-none cursor-pointer"
-                >
-                  <option value="all">All Roles</option>
-                  <option value="Admin">Admin</option>
-                  <option value="Staff">Staff</option>
-                  <option value="Cashier">Cashier</option>
+                  <option value="Login">Login</option>
+                  <option value="Logout">Logout</option>
                 </select>
               </div>
             </div>
@@ -264,7 +229,14 @@ const StaffAuditTrailPage: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-neutral-200 dark:divide-neutral-700">
-                  {filteredLogs.length === 0 ? (
+                  {isLoading ? (
+                    <tr>
+                      <td colSpan={5} className="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
+                        <div className="inline-block h-12 w-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                        <p className="text-lg font-medium">Loading audit logs...</p>
+                      </td>
+                    </tr>
+                  ) : filteredLogs.length === 0 ? (
                     <tr>
                       <td colSpan={5} className="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
                         <FontAwesomeIcon icon={faClipboardList} className="text-4xl mb-3 opacity-50" />
