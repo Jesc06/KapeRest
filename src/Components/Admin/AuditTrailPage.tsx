@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faSearch, faUser, faCalendar, faClock } from '@fortawesome/free-solid-svg-icons';
 import AdminSidebar from './AdminSidebar';
 import LogoutPanel from '../Shared/LogoutPanel';
+import { API_BASE_URL } from '../../config/api';
 
 interface AuditLog {
   id: number;
@@ -22,73 +23,36 @@ const AuditTrailPage: React.FC = () => {
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Mock data - Replace with actual API call
+  // Fetch audit logs from API
   useEffect(() => {
     const fetchAuditLogs = async () => {
       setIsLoading(true);
-      // Simulate API call
-      setTimeout(() => {
-        const mockData: AuditLog[] = [
-          {
-            id: 1,
-            username: "Juan Dela Cruz",
-            role: "Staff",
-            action: "Add",
-            description: "Added new product Cappuccino to menu",
-            date: "2025-11-18T08:30:00"
+      try {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+          console.error('No access token found');
+          setIsLoading(false);
+          return;
+        }
+
+        const response = await fetch(`${API_BASE_URL}/Audit/GetALlAudit`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
           },
-          {
-            id: 2,
-            username: "Maria Santos",
-            role: "Admin",
-            action: "Add",
-            description: "Added new supplier Coffee Beans Co.",
-            date: "2025-11-18T09:15:00"
-          },
-          {
-            id: 3,
-            username: "Pedro Reyes",
-            role: "Staff",
-            action: "Deliver",
-            description: "Delivered 50 units of Latte",
-            date: "2025-11-18T10:00:00"
-          },
-          {
-            id: 4,
-            username: "Ana Garcia",
-            role: "Cashier",
-            action: "Add",
-            description: "Processed new order for customer",
-            date: "2025-11-18T11:30:00"
-          },
-          {
-            id: 5,
-            username: "Juan Dela Cruz",
-            role: "Staff",
-            action: "Delete",
-            description: "Deleted discontinued product: Old Coffee Blend",
-            date: "2025-11-18T12:45:00"
-          },
-          {
-            id: 6,
-            username: "Maria Santos",
-            role: "Admin",
-            action: "Delete",
-            description: "Removed supplier: Discontinued Supplier Inc.",
-            date: "2025-11-18T13:20:00"
-          },
-          {
-            id: 7,
-            username: "Pedro Reyes",
-            role: "Staff",
-            action: "Deliver",
-            description: "Delivered 100 units of Espresso",
-            date: "2025-11-18T14:15:00"
-          },
-        ];
-        setAuditLogs(mockData);
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data: AuditLog[] = await response.json();
+        setAuditLogs(data);
         setIsLoading(false);
-      }, 500);
+      } catch (err) {
+        console.error('Error fetching audit logs:', err);
+        setIsLoading(false);
+      }
     };
 
     fetchAuditLogs();
@@ -136,6 +100,10 @@ const AuditTrailPage: React.FC = () => {
         return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
       case 'Deliver':
         return 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400';
+      case 'Login':
+        return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
+      case 'Logout':
+        return 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400';
       default:
         return 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400';
     }
@@ -244,7 +212,8 @@ const AuditTrailPage: React.FC = () => {
                     {isLoading ? (
                       <tr>
                         <td colSpan={5} className="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
-                          Loading audit logs...
+                          <div className="inline-block h-12 w-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                          <p className="text-lg font-medium">Loading audit logs...</p>
                         </td>
                       </tr>
                     ) : filteredLogs.length === 0 ? (
