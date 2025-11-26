@@ -134,45 +134,52 @@ const CashierPage: React.FC = () => {
           {/* Main Content Area */}
           <div className="flex-1 overflow-y-auto bg-gradient-to-br from-white via-stone-50 to-orange-50/20 dark:from-neutral-900 dark:via-neutral-900 dark:to-neutral-800">
             <div className="w-full px-4 sm:px-6 md:px-8 lg:px-10 py-8 sm:py-10 md:py-12">
+              {/* Floating Elements */}
+              <div className="absolute top-10 right-10 w-20 h-20 bg-gradient-to-br from-orange-400/10 to-amber-400/10 rounded-full blur-2xl animate-pulse" style={{ animationDuration: '3s' }}></div>
+              <div className="absolute bottom-20 left-10 w-32 h-32 bg-gradient-to-br from-rose-400/10 to-pink-400/10 rounded-full blur-2xl animate-pulse" style={{ animationDuration: '4s', animationDelay: '1s' }}></div>
+              
               {/* Welcome Section */}
-              <div className="mb-16 sm:mb-20">
-                <div className="relative bg-gradient-to-br from-amber-500 via-orange-600 to-rose-600 dark:from-amber-600 dark:via-orange-700 dark:to-rose-700 rounded-3xl p-10 sm:p-12 md:p-16 shadow-2xl overflow-hidden group border border-orange-400/30">
+              <div className="mb-16 sm:mb-20 relative">
+                <div className="relative bg-gradient-to-br from-amber-500 via-orange-600 to-rose-600 dark:from-amber-600 dark:via-orange-700 dark:to-rose-700 rounded-3xl p-12 sm:p-16 md:p-20 shadow-2xl overflow-hidden group border border-orange-400/30 min-h-[400px]">
                   {/* Animated Premium Background */}
                   <div className="absolute inset-0 opacity-20">
                     <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] animate-pulse"></div>
                   </div>
                   
-                  {/* Floating Particles Effect */}
+                  {/* Enhanced Floating Particles Effect */}
                   <div className="absolute inset-0 overflow-hidden">
                     <div className="absolute top-10 left-10 w-2 h-2 bg-white/40 rounded-full animate-ping"></div>
                     <div className="absolute top-20 right-20 w-3 h-3 bg-white/30 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
                     <div className="absolute bottom-10 left-1/3 w-2 h-2 bg-white/40 rounded-full animate-ping" style={{ animationDelay: '2s' }}></div>
+                    <div className="absolute top-1/2 right-1/4 w-2 h-2 bg-yellow-300/50 rounded-full animate-bounce" style={{ animationDuration: '3s' }}></div>
+                    <div className="absolute bottom-1/3 left-1/4 w-3 h-3 bg-white/30 rounded-full animate-bounce" style={{ animationDuration: '4s', animationDelay: '0.5s' }}></div>
+                    <div className="absolute top-1/3 left-2/3 w-2 h-2 bg-orange-200/40 rounded-full animate-pulse" style={{ animationDuration: '2s', animationDelay: '1s' }}></div>
                   </div>
                   
-                  <div className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-12 lg:gap-16">
+                  <div className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-14 lg:gap-20">
                     <div className="flex-1">
-                      <div className="flex items-start gap-6 mb-8">
-                        <div className="w-20 h-20 bg-white/25 backdrop-blur-md rounded-2xl flex items-center justify-center border-2 border-white/50 shadow-2xl group-hover:scale-110 group-hover:rotate-2 transition-all duration-300 flex-shrink-0">
-                          <FontAwesomeIcon icon={faCashRegister} className="text-5xl text-white drop-shadow-lg" />
+                      <div className="flex items-start gap-8 mb-10">
+                        <div className="w-28 h-28 bg-white/25 backdrop-blur-md rounded-3xl flex items-center justify-center border-2 border-white/50 shadow-2xl group-hover:scale-110 group-hover:rotate-2 transition-all duration-300 flex-shrink-0">
+                          <FontAwesomeIcon icon={faCashRegister} className="text-6xl text-white drop-shadow-lg" />
                         </div>
                         <div className="flex-1">
-                          <h2 className="text-5xl sm:text-6xl font-black text-white mb-3 tracking-tighter drop-shadow-lg leading-tight">
-                          {getGreeting()}!
-                        </h2>
-                        <div className="text-orange-50 text-sm font-bold uppercase tracking-widest flex items-center gap-2">
-                          <div className="w-2 h-2 rounded-full bg-yellow-300 flex-shrink-0"></div>
-                          <span>Cashier Portal</span>
-                        </div>
+                          <h2 className="text-6xl sm:text-7xl md:text-8xl font-black text-white mb-4 tracking-tighter drop-shadow-lg leading-tight">
+                            {getGreeting()}!
+                          </h2>
+                          <div className="text-orange-50 text-base sm:text-lg font-bold uppercase tracking-widest flex items-center gap-3">
+                            <div className="w-2.5 h-2.5 rounded-full bg-yellow-300 flex-shrink-0"></div>
+                            <span>Cashier Portal</span>
+                          </div>
                         </div>
                       </div>
-                      <p className="text-white/95 text-base sm:text-lg leading-relaxed max-w-2xl font-medium">
+                      <p className="text-white/95 text-lg sm:text-xl md:text-2xl leading-relaxed max-w-2xl font-medium">
                         Welcome to your dashboard. Ready to serve customers and process transactions efficiently.
                       </p>
                     </div>
-                    <div className="w-full lg:w-auto bg-white/20 backdrop-blur-lg rounded-2xl px-8 py-6 border-2 border-white/40 shadow-2xl group-hover:scale-110 group-hover:shadow-3xl transition-all duration-300">
-                      <p className="text-white/90 text-xs font-black uppercase tracking-widest mb-4">📅 Today's Date</p>
-                      <p className="text-white text-4xl font-black drop-shadow-lg leading-none mb-2">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
-                      <p className="text-white/95 text-lg font-bold drop-shadow-lg">{new Date().toLocaleDateString('en-US', { year: 'numeric' })}</p>
+                    <div className="w-full lg:w-auto bg-white/20 backdrop-blur-lg rounded-2xl px-10 py-8 border-2 border-white/40 shadow-2xl group-hover:scale-110 group-hover:shadow-3xl transition-all duration-300">
+                      <p className="text-white/90 text-sm font-black uppercase tracking-widest mb-5">📅 Today's Date</p>
+                      <p className="text-white text-5xl font-black drop-shadow-lg leading-none mb-3">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                      <p className="text-white/95 text-xl font-bold drop-shadow-lg">{new Date().toLocaleDateString('en-US', { year: 'numeric' })}</p>
                     </div>
                   </div>
                 </div>
@@ -241,56 +248,6 @@ const CashierPage: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-
-              {/* Quick Actions */}
-              <div className="mb-16 sm:mb-20">
-                <div className="mb-8">
-                  <h3 className="text-2xl sm:text-3xl font-black text-neutral-900 dark:text-white tracking-tight mb-1">
-                    Quick Actions
-                  </h3>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
-                    Fast access to key functions
-                  </p>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {quickActions.map((action, index) => (
-                    <button
-                      key={index}
-                      onClick={() => navigate(action.path)}
-                      className="group relative bg-white dark:bg-neutral-800 rounded-2xl p-6 transition-all duration-200 border border-neutral-200 dark:border-neutral-700 hover:border-orange-400 dark:hover:border-orange-500 overflow-hidden text-left shadow-sm hover:shadow-md"
-                    >
-                      <div className="relative z-10 flex flex-col h-full">
-                        {/* Icon Section */}
-                        <div className="mb-4">
-                          <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center shadow-md`}>
-                            <FontAwesomeIcon icon={action.icon} className="h-6 w-6 text-white" />
-                          </div>
-                        </div>
-                        
-                        {/* Content Section */}
-                        <div className="flex-1 flex flex-col justify-between">
-                          <div>
-                            <h4 className="text-lg font-black text-neutral-900 dark:text-white mb-2 leading-tight">
-                              {action.title}
-                            </h4>
-                            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-medium">
-                              {action.description}
-                            </p>
-                          </div>
-                          
-                          {/* Arrow Indicator */}
-                          <div className="mt-4 flex items-center gap-2 text-xs font-bold text-neutral-600 dark:text-neutral-400 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
-                            <span className="uppercase tracking-wider">Access</span>
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
-                    </button>
-                  ))}
                 </div>
               </div>
 
