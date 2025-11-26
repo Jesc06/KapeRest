@@ -155,7 +155,7 @@ const StaffPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen w-full relative overflow-hidden" style={{ backgroundColor: '#FEF7EB' }}>
+    <div className="min-h-screen w-full relative overflow-hidden" style={{ backgroundColor: '#FAFAFA' }}>
       {/* Animated Background Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Gradient Orbs */}

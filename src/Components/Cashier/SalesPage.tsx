@@ -114,7 +114,7 @@ const SalesPage: React.FC = () => {
   }, [selectedPeriod]);
 
   return (
-    <div className="relative min-h-screen text-neutral-800 transition-colors duration-300 dark:text-neutral-200 overflow-hidden" style={{ backgroundColor: '#FEF7EB' }}>
+    <div className="relative min-h-screen text-neutral-800 transition-colors duration-300 dark:text-neutral-200 overflow-hidden" style={{ backgroundColor: '#FAFAFA' }}>
       <TintedBackdrop />
       <div aria-hidden className="absolute inset-0 z-0 bg-stone-50/90 backdrop-blur-xl dark:bg-neutral-900/60 pointer-events-none" />
 

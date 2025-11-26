@@ -94,7 +94,7 @@ const CashierPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen w-full" style={{ backgroundColor: '#FEF7EB' }}>
+    <div className="min-h-screen w-full" style={{ backgroundColor: '#FAFAFA' }}>
       <div className="relative z-10 flex h-screen overflow-hidden">
         {/* Sidebar */}
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
@@ -132,7 +132,7 @@ const CashierPage: React.FC = () => {
           </div>
 
           {/* Main Content Area */}
-          <div className="flex-1 overflow-y-auto" style={{ backgroundColor: '#FEF7EB' }}>
+          <div className="flex-1 overflow-y-auto" style={{ backgroundColor: '#FAFAFA' }}>
             <div className="w-full px-4 sm:px-6 md:px-8 lg:px-10 py-8 sm:py-10 md:py-12">
               {/* Floating Elements */}
               <div className="absolute top-10 right-10 w-20 h-20 bg-gradient-to-br from-orange-400/10 to-amber-400/10 rounded-full blur-2xl animate-pulse" style={{ animationDuration: '3s' }}></div>
