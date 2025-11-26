@@ -114,188 +114,196 @@ const StaffAuditTrailPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950">
-      {/* Animated Background Elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-orange-200/20 to-transparent dark:from-orange-900/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-gradient-to-tl from-amber-200/20 to-transparent dark:from-amber-900/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-      </div>
+    <div className="min-h-screen w-full bg-gradient-to-br from-neutral-50 via-stone-50 to-neutral-100 dark:from-neutral-950 dark:via-neutral-900 dark:to-stone-950">
+      <div className="flex h-screen overflow-hidden">
+        <StaffSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} isExpanded={isSidebarExpanded} />
 
-      {/* Sidebar */}
-      <StaffSidebar 
-        isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
-        isExpanded={isSidebarExpanded}
-      />
+        <div className={`flex h-screen w-full flex-col transition-all duration-300 ${isSidebarExpanded ? 'lg:ml-72' : 'lg:ml-24'}`}>
+          {/* Premium Header */}
+          <div className="sticky top-0 z-20 backdrop-blur-xl bg-white/80 dark:bg-neutral-900/80 border-b border-stone-200/50 dark:border-neutral-700/50 shadow-lg shadow-black/5">
+            <div className="px-4 sm:px-6 md:px-8 py-4">
+              <div className="flex items-center justify-between gap-3 sm:gap-4">
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    className="lg:hidden flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40 transition-all duration-300 active:scale-95 hover:scale-105"
+                  >
+                    <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
+                  </button>
 
-      {/* Main Content */}
-      <div className={`transition-all duration-300 ${isSidebarExpanded ? 'lg:ml-72' : 'lg:ml-24'}`}>
-        {/* Header */}
-        <header className="sticky top-0 z-10 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md border-b border-neutral-200 dark:border-neutral-700 shadow-sm">
-          <div className="px-6 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                  className="lg:hidden p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-                >
-                  <FontAwesomeIcon icon={faBars} className="text-neutral-600 dark:text-neutral-400" />
-                </button>
-                <button
-                  onClick={toggleSidebar}
-                  className="hidden lg:block p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-                >
-                  <FontAwesomeIcon icon={faBars} className="text-neutral-600 dark:text-neutral-400" />
-                </button>
-                <div>
-                  <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
-                    Audit Trail
-                  </h1>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-0.5">
-                    System Activity Monitor
-                  </p>
+                  <button
+                    onClick={toggleSidebar}
+                    className="hidden lg:flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-800 hover:from-orange-100 hover:to-orange-200 dark:hover:from-orange-900/40 dark:hover:to-orange-800/40 text-neutral-700 dark:text-neutral-300 hover:text-orange-600 dark:hover:text-orange-400 border border-stone-300 dark:border-neutral-600 shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 hover:scale-105"
+                  >
+                    <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
+                  </button>
+
+                  <div className="hidden sm:flex items-center gap-3">
+                    <div>
+                      <h1 className="text-xl font-black text-neutral-900 dark:text-white tracking-tight">Audit Trail</h1>
+                      <p className="text-xs font-medium text-neutral-600 dark:text-neutral-400">Activity logs</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center gap-3">
+
+                <div className="flex-1 max-w-xl">
+                  <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-amber-500/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="relative flex items-center gap-3 bg-white dark:bg-neutral-800 rounded-xl border-2 border-stone-200 dark:border-neutral-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
+                      <FontAwesomeIcon icon={faSearch} className="h-5 w-5 text-neutral-400 dark:text-neutral-500 group-focus-within:text-orange-500 transition-colors" />
+                      <input
+                        type="text"
+                        placeholder="Search logs..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="flex-1 bg-transparent text-sm font-medium text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none"
+                      />
+                      {searchTerm && (
+                        <span className="text-xs font-bold text-orange-600 dark:text-orange-400 px-2 py-1 rounded-md bg-orange-100 dark:bg-orange-900/30">
+                          {filteredLogs.length} found
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
                 <LogoutPanel />
               </div>
-            </div>
-          </div>
-        </header>
 
-        {/* Content */}
-        <main className="p-6 relative z-0">
-          {/* Filters */}
-          <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-lg p-6 mb-8 border border-orange-100 dark:border-orange-900/20">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Search */}
-              <div className="relative">
-                <FontAwesomeIcon 
-                  icon={faSearch} 
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
-                />
-                <input
-                  type="text"
-                  placeholder="Search username or description..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-neutral-50 dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition-all"
-                />
-              </div>
-
-              {/* Action Filter */}
-              <div className="relative">
-                <FontAwesomeIcon 
-                  icon={faBolt} 
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
-                />
-                <select
-                  value={selectedAction}
-                  onChange={(e) => setSelectedAction(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-neutral-50 dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition-all appearance-none cursor-pointer"
-                >
-                  <option value="all">All Actions</option>
-                  <option value="Add">Add</option>
-                  <option value="Delete">Delete</option>
-                  <option value="Deliver">Deliver</option>
-                  <option value="Login">Login</option>
-                  <option value="Logout">Logout</option>
-                </select>
+              {/* Filter Section */}
+              <div className="flex items-center gap-3 flex-wrap mt-4">
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-stone-100 to-stone-200 dark:from-neutral-800 dark:to-neutral-700 border border-stone-300 dark:border-neutral-600">
+                  <div className="h-2 w-2 rounded-full bg-orange-600 animate-pulse"></div>
+                  <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Action</span>
+                </div>
+                
+                <div className="flex gap-2">
+                  {['all', 'Add', 'Delete', 'Deliver', 'Login', 'Logout'].map((filter) => (
+                    <button
+                      key={filter}
+                      onClick={() => setSelectedAction(filter)}
+                      className={`group relative flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-all duration-300 overflow-hidden ${
+                        selectedAction === filter
+                          ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/40 scale-105'
+                          : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-orange-300 dark:hover:border-orange-700 hover:scale-105 active:scale-95'
+                      }`}
+                    >
+                      {selectedAction === filter && (
+                        <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent animate-pulse"></div>
+                      )}
+                      <span className="relative z-10 capitalize">{filter}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Audit Logs Table */}
-          <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-lg overflow-hidden border border-orange-100 dark:border-orange-900/20">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20 border-b border-neutral-200 dark:border-neutral-700">
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
-                      Date & Time
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
-                      Username
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
-                      Role
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
-                      Action
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
-                      Description
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-neutral-200 dark:divide-neutral-700">
-                  {isLoading ? (
-                    <tr>
-                      <td colSpan={5} className="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
-                        <div className="inline-block h-12 w-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                        <p className="text-lg font-medium">Loading audit logs...</p>
-                      </td>
-                    </tr>
-                  ) : filteredLogs.length === 0 ? (
-                    <tr>
-                      <td colSpan={5} className="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
-                        <FontAwesomeIcon icon={faClipboardList} className="text-4xl mb-3 opacity-50" />
-                        <p className="text-lg font-medium">No audit logs found</p>
-                        <p className="text-sm mt-1">Try adjusting your filters</p>
-                      </td>
-                    </tr>
-                  ) : (
-                    filteredLogs.map((log) => {
-                      const { date, time } = formatDateTime(log.date);
-                      return (
-                        <tr 
-                          key={log.id}
-                          className="hover:bg-orange-50/50 dark:hover:bg-orange-950/10 transition-colors"
-                        >
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex flex-col">
-                              <div className="flex items-center gap-2 text-sm font-medium text-neutral-900 dark:text-neutral-100">
-                                <FontAwesomeIcon icon={faCalendarAlt} className="text-xs text-orange-500" />
-                                {date}
-                              </div>
-                              <div className="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                                <FontAwesomeIcon icon={faClock} className="text-xs" />
-                                {time}
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center gap-2">
-                              <FontAwesomeIcon icon={faUser} className="text-orange-500" />
-                              <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
-                                {log.username}
-                              </span>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="text-sm text-neutral-700 dark:text-neutral-300">
-                              {log.role}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getActionBadgeColor(log.action)}`}>
-                              {log.action}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4">
-                            <span className="text-sm text-neutral-600 dark:text-neutral-400">
-                              {log.description || '-'}
-                            </span>
+          {/* Main Content */}
+          <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+            <div className="flex-1 flex flex-col gap-6 px-4 sm:px-6 md:px-8 py-6 overflow-auto">
+
+              {/* Table Section */}
+              <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-white dark:bg-neutral-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-neutral-700">
+                <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-white via-orange-50/30 to-white dark:from-neutral-800 dark:via-orange-950/20 dark:to-neutral-800">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-orange-500 to-orange-600"></div>
+                  
+                  <div className="px-6 sm:px-8 py-6">
+                    <div className="flex items-center justify-between flex-wrap gap-4">
+                      <div className="flex items-center gap-4">
+                        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/30">
+                          <FontAwesomeIcon icon={faClipboardList} className="h-7 w-7 text-white" />
+                        </div>
+                        <div>
+                          <h3 className="text-2xl font-black text-neutral-900 dark:text-white tracking-tight">Activity Logs</h3>
+                          <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mt-0.5">System audit trail</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto flex-1">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b-2 border-orange-200/60 dark:border-neutral-800 bg-gradient-to-r from-orange-50 via-amber-50 to-orange-50 dark:from-neutral-800/50 dark:via-neutral-700/50 dark:to-neutral-800/50">
+                        <th className="px-6 py-4 text-left text-xs font-black text-orange-700 dark:text-orange-400 uppercase tracking-wider">Date & Time</th>
+                        <th className="px-6 py-4 text-left text-xs font-black text-orange-700 dark:text-orange-400 uppercase tracking-wider">Username</th>
+                        <th className="px-6 py-4 text-left text-xs font-black text-orange-700 dark:text-orange-400 uppercase tracking-wider">Role</th>
+                        <th className="px-6 py-4 text-left text-xs font-black text-orange-700 dark:text-orange-400 uppercase tracking-wider">Action</th>
+                        <th className="px-6 py-4 text-left text-xs font-black text-orange-700 dark:text-orange-400 uppercase tracking-wider">Description</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-orange-100/50 dark:divide-neutral-800/50">
+                      {isLoading ? (
+                        <tr>
+                          <td colSpan={5} className="px-6 py-20 text-center">
+                            <div className="inline-block h-12 w-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                            <p className="text-neutral-600 dark:text-neutral-400 font-medium">Loading audit logs...</p>
                           </td>
                         </tr>
-                      );
-                    })
-                  )}
-                </tbody>
-              </table>
+                      ) : filteredLogs.length === 0 ? (
+                        <tr>
+                          <td colSpan={5} className="px-6 py-20 text-center">
+                            <FontAwesomeIcon icon={faClipboardList} className="h-16 w-16 text-neutral-300 dark:text-neutral-700 mb-4" />
+                            <p className="text-neutral-600 dark:text-neutral-400 text-lg font-bold">No audit logs found</p>
+                            <p className="text-neutral-500 dark:text-neutral-500 text-sm mt-2">Try adjusting your filters</p>
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredLogs.map((log) => {
+                          const { date, time } = formatDateTime(log.date);
+                          return (
+                            <tr 
+                              key={log.id}
+                              className="hover:bg-gradient-to-r hover:from-orange-50/50 hover:via-amber-50/30 hover:to-orange-50/50 dark:hover:from-neutral-800/40 dark:hover:via-neutral-700/30 dark:hover:to-neutral-800/40 transition-all duration-300"
+                            >
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="flex flex-col">
+                                  <div className="flex items-center gap-2 text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                                    <FontAwesomeIcon icon={faCalendarAlt} className="text-xs text-orange-500" />
+                                    {date}
+                                  </div>
+                                  <div className="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                                    <FontAwesomeIcon icon={faClock} className="text-xs" />
+                                    {time}
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="flex items-center gap-2">
+                                  <FontAwesomeIcon icon={faUser} className="text-orange-500" />
+                                  <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                                    {log.username}
+                                  </span>
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <span className="text-sm text-neutral-700 dark:text-neutral-300">
+                                  {log.role}
+                                </span>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getActionBadgeColor(log.action)}`}>
+                                  {log.action}
+                                </span>
+                              </td>
+                              <td className="px-6 py-4">
+                                <span className="text-sm text-neutral-600 dark:text-neutral-400">
+                                  {log.description || '-'}
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
-        </main>
+        </div>
       </div>
     </div>
   );
