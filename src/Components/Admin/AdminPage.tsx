@@ -120,9 +120,7 @@ const AdminPage: React.FC = () => {
       change: '+12.5%',
       isIncrease: true,
       icon: faUsers,
-      color: 'from-purple-500 to-indigo-600',
-      bgColor: 'from-purple-50 to-indigo-50 dark:from-purple-950/20 dark:to-indigo-950/20',
-      borderColor: 'border-purple-200 dark:border-purple-800'
+      color: 'from-violet-500 via-purple-600 to-fuchsia-600'
     },
     {
       title: 'Active Branches',
@@ -130,19 +128,7 @@ const AdminPage: React.FC = () => {
       change: '+2',
       isIncrease: true,
       icon: faBuilding,
-      color: 'from-blue-500 to-cyan-600',
-      bgColor: 'from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20',
-      borderColor: 'border-blue-200 dark:border-blue-800'
-    },
-    {
-      title: 'Inventory Items',
-      value: '1,245',
-      change: '-3.2%',
-      isIncrease: false,
-      icon: faBoxes,
-      color: 'from-orange-500 to-amber-600',
-      bgColor: 'from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20',
-      borderColor: 'border-orange-200 dark:border-orange-800'
+      color: 'from-blue-500 via-indigo-600 to-blue-600'
     },
     {
       title: 'Total Revenue',
@@ -150,9 +136,7 @@ const AdminPage: React.FC = () => {
       change: '+18.7%',
       isIncrease: true,
       icon: faChartLine,
-      color: 'from-emerald-500 to-teal-600',
-      bgColor: 'from-emerald-50 to-teal-50 dark:from-emerald-950/20 dark:to-teal-950/20',
-      borderColor: 'border-emerald-200 dark:border-emerald-800'
+      color: 'from-emerald-500 via-teal-600 to-emerald-600'
     }
   ];
 
@@ -207,57 +191,56 @@ const AdminPage: React.FC = () => {
           {/* Main Content */}
           <main className="flex-1 flex flex-col min-h-0 overflow-hidden">
             <div className="flex-1 flex flex-col gap-8 px-6 sm:px-8 lg:px-10 py-8 sm:py-10 md:py-12 overflow-auto bg-gradient-to-br from-white via-stone-50 to-orange-50/20 dark:from-neutral-900 dark:via-neutral-900 dark:to-neutral-800">
+              {/* Floating Elements */}
+              <div className="absolute top-10 right-10 w-20 h-20 bg-gradient-to-br from-orange-400/10 to-amber-400/10 rounded-full blur-2xl animate-pulse" style={{ animationDuration: '3s' }}></div>
+              <div className="absolute bottom-20 left-10 w-32 h-32 bg-gradient-to-br from-rose-400/10 to-pink-400/10 rounded-full blur-2xl animate-pulse" style={{ animationDuration: '4s', animationDelay: '1s' }}></div>
+              
               {/* Welcome Section */}
-              <section className="mb-16 sm:mb-20">
-                <div className="relative bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 dark:from-orange-600 dark:via-orange-700 dark:to-amber-700 rounded-3xl p-10 sm:p-12 md:p-16 shadow-2xl shadow-orange-500/30 overflow-hidden group border border-orange-300/20">
+              <div className="mb-16 sm:mb-20 relative">
+                <div className="relative bg-gradient-to-br from-amber-500 via-orange-600 to-rose-600 dark:from-amber-600 dark:via-orange-700 dark:to-rose-700 rounded-3xl p-12 sm:p-16 md:p-20 shadow-2xl overflow-hidden group border border-orange-400/30 min-h-[400px]">
                   {/* Animated Premium Background */}
-                  <div className="absolute inset-0 opacity-10">
+                  <div className="absolute inset-0 opacity-20">
                     <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] animate-pulse"></div>
                   </div>
                   
-                  {/* Premium Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/10 group-hover:via-white/10 transition-all duration-700"></div>
-                  
-                  {/* Floating Particles Effect */}
-                  <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                    <div className="absolute top-10 left-10 w-2 h-2 bg-white/50 rounded-full animate-ping"></div>
-                    <div className="absolute top-20 right-20 w-3 h-3 bg-white/40 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
-                    <div className="absolute bottom-10 left-1/3 w-2 h-2 bg-white/50 rounded-full animate-ping" style={{ animationDelay: '2s' }}></div>
-                    <div className="absolute bottom-20 right-1/4 w-2.5 h-2.5 bg-white/45 rounded-full animate-ping" style={{ animationDelay: '1.5s' }}></div>
-                    <div className="absolute top-1/2 left-1/4 w-2 h-2 bg-white/40 rounded-full animate-ping" style={{ animationDelay: '0.5s' }}></div>
+                  {/* Enhanced Floating Particles Effect */}
+                  <div className="absolute inset-0 overflow-hidden">
+                    <div className="absolute top-10 left-10 w-2 h-2 bg-white/40 rounded-full animate-ping"></div>
+                    <div className="absolute top-20 right-20 w-3 h-3 bg-white/30 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
+                    <div className="absolute bottom-10 left-1/3 w-2 h-2 bg-white/40 rounded-full animate-ping" style={{ animationDelay: '2s' }}></div>
+                    <div className="absolute top-1/2 right-1/4 w-2 h-2 bg-yellow-300/50 rounded-full animate-bounce" style={{ animationDuration: '3s' }}></div>
+                    <div className="absolute bottom-1/3 left-1/4 w-3 h-3 bg-white/30 rounded-full animate-bounce" style={{ animationDuration: '4s', animationDelay: '0.5s' }}></div>
+                    <div className="absolute top-1/3 left-2/3 w-2 h-2 bg-orange-200/40 rounded-full animate-pulse" style={{ animationDuration: '2s', animationDelay: '1s' }}></div>
                   </div>
                   
-                  <div className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10 lg:gap-12">
-                    <div className="flex-1 space-y-8">
-                      <div className="flex items-start gap-5 sm:gap-6">
-                        <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center border-2 border-white/60 shadow-2xl shadow-black/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 flex-shrink-0">
-                          <FontAwesomeIcon icon={faShieldAlt} className="text-4xl sm:text-5xl text-white drop-shadow-2xl" />
+                  <div className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-14 lg:gap-20">
+                    <div className="flex-1">
+                      <div className="flex items-start gap-8 mb-10">
+                        <div className="w-28 h-28 bg-white/25 backdrop-blur-md rounded-3xl flex items-center justify-center border-2 border-white/50 shadow-2xl group-hover:scale-110 group-hover:rotate-2 transition-all duration-300 flex-shrink-0">
+                          <FontAwesomeIcon icon={faShieldAlt} className="text-6xl text-white drop-shadow-lg" />
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-3 tracking-tighter drop-shadow-2xl leading-tight">
+                        <div className="flex-1">
+                          <h2 className="text-6xl sm:text-7xl md:text-8xl font-black text-white mb-4 tracking-tighter drop-shadow-lg leading-tight">
                             {getGreeting()}!
                           </h2>
-                          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/25 backdrop-blur-md border border-white/40 shadow-lg">
-                            <div className="w-2 h-2 rounded-full bg-yellow-300 animate-pulse flex-shrink-0 shadow-lg shadow-yellow-300/50"></div>
-                            <span className="text-white text-xs sm:text-sm font-bold uppercase tracking-wider">Administrator Portal</span>
+                          <div className="text-orange-50 text-base sm:text-lg font-bold uppercase tracking-widest flex items-center gap-3">
+                            <div className="w-2.5 h-2.5 rounded-full bg-yellow-300 flex-shrink-0"></div>
+                            <span>Administrator Portal</span>
                           </div>
                         </div>
                       </div>
-                      <p className="text-white text-base sm:text-lg leading-relaxed font-medium max-w-2xl drop-shadow-lg">
+                      <p className="text-white/95 text-lg sm:text-xl md:text-2xl leading-relaxed max-w-2xl font-medium">
                         Welcome to your comprehensive control center. Manage all aspects of your business operations with full administrative privileges.
                       </p>
                     </div>
-                    <div className="w-full lg:w-auto shrink-0 bg-white/25 backdrop-blur-xl rounded-2xl px-6 sm:px-8 py-5 sm:py-6 border-2 border-white/50 shadow-2xl shadow-black/20 group-hover:scale-105 group-hover:shadow-3xl transition-all duration-500">
-                      <p className="text-white text-xs font-black uppercase tracking-widest mb-3 sm:mb-4 flex items-center gap-2">
-                        <span>📅</span>
-                        <span>Today's Date</span>
-                      </p>
-                      <p className="text-white text-3xl sm:text-4xl font-black drop-shadow-2xl leading-none mb-1.5 sm:mb-2">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
-                      <p className="text-white text-base sm:text-lg font-bold drop-shadow-lg">{new Date().toLocaleDateString('en-US', { year: 'numeric' })}</p>
+                    <div className="w-full lg:w-auto bg-white/20 backdrop-blur-lg rounded-2xl px-10 py-8 border-2 border-white/40 shadow-2xl group-hover:scale-110 group-hover:shadow-3xl transition-all duration-300">
+                      <p className="text-white/90 text-sm font-black uppercase tracking-widest mb-5">📅 Today's Date</p>
+                      <p className="text-white text-5xl font-black drop-shadow-lg leading-none mb-3">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                      <p className="text-white/95 text-xl font-bold drop-shadow-lg">{new Date().toLocaleDateString('en-US', { year: 'numeric' })}</p>
                     </div>
                   </div>
                 </div>
-              </section>
+              </div>
 
               {/* Performance Metrics Section */}
               <section className="mb-16 sm:mb-20">
@@ -270,7 +253,7 @@ const AdminPage: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
                   {statsCards.map((stat, index) => (
                     <div
                       key={index}
@@ -306,64 +289,6 @@ const AdminPage: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </section>
-
-              {/* Quick Actions Section */}
-              <section className="mb-16 sm:mb-20">
-                <div className="mb-8">
-                  <h3 className="text-2xl sm:text-3xl font-black text-neutral-900 dark:text-white tracking-tight mb-2">
-                    Quick Actions
-                  </h3>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
-                    Fast access to key management functions
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-                  {quickActions.map((action, index) => (
-                    <button
-                      key={index}
-                      onClick={() => navigate(action.path)}
-                      className="group relative bg-white dark:bg-neutral-800 rounded-2xl p-6 transition-all duration-500 border-2 border-stone-200 dark:border-neutral-700 hover:border-orange-400 hover:shadow-2xl hover:shadow-orange-500/10 overflow-hidden transform hover:-translate-y-2 hover:scale-[1.03] text-left"
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-br from-orange-50 via-amber-50/50 to-orange-50 dark:from-orange-950/10 dark:via-amber-950/10 dark:to-orange-950/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                      
-                      {/* Shimmer Effect */}
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-orange-200/20 dark:via-orange-500/10 to-transparent skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
-                      </div>
-
-                      <div className="relative z-10 flex flex-col h-full min-h-[180px]">
-                        {/* Icon Section */}
-                        <div className="mb-5">
-                          <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center shadow-xl shadow-black/10 group-hover:shadow-2xl group-hover:shadow-black/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 border border-white/20`}>
-                            <FontAwesomeIcon icon={action.icon} className="h-6 w-6 text-white drop-shadow-lg" />
-                          </div>
-                        </div>
-
-                        {/* Content Section */}
-                        <div className="flex-1 flex flex-col justify-between">
-                          <div className="space-y-2">
-                            <h4 className="text-xl font-black text-neutral-900 dark:text-white leading-tight group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">
-                              {action.title}
-                            </h4>
-                            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-medium">
-                              {action.description}
-                            </p>
-                          </div>
-
-                          {/* Arrow Indicator */}
-                          <div className="mt-5 flex items-center gap-2 text-xs font-black text-orange-600 dark:text-orange-400 group-hover:gap-3 transition-all duration-300">
-                            <span className="uppercase tracking-wider">Access Now</span>
-                            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
-                    </button>
                   ))}
                 </div>
               </section>
@@ -615,38 +540,114 @@ const AdminPage: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Premium Bar Chart */}
+                  {/* Line Graph */}
                   <div>
                     <h5 className="text-lg font-black text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-6 flex items-center gap-2">
                       <div className="w-1 h-5 bg-gradient-to-b from-orange-400 to-amber-500 rounded-full"></div>
-                      Daily Performance
+                      Sales Trend
                     </h5>
-                    <div className="space-y-4">
-                      {salesData.map((data, index) => {
-                        const percentage = (data.sales / maxSales) * 100;
-                        const isToday = index === salesData.length - 1;
-
-                        return (
-                          <div key={data.day} className="flex items-center gap-4 group">
-                            <span className={`text-sm font-black min-w-[50px] ${isToday ? 'text-orange-600 dark:text-orange-400' : 'text-neutral-700 dark:text-neutral-300'}`}>
+                    <div className="relative h-80 bg-gradient-to-br from-neutral-50 to-orange-50/30 dark:from-neutral-900 dark:to-orange-950/20 rounded-2xl p-8 border-2 border-neutral-200 dark:border-neutral-700">
+                      {/* Y-axis labels */}
+                      <div className="absolute left-2 top-8 bottom-12 flex flex-col justify-between text-xs font-bold text-neutral-500 dark:text-neutral-400">
+                        <span>₱{maxSales.toLocaleString()}</span>
+                        <span>₱{(maxSales * 0.75).toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
+                        <span>₱{(maxSales * 0.5).toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
+                        <span>₱{(maxSales * 0.25).toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
+                        <span>₱0</span>
+                      </div>
+                      
+                      {/* Graph area */}
+                      <div className="ml-16 h-full flex items-end justify-between gap-1 relative">
+                        {/* Grid lines */}
+                        <div className="absolute inset-0 flex flex-col justify-between">
+                          {[0, 1, 2, 3, 4].map((i) => (
+                            <div key={i} className="w-full border-t border-neutral-300/50 dark:border-neutral-600/50"></div>
+                          ))}
+                        </div>
+                        
+                        {/* SVG Line Graph */}
+                        <svg className="absolute inset-0 w-full h-full" style={{ overflow: 'visible' }}>
+                          <defs>
+                            <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                              <stop offset="0%" stopColor="#f97316" />
+                              <stop offset="50%" stopColor="#fb923c" />
+                              <stop offset="100%" stopColor="#fbbf24" />
+                            </linearGradient>
+                            <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                              <stop offset="0%" stopColor="#f97316" stopOpacity="0.3" />
+                              <stop offset="100%" stopColor="#f97316" stopOpacity="0" />
+                            </linearGradient>
+                          </defs>
+                          
+                          {/* Area under the line */}
+                          <path
+                            d={`M 0,${(1 - salesData[0].sales / maxSales) * 100}% ${salesData.map((data, i) => {
+                              const x = (i / (salesData.length - 1)) * 100;
+                              const y = (1 - data.sales / maxSales) * 100;
+                              return `L ${x}%,${y}%`;
+                            }).join(' ')} L 100%,100% L 0,100% Z`}
+                            fill="url(#areaGradient)"
+                          />
+                          
+                          {/* Line */}
+                          <path
+                            d={`M 0,${(1 - salesData[0].sales / maxSales) * 100}% ${salesData.map((data, i) => {
+                              const x = (i / (salesData.length - 1)) * 100;
+                              const y = (1 - data.sales / maxSales) * 100;
+                              return `L ${x}%,${y}%`;
+                            }).join(' ')}`}
+                            fill="none"
+                            stroke="url(#lineGradient)"
+                            strokeWidth="4"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="drop-shadow-lg"
+                          />
+                          
+                          {/* Data points */}
+                          {salesData.map((data, i) => {
+                            const x = (i / (salesData.length - 1)) * 100;
+                            const y = (1 - data.sales / maxSales) * 100;
+                            const isToday = i === salesData.length - 1;
+                            
+                            return (
+                              <g key={i}>
+                                <circle
+                                  cx={`${x}%`}
+                                  cy={`${y}%`}
+                                  r={isToday ? "8" : "6"}
+                                  fill="white"
+                                  stroke={isToday ? "#f97316" : "#fb923c"}
+                                  strokeWidth="3"
+                                  className="drop-shadow-xl"
+                                />
+                                {isToday && (
+                                  <circle
+                                    cx={`${x}%`}
+                                    cy={`${y}%`}
+                                    r="8"
+                                    fill="#f97316"
+                                    opacity="0.3"
+                                    className="animate-ping"
+                                  />
+                                )}
+                              </g>
+                            );
+                          })}
+                        </svg>
+                      </div>
+                      
+                      {/* X-axis labels */}
+                      <div className="ml-16 mt-4 flex justify-between text-sm font-black text-neutral-700 dark:text-neutral-300">
+                        {salesData.map((data, i) => {
+                          const isToday = i === salesData.length - 1;
+                          return (
+                            <span key={i} className={isToday ? 'text-orange-600 dark:text-orange-400' : ''}>
                               {data.day}
                             </span>
-                            <div className="flex-1 h-8 bg-neutral-100 dark:bg-neutral-700 rounded-xl overflow-hidden shadow-inner border border-neutral-200 dark:border-neutral-600">
-                              <div
-                                className={`h-full rounded-xl transition-all duration-700 ease-out relative ${
-                                  isToday
-                                    ? 'bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 shadow-lg border-2 border-orange-400/50'
-                                    : 'bg-gradient-to-r from-emerald-400 to-teal-500 group-hover:from-emerald-500 group-hover:to-teal-600'
-                                }`}
-                                style={{ width: `${percentage}%` }}
-                              ></div>
-                            </div>
-                            <span className={`text-base font-black tabular-nums ${isToday ? 'text-orange-600 dark:text-orange-400' : 'text-neutral-900 dark:text-white'} drop-shadow-sm`}>
-                              ₱{data.sales.toLocaleString()}
-                            </span>
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
 
