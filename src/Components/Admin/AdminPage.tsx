@@ -155,7 +155,7 @@ const AdminPage: React.FC = () => {
       <div className="relative z-10 flex h-screen overflow-hidden">
         <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
 
-        <div className={`flex h-screen w-full flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
+        <div className={`flex h-screen flex-1 flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
           {/* Minimal Clean Header */}
           <div className="sticky top-0 z-20 border-b border-stone-200 dark:border-neutral-700 bg-white/95 dark:bg-neutral-800/95 backdrop-blur-sm">
             <div className="px-4 sm:px-5 md:px-6 py-2.5 sm:py-3">

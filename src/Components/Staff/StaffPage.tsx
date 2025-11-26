@@ -193,7 +193,7 @@ const StaffPage: React.FC = () => {
         <StaffSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
 
         {/* Main Content */}
-        <div className={`flex h-screen w-full flex-col bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
+        <div className={`flex h-screen flex-1 flex-col bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
           {/* Top Bar - Minimal Header */}
           <div className="sticky top-0 z-20 border-b border-orange-200/50 dark:border-neutral-700/50 bg-white/90 dark:bg-neutral-800/90 px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 transition-all duration-300 backdrop-blur-xl shadow-sm shadow-orange-500/5">
             <div className="flex items-center justify-between gap-3">

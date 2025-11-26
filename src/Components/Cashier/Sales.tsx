@@ -87,7 +87,7 @@ const Sales: React.FC<SalesProps> = ({
   return (
     <>
       {/* Main Content */}
-      <div className={`flex h-screen w-full flex-col bg-gradient-to-br from-neutral-50 via-white to-orange-50/20 dark:bg-gradient-to-br dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-900 transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
+      <div className={`flex h-screen flex-1 flex-col bg-gradient-to-br from-neutral-50 via-white to-orange-50/20 dark:bg-gradient-to-br dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-900 transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
         
         {/* Premium Top Bar with Glass Effect */}
         <div className="sticky top-0 z-20 backdrop-blur-xl bg-white/80 dark:bg-neutral-900/80 border-b border-stone-200/50 dark:border-neutral-700/50 shadow-lg shadow-black/5 transition-all duration-300">
