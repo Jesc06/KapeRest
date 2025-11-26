@@ -299,117 +299,141 @@ const StocksList: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-orange-50 via-white to-amber-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950">
-      {/* Animated Background Elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 -right-40 w-96 h-96 bg-orange-200/20 dark:bg-orange-500/5 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-amber-200/20 dark:bg-amber-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-      </div>
-
-      <div className="relative z-10 flex h-screen overflow-hidden">
+    <div className="min-h-screen w-full bg-gradient-to-br from-neutral-50 via-stone-50 to-neutral-100 dark:from-neutral-950 dark:via-neutral-900 dark:to-stone-950">
+      <div className="flex h-screen overflow-hidden">
         <StaffSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
 
         <div className={`flex h-screen w-full flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-72' : 'lg:ml-24'}`}>
-          {/* Header */}
-          <div className="sticky top-0 z-20 border-b border-orange-100/50 dark:border-neutral-800/50 bg-white/80 dark:bg-neutral-900/80 px-4 sm:px-6 md:px-8 py-3.5 sm:py-4 shadow-sm backdrop-blur-xl">
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-                <button
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className="lg:hidden flex-shrink-0 h-10 w-10 flex items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white transition-all duration-200 active:scale-95 shadow-lg shadow-orange-500/25"
-                >
-                  <FontAwesomeIcon icon={faBars} className="h-4 w-4" />
-                </button>
+          {/* Premium Header */}
+          <div className="sticky top-0 z-20 backdrop-blur-xl bg-white/80 dark:bg-neutral-900/80 border-b border-stone-200/50 dark:border-neutral-700/50 shadow-lg shadow-black/5">
+            <div className="px-4 sm:px-6 md:px-8 py-4">
+              <div className="flex items-center justify-between gap-3 sm:gap-4">
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setSidebarOpen(!sidebarOpen)}
+                    className="lg:hidden flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40 transition-all duration-300 active:scale-95 hover:scale-105"
+                  >
+                    <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
+                  </button>
 
-                <button
-                  onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                  className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white transition-all duration-200 active:scale-95 shadow-lg shadow-orange-500/25"
-                >
-                  <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
-                </button>
+                  <button
+                    onClick={() => setSidebarExpanded(!sidebarExpanded)}
+                    className="hidden lg:flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-800 hover:from-orange-100 hover:to-orange-200 dark:hover:from-orange-900/40 dark:hover:to-orange-800/40 text-neutral-700 dark:text-neutral-300 hover:text-orange-600 dark:hover:text-orange-400 border border-stone-300 dark:border-neutral-600 shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 hover:scale-105"
+                  >
+                    <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
+                  </button>
 
-                <h1 className="text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-400 dark:to-orange-300 bg-clip-text text-transparent truncate">Stocks Inventory</h1>
+                  <div className="hidden sm:flex items-center gap-3">
+                    <div>
+                      <h1 className="text-xl font-black text-neutral-900 dark:text-white tracking-tight">Stocks Inventory</h1>
+                      <p className="text-xs font-medium text-neutral-600 dark:text-neutral-400">Manage stock levels</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex-1 max-w-xl">
+                  <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-amber-500/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="relative flex items-center gap-3 bg-white dark:bg-neutral-800 rounded-xl border-2 border-stone-200 dark:border-neutral-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
+                      <FontAwesomeIcon icon={faSearch} className="h-5 w-5 text-neutral-400 dark:text-neutral-500 group-focus-within:text-orange-500 transition-colors" />
+                      <input
+                        type="text"
+                        placeholder="Search stocks..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="flex-1 bg-transparent text-sm font-medium text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none"
+                      />
+                      {searchTerm && (
+                        <span className="text-xs font-bold text-orange-600 dark:text-orange-400 px-2 py-1 rounded-md bg-orange-100 dark:bg-orange-900/30">
+                          {filteredStocks.length} found
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <LogoutPanel />
               </div>
 
-              <LogoutPanel />
+              {/* Filter Section */}
+              <div className="flex items-center gap-3 flex-wrap mt-4">
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-stone-100 to-stone-200 dark:from-neutral-800 dark:to-neutral-700 border border-stone-300 dark:border-neutral-600">
+                  <div className="h-2 w-2 rounded-full bg-orange-600 animate-pulse"></div>
+                  <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Filter</span>
+                </div>
+                
+                <div className="flex gap-2">
+                  {['all', 'product', 'supplier'].map((filter) => (
+                    <button
+                      key={filter}
+                      onClick={() => setFilterCategory(filter as 'all' | 'product' | 'supplier')}
+                      className={`group relative flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-all duration-300 overflow-hidden ${
+                        filterCategory === filter
+                          ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/40 scale-105'
+                          : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-orange-300 dark:hover:border-orange-700 hover:scale-105 active:scale-95'
+                      }`}
+                    >
+                      {filterCategory === filter && (
+                        <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent animate-pulse"></div>
+                      )}
+                      <span className="relative z-10 capitalize">{filter}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 overflow-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8">
-            <div className="w-full">
-              {/* Header Section */}
-              <div className="mb-6">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/25">
-                    <FontAwesomeIcon icon={faBox} className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300 bg-clip-text text-transparent">Stocks List</h2>
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">Manage your inventory and stock levels</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Search and Filter Section */}
-              <div className="mb-6">
-                <div className="flex flex-col sm:flex-row gap-3">
-                  {/* Search Input */}
-                  <div className="flex-1 relative">
-                    <FontAwesomeIcon icon={faSearch} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-neutral-500 text-sm" />
-                    <input
-                      type="text"
-                      placeholder="Search stocks..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-lg text-sm text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:border-orange-500 transition-colors duration-200"
-                    />
-                  </div>
-
-                  {/* Filter Dropdown */}
-                  <div className="relative sm:w-48">
-                    <FontAwesomeIcon icon={faFilter} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-neutral-500 pointer-events-none z-10 text-sm" />
-                    <select
-                      value={filterCategory}
-                      onChange={(e) => setFilterCategory(e.target.value as 'all' | 'product' | 'supplier')}
-                      className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-lg text-sm text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 transition-colors duration-200 appearance-none cursor-pointer"
-                    >
-                      <option value="all">All Categories</option>
-                      <option value="product">Product Name</option>
-                      <option value="supplier">Supplier Name</option>
-                    </select>
-                  </div>
-
-                  {/* Add Button */}
-                  <button
-                    onClick={() => navigate('/staff/add-stocks')}
-                    className="flex items-center justify-center gap-2 px-5 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-medium rounded-lg transition-colors duration-200"
-                  >
-                    <FontAwesomeIcon icon={faPlus} className="h-3.5 w-3.5" />
-                    <span className="hidden sm:inline text-sm">Add Stock</span>
-                  </button>
-                </div>
-              </div>
+          <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+            <div className="flex-1 flex flex-col gap-6 px-4 sm:px-6 md:px-8 py-6 overflow-auto">
 
               {/* Table Section */}
-              <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 overflow-hidden">
-                {isLoading ? (
-                  <div className="flex items-center justify-center py-20">
-                    <div className="text-center">
-                      <div className="inline-block h-12 w-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                      <p className="text-neutral-600 dark:text-neutral-400">Loading stocks...</p>
+              <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-white dark:bg-neutral-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-neutral-700">
+                <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-white via-orange-50/30 to-white dark:from-neutral-800 dark:via-orange-950/20 dark:to-neutral-800">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-orange-500 to-orange-600"></div>
+                  
+                  <div className="px-6 sm:px-8 py-6">
+                    <div className="flex items-center justify-between flex-wrap gap-4">
+                      <div className="flex items-center gap-4">
+                        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/30">
+                          <FontAwesomeIcon icon={faBox} className="h-7 w-7 text-white" />
+                        </div>
+                        <div>
+                          <h3 className="text-2xl font-black text-neutral-900 dark:text-white tracking-tight">Stocks Catalog</h3>
+                          <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mt-0.5">Complete inventory list</p>
+                        </div>
+                      </div>
+                      
+                      <button
+                        onClick={() => navigate('/staff/add-stocks')}
+                        className="relative flex items-center gap-2.5 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl transition-all duration-300 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:scale-105 active:scale-95 overflow-hidden group"
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent"></div>
+                        <FontAwesomeIcon icon={faPlus} className="relative h-4 w-4" />
+                        <span className="relative text-sm">Add Stock</span>
+                      </button>
                     </div>
                   </div>
-                ) : filteredStocks.length === 0 ? (
-                  <div className="flex items-center justify-center py-20">
-                    <div className="text-center">
-                      <FontAwesomeIcon icon={faBox} className="h-16 w-16 text-neutral-300 dark:text-neutral-700 mb-4" />
-                      <p className="text-neutral-600 dark:text-neutral-400 text-lg font-medium">No stocks found</p>
-                      <p className="text-neutral-500 dark:text-neutral-500 text-sm mt-2">Try adjusting your search or filter</p>
+                </div>
+
+                <div className="overflow-x-auto flex-1">
+                  {isLoading ? (
+                    <div className="flex items-center justify-center py-20">
+                      <div className="text-center">
+                        <div className="inline-block h-12 w-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                        <p className="text-neutral-600 dark:text-neutral-400">Loading stocks...</p>
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <div className="overflow-x-auto">
+                  ) : filteredStocks.length === 0 ? (
+                    <div className="flex items-center justify-center py-20">
+                      <div className="text-center">
+                        <FontAwesomeIcon icon={faBox} className="h-16 w-16 text-neutral-300 dark:text-neutral-700 mb-4" />
+                        <p className="text-neutral-600 dark:text-neutral-400 text-lg font-medium">No stocks found</p>
+                        <p className="text-neutral-500 dark:text-neutral-500 text-sm mt-2">Try adjusting your search or filter</p>
+                      </div>
+                    </div>
+                  ) : (
                     <table className="w-full">
                       <thead>
                         <tr className="border-b border-orange-100 dark:border-neutral-800 bg-orange-50/50 dark:bg-neutral-800/50">
@@ -481,31 +505,9 @@ const StocksList: React.FC = () => {
                         ))}
                       </tbody>
                     </table>
-                  </div>
-                )}
-              </div>
-
-              {/* Summary Card */}
-              {!isLoading && filteredStocks.length > 0 && (
-                <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="bg-white dark:bg-neutral-900 p-4 rounded-lg border border-neutral-200 dark:border-neutral-800">
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">Total Items</p>
-                    <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">{filteredStocks.length}</p>
-                  </div>
-                  <div className="bg-white dark:bg-neutral-900 p-4 rounded-lg border border-neutral-200 dark:border-neutral-800">
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">Total Stock Units</p>
-                    <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">
-                      {filteredStocks.reduce((sum, stock) => sum + stock.stocks, 0)}
-                    </p>
-                  </div>
-                  <div className="bg-white dark:bg-neutral-900 p-4 rounded-lg border border-neutral-200 dark:border-neutral-800">
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">Total Value</p>
-                    <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">
-                      ₱{filteredStocks.reduce((sum, stock) => sum + (stock.stocks * stock.costPrice), 0).toFixed(2)}
-                    </p>
-                  </div>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           </div>
         </div>
