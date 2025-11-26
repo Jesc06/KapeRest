@@ -192,164 +192,157 @@ const BranchPage: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-white via-stone-50 to-orange-50/30 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-800">
-      <div className="relative z-10 flex h-screen overflow-hidden">
+    <div className="min-h-screen w-full bg-gradient-to-br from-neutral-50 via-stone-50 to-neutral-100 dark:from-neutral-950 dark:via-neutral-900 dark:to-stone-950">
+      <div className="flex h-screen overflow-hidden">
         <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
       
-        <div className={`flex-1 flex flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-72' : 'lg:ml-24'}`}>
-          {/* Top Bar */}
-          <header className="sticky top-0 z-10 flex items-center justify-between border-b border-neutral-200 dark:border-neutral-700 bg-white/95 dark:bg-neutral-800/95 backdrop-blur-sm px-4 sm:px-6 py-4">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="lg:hidden flex h-10 w-10 items-center justify-center rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 transition-all duration-200 hover:bg-orange-100 hover:text-orange-600 dark:hover:bg-orange-950/30 dark:hover:text-orange-400"
-              >
-                <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
-              </button>
-              <button
-                onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                className="hidden lg:flex h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
-              >
-                <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
-              </button>
-              <h1 className="text-base sm:text-lg md:text-xl font-bold text-neutral-900 dark:text-white">Branch Management</h1>
-            </div>
-            <LogoutPanel />
-          </header>
+        <div className={`flex h-screen w-full flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-72' : 'lg:ml-24'}`}>
+          {/* Premium Header with Glass Morphism */}
+          <div className="sticky top-0 z-20 backdrop-blur-xl bg-white/80 dark:bg-neutral-900/80 border-b border-stone-200/50 dark:border-neutral-700/50 shadow-lg shadow-black/5">
+            <div className="px-4 sm:px-6 md:px-8 py-4">
+              <div className="flex items-center justify-between gap-3 sm:gap-4">
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setSidebarOpen(!sidebarOpen)}
+                    className="lg:hidden flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40 transition-all duration-300 active:scale-95 hover:scale-105"
+                  >
+                    <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
+                  </button>
 
-          {/* Main Content */}
-          <main className="flex-1 overflow-y-auto bg-gradient-to-br from-stone-50/50 to-orange-50/30 dark:from-neutral-900 dark:to-neutral-800/50">
-            <div className="w-full px-4 sm:px-5 md:px-6 py-5 sm:py-6">
-              {/* Page Header */}
-              <div className="mb-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-lg flex-shrink-0">
-                    <FontAwesomeIcon icon={faBuilding} className="h-7 w-7 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <h2 className="text-2xl font-black text-neutral-900 dark:text-white mb-2">
-                      Branch Locations
-                    </h2>
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
-                      Manage all branch locations and their staff members
-                    </p>
+                  <button
+                    onClick={() => setSidebarExpanded(!sidebarExpanded)}
+                    className="hidden lg:flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-800 hover:from-orange-100 hover:to-orange-200 dark:hover:from-orange-900/40 dark:hover:to-orange-800/40 text-neutral-700 dark:text-neutral-300 hover:text-orange-600 dark:hover:text-orange-400 border border-stone-300 dark:border-neutral-600 shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 hover:scale-105"
+                  >
+                    <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
+                  </button>
+
+                  <div className="hidden sm:flex items-center gap-3">
+                    <div>
+                      <h1 className="text-xl font-black text-neutral-900 dark:text-white tracking-tight">Branch Management</h1>
+                      <p className="text-xs font-medium text-neutral-600 dark:text-neutral-400">Manage locations and staff</p>
+                    </div>
                   </div>
                 </div>
+
+                <LogoutPanel />
+              </div>
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+            <div className="flex-1 flex flex-col gap-6 px-4 sm:px-6 md:px-8 py-6 overflow-auto">
+              
+              {/* Search and Add Button Row */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <div className="flex-1 relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-amber-500/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative flex items-center gap-3 bg-white dark:bg-neutral-800 rounded-xl border-2 border-stone-200 dark:border-neutral-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
+                    <FontAwesomeIcon
+                      icon={faSearch}
+                      className="h-5 w-5 text-neutral-400 dark:text-neutral-500 group-focus-within:text-orange-500 transition-colors"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Search branches..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="flex-1 bg-transparent text-sm font-medium text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none"
+                    />
+                    {searchQuery && (
+                      <span className="text-xs font-bold text-orange-600 dark:text-orange-400 px-2 py-1 rounded-md bg-orange-100 dark:bg-orange-900/30">
+                        {filteredBranches.length} found
+                      </span>
+                    )}
+                  </div>
+                </div>
+                
+                <button
+                  onClick={() => setIsAddBranchOpen(true)}
+                  className="flex items-center justify-center gap-2.5 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl transition-all duration-300 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:scale-105 active:scale-95"
+                >
+                  <FontAwesomeIcon icon={faPlus} className="h-4 w-4" />
+                  <span className="text-sm">Add Branch</span>
+                </button>
               </div>
 
-              {/* Filters and Search */}
-              <div className="bg-white dark:bg-neutral-800 rounded-2xl border-2 border-stone-200 dark:border-neutral-700 p-6 mb-6 shadow-lg">
-                <div className="flex flex-col gap-6">
-                  {/* Search Bar */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="w-2 h-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500"></div>
-                      <label className="text-xs font-black uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
-                        Search Branches
-                      </label>
-                    </div>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search by branch name, location, or manager..."
-                        className="w-full pl-12 pr-4 py-3.5 rounded-xl border-2 border-stone-200 dark:border-neutral-700 bg-gradient-to-br from-white to-orange-50/30 dark:from-neutral-800 dark:to-orange-950/20 text-neutral-900 dark:text-white text-sm font-bold focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 shadow-sm hover:shadow-md transition-all duration-200"
-                      />
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                        <FontAwesomeIcon icon={faSearch} className="h-4 w-4 text-orange-500" />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Filters Row */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="w-2 h-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500"></div>
-                      <label className="text-xs font-black uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
-                        Filter Options
-                      </label>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Location Filter */}
-                      <div>
-                        <label className="block text-xs font-bold text-neutral-500 dark:text-neutral-400 mb-2">
-                          Location
-                        </label>
-                        <div className="relative">
-                          <select
-                            value={filterLocation}
-                            onChange={(e) => setFilterLocation(e.target.value)}
-                            className="w-full appearance-none pl-12 pr-12 py-3.5 rounded-xl border-2 border-stone-200 dark:border-neutral-700 bg-gradient-to-br from-white to-orange-50/30 dark:from-neutral-800 dark:to-orange-950/20 text-neutral-900 dark:text-white text-sm font-bold focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer"
-                          >
-                            <option value="all">All Locations</option>
-                            {locations.filter(loc => loc !== 'all').map(location => (
-                              <option key={location} value={location}>
-                                {location}
-                              </option>
-                            ))}
-                          </select>
-                          <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                            <FontAwesomeIcon icon={faMapMarkerAlt} className="h-4 w-4 text-orange-500" />
-                          </div>
-                          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                            <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Status Filter */}
-                      <div>
-                        <label className="block text-xs font-bold text-neutral-500 dark:text-neutral-400 mb-2">
-                          Status
-                        </label>
-                        <div className="relative">
-                          <select
-                            value={filterStatus}
-                            onChange={(e) => setFilterStatus(e.target.value)}
-                            className="w-full appearance-none pl-12 pr-12 py-3.5 rounded-xl border-2 border-stone-200 dark:border-neutral-700 bg-gradient-to-br from-white to-orange-50/30 dark:from-neutral-800 dark:to-orange-950/20 text-neutral-900 dark:text-white text-sm font-bold focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer"
-                          >
-                            <option value="all">All Status</option>
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
-                          </select>
-                          <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                            <FontAwesomeIcon icon={faBuilding} className="h-4 w-4 text-orange-500" />
-                          </div>
-                          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                            <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Add Branch Button */}
-                  <div className="flex items-center justify-between pt-4 border-t border-stone-200 dark:border-neutral-700">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                      <p className="text-sm font-bold text-neutral-700 dark:text-neutral-300">
-                        Showing <span className="text-orange-600 dark:text-orange-400 font-black">{filteredBranches.length}</span> of <span className="font-black">{branches.length}</span> branches
-                      </p>
-                    </div>
-                    <button 
-                      onClick={() => setIsAddBranchOpen(true)}
-                      className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-black text-sm uppercase tracking-wide hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95"
-                    >
-                      <FontAwesomeIcon icon={faPlus} className="h-4 w-4" />
-                      Add Branch
-                    </button>
+              {/* Filter Buttons */}
+              <div className="flex flex-wrap items-center gap-3">
+                <button
+                  onClick={() => setFilterStatus('all')}
+                  className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
+                    filterStatus === 'all'
+                      ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30'
+                      : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-orange-500 dark:hover:border-orange-500'
+                  }`}
+                >
+                  All Status
+                </button>
+                <button
+                  onClick={() => setFilterStatus('Active')}
+                  className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
+                    filterStatus === 'Active'
+                      ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/30'
+                      : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-green-500 dark:hover:border-green-500'
+                  }`}
+                >
+                  Active
+                </button>
+                <button
+                  onClick={() => setFilterStatus('Inactive')}
+                  className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
+                    filterStatus === 'Inactive'
+                      ? 'bg-gradient-to-r from-red-500 to-rose-600 text-white shadow-lg shadow-red-500/30'
+                      : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-red-500 dark:hover:border-red-500'
+                  }`}
+                >
+                  Inactive
+                </button>
+                
+                <div className="h-8 w-px bg-stone-200 dark:bg-neutral-700 mx-2"></div>
+                
+                <div className="relative">
+                  <select
+                    value={filterLocation}
+                    onChange={(e) => setFilterLocation(e.target.value)}
+                    className="appearance-none px-4 py-2.5 pr-10 rounded-xl bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-orange-500 dark:hover:border-orange-500 font-bold text-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500 cursor-pointer"
+                  >
+                    <option value="all">All Locations</option>
+                    {locations.filter(loc => loc !== 'all').map(location => (
+                      <option key={location} value={location}>
+                        {location}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <svg className="w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                    </svg>
                   </div>
                 </div>
               </div>
 
               {/* Branches Table */}
-              <div className="bg-white dark:bg-neutral-800 rounded-2xl border-2 border-stone-200 dark:border-neutral-700 shadow-lg overflow-hidden">
-                <div className="overflow-x-auto">
+              <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-white dark:bg-neutral-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-neutral-700">
+                <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-white via-orange-50/30 to-white dark:from-neutral-800 dark:via-orange-950/20 dark:to-neutral-800">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-orange-500 to-orange-600"></div>
+                  
+                  <div className="px-6 sm:px-8 py-6">
+                    <div className="flex items-center justify-between flex-wrap gap-4">
+                      <div className="flex items-center gap-4">
+                        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/30">
+                          <FontAwesomeIcon icon={faBuilding} className="h-7 w-7 text-white" />
+                        </div>
+                        <div>
+                          <h3 className="text-2xl font-black text-neutral-900 dark:text-white tracking-tight">Branch Locations</h3>
+                          <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mt-0.5">All branch records</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto flex-1">
                   <table className="w-full">
                     <thead className="bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/30 border-b-2 border-stone-200 dark:border-neutral-700">
                       <tr>
@@ -461,7 +454,7 @@ const BranchPage: React.FC = () => {
                 </div>
               </div>
             </div>
-          </main>
+          </div>
         </div>
       </div>
 
