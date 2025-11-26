@@ -192,7 +192,7 @@ const BranchPage: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-neutral-50 via-stone-50 to-neutral-100 dark:from-neutral-950 dark:via-neutral-900 dark:to-stone-950">
+    <div className="min-h-screen w-full" style={{ backgroundColor: '#FEF7EB' }}>
       <div className="flex h-screen overflow-hidden">
         <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
       

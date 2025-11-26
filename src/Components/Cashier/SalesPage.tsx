@@ -48,6 +48,8 @@ const SalesPage: React.FC = () => {
           return;
         }
 
+
+
         // Decode JWT to get cashierId
         const base64Url = token.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -112,7 +114,7 @@ const SalesPage: React.FC = () => {
   }, [selectedPeriod]);
 
   return (
-    <div className="relative min-h-screen bg-transparent text-neutral-800 transition-colors duration-300 dark:text-neutral-200 overflow-hidden">
+    <div className="relative min-h-screen text-neutral-800 transition-colors duration-300 dark:text-neutral-200 overflow-hidden" style={{ backgroundColor: '#FEF7EB' }}>
       <TintedBackdrop />
       <div aria-hidden className="absolute inset-0 z-0 bg-stone-50/90 backdrop-blur-xl dark:bg-neutral-900/60 pointer-events-none" />
 
