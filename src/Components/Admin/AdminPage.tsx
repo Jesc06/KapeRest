@@ -172,132 +172,126 @@ const AdminPage: React.FC = () => {
         <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
 
         <div className={`flex h-screen w-full flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-72' : 'lg:ml-24'}`}>
-          {/* Premium Header with Glass Morphism */}
-          <div className="sticky top-0 z-20 border-b border-orange-200/30 dark:border-orange-700/20 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-2xl shadow-2xl shadow-orange-500/10">
-            {/* Premium accent line */}
-            <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-orange-400/50 to-transparent"></div>
-            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-300/30 to-transparent"></div>
-
-            <div className="px-5 sm:px-7 md:px-9 py-6">
-              <div className="flex items-center justify-between gap-5">
-                <div className="flex items-center gap-4 flex-shrink-0">
+          {/* Minimal Clean Header */}
+          <div className="sticky top-0 z-20 border-b border-stone-200 dark:border-neutral-700 bg-white/95 dark:bg-neutral-800/95 backdrop-blur-sm">
+            <div className="px-4 sm:px-5 md:px-6 py-2.5 sm:py-3">
+              <div className="flex items-center justify-between gap-3">
+                {/* Left: Controls & Title */}
+                <div className="flex items-center gap-2 sm:gap-2.5 flex-1 min-w-0">
+                  {/* Hamburger - Mobile Only */}
                   <button
                     onClick={() => setSidebarOpen(!sidebarOpen)}
-                    className="lg:hidden flex-shrink-0 h-12 w-12 flex items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white transition-all duration-300 active:scale-95 shadow-xl shadow-orange-500/30 border border-orange-400/20"
+                    className="lg:hidden flex-shrink-0 h-9 w-9 flex items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                   >
                     <FontAwesomeIcon icon={faBars} className="h-4 w-4" />
                   </button>
 
+                  {/* Sidebar Toggle - Desktop Only */}
                   <button
                     onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                    className="hidden lg:flex flex-shrink-0 h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-orange-700 text-white transition-all duration-300 active:scale-95 shadow-xl shadow-orange-500/30 border border-orange-400/20"
+                    className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                   >
-                    <FontAwesomeIcon icon={faBars} className="h-4 w-4" />
+                    <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                   </button>
 
-                  <div>
-                    <h1 className="text-2xl font-black text-neutral-900 dark:text-white tracking-tight">
-                      Admin Dashboard
-                    </h1>
-                    <p className="text-sm font-semibold text-neutral-600 dark:text-neutral-400">
-                      Complete System Control Center
-                    </p>
-                  </div>
+                  {/* Title */}
+                  <h1 className="text-base sm:text-lg md:text-xl font-bold text-neutral-900 dark:text-stone-100 truncate">Admin Dashboard</h1>
                 </div>
 
-                <div className="flex-shrink-0">
-                  <LogoutPanel />
-                </div>
+                {/* Right: Logout Panel */}
+                <LogoutPanel />
               </div>
             </div>
           </div>
 
           {/* Main Content */}
           <main className="flex-1 flex flex-col min-h-0 overflow-hidden">
-            <div className="flex-1 flex flex-col gap-8 px-6 sm:px-8 lg:px-10 py-8 overflow-auto">
+            <div className="flex-1 flex flex-col gap-8 px-6 sm:px-8 lg:px-10 py-8 sm:py-10 md:py-12 overflow-auto bg-gradient-to-br from-white via-stone-50 to-orange-50/20 dark:from-neutral-900 dark:via-neutral-900 dark:to-neutral-800">
               {/* Welcome Section */}
-              <section className="mb-12">
-                <div className="relative bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 rounded-2xl p-8 lg:p-10 shadow-2xl shadow-orange-500/20 overflow-hidden border border-orange-400/20">
-                  {/* Background Pattern */}
+              <section className="mb-16 sm:mb-20">
+                <div className="relative bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 dark:from-orange-600 dark:via-orange-700 dark:to-amber-700 rounded-3xl p-10 sm:p-12 md:p-16 shadow-2xl shadow-orange-500/30 overflow-hidden group border border-orange-300/20">
+                  {/* Animated Premium Background */}
                   <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-4 right-4 w-32 h-32 bg-white/20 rounded-full blur-2xl"></div>
-                    <div className="absolute bottom-4 left-4 w-24 h-24 bg-white/15 rounded-full blur-xl"></div>
+                    <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] animate-pulse"></div>
                   </div>
-
-                  <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-                    <div className="flex-1 space-y-4">
-                      <div>
-                        <h2 className="text-2xl lg:text-3xl font-black text-white mb-2">
-                          {getGreeting()}, Administrator!
-                        </h2>
-                        <p className="text-orange-100 text-lg font-semibold leading-relaxed">
-                          Welcome to your comprehensive admin control center
-                        </p>
-                      </div>
-
-                      <div className="flex flex-wrap items-center gap-6 text-orange-100/90">
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-orange-300 rounded-full"></div>
-                          <span className="text-sm font-medium">System Status: Operational</span>
+                  
+                  {/* Premium Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/10 group-hover:via-white/10 transition-all duration-700"></div>
+                  
+                  {/* Floating Particles Effect */}
+                  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div className="absolute top-10 left-10 w-2 h-2 bg-white/50 rounded-full animate-ping"></div>
+                    <div className="absolute top-20 right-20 w-3 h-3 bg-white/40 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
+                    <div className="absolute bottom-10 left-1/3 w-2 h-2 bg-white/50 rounded-full animate-ping" style={{ animationDelay: '2s' }}></div>
+                    <div className="absolute bottom-20 right-1/4 w-2.5 h-2.5 bg-white/45 rounded-full animate-ping" style={{ animationDelay: '1.5s' }}></div>
+                    <div className="absolute top-1/2 left-1/4 w-2 h-2 bg-white/40 rounded-full animate-ping" style={{ animationDelay: '0.5s' }}></div>
+                  </div>
+                  
+                  <div className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10 lg:gap-12">
+                    <div className="flex-1 space-y-8">
+                      <div className="flex items-start gap-5 sm:gap-6">
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center border-2 border-white/60 shadow-2xl shadow-black/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 flex-shrink-0">
+                          <FontAwesomeIcon icon={faShieldAlt} className="text-4xl sm:text-5xl text-white drop-shadow-2xl" />
                         </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
-                          <span className="text-sm font-medium">All Services Active</span>
+                        <div className="flex-1 min-w-0">
+                          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-3 tracking-tighter drop-shadow-2xl leading-tight">
+                            {getGreeting()}!
+                          </h2>
+                          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/25 backdrop-blur-md border border-white/40 shadow-lg">
+                            <div className="w-2 h-2 rounded-full bg-yellow-300 animate-pulse flex-shrink-0 shadow-lg shadow-yellow-300/50"></div>
+                            <span className="text-white text-xs sm:text-sm font-bold uppercase tracking-wider">Administrator Portal</span>
+                          </div>
                         </div>
                       </div>
+                      <p className="text-white text-base sm:text-lg leading-relaxed font-medium max-w-2xl drop-shadow-lg">
+                        Welcome to your comprehensive control center. Manage all aspects of your business operations with full administrative privileges.
+                      </p>
                     </div>
-
-                    <div className="flex-shrink-0">
-                      <div className="bg-white/15 backdrop-blur-md rounded-xl px-6 py-4 border border-white/30 shadow-lg">
-                        <p className="text-white/90 text-xs font-bold uppercase tracking-wider mb-1">Today</p>
-                        <p className="text-white text-2xl font-black drop-shadow-lg">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
-                        <p className="text-white/95 text-sm font-semibold">{new Date().toLocaleDateString('en-US', { year: 'numeric' })}</p>
-                      </div>
+                    <div className="w-full lg:w-auto shrink-0 bg-white/25 backdrop-blur-xl rounded-2xl px-6 sm:px-8 py-5 sm:py-6 border-2 border-white/50 shadow-2xl shadow-black/20 group-hover:scale-105 group-hover:shadow-3xl transition-all duration-500">
+                      <p className="text-white text-xs font-black uppercase tracking-widest mb-3 sm:mb-4 flex items-center gap-2">
+                        <span>📅</span>
+                        <span>Today's Date</span>
+                      </p>
+                      <p className="text-white text-3xl sm:text-4xl font-black drop-shadow-2xl leading-none mb-1.5 sm:mb-2">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                      <p className="text-white text-base sm:text-lg font-bold drop-shadow-lg">{new Date().toLocaleDateString('en-US', { year: 'numeric' })}</p>
                     </div>
                   </div>
                 </div>
               </section>
 
               {/* Performance Metrics Section */}
-              <section className="mb-12">
+              <section className="mb-16 sm:mb-20">
                 <div className="mb-8">
-                  <div className="flex items-center gap-4 mb-3">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-lg shadow-orange-500/30 border border-orange-400/20 flex-shrink-0">
-                      <FontAwesomeIcon icon={faChartLine} className="h-5 w-5 text-white" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <h2 className="text-2xl lg:text-3xl font-black text-neutral-900 dark:text-white mb-1">
-                        Performance Metrics
-                      </h2>
-                      <p className="text-neutral-600 dark:text-neutral-400 font-medium">
-                        Real-time overview of your business performance
-                      </p>
-                    </div>
-                  </div>
+                  <h3 className="text-2xl sm:text-3xl font-black text-neutral-900 dark:text-white tracking-tight mb-2">
+                    Performance Metrics
+                  </h3>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
+                    Real-time overview of your business performance
+                  </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
                   {statsCards.map((stat, index) => (
                     <div
                       key={index}
-                      className={`group relative bg-gradient-to-br ${stat.bgColor} rounded-2xl p-6 border-2 ${stat.borderColor} shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:-translate-y-2 hover:scale-105 border-t-4 border-t-orange-400/50`}
+                      className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${stat.color} p-6 shadow-xl shadow-black/10 hover:shadow-2xl hover:shadow-black/20 transition-all duration-500 hover:-translate-y-2 hover:scale-[1.03]`}
                     >
-                      {/* Premium accent */}
-                      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 rounded-t-2xl"></div>
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-orange-50/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                      <div className="absolute top-2 right-2 w-8 h-8 bg-orange-400/10 rounded-full blur-sm group-hover:bg-orange-400/20 transition-colors duration-500"></div>
-
+                      <div className="absolute inset-0 opacity-10">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-3xl transform translate-x-8 -translate-y-8 group-hover:scale-110 transition-transform duration-700"></div>
+                        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full blur-2xl transform -translate-x-4 translate-y-4 group-hover:scale-110 transition-transform duration-700"></div>
+                      </div>
+                      
+                      {/* Shimmer Effect */}
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
+                      </div>
+                      
                       <div className="relative z-10 flex flex-col h-full">
-                        {/* Top Section - Icon and Badge */}
                         <div className="flex items-start justify-between mb-5">
-                          <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-all duration-500 border-2 border-white/20`}>
-                            <FontAwesomeIcon icon={stat.icon} className="h-6 w-6 text-white drop-shadow-sm" />
+                          <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/25 backdrop-blur-md shadow-xl shadow-black/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 border border-white/30">
+                            <FontAwesomeIcon icon={stat.icon} className="h-7 w-7 text-white drop-shadow-lg" />
                           </div>
-                          <span className={`text-xs font-black px-3 py-1.5 rounded-lg backdrop-blur-sm shadow-lg flex items-center gap-1.5 border ${
-                            stat.isIncrease
-                              ? 'bg-emerald-100/90 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 border-emerald-300/50'
-                              : 'bg-red-100/90 dark:bg-red-900/40 text-red-700 dark:text-red-400 border-red-300/50'
-                          }`}>
+                          <span className="text-xs font-black px-3 py-1.5 rounded-lg bg-white/30 backdrop-blur-md text-white flex items-center gap-1.5 shadow-lg border border-white/30">
                             <FontAwesomeIcon
                               icon={stat.isIncrease ? faArrowUp : faArrowDown}
                               className="h-3.5 w-3.5"
@@ -305,14 +299,10 @@ const AdminPage: React.FC = () => {
                             {stat.change}
                           </span>
                         </div>
-
-                        {/* Bottom Section - Label and Value */}
-                        <div className="flex-1 flex flex-col justify-end">
-                          <h3 className="text-xs font-black text-neutral-600 dark:text-neutral-400 mb-3 uppercase tracking-widest flex items-center gap-2">
-                            <div className="w-1 h-3 bg-gradient-to-b from-orange-400 to-amber-500 rounded-full"></div>
-                            {stat.title}
-                          </h3>
-                          <p className="text-3xl font-black text-neutral-900 dark:text-white leading-none drop-shadow-sm">{stat.value}</p>
+                        
+                        <div className="space-y-2 mt-auto">
+                          <p className="text-xs font-bold uppercase tracking-wider text-white/90">{stat.title}</p>
+                          <p className="text-4xl font-black text-white leading-none drop-shadow-lg">{stat.value}</p>
                         </div>
                       </div>
                     </div>
@@ -321,48 +311,42 @@ const AdminPage: React.FC = () => {
               </section>
 
               {/* Quick Actions Section */}
-              <section className="mb-12">
+              <section className="mb-16 sm:mb-20">
                 <div className="mb-8">
-                  <div className="flex items-center gap-4 mb-3">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-lg shadow-orange-500/30 border border-orange-400/20 flex-shrink-0">
-                      <FontAwesomeIcon icon={faBars} className="h-5 w-5 text-white" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <h2 className="text-2xl lg:text-3xl font-black text-neutral-900 dark:text-white mb-1">
-                        Quick Actions
-                      </h2>
-                      <p className="text-neutral-600 dark:text-neutral-400 font-medium">
-                        Fast access to key management functions
-                      </p>
-                    </div>
-                  </div>
+                  <h3 className="text-2xl sm:text-3xl font-black text-neutral-900 dark:text-white tracking-tight mb-2">
+                    Quick Actions
+                  </h3>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
+                    Fast access to key management functions
+                  </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
                   {quickActions.map((action, index) => (
                     <button
                       key={index}
                       onClick={() => navigate(action.path)}
-                      className="group relative bg-white dark:bg-neutral-800 rounded-2xl p-6 transition-all duration-500 border-2 border-stone-200 dark:border-neutral-700 hover:border-orange-400/50 overflow-hidden transform hover:-translate-y-2 hover:scale-105 shadow-xl hover:shadow-2xl text-left border-t-4 border-t-orange-400/30"
+                      className="group relative bg-white dark:bg-neutral-800 rounded-2xl p-6 transition-all duration-500 border-2 border-stone-200 dark:border-neutral-700 hover:border-orange-400 hover:shadow-2xl hover:shadow-orange-500/10 overflow-hidden transform hover:-translate-y-2 hover:scale-[1.03] text-left"
                     >
-                      {/* Premium accent */}
-                      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 rounded-t-2xl"></div>
-                      <div className={`absolute inset-0 bg-gradient-to-br ${action.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
-                      <div className="absolute inset-[3px] bg-white dark:bg-neutral-800 rounded-[14px]"></div>
-                      <div className="absolute top-3 right-3 w-6 h-6 bg-orange-400/20 rounded-full blur-sm group-hover:bg-orange-400/30 transition-colors duration-500"></div>
+                      <div className="absolute inset-0 bg-gradient-to-br from-orange-50 via-amber-50/50 to-orange-50 dark:from-orange-950/10 dark:via-amber-950/10 dark:to-orange-950/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      
+                      {/* Shimmer Effect */}
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-orange-200/20 dark:via-orange-500/10 to-transparent skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
+                      </div>
 
-                      <div className="relative z-10 flex flex-col h-full">
+                      <div className="relative z-10 flex flex-col h-full min-h-[180px]">
                         {/* Icon Section */}
                         <div className="mb-5">
-                          <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-all duration-500 border-2 border-white/20`}>
-                            <FontAwesomeIcon icon={action.icon} className="h-5 w-5 text-white drop-shadow-sm" />
+                          <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center shadow-xl shadow-black/10 group-hover:shadow-2xl group-hover:shadow-black/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 border border-white/20`}>
+                            <FontAwesomeIcon icon={action.icon} className="h-6 w-6 text-white drop-shadow-lg" />
                           </div>
                         </div>
 
                         {/* Content Section */}
                         <div className="flex-1 flex flex-col justify-between">
-                          <div>
-                            <h4 className="text-xl font-black text-neutral-900 dark:text-white mb-3 leading-tight drop-shadow-sm">
+                          <div className="space-y-2">
+                            <h4 className="text-xl font-black text-neutral-900 dark:text-white leading-tight group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">
                               {action.title}
                             </h4>
                             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-medium">
@@ -371,10 +355,10 @@ const AdminPage: React.FC = () => {
                           </div>
 
                           {/* Arrow Indicator */}
-                          <div className="mt-5 flex items-center gap-2 text-xs font-bold text-neutral-500 dark:text-neutral-400 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
-                            <span className="uppercase tracking-wider">Manage</span>
-                            <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                          <div className="mt-5 flex items-center gap-2 text-xs font-black text-orange-600 dark:text-orange-400 group-hover:gap-3 transition-all duration-300">
+                            <span className="uppercase tracking-wider">Access Now</span>
+                            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                             </svg>
                           </div>
                         </div>
@@ -385,20 +369,13 @@ const AdminPage: React.FC = () => {
               </section>
 
               {/* Premium Sales Overview Section */}
-              <div className="mb-8">
+              <div className="mb-12 sm:mb-16">
                 {/* Premium Header */}
-                <div className="mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-lg shadow-orange-500/30 border border-orange-400/20 flex-shrink-0">
-                      <FontAwesomeIcon icon={faChartLine} className="h-4 w-4 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-3xl font-black text-neutral-900 dark:text-white">
-                        Sales Overview
-                      </h3>
-                    </div>
-                  </div>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-semibold mt-2">
+                <div className="mb-8">
+                  <h3 className="text-2xl sm:text-3xl font-black text-neutral-900 dark:text-white tracking-tight mb-1">
+                    Sales Overview
+                  </h3>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
                     Monitor your sales performance with real-time analytics
                   </p>
                 </div>
@@ -689,22 +666,21 @@ const AdminPage: React.FC = () => {
               </div>
 
               {/* Administrator Information */}
-              <aside className="bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-950/20 dark:via-purple-950/20 dark:to-pink-950/20 border border-indigo-200 dark:border-indigo-800 rounded-2xl p-6 lg:p-8 shadow-xl" role="complementary">
+              <aside className="bg-white dark:bg-neutral-800 border border-stone-200 dark:border-neutral-700 rounded-2xl p-6 lg:p-8 shadow-lg" role="complementary">
                 <div className="flex flex-col sm:flex-row items-start gap-6">
-                  <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-xl border-2 border-white/30">
-                    <FontAwesomeIcon icon={faShieldAlt} className="h-7 w-7 lg:h-8 lg:w-8 text-white drop-shadow-lg" aria-hidden="true" />
+                  <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <FontAwesomeIcon icon={faShieldAlt} className="h-7 w-7 lg:h-8 lg:w-8 text-white" aria-hidden="true" />
                   </div>
                   <div className="flex-1 space-y-3">
-                    <h3 className="text-lg lg:text-xl font-black text-indigo-900 dark:text-indigo-300 flex items-center gap-3">
-                      <FontAwesomeIcon icon={faShieldAlt} className="h-4 w-4 lg:h-5 lg:w-5 text-indigo-600 dark:text-indigo-400" aria-hidden="true" />
+                    <h3 className="text-lg font-black text-neutral-900 dark:text-white flex items-center gap-2">
                       <span>Administrator Privileges</span>
                     </h3>
-                    <p className="text-sm lg:text-base text-indigo-800 dark:text-indigo-400 leading-relaxed font-medium">
-                      You have full system access with comprehensive control over all administrative functions. Navigate through the system to manage user accounts, configure business settings, monitor inventory levels, and oversee multi-branch operations with elevated permissions.
+                    <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-medium">
+                      You have full system access with comprehensive control over all administrative functions. Navigate through the system to manage user accounts, configure business settings, monitor inventory levels, and oversee multi-branch operations.
                     </p>
-                    <div className="pt-2">
-                      <span className="inline-flex items-center gap-2 text-xs font-bold text-indigo-700 dark:text-indigo-300 uppercase tracking-wider">
-                        <div className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></div>
+                    <div className="pt-2 flex items-center gap-2">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                      <span className="text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                         System Status: Fully Operational
                       </span>
                     </div>

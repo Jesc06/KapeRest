@@ -241,91 +241,114 @@ const StaffPage: React.FC = () => {
 
               {/* Quick Stats */}
               <div className="mb-16 sm:mb-20">
-                <div className="mb-8">
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <h3 className="text-2xl sm:text-3xl font-black text-neutral-900 dark:text-white tracking-tight mb-1">
-                        {dateRange === '7d' ? "Today's Overview" : "Sales Overview"}
-                      </h3>
-                      <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
-                        Sales data for selected period
-                      </p>
+                <div className="mb-10">
+                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
+                    <div className="flex items-center gap-4">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-gradient-to-br from-orange-500 to-amber-600 rounded-2xl blur-lg opacity-30"></div>
+                        <div className="relative w-14 h-14 bg-gradient-to-br from-orange-500 via-amber-600 to-orange-600 rounded-2xl flex items-center justify-center shadow-xl shadow-orange-500/30">
+                          <FontAwesomeIcon icon={faChartLine} className="h-7 w-7 text-white drop-shadow-2xl" />
+                        </div>
+                      </div>
+                      <div>
+                        <h3 className="text-3xl font-black bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 dark:from-orange-400 dark:via-amber-400 dark:to-orange-500 bg-clip-text text-transparent tracking-tight mb-1">
+                          {dateRange === '7d' ? "Today's Overview" : "Sales Overview"}
+                        </h3>
+                        <p className="text-sm text-neutral-600 dark:text-neutral-400 font-bold flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse"></span>
+                          Sales data for selected period
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2 bg-neutral-50 dark:bg-neutral-700/50 rounded-xl p-2">
+                    <div className="flex items-center gap-3 bg-gradient-to-r from-white via-neutral-50 to-white dark:from-neutral-800 dark:via-neutral-700 dark:to-neutral-800 rounded-2xl p-2 border-2 border-neutral-200/60 dark:border-neutral-600/60 shadow-lg backdrop-blur-sm">
                       {(['1d', '7d', '30d'] as const).map((range) => (
                         <button
                           key={range}
                           onClick={() => setDateRange(range)}
-                          className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+                          className={`relative px-5 py-2.5 rounded-xl text-sm font-black transition-all duration-300 ${
                             dateRange === range
-                              ? 'bg-orange-500 text-white shadow-md'
-                              : 'text-neutral-600 dark:text-neutral-300 hover:bg-white dark:hover:bg-neutral-600 active:scale-95'
+                              ? 'bg-gradient-to-r from-orange-500 to-amber-600 text-white shadow-xl shadow-orange-500/30 scale-105'
+                              : 'text-neutral-600 dark:text-neutral-300 hover:bg-white dark:hover:bg-neutral-600 hover:scale-105 active:scale-95'
                           }`}
                         >
-                          {range === '1d' ? '1 Day' : range === '7d' ? '7 Days' : '30 Days'}
+                          {dateRange === range && <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent rounded-xl"></div>}
+                          <span className="relative">{range === '1d' ? '1 Day' : range === '7d' ? '7 Days' : '30 Days'}</span>
                         </button>
                       ))}
-                      <div className="w-px h-6 bg-neutral-300 dark:bg-neutral-600 mx-1"></div>
+                      <div className="w-0.5 h-8 bg-gradient-to-b from-transparent via-neutral-300 dark:via-neutral-600 to-transparent mx-2"></div>
                       <div className="relative">
                         <button
                           onClick={() => setShowCalendar(!showCalendar)}
-                          className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 ${
+                          className={`relative px-5 py-2.5 rounded-xl text-sm font-black transition-all duration-300 flex items-center gap-2.5 ${
                             dateRange === 'custom'
-                              ? 'bg-orange-500 text-white shadow-md'
-                              : 'text-neutral-600 dark:text-neutral-300 hover:bg-white dark:hover:bg-neutral-600 active:scale-95'
+                              ? 'bg-gradient-to-r from-orange-500 to-amber-600 text-white shadow-xl shadow-orange-500/30 scale-105'
+                              : 'text-neutral-600 dark:text-neutral-300 hover:bg-white dark:hover:bg-neutral-600 hover:scale-105 active:scale-95'
                           }`}
                         >
-                          <FontAwesomeIcon icon={faCalendarDays} className="h-4 w-4" />
-                          Custom
+                          {dateRange === 'custom' && <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent rounded-xl"></div>}
+                          <FontAwesomeIcon icon={faCalendarDays} className="relative h-4 w-4" />
+                          <span className="relative">Custom</span>
                         </button>
 
                         {/* Calendar Picker Dropdown */}
                         {showCalendar && (
-                          <div className="absolute top-full right-0 mt-2 bg-white dark:bg-neutral-800 rounded-xl shadow-2xl p-4 z-50 border border-neutral-200 dark:border-neutral-700 w-80">
-                            <div className="flex items-center justify-between mb-4">
-                              <h4 className="font-bold text-neutral-900 dark:text-white">Select Date Range</h4>
+                          <div className="absolute top-full right-0 mt-3 bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-800 dark:to-neutral-900 rounded-2xl shadow-2xl p-6 z-50 border-2 border-neutral-200/60 dark:border-neutral-700/60 w-96 backdrop-blur-xl">
+                            <div className="flex items-center justify-between mb-6">
+                              <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-600 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/30">
+                                  <FontAwesomeIcon icon={faCalendarDays} className="h-5 w-5 text-white" />
+                                </div>
+                                <h4 className="font-black text-neutral-900 dark:text-white text-lg">Select Date Range</h4>
+                              </div>
                               <button
                                 onClick={() => setShowCalendar(false)}
-                                className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded transition-all"
+                                className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 text-neutral-600 dark:text-neutral-300 hover:text-red-600 dark:hover:text-red-400 transition-all duration-300 hover:scale-110 active:scale-95"
                               >
-                                <FontAwesomeIcon icon={faX} className="h-4 w-4 text-neutral-600 dark:text-neutral-300" />
+                                <FontAwesomeIcon icon={faX} className="h-4 w-4" />
                               </button>
                             </div>
 
-                            <div className="space-y-3 mb-4">
+                            <div className="space-y-4 mb-6">
                               <div>
-                                <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-2">From</label>
+                                <label className="text-xs font-black uppercase tracking-widest text-neutral-600 dark:text-neutral-400 block mb-3 flex items-center gap-2">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                                  From Date
+                                </label>
                                 <input
                                   type="date"
                                   value={customStartDate}
                                   onChange={(e) => setCustomStartDate(e.target.value)}
-                                  className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white text-sm"
+                                  className="w-full px-4 py-3 rounded-xl border-2 border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white text-sm font-bold focus:border-orange-500 dark:focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300"
                                 />
                               </div>
                               <div>
-                                <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300 block mb-2">To</label>
+                                <label className="text-xs font-black uppercase tracking-widest text-neutral-600 dark:text-neutral-400 block mb-3 flex items-center gap-2">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                                  To Date
+                                </label>
                                 <input
                                   type="date"
                                   value={customEndDate}
                                   onChange={(e) => setCustomEndDate(e.target.value)}
-                                  className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white text-sm"
+                                  className="w-full px-4 py-3 rounded-xl border-2 border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white text-sm font-bold focus:border-orange-500 dark:focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300"
                                 />
                               </div>
                             </div>
 
-                            <div className="flex gap-2">
+                            <div className="flex gap-3 pt-4 border-t-2 border-neutral-200 dark:border-neutral-700">
                               <button
                                 onClick={() => {
                                   setDateRange('custom');
                                   setShowCalendar(false);
                                 }}
-                                className="flex-1 px-3 py-2 rounded-lg bg-orange-500 text-white font-bold text-sm hover:bg-orange-600 transition-all"
+                                className="relative flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-amber-600 text-white font-black text-sm shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 overflow-hidden"
                               >
-                                Apply
+                                <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent"></div>
+                                <span className="relative">Apply Range</span>
                               </button>
                               <button
                                 onClick={() => setShowCalendar(false)}
-                                className="flex-1 px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 text-neutral-600 dark:text-neutral-300 font-bold text-sm hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-all"
+                                className="flex-1 px-4 py-3 rounded-xl border-2 border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 font-black text-sm hover:bg-neutral-100 dark:hover:bg-neutral-700 hover:scale-105 active:scale-95 transition-all duration-300"
                               >
                                 Cancel
                               </button>
@@ -355,78 +378,440 @@ const StaffPage: React.FC = () => {
                       return (
                       <div
                         key={index}
-                        className="group relative bg-white dark:bg-neutral-800 rounded-2xl p-6 border border-neutral-200 dark:border-neutral-700 hover:border-orange-400 dark:hover:border-orange-500 shadow-sm hover:shadow-md transition-all duration-200"
+                        className="group relative bg-gradient-to-br from-white via-white to-neutral-50/50 dark:from-neutral-800 dark:via-neutral-800 dark:to-neutral-900/50 rounded-3xl p-8 border-2 border-neutral-200/80 dark:border-neutral-700/80 hover:border-purple-400/60 dark:hover:border-purple-500/60 shadow-xl hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-500 backdrop-blur-sm"
                       >
-                      <div className="flex items-start justify-between mb-4">
-                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-md`}>
-                          <FontAwesomeIcon icon={stat.icon} className="h-6 w-6 text-white" />
+                        <div className="flex items-start justify-between mb-8">
+                          <div className="relative">
+                            <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} rounded-2xl blur-xl opacity-40 group-hover:opacity-60 transition-all duration-500`}></div>
+                            <div className={`relative w-16 h-16 rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-2xl shadow-purple-500/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
+                            <FontAwesomeIcon icon={stat.icon} className="h-8 w-8 text-white drop-shadow-2xl" />
+                          </div>
                         </div>
-                        <div className={`flex items-center gap-1 px-2 py-1 rounded-lg ${stat.trend === 'up' ? 'bg-green-100 dark:bg-green-900/30' : 'bg-red-100 dark:bg-red-900/30'}`}>
+                        <div className={`relative flex items-center gap-2 px-4 py-2 rounded-xl shadow-lg backdrop-blur-md border-2 transition-all duration-300 ${stat.trend === 'up' ? 'bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/40 dark:to-emerald-900/40 border-green-300/50 dark:border-green-600/50' : 'bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-900/40 dark:to-rose-900/40 border-red-300/50 dark:border-red-600/50'}`}>
+                          <div className={`absolute inset-0 rounded-xl blur-md opacity-30 ${stat.trend === 'up' ? 'bg-green-500' : 'bg-red-500'}`}></div>
                           <FontAwesomeIcon 
                             icon={stat.trend === 'up' ? faArrowUp : faArrowDown} 
-                            className={`h-3 w-3 ${stat.trend === 'up' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}
+                            className={`relative h-4 w-4 ${stat.trend === 'up' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}
                           />
-                          <span className={`text-xs font-bold ${stat.trend === 'up' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                          <span className={`relative text-sm font-black ${stat.trend === 'up' ? 'text-green-700 dark:text-green-300' : 'text-red-700 dark:text-red-300'}`}>
                             {stat.trendValue}
                           </span>
                         </div>
                       </div>
                       
-                      <div className="mb-4">
-                        <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mb-1">{stat.title}</p>
-                        <p className="text-3xl font-black text-neutral-900 dark:text-white">{stat.value}</p>
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">{stat.label}</p>
+                      <div className="mb-8">
+                        <p className="text-xs font-black uppercase tracking-widest text-neutral-600 dark:text-neutral-400 mb-3 flex items-center gap-2">
+                          <span className="w-2 h-2 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 shadow-lg shadow-purple-500/50"></span>
+                          {stat.title}
+                        </p>
+                        <p className="text-5xl font-black bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-700 dark:from-white dark:via-neutral-100 dark:to-neutral-200 bg-clip-text text-transparent leading-none mb-4">{stat.value}</p>
+                        <div className="flex items-center gap-3 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 px-4 py-2 rounded-xl border border-orange-200/50 dark:border-orange-800/50">
+                          <div className="relative">
+                            <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full blur-sm"></div>
+                            <div className="relative h-2 w-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 shadow-lg"></div>
+                          </div>
+                          <p className="text-xs font-black text-orange-700 dark:text-orange-300">{stat.totalTransactions} Transactions</p>
+                        </div>
                       </div>
 
-                      <div className="mb-4">
-                        <div className="relative h-32 bg-gradient-to-b from-neutral-50 to-neutral-100 dark:from-neutral-700/50 dark:to-neutral-700 rounded-lg p-3 overflow-hidden">
-                          {/* Grid lines */}
-                          <div className="absolute inset-0 opacity-20">
-                            {[...Array(5)].map((_, i) => (
-                              <div key={i} className="absolute w-full border-t border-neutral-300 dark:border-neutral-600" style={{ top: `${i * 20}%` }}></div>
-                            ))}
+                      {/* Chart Section - Premium Line Graph with Trend Visualization */}
+                      <div className="mb-8">
+                        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
+                          <div className="flex items-center gap-5">
+                            <div className="relative">
+                              <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-2xl blur-lg opacity-40"></div>
+                              <div className="relative w-14 h-14 bg-gradient-to-br from-purple-500 via-indigo-600 to-blue-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-purple-500/40">
+                                <FontAwesomeIcon icon={faChartLine} className="h-7 w-7 text-white drop-shadow-2xl" />
+                              </div>
+                            </div>
+                            <div>
+                              <p className="text-xl font-black bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 dark:from-purple-400 dark:via-indigo-400 dark:to-blue-400 bg-clip-text text-transparent mb-1">Revenue Trend Analysis</p>
+                              <p className="text-xs text-neutral-600 dark:text-neutral-400 font-bold">Interactive sales performance visualization</p>
+                            </div>
                           </div>
-
-                          {/* Line chart bars */}
-                          <div className="flex items-end justify-between h-full gap-0.5 relative z-10">
-                            {normalizedData.map((height, i) => {
-                              const prevValue = i === 0 ? stat.chartData[0] : stat.chartData[i - 1];
-                              const currentValue = stat.chartData[i];
-                              const percentChange = (((currentValue - prevValue) / prevValue) * 100).toFixed(0);
-                              const isIncrease = currentValue >= prevValue;
-                              
+                          <div className="flex items-center gap-4 bg-gradient-to-r from-white via-neutral-50 to-white dark:from-neutral-800 dark:via-neutral-700 dark:to-neutral-800 px-6 py-3 rounded-2xl border-2 border-neutral-200/60 dark:border-neutral-600/60 shadow-xl backdrop-blur-sm">
+                            <div className="flex items-center gap-2.5">
+                              <div className="relative">
+                                <div className="absolute inset-0 bg-green-500 rounded-full blur-sm opacity-50"></div>
+                                <div className="relative w-3 h-3 rounded-full bg-gradient-to-br from-green-400 to-green-600 shadow-lg"></div>
+                              </div>
+                              <span className="text-xs font-black text-green-700 dark:text-green-300 uppercase tracking-wider">Increase</span>
+                            </div>
+                            <div className="w-0.5 h-6 bg-gradient-to-b from-transparent via-neutral-300 dark:via-neutral-600 to-transparent"></div>
+                            <div className="flex items-center gap-2.5">
+                              <div className="relative">
+                                <div className="absolute inset-0 bg-red-500 rounded-full blur-sm opacity-50"></div>
+                                <div className="relative w-3 h-3 rounded-full bg-gradient-to-br from-red-400 to-red-600 shadow-lg"></div>
+                              </div>
+                              <span className="text-xs font-black text-red-700 dark:text-red-300 uppercase tracking-wider">Decrease</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="relative h-[28rem] bg-gradient-to-br from-slate-50 via-white to-indigo-50/50 dark:from-neutral-900 dark:via-neutral-800 dark:to-indigo-950/30 rounded-3xl p-10 overflow-hidden border-2 border-neutral-200/80 dark:border-neutral-700/80 shadow-2xl shadow-indigo-500/10">
+                          {/* Enhanced Ambient Effects */}
+                          <div className="absolute inset-0 rounded-3xl overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-blue-500/8 to-indigo-500/8 pointer-events-none"></div>
+                            <div className="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-white/60 dark:from-neutral-800/60 to-transparent pointer-events-none"></div>
+                            <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-white/60 dark:from-neutral-800/60 to-transparent pointer-events-none"></div>
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(139,92,246,0.05),transparent_50%)]"></div>
+                          </div>
+                          
+                          {/* Premium Grid Lines with Enhanced Y-axis Labels */}
+                          <div className="absolute inset-0 pointer-events-none pl-8 pr-8">
+                            {[...Array(6)].map((_, i) => {
+                              const percentage = 100 - (i * 20);
+                              const value = minValue + (range * percentage / 100);
                               return (
-                                <div key={i} className="flex-1 flex flex-col items-center justify-end group relative">
-                                  {/* Percentage label */}
-                                  <div className="absolute -top-6 text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <span className={isIncrease ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}>
-                                      {isIncrease ? '+' : ''}{percentChange}%
+                                <div key={i} className="absolute w-full flex items-center transition-all duration-300" style={{ top: `${i * 20}%`, left: 0 }}>
+                                  <div className="flex items-center gap-3 w-24 justify-end pr-4">
+                                    <span className="text-xs font-black text-neutral-700 dark:text-neutral-300 bg-gradient-to-r from-white to-neutral-50 dark:from-neutral-800 dark:to-neutral-700 px-3 py-1.5 rounded-lg shadow-md border border-neutral-200/50 dark:border-neutral-600/50">
+                                      ₱{Math.round(value).toLocaleString()}
                                     </span>
                                   </div>
-                                  
-                                  <div
-                                    className={`w-full rounded-t transition-all duration-300 ${
-                                      stat.trend === 'up' 
-                                        ? 'bg-gradient-to-t from-green-500 to-green-400 hover:from-green-600 hover:to-green-500 shadow-lg' 
-                                        : 'bg-gradient-to-t from-red-500 to-red-400 hover:from-red-600 hover:to-red-500 shadow-lg'
-                                    }`}
-                                    style={{ height: `${Math.max(height, 5)}%` }}
-                                    title={`₱${stat.chartData[i]} (${isIncrease ? '+' : ''}${percentChange}%)`}
-                                  ></div>
+                                  <div className="flex-1 border-t border-dashed border-neutral-300/60 dark:border-neutral-600/60 mr-8 relative">
+                                    <div className="absolute inset-0 border-t border-neutral-200/40 dark:border-neutral-500/40 translate-y-[1px]"></div>
+                                  </div>
                                 </div>
                               );
                             })}
                           </div>
+
+                          {/* Premium Line Graph Container with Enhanced Spacing */}
+                          <div className="relative h-full pl-24 pr-6 pt-4 pb-20">
+                            <svg className="absolute inset-0 w-full h-full" style={{ left: '96px', right: '24px', top: '16px', bottom: '64px' }}>
+                              <defs>
+                                {/* Enhanced Gradient for Area Fill */}
+                                <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                  <stop offset="0%" stopColor="#6366f1" stopOpacity="0.25" />
+                                  <stop offset="30%" stopColor="#8b5cf6" stopOpacity="0.15" />
+                                  <stop offset="70%" stopColor="#3b82f6" stopOpacity="0.1" />
+                                  <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.05" />
+                                </linearGradient>
+                                
+                                {/* Enhanced Glow Filters */}
+                                <filter id="glowGreen">
+                                  <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                                  <feMerge>
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                  </feMerge>
+                                </filter>
+                                <filter id="glowRed">
+                                  <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                                  <feMerge>
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                  </feMerge>
+                                </filter>
+                              </defs>
+                              
+                              {/* Enhanced Gradient Area Under Line */}
+                              <path
+                                d={`M 0,100% ${normalizedData.map((height, i) => {
+                                  const x = (i / (normalizedData.length - 1)) * 100;
+                                  const y = 100 - Math.max(height, 8);
+                                  return `L ${x}%,${y}%`;
+                                }).join(' ')} L 100%,100% Z`}
+                                fill="url(#areaGradient)"
+                                className="opacity-80 transition-opacity duration-500"
+                              />
+                              
+                              {/* Enhanced Premium Connecting Lines with Smooth Curves */}
+                              {normalizedData.map((height, i) => {
+                                if (i === normalizedData.length - 1) return null;
+                                const x1 = (i / (normalizedData.length - 1)) * 100;
+                                const x2 = ((i + 1) / (normalizedData.length - 1)) * 100;
+                                const y1 = 100 - Math.max(height, 8);
+                                const y2 = 100 - Math.max(normalizedData[i + 1], 8);
+                                
+                                const currentValue = stat.chartData[i];
+                                const nextValue = stat.chartData[i + 1];
+                                const isIncrease = nextValue >= currentValue;
+                                
+                                return (
+                                  <g key={i}>
+                                    {/* Enhanced Shadow Layer for 3D Effect */}
+                                    <line
+                                      x1={`${x1}%`}
+                                      y1={`${y1}%`}
+                                      x2={`${x2}%`}
+                                      y2={`${y2}%`}
+                                      stroke={isIncrease ? '#166534' : '#991b1b'}
+                                      strokeWidth="7"
+                                      opacity="0.15"
+                                      strokeLinecap="round"
+                                    />
+                                    {/* Middle Shadow for Depth */}
+                                    <line
+                                      x1={`${x1}%`}
+                                      y1={`${y1}%`}
+                                      x2={`${x2}%`}
+                                      y2={`${y2}%`}
+                                      stroke={isIncrease ? '#15803d' : '#b91c1c'}
+                                      strokeWidth="6"
+                                      opacity="0.25"
+                                      strokeLinecap="round"
+                                    />
+                                    {/* Main Enhanced Gradient Line */}
+                                    <line
+                                      x1={`${x1}%`}
+                                      y1={`${y1}%`}
+                                      x2={`${x2}%`}
+                                      y2={`${y2}%`}
+                                      stroke={isIncrease ? 'url(#greenGradient)' : 'url(#redGradient)'}
+                                      strokeWidth="5"
+                                      strokeLinecap="round"
+                                      filter={isIncrease ? 'url(#glowGreen)' : 'url(#glowRed)'}
+                                      className="transition-all duration-500 hover:stroke-width-6"
+                                    />
+                                  </g>
+                                );
+                              })}
+                              
+                              {/* Enhanced Gradient Definitions for Lines */}
+                              <defs>
+                                <linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                  <stop offset="0%" stopColor="#059669" />
+                                  <stop offset="50%" stopColor="#10b981" />
+                                  <stop offset="100%" stopColor="#34d399" />
+                                </linearGradient>
+                                <linearGradient id="redGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                  <stop offset="0%" stopColor="#dc2626" />
+                                  <stop offset="50%" stopColor="#ef4444" />
+                                  <stop offset="100%" stopColor="#f87171" />
+                                </linearGradient>
+                              </defs>
+                            </svg>
+
+                            {/* Enhanced Premium Data Points with Smooth Animations */}
+                            <div className="relative h-full flex items-end justify-between gap-1">
+                              {normalizedData.map((height, i) => {
+                                const prevValue = i === 0 ? stat.chartData[0] : stat.chartData[i - 1];
+                                const currentValue = stat.chartData[i];
+                                const percentChange = prevValue !== 0 ? (((currentValue - prevValue) / prevValue) * 100).toFixed(1) : '0';
+                                const isIncrease = currentValue >= prevValue;
+                                const dateLabel = salesData[i]?.date ? new Date(salesData[i].date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : `Day ${i + 1}`;
+                                
+                                return (
+                                  <div 
+                                    key={i} 
+                                    className="group/point relative flex flex-col items-center transition-all duration-500 hover:scale-105"
+                                    style={{ 
+                                      height: '100%',
+                                      justifyContent: 'flex-end',
+                                      alignItems: 'center',
+                                      paddingBottom: `${100 - Math.max(height, 8)}%`,
+                                      animation: `slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) ${i * 0.12}s both`
+                                    }}
+                                  >
+                                    {/* Enhanced Trend Arrow and Percentage with Smooth Animations */}
+                                    {i > 0 && (
+                                      <div className="absolute -top-14 flex flex-col items-center gap-1.5 transition-all duration-500 group-hover/point:scale-125 group-hover/point:-translate-y-1">
+                                        {/* Enhanced Animated Arrow with Multi-layer Glow */}
+                                        <div className={`relative ${isIncrease ? 'animate-bounce' : 'animate-pulse'}`}>
+                                          <div className={`absolute inset-0 blur-lg ${
+                                            isIncrease ? 'bg-green-500/60' : 'bg-red-500/60'
+                                          } rounded-full scale-150`}></div>
+                                          <div className={`absolute inset-0 blur-md ${
+                                            isIncrease ? 'bg-green-400/40' : 'bg-red-400/40'
+                                          } rounded-full scale-125`}></div>
+                                          <FontAwesomeIcon 
+                                            icon={isIncrease ? faArrowUp : faArrowDown}
+                                            className={`relative h-7 w-7 ${
+                                              isIncrease ? 'text-green-500 dark:text-green-400' : 'text-red-500 dark:text-red-400'
+                                            } drop-shadow-2xl transition-transform duration-300 group-hover/point:scale-110`}
+                                            style={{
+                                              filter: isIncrease 
+                                                ? 'drop-shadow(0 0 10px rgba(34, 197, 94, 0.9)) drop-shadow(0 0 4px rgba(34, 197, 94, 0.6))' 
+                                                : 'drop-shadow(0 0 10px rgba(239, 68, 68, 0.9)) drop-shadow(0 0 4px rgba(239, 68, 68, 0.6))'
+                                            }}
+                                          />
+                                        </div>
+                                        
+                                        {/* Enhanced Percentage Badge with Multi-layer Design */}
+                                        <div className={`relative px-3.5 py-1.5 rounded-xl shadow-2xl border-2 backdrop-blur-md transition-all duration-300 ${
+                                          isIncrease 
+                                            ? 'bg-gradient-to-br from-green-500 via-green-600 to-emerald-600 border-green-300/50 shadow-green-500/50' 
+                                            : 'bg-gradient-to-br from-red-500 via-red-600 to-rose-600 border-red-300/50 shadow-red-500/50'
+                                        } group-hover/point:shadow-3xl`}>
+                                          <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent rounded-xl"></div>
+                                          <span className="relative text-xs font-black text-white flex items-center gap-1">
+                                            <span>{isIncrease ? '▲' : '▼'}</span>
+                                            <span>{percentChange}%</span>
+                                          </span>
+                                        </div>
+                                      </div>
+                                    )}
+                                    
+                                    {/* Enhanced Premium Data Point with Multi-layer Effects */}
+                                    <div className="relative group-hover/point:z-10">
+                                      {/* Outer Animated Pulsing Ring */}
+                                      <div className={`absolute inset-0 rounded-full animate-ping ${
+                                        i === 0 ? 'bg-indigo-500/50' : isIncrease ? 'bg-green-500/50' : 'bg-red-500/50'
+                                      }`} style={{ width: '28px', height: '28px', left: '-6px', top: '-6px', animationDuration: '2s' }}></div>
+                                      
+                                      {/* Second Pulsing Layer for Depth */}
+                                      <div className={`absolute inset-0 rounded-full animate-ping ${
+                                        i === 0 ? 'bg-indigo-400/40' : isIncrease ? 'bg-green-400/40' : 'bg-red-400/40'
+                                      }`} style={{ width: '24px', height: '24px', left: '-4px', top: '-4px', animationDuration: '2.5s', animationDelay: '0.5s' }}></div>
+                                      
+                                      {/* Enhanced Glow Ring */}
+                                      <div className={`absolute inset-0 rounded-full blur-md ${
+                                        i === 0 ? 'bg-indigo-500/70' : isIncrease ? 'bg-green-500/70' : 'bg-red-500/70'
+                                      }`} style={{ width: '22px', height: '22px', left: '-3px', top: '-3px' }}></div>
+                                      
+                                      {/* Main Enhanced Point */}
+                                      <div className={`relative w-5 h-5 rounded-full border-[3px] bg-white dark:bg-neutral-800 shadow-2xl cursor-pointer transition-all duration-700 group-hover/point:w-8 group-hover/point:h-8 group-hover/point:border-[5px] group-hover/point:shadow-3xl ${
+                                        i === 0 ? 'border-indigo-500' : isIncrease ? 'border-green-500' : 'border-red-500'
+                                      }`}>
+                                        {/* Multi-layer Inner Gradient */}
+                                        <div className={`absolute inset-[2px] rounded-full bg-gradient-to-br shadow-inner ${
+                                          i === 0 
+                                            ? 'from-indigo-400 via-indigo-500 to-indigo-600' 
+                                            : isIncrease 
+                                            ? 'from-green-400 via-green-500 to-emerald-600' 
+                                            : 'from-red-400 via-red-500 to-rose-600'
+                                        }`}></div>
+                                        {/* Inner Highlight */}
+                                        <div className="absolute inset-[2px] rounded-full bg-gradient-to-br from-white/40 to-transparent"></div>
+                                      </div>
+                                      
+                                      {/* Enhanced Premium Tooltip with Glass Morphism */}
+                                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 opacity-0 scale-90 group-hover/point:opacity-100 group-hover/point:scale-100 transition-all duration-500 pointer-events-none z-40 whitespace-nowrap">
+                                        <div className={`relative px-6 py-5 rounded-2xl shadow-2xl backdrop-blur-xl border-2 overflow-hidden ${
+                                          i === 0 
+                                            ? 'bg-gradient-to-br from-indigo-500/95 via-indigo-600/95 to-blue-600/95 border-indigo-300/60 shadow-indigo-500/50' 
+                                            : isIncrease 
+                                            ? 'bg-gradient-to-br from-green-500/95 via-emerald-600/95 to-green-600/95 border-green-300/60 shadow-green-500/50' 
+                                            : 'bg-gradient-to-br from-red-500/95 via-rose-600/95 to-red-600/95 border-red-300/60 shadow-red-500/50'
+                                        }`}>
+                                          {/* Animated Shimmer Effect */}
+                                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent rounded-2xl animate-pulse"></div>
+                                          <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/20 to-transparent"></div>
+                                          
+                                          <div className="relative">
+                                            <p className="text-xs font-black text-white/95 mb-3 uppercase tracking-widest flex items-center gap-2">
+                                              <span className="w-1.5 h-1.5 rounded-full bg-white/80 animate-pulse"></span>
+                                              {dateLabel}
+                                            </p>
+                                            <p className="text-3xl font-black text-white drop-shadow-2xl mb-3">₱{currentValue.toLocaleString()}</p>
+                                            {i > 0 && (
+                                              <div className="flex items-center justify-center gap-3 pt-3 border-t border-white/40">
+                                                <div className={`p-2 rounded-xl ${isIncrease ? 'bg-white/25' : 'bg-white/25'} backdrop-blur-sm`}>
+                                                  <FontAwesomeIcon 
+                                                    icon={isIncrease ? faArrowUp : faArrowDown} 
+                                                    className="h-5 w-5 text-white drop-shadow-lg"
+                                                  />
+                                                </div>
+                                                <div className="flex flex-col items-start">
+                                                  <span className="text-xs font-bold text-white/90 uppercase tracking-wider">Change</span>
+                                                  <span className="text-lg font-black text-white drop-shadow-lg">{percentChange}%</span>
+                                                </div>
+                                              </div>
+                                            )}
+                                            {i === 0 && (
+                                              <div className="pt-3 border-t border-white/40">
+                                                <p className="text-xs font-black text-white/90 uppercase tracking-wider flex items-center gap-2">
+                                                  <span className="w-2 h-2 rounded-full bg-white/80"></span>
+                                                  Starting Point
+                                                </p>
+                                              </div>
+                                            )}
+                                          </div>
+                                        </div>
+                                        {/* Enhanced Tooltip Arrow */}
+                                        <div className={`w-4 h-4 rotate-45 absolute -bottom-2 left-1/2 -translate-x-1/2 shadow-lg ${
+                                          i === 0 ? 'bg-gradient-to-br from-indigo-600 to-blue-600' : isIncrease ? 'bg-gradient-to-br from-green-600 to-emerald-600' : 'bg-gradient-to-br from-red-600 to-rose-600'
+                                        }`}></div>
+                                      </div>
+                                    </div>
+                                    
+                                    {/* Enhanced Premium Date Label with Multi-layer Design */}
+                                    <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+                                      {/* Enhanced Color Indicator with Glow */}
+                                      {i > 0 && (
+                                        <div className="relative">
+                                          <div className={`absolute inset-0 rounded-full blur-sm ${
+                                            isIncrease ? 'bg-green-500/60' : 'bg-red-500/60'
+                                          }`}></div>
+                                          <div className={`relative w-2.5 h-2.5 rounded-full shadow-xl ${
+                                            isIncrease ? 'bg-gradient-to-br from-green-400 to-green-600 shadow-green-500/60' : 'bg-gradient-to-br from-red-400 to-red-600 shadow-red-500/60'
+                                          }`}></div>
+                                        </div>
+                                      )}
+                                      {i === 0 && (
+                                        <div className="relative">
+                                          <div className="absolute inset-0 rounded-full blur-sm bg-indigo-500/60"></div>
+                                          <div className="relative w-2.5 h-2.5 rounded-full shadow-xl bg-gradient-to-br from-indigo-400 to-indigo-600 shadow-indigo-500/60"></div>
+                                        </div>
+                                      )}
+                                      {/* Enhanced Date Label Badge */}
+                                      <div className={`relative transition-all duration-500 px-3 py-1.5 rounded-lg shadow-lg border ${
+                                        i === 0 
+                                          ? 'text-indigo-700 dark:text-indigo-300 bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/40 dark:to-indigo-800/40 border-indigo-200 dark:border-indigo-700 shadow-indigo-500/20' 
+                                          : isIncrease 
+                                          ? 'text-green-700 dark:text-green-300 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/40 dark:to-green-800/40 border-green-200 dark:border-green-700 shadow-green-500/20' 
+                                          : 'text-red-700 dark:text-red-300 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/40 dark:to-red-800/40 border-red-200 dark:border-red-700 shadow-red-500/20'
+                                      } group-hover/point:scale-125 group-hover/point:shadow-2xl group-hover/point:-translate-y-1`}>
+                                        <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white/40 dark:to-white/10 rounded-lg"></div>
+                                        <span className="relative text-xs font-black">
+                                          {dateLabel}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
                         </div>
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2 text-center">
-                          From ₱{Math.min(...stat.chartData)} to ₱{Math.max(...stat.chartData)}
-                        </p>
+                        
+                        {/* Enhanced Chart Summary with Premium Cards */}
+                        <div className="mt-8 pt-8 border-t-2 border-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-600 to-transparent">
+                          <div className="grid grid-cols-3 gap-6">
+                            <div className="group relative text-center bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-50 dark:from-blue-900/30 dark:via-indigo-900/30 dark:to-blue-900/30 rounded-2xl p-6 border-2 border-blue-300/60 dark:border-blue-700/60 transition-all duration-500 hover:shadow-2xl hover:scale-110 hover:border-blue-500 dark:hover:border-blue-500 backdrop-blur-sm overflow-hidden">
+                              <div className="absolute inset-0 bg-gradient-to-br from-blue-400/10 to-indigo-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                              <div className="relative flex items-center justify-center gap-2 mb-4">
+                                <div className="relative">
+                                  <div className="absolute inset-0 bg-blue-500 rounded-full blur-md opacity-50"></div>
+                                  <div className="relative w-3 h-3 rounded-full bg-gradient-to-br from-blue-400 to-indigo-600 shadow-lg"></div>
+                                </div>
+                                <p className="text-[11px] font-black uppercase tracking-widest text-blue-700 dark:text-blue-300">Minimum</p>
+                              </div>
+                              <p className="relative text-3xl font-black bg-gradient-to-br from-blue-700 to-indigo-700 dark:from-blue-200 dark:to-indigo-200 bg-clip-text text-transparent transition-all duration-500 group-hover:scale-125">₱{Math.min(...stat.chartData).toLocaleString()}</p>
+                            </div>
+                            <div className="group relative text-center bg-gradient-to-br from-orange-50 via-amber-50 to-orange-50 dark:from-orange-900/30 dark:via-amber-900/30 dark:to-orange-900/30 rounded-2xl p-6 border-2 border-orange-300/60 dark:border-orange-700/60 transition-all duration-500 hover:shadow-2xl hover:scale-110 hover:border-orange-500 dark:hover:border-orange-500 backdrop-blur-sm overflow-hidden">
+                              <div className="absolute inset-0 bg-gradient-to-br from-orange-400/10 to-amber-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                              <div className="relative flex items-center justify-center gap-2 mb-4">
+                                <div className="relative">
+                                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full blur-md opacity-50"></div>
+                                  <div className="relative w-3 h-3 rounded-full bg-gradient-to-r from-orange-400 to-amber-600 shadow-lg"></div>
+                                </div>
+                                <p className="text-[11px] font-black uppercase tracking-widest text-orange-700 dark:text-orange-300">Average</p>
+                              </div>
+                              <p className="relative text-3xl font-black bg-gradient-to-br from-orange-700 to-amber-700 dark:from-orange-200 dark:to-amber-200 bg-clip-text text-transparent transition-all duration-500 group-hover:scale-125">
+                                ₱{Math.round(stat.chartData.reduce((a, b) => a + b, 0) / stat.chartData.length).toLocaleString()}
+                              </p>
+                            </div>
+                            <div className="group relative text-center bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 dark:from-purple-900/30 dark:via-pink-900/30 dark:to-purple-900/30 rounded-2xl p-6 border-2 border-purple-300/60 dark:border-purple-700/60 transition-all duration-500 hover:shadow-2xl hover:scale-110 hover:border-purple-500 dark:hover:border-purple-500 backdrop-blur-sm overflow-hidden">
+                              <div className="absolute inset-0 bg-gradient-to-br from-purple-400/10 to-pink-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                              <div className="relative flex items-center justify-center gap-2 mb-4">
+                                <div className="relative">
+                                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full blur-md opacity-50"></div>
+                                  <div className="relative w-3 h-3 rounded-full bg-gradient-to-r from-purple-400 to-pink-600 shadow-lg"></div>
+                                </div>
+                                <p className="text-[11px] font-black uppercase tracking-widest text-purple-700 dark:text-purple-300">Maximum</p>
+                              </div>
+                              <p className="relative text-3xl font-black bg-gradient-to-br from-purple-700 to-pink-700 dark:from-purple-200 dark:to-pink-200 bg-clip-text text-transparent transition-all duration-500 group-hover:scale-125">₱{Math.max(...stat.chartData).toLocaleString()}</p>
+                            </div>
+                          </div>
+                        </div>
                       </div>
 
                       <p className="text-xs text-neutral-500 dark:text-neutral-400">
                         {dateRange === '7d' ? 'Last 7 days' : dateRange === '1d' ? 'Last 24 hours' : dateRange === '30d' ? 'Last 30 days' : 'Custom period'} • {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                       </p>
-                    </div>
+                      </div>
                     );
                   })
                   ) : (

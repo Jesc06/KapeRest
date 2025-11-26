@@ -181,7 +181,7 @@ const ItemList: React.FC = () => {
       if (result.includes('Successfully deleted')) {
         // Remove from local state
         setItems(items.filter(i => i.id !== itemId));
-        alert('Item deleted successfully');
+        alert('Item deleted successfully'); 
       } else {
         alert(result); // Show the error message from backend
       }
