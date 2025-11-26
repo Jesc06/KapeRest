@@ -290,8 +290,8 @@ const AddSupplier: React.FC = () => {
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 overflow-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8">
-            <div className="w-full max-w-4xl mx-auto">
+          <div className="flex-1 overflow-auto px-6 sm:px-8 md:px-12 py-10 sm:py-12">
+            <div className="w-full max-w-5xl mx-auto">
               {/* Page Header */}
               <div className="mb-8">
                 <div className="flex items-center gap-4 mb-4">
@@ -340,7 +340,7 @@ const AddSupplier: React.FC = () => {
                     value={formData.supplierName}
                     onChange={handleChange}
                     onBlur={() => handleFieldBlur('supplierName')}
-                    className={`w-full px-3 py-2 rounded-lg border bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
+                    className={`w-full px-4 py-3.5 text-base rounded-lg border bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
                       fieldErrors.supplierName
                         ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500'
                         : 'border-neutral-300 dark:border-neutral-700 focus:border-orange-500 focus:ring-orange-500'
@@ -366,7 +366,7 @@ const AddSupplier: React.FC = () => {
                     value={formData.contactPerson}
                     onChange={handleChange}
                     onBlur={() => handleFieldBlur('contactPerson')}
-                    className={`w-full px-3 py-2 rounded-lg border bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
+                    className={`w-full px-4 py-3.5 text-base rounded-lg border bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
                       fieldErrors.contactPerson
                         ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500'
                         : 'border-neutral-300 dark:border-neutral-700 focus:border-orange-500 focus:ring-orange-500'
@@ -394,7 +394,7 @@ const AddSupplier: React.FC = () => {
                       value={formData.phoneNumber}
                       onChange={handleChange}
                       onBlur={() => handleFieldBlur('phoneNumber')}
-                      className={`w-full px-3 py-2 rounded-lg border bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
+                      className={`w-full px-4 py-3.5 text-base rounded-lg border bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
                         fieldErrors.phoneNumber
                           ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500'
                           : 'border-neutral-300 dark:border-neutral-700 focus:border-orange-500 focus:ring-orange-500'
@@ -420,7 +420,7 @@ const AddSupplier: React.FC = () => {
                       value={formData.email}
                       onChange={handleChange}
                       onBlur={() => handleFieldBlur('email')}
-                      className={`w-full px-3 py-2 rounded-lg border bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
+                      className={`w-full px-4 py-3.5 text-base rounded-lg border bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
                         fieldErrors.email
                           ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500'
                           : 'border-neutral-300 dark:border-neutral-700 focus:border-orange-500 focus:ring-orange-500'
@@ -447,7 +447,7 @@ const AddSupplier: React.FC = () => {
                     value={formData.address}
                     onChange={handleChange}
                     onBlur={() => handleFieldBlur('address')}
-                    className={`w-full px-3 py-2 rounded-lg border bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
+                    className={`w-full px-4 py-3.5 text-base rounded-lg border bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
                       fieldErrors.address
                         ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500'
                         : 'border-neutral-300 dark:border-neutral-700 focus:border-orange-500 focus:ring-orange-500'

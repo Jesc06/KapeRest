@@ -285,8 +285,8 @@ const AddStocks: React.FC = () => {
           </div>
 
           {/* Content Area */}
-          <div className="flex-1 overflow-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8">
-            <div className="w-full max-w-4xl mx-auto">
+          <div className="flex-1 overflow-auto px-6 sm:px-8 md:px-12 py-10 sm:py-12">
+            <div className="w-full max-w-5xl mx-auto">
               {/* Page Header */}
               <div className="mb-8">
                 <div className="flex items-center gap-4 mb-4">
@@ -323,7 +323,7 @@ const AddStocks: React.FC = () => {
               )}
 
               {/* Form - Flat Design */}
-              <form onSubmit={handleSubmit} className="space-y-5 bg-white dark:bg-neutral-900 p-6 rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-sm">
+              <form onSubmit={handleSubmit} className="space-y-6 bg-white dark:bg-neutral-900 p-8 rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-sm">
                 
                 {/* Product Name */}
                 <div>
@@ -335,7 +335,7 @@ const AddStocks: React.FC = () => {
                     name="productName"
                     value={formData.productName}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
+                    className="w-full px-4 py-3.5 text-base rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
                     placeholder="e.g., Arabica Coffee Beans"
                     disabled={isLoading}
                   />
@@ -355,7 +355,7 @@ const AddStocks: React.FC = () => {
                         name="costPrice"
                         value={formData.costPrice}
                         onChange={handleChange}
-                        className="w-full pl-7 pr-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
+                        className="w-full pl-8 pr-4 py-3.5 text-base rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
                         placeholder="0.00"
                         step="0.01"
                         disabled={isLoading}
@@ -373,7 +373,7 @@ const AddStocks: React.FC = () => {
                       name="stocks"
                       value={formData.stocks}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
+                      className="w-full px-4 py-3.5 text-base rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
                       placeholder="0"
                       min="0"
                       disabled={isLoading}
@@ -392,7 +392,7 @@ const AddStocks: React.FC = () => {
                       name="units"
                       value={formData.units}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
+                      className="w-full px-4 py-3.5 text-base rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
                       disabled={isLoading}
                     >
                       <option value="">Select unit</option>
@@ -413,7 +413,7 @@ const AddStocks: React.FC = () => {
                       name="supplierId"
                       value={formData.supplierId}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
+                      className="w-full px-4 py-3.5 text-base rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
                       disabled={isLoading}
                     >
                       <option value="">Select supplier</option>
