@@ -3,18 +3,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faSearch, faChartLine, faCalendar, faBuilding, faMoneyBill, faClock, faSpinner, faSun, faCalendarWeek, faReceipt } from '@fortawesome/free-solid-svg-icons';
 import AdminSidebar from './AdminSidebar';
 import LogoutPanel from '../Shared/LogoutPanel';
+import { API_BASE_URL } from '../../config/api';
 
 interface Sale {
   id: number;
-  transactionId: string;
-  productName: string;
-  quantity: number;
-  unitPrice: number;
-  totalAmount: number;
   cashierName: string;
   branchName: string;
-  transactionDate: string;
-  paymentMethod: string;
+  branchLocation: string;
+  email: string;
+  menuItemName: string;
+  dateTime: string;
+  subtotal: number;
+  tax: number;
+  discount: number;
+  total: number;
+  status: string;
 }
 
 const SalesPage: React.FC = () => {
@@ -27,89 +30,46 @@ const SalesPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState<'daily' | 'weekly' | 'monthly' | null>(null);
 
-  // Mock data - Replace with actual API call
+  // Fetch sales from API based on period filter
   useEffect(() => {
     const fetchSales = async () => {
       setIsLoading(true);
-      // Simulate API call
-      setTimeout(() => {
-        const mockData: Sale[] = [
-          {
-            id: 1,
-            transactionId: "TXN-001",
-            productName: "Cappuccino",
-            quantity: 2,
-            unitPrice: 120,
-            totalAmount: 240,
-            cashierName: "Juan Dela Cruz",
-            branchName: "Main Branch",
-            transactionDate: "2025-11-18T08:30:00",
-            paymentMethod: "Cash"
+      try {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+          console.error('No access token found');
+          setIsLoading(false);
+          return;
+        }
+
+        // Determine endpoint based on period filter
+        let endpoint = '';
+        if (filterPeriod === 'daily') {
+          endpoint = `${API_BASE_URL}/AdminSalesReports/AdminDailyReports`;
+        } else if (filterPeriod === 'monthly') {
+          endpoint = `${API_BASE_URL}/AdminSalesReports/AdminMonthlyReports`;
+        } else if (filterPeriod === 'yearly') {
+          endpoint = `${API_BASE_URL}/AdminSalesReports/AdminYearlyReports`;
+        }
+
+        const response = await fetch(endpoint, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
           },
-          {
-            id: 2,
-            transactionId: "TXN-002",
-            productName: "Latte",
-            quantity: 1,
-            unitPrice: 150,
-            totalAmount: 150,
-            cashierName: "Maria Santos",
-            branchName: "Downtown Branch",
-            transactionDate: "2025-11-18T09:15:00",
-            paymentMethod: "Card"
-          },
-          {
-            id: 3,
-            transactionId: "TXN-003",
-            productName: "Espresso",
-            quantity: 3,
-            unitPrice: 100,
-            totalAmount: 300,
-            cashierName: "Pedro Reyes",
-            branchName: "Main Branch",
-            transactionDate: "2025-11-18T10:00:00",
-            paymentMethod: "Cash"
-          },
-          {
-            id: 4,
-            transactionId: "TXN-004",
-            productName: "Mocha",
-            quantity: 2,
-            unitPrice: 140,
-            totalAmount: 280,
-            cashierName: "Ana Garcia",
-            branchName: "Uptown Branch",
-            transactionDate: "2025-11-18T11:30:00",
-            paymentMethod: "GCash"
-          },
-          {
-            id: 5,
-            transactionId: "TXN-005",
-            productName: "Americano",
-            quantity: 1,
-            unitPrice: 110,
-            totalAmount: 110,
-            cashierName: "Juan Dela Cruz",
-            branchName: "Main Branch",
-            transactionDate: "2025-11-18T12:45:00",
-            paymentMethod: "Card"
-          },
-          {
-            id: 6,
-            transactionId: "TXN-006",
-            productName: "Flat White",
-            quantity: 2,
-            unitPrice: 135,
-            totalAmount: 270,
-            cashierName: "Maria Santos",
-            branchName: "Downtown Branch",
-            transactionDate: "2025-11-18T13:20:00",
-            paymentMethod: "Cash"
-          },
-        ];
-        setSales(mockData);
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data: Sale[] = await response.json();
+        setSales(data);
         setIsLoading(false);
-      }, 500);
+      } catch (err) {
+        console.error('Error fetching sales:', err);
+        setIsLoading(false);
+      }
     };
 
     fetchSales();
@@ -122,9 +82,10 @@ const SalesPage: React.FC = () => {
   const filteredSales = sales.filter(sale => {
     const searchLower = searchTerm.toLowerCase();
     const matchesSearch = 
-      sale.transactionId.toLowerCase().includes(searchLower) ||
-      sale.productName.toLowerCase().includes(searchLower) ||
-      sale.cashierName.toLowerCase().includes(searchLower);
+      sale.id.toString().includes(searchLower) ||
+      sale.menuItemName.toLowerCase().includes(searchLower) ||
+      sale.cashierName.toLowerCase().includes(searchLower) ||
+      sale.branchName.toLowerCase().includes(searchLower);
     
     const matchesBranch = filterBranch === 'all' || sale.branchName === filterBranch;
     
@@ -132,7 +93,7 @@ const SalesPage: React.FC = () => {
   });
 
   // Calculate stats
-  const totalSales = filteredSales.reduce((sum, sale) => sum + sale.totalAmount, 0);
+  const totalSales = filteredSales.reduce((sum, sale) => sum + sale.total, 0);
   const totalTransactions = filteredSales.length;
   const averageSale = totalTransactions > 0 ? totalSales / totalTransactions : 0;
 
@@ -158,12 +119,56 @@ const SalesPage: React.FC = () => {
   const handleGenerateReport = async (type: 'daily' | 'weekly' | 'monthly') => {
     setIsGenerating(type);
     
-    // Simulate report generation
-    setTimeout(() => {
-      console.log(`Generating ${type} report...`);
-      // Add your actual report generation logic here
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        console.error('No access token found');
+        alert('Please login first');
+        setIsGenerating(null);
+        return;
+      }
+
+      // Map type to correct endpoint
+      let endpoint = '';
+      if (type === 'daily') {
+        endpoint = `${API_BASE_URL}/AdminSalesReports/AdminGenerateDailyPdfReports`;
+      } else if (type === 'monthly') {
+        endpoint = `${API_BASE_URL}/AdminSalesReports/AdminGenerateMonthlyPdfReports`;
+      } else if (type === 'weekly') {
+        endpoint = `${API_BASE_URL}/AdminSalesReports/AdminGenerateYearlyPdfReports`;
+      }
+
+      const response = await fetch(endpoint, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Get the PDF blob
+      const blob = await response.blob();
+      
+      // Create a download link
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${type}_sales_report_${new Date().toISOString().split('T')[0]}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      
+      alert(`${type.charAt(0).toUpperCase() + type.slice(1)} report generated successfully!`);
       setIsGenerating(null);
-    }, 2000);
+    } catch (err) {
+      console.error(`Error generating ${type} report:`, err);
+      alert(`Failed to generate ${type} report. Please try again.`);
+      setIsGenerating(null);
+    }
   };
 
   return (
@@ -308,8 +313,8 @@ const SalesPage: React.FC = () => {
 
                     {[
                       { type: 'daily', label: 'Daily', icon: faSun },
-                      { type: 'weekly', label: 'Weekly', icon: faCalendarWeek },
-                      { type: 'monthly', label: 'Monthly', icon: faCalendar }
+                      { type: 'monthly', label: 'Monthly', icon: faCalendar },
+                      { type: 'weekly', label: 'Yearly', icon: faCalendarWeek }
                     ].map(({ type, label, icon }) => (
                       <button
                         key={type}
@@ -450,20 +455,11 @@ const SalesPage: React.FC = () => {
                           <th className="px-7 py-4 text-left">
                             <div className="flex items-center gap-2">
                               <div className="h-2 w-2 rounded-full bg-gradient-to-r from-orange-500 to-orange-600"></div>
-                              <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Transaction ID</span>
+                              <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">ID</span>
                             </div>
                           </th>
                           <th className="px-7 py-4 text-left">
-                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Product</span>
-                          </th>
-                          <th className="px-7 py-4 text-center">
-                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Quantity</span>
-                          </th>
-                          <th className="px-7 py-4 text-right">
-                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Unit Price</span>
-                          </th>
-                          <th className="px-7 py-4 text-right">
-                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Total Amount</span>
+                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Menu Item</span>
                           </th>
                           <th className="px-7 py-4 text-left">
                             <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Cashier</span>
@@ -471,8 +467,20 @@ const SalesPage: React.FC = () => {
                           <th className="px-7 py-4 text-left">
                             <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Branch</span>
                           </th>
+                          <th className="px-7 py-4 text-right">
+                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Subtotal</span>
+                          </th>
+                          <th className="px-7 py-4 text-right">
+                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Tax</span>
+                          </th>
+                          <th className="px-7 py-4 text-right">
+                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Discount</span>
+                          </th>
+                          <th className="px-7 py-4 text-right">
+                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Total</span>
+                          </th>
                           <th className="px-7 py-4 text-center">
-                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Payment</span>
+                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Status</span>
                           </th>
                           <th className="px-7 py-4 text-left">
                             <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Date & Time</span>
@@ -488,27 +496,12 @@ const SalesPage: React.FC = () => {
                             <td className="px-7 py-5 relative">
                               <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-orange-500 to-orange-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                               <span className="text-sm font-black text-orange-600 dark:text-orange-400 group-hover:text-orange-700 dark:group-hover:text-orange-300 transition-colors">
-                                {sale.transactionId}
+                                #{sale.id}
                               </span>
                             </td>
                             <td className="px-7 py-5">
                               <span className="text-sm font-semibold text-neutral-900 dark:text-white">
-                                {sale.productName}
-                              </span>
-                            </td>
-                            <td className="px-7 py-5 text-center">
-                              <span className="text-sm font-bold text-neutral-700 dark:text-neutral-300 tabular-nums">
-                                {sale.quantity}
-                              </span>
-                            </td>
-                            <td className="px-7 py-5 text-right">
-                              <span className="text-sm font-bold text-neutral-900 dark:text-white tabular-nums">
-                                ₱{sale.unitPrice.toFixed(2)}
-                              </span>
-                            </td>
-                            <td className="px-7 py-5 text-right">
-                              <span className="text-base font-black text-green-600 dark:text-green-400 tabular-nums">
-                                ₱{sale.totalAmount.toLocaleString()}
+                                {sale.menuItemName}
                               </span>
                             </td>
                             <td className="px-7 py-5">
@@ -517,30 +510,55 @@ const SalesPage: React.FC = () => {
                               </span>
                             </td>
                             <td className="px-7 py-5">
-                              <span className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
-                                {sale.branchName}
+                              <div className="flex flex-col">
+                                <span className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+                                  {sale.branchName}
+                                </span>
+                                <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                                  {sale.branchLocation}
+                                </span>
+                              </div>
+                            </td>
+                            <td className="px-7 py-5 text-right">
+                              <span className="text-sm font-bold text-neutral-900 dark:text-white tabular-nums">
+                                ₱{sale.subtotal.toFixed(2)}
+                              </span>
+                            </td>
+                            <td className="px-7 py-5 text-right">
+                              <span className="text-sm font-bold text-blue-600 dark:text-blue-400 tabular-nums">
+                                ₱{sale.tax.toFixed(2)}
+                              </span>
+                            </td>
+                            <td className="px-7 py-5 text-right">
+                              <span className="text-sm font-bold text-orange-600 dark:text-orange-400 tabular-nums">
+                                ₱{sale.discount.toFixed(2)}
+                              </span>
+                            </td>
+                            <td className="px-7 py-5 text-right">
+                              <span className="text-base font-black text-green-600 dark:text-green-400 tabular-nums">
+                                ₱{sale.total.toFixed(2)}
                               </span>
                             </td>
                             <td className="px-7 py-5 text-center">
                               <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-sm shadow-lg transition-all duration-300 group-hover:scale-105 ${
-                                sale.paymentMethod === 'Cash' 
+                                sale.status === 'Completed' 
                                   ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-green-500/30'
-                                  : sale.paymentMethod === 'Card'
-                                  ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-blue-500/30'
-                                  : 'bg-gradient-to-r from-purple-500 to-pink-600 text-white shadow-purple-500/30'
+                                  : sale.status === 'Pending'
+                                  ? 'bg-gradient-to-r from-yellow-500 to-orange-600 text-white shadow-yellow-500/30'
+                                  : 'bg-gradient-to-r from-red-500 to-pink-600 text-white shadow-red-500/30'
                               }`}>
                                 <div className="h-2 w-2 rounded-full bg-white"></div>
-                                {sale.paymentMethod}
+                                {sale.status}
                               </span>
                             </td>
                             <td className="px-7 py-5">
                               <div className="flex flex-col gap-1">
                                 <span className="text-sm font-semibold text-neutral-900 dark:text-white">
-                                  {formatDate(sale.transactionDate).split(',')[0]}
+                                  {formatDate(sale.dateTime).split(',')[0]}
                                 </span>
                                 <span className="text-xs font-medium text-stone-500 dark:text-stone-400 flex items-center gap-1.5">
                                   <FontAwesomeIcon icon={faClock} className="h-3 w-3" />
-                                  {formatTime(sale.transactionDate)}
+                                  {formatTime(sale.dateTime)}
                                 </span>
                               </div>
                             </td>
