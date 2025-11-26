@@ -59,7 +59,6 @@ const AuditTrailPage: React.FC = () => {
   }, []);
 
   // Get unique values for filters
-  const actions = ['all', ...Array.from(new Set(auditLogs.map(log => log.action)))];
   const roles = ['all', ...Array.from(new Set(auditLogs.map(log => log.role)))];
 
   // Filter audit logs

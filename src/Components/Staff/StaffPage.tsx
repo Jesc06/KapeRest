@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faBoxOpen, faPlus, faList, faWarehouse, faArrowUp, faArrowDown, faChartLine, faCalendarDays, faX } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faWarehouse, faArrowUp, faArrowDown, faChartLine, faCalendarDays, faX } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from './StaffSidebar';
 import LogoutPanel from '../Shared/LogoutPanel';
 import { API_BASE_URL } from '../../config/api';
@@ -13,7 +12,6 @@ interface StaffSalesData {
 }
 
 const StaffPage: React.FC = () => {
-  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [dateRange, setDateRange] = useState<'1d' | '7d' | '30d' | 'custom'>('7d');
@@ -111,48 +109,8 @@ const StaffPage: React.FC = () => {
 
   const salesOverview = processSalesData();
 
-  // Quick action cards
-  const quickActions = [
-    {
-      title: 'Add Item',
-      description: 'Add new products',
-      icon: faPlus,
-      color: 'from-orange-500 to-amber-600',
-      path: '/staff/add-item'
-    },
-    {
-      title: 'Add Stocks',
-      description: 'Manage inventory',
-      icon: faWarehouse,
-      color: 'from-amber-500 to-orange-600',
-      path: '/staff/add-stocks'
-    }
-  ];
-
   // Quick stats cards - Sales Overview
   const statsCards = salesOverview ? [salesOverview] : [];
-
-  // Management cards
-  const managementCards = [
-    {
-      title: 'Supplier List',
-      description: 'View and manage all suppliers',
-      icon: faList,
-      path: '/staff/suppliers'
-    },
-    {
-      title: 'Item List',
-      description: 'Browse all products',
-      icon: faBoxOpen,
-      path: '/staff/items'
-    },
-    {
-      title: 'Stock List',
-      description: 'Monitor stock levels',
-      icon: faWarehouse,
-      path: '/staff/stocks'
-    }
-  ];
 
   return (
     <div className="min-h-screen w-full relative overflow-hidden" style={{ backgroundColor: '#FAFAFA' }}>

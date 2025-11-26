@@ -6,8 +6,7 @@ import {
   faBars,
   faCalendarAlt,
   faClock,
-  faUser,
-  faBolt
+  faUser
 } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from './StaffSidebar';
 import LogoutPanel from '../Shared/LogoutPanel';

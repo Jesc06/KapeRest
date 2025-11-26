@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faSearch, faBox, faBoxes, faEdit, faTrash, faPlus, faFilter, faTimes, faSave } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faSearch, faBox, faBoxes, faEdit, faTrash, faPlus, faTimes, faSave } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from '../Staff/StaffSidebar';
 import LogoutPanel from './LogoutPanel';
 import { API_BASE_URL } from '../../config/api';

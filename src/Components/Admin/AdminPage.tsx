@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import AdminSidebar from './AdminSidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faUsers, faPercent, faBoxes, faBuilding, faChartLine, faShieldAlt, faArrowUp, faArrowDown, faCalendar } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faUsers, faBuilding, faChartLine, faShieldAlt, faArrowUp, faArrowDown, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import LogoutPanel from '../Shared/LogoutPanel';
 import { useNavigate } from 'react-router-dom';
 
@@ -79,38 +79,6 @@ const AdminPage: React.FC = () => {
     if (hour < 18) return 'Good Afternoon';
     return 'Good Evening';
   };
-
-  // Premium Quick Actions
-  const quickActions = [
-    {
-      title: 'Manage Accounts',
-      description: 'Control user access & permissions',
-      icon: faUsers,
-      color: 'from-purple-500 via-purple-600 to-indigo-600',
-      path: '/admin/accounts'
-    },
-    {
-      title: 'Tax & Discounts',
-      description: 'Configure pricing rules',
-      icon: faPercent,
-      color: 'from-emerald-500 via-teal-600 to-cyan-600',
-      path: '/admin/tax-discounts'
-    },
-    {
-      title: 'Inventory',
-      description: 'Monitor stock levels',
-      icon: faBoxes,
-      color: 'from-orange-500 via-amber-600 to-yellow-600',
-      path: '/admin/inventory'
-    },
-    {
-      title: 'Branch Management',
-      description: 'Oversee all locations',
-      icon: faBuilding,
-      color: 'from-blue-500 via-indigo-600 to-purple-600',
-      path: '/admin/branch'
-    }
-  ];
 
   // Stats Cards
   const statsCards = [

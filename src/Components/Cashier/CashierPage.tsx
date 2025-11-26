@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faShoppingCart, faChartLine, faCashRegister, faMoneyBillWave, faReceipt } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faChartLine, faCashRegister, faMoneyBillWave, faReceipt } from '@fortawesome/free-solid-svg-icons';
 import Sidebar from './Sidebar.tsx';
 import LogoutPanel from '../Shared/LogoutPanel';
 import { API_BASE_URL } from '../../config/api';
 
 const CashierPage: React.FC = () => {
-  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [todaySales, setTodaySales] = useState(0);
@@ -74,24 +72,6 @@ const CashierPage: React.FC = () => {
     if (hour < 18) return 'Good Afternoon';
     return 'Good Evening';
   };
-
-  // Quick action cards
-  const quickActions = [
-    {
-      title: 'Buy Item',
-      description: 'Process customer orders',
-      icon: faShoppingCart,
-      color: 'from-orange-500 to-orange-600',
-      path: '/cashier/buy-item'
-    },
-    {
-      title: 'View Sales',
-      description: 'Check sales records',
-      icon: faChartLine,
-      color: 'from-blue-500 to-blue-600',
-      path: '/cashier/sales'
-    }
-  ];
 
   return (
     <div className="min-h-screen w-full" style={{ backgroundColor: '#FAFAFA' }}>
