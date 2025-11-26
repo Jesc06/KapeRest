@@ -193,7 +193,7 @@ const StaffPage: React.FC = () => {
         <StaffSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
 
         {/* Main Content */}
-        <div className={`flex h-screen w-full flex-col bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl transition-all duration-300 ${sidebarExpanded ? 'lg:ml-72' : 'lg:ml-24'}`}>
+        <div className={`flex h-screen w-full flex-col bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
           {/* Top Bar - Minimal Header */}
           <div className="sticky top-0 z-20 border-b border-orange-200/50 dark:border-neutral-700/50 bg-white/90 dark:bg-neutral-800/90 px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 transition-all duration-300 backdrop-blur-xl shadow-sm shadow-orange-500/5">
             <div className="flex items-center justify-between gap-3">
@@ -233,7 +233,7 @@ const StaffPage: React.FC = () => {
               
               {/* Welcome Section */}
               <div className="mb-16 sm:mb-20 relative">
-                <div className="relative bg-gradient-to-br from-amber-500 via-orange-600 to-rose-600 dark:from-amber-600 dark:via-orange-700 dark:to-rose-700 rounded-3xl p-10 sm:p-12 md:p-16 shadow-2xl overflow-hidden group border border-orange-400/30">
+                <div className="relative bg-gradient-to-br from-amber-500 via-orange-600 to-rose-600 dark:from-amber-600 dark:via-orange-700 dark:to-rose-700 rounded-3xl p-12 sm:p-16 md:p-20 shadow-2xl overflow-hidden group border border-orange-400/30 min-h-[400px]">
                   {/* Animated Premium Background */}
                   <div className="absolute inset-0 opacity-20">
                     <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] animate-pulse"></div>
@@ -249,30 +249,30 @@ const StaffPage: React.FC = () => {
                     <div className="absolute top-1/3 left-2/3 w-2 h-2 bg-orange-200/40 rounded-full animate-pulse" style={{ animationDuration: '2s', animationDelay: '1s' }}></div>
                   </div>
                   
-                  <div className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-12 lg:gap-16">
+                  <div className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-14 lg:gap-20">
                     <div className="flex-1">
-                      <div className="flex items-start gap-6 mb-8">
-                        <div className="w-20 h-20 bg-white/25 backdrop-blur-md rounded-2xl flex items-center justify-center border-2 border-white/50 shadow-2xl group-hover:scale-110 group-hover:rotate-2 transition-all duration-300 flex-shrink-0">
-                          <FontAwesomeIcon icon={faWarehouse} className="text-5xl text-white drop-shadow-lg" />
+                      <div className="flex items-start gap-8 mb-10">
+                        <div className="w-28 h-28 bg-white/25 backdrop-blur-md rounded-3xl flex items-center justify-center border-2 border-white/50 shadow-2xl group-hover:scale-110 group-hover:rotate-2 transition-all duration-300 flex-shrink-0">
+                          <FontAwesomeIcon icon={faWarehouse} className="text-6xl text-white drop-shadow-lg" />
                         </div>
                         <div className="flex-1">
-                          <h2 className="text-5xl sm:text-6xl font-black text-white mb-3 tracking-tighter drop-shadow-lg leading-tight">
+                          <h2 className="text-6xl sm:text-7xl md:text-8xl font-black text-white mb-4 tracking-tighter drop-shadow-lg leading-tight">
                             {getGreeting()}!
                           </h2>
-                          <div className="text-orange-50 text-sm font-bold uppercase tracking-widest flex items-center gap-2">
-                            <div className="w-2 h-2 rounded-full bg-yellow-300 flex-shrink-0"></div>
+                          <div className="text-orange-50 text-base sm:text-lg font-bold uppercase tracking-widest flex items-center gap-3">
+                            <div className="w-2.5 h-2.5 rounded-full bg-yellow-300 flex-shrink-0"></div>
                             <span>Staff Portal</span>
                           </div>
                         </div>
                       </div>
-                      <p className="text-white/95 text-base sm:text-lg leading-relaxed max-w-2xl font-medium">
+                      <p className="text-white/95 text-lg sm:text-xl md:text-2xl leading-relaxed max-w-2xl font-medium">
                         Welcome to your workspace. Ready to manage suppliers, items, and inventory efficiently.
                       </p>
                     </div>
-                    <div className="w-full lg:w-auto bg-white/20 backdrop-blur-lg rounded-2xl px-8 py-6 border-2 border-white/40 shadow-2xl group-hover:scale-110 group-hover:shadow-3xl transition-all duration-300">
-                      <p className="text-white/90 text-xs font-black uppercase tracking-widest mb-4">📅 Today's Date</p>
-                      <p className="text-white text-4xl font-black drop-shadow-lg leading-none mb-2">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
-                      <p className="text-white/95 text-lg font-bold drop-shadow-lg">{new Date().toLocaleDateString('en-US', { year: 'numeric' })}</p>
+                    <div className="w-full lg:w-auto bg-white/20 backdrop-blur-lg rounded-2xl px-10 py-8 border-2 border-white/40 shadow-2xl group-hover:scale-110 group-hover:shadow-3xl transition-all duration-300">
+                      <p className="text-white/90 text-sm font-black uppercase tracking-widest mb-5">📅 Today's Date</p>
+                      <p className="text-white text-5xl font-black drop-shadow-lg leading-none mb-3">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                      <p className="text-white/95 text-xl font-bold drop-shadow-lg">{new Date().toLocaleDateString('en-US', { year: 'numeric' })}</p>
                     </div>
                   </div>
                 </div>
@@ -282,22 +282,14 @@ const StaffPage: React.FC = () => {
               <div className="mb-16 sm:mb-20">
                 <div className="mb-10">
                   <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
-                    <div className="flex items-center gap-4">
-                      <div className="relative">
-                        <div className="absolute inset-0 bg-gradient-to-br from-orange-500 to-amber-600 rounded-2xl blur-lg opacity-30"></div>
-                        <div className="relative w-14 h-14 bg-gradient-to-br from-orange-500 via-amber-600 to-orange-600 rounded-2xl flex items-center justify-center shadow-xl shadow-orange-500/30">
-                          <FontAwesomeIcon icon={faChartLine} className="h-7 w-7 text-white drop-shadow-2xl" />
-                        </div>
-                      </div>
-                      <div>
-                        <h3 className="text-3xl font-black bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 dark:from-orange-400 dark:via-amber-400 dark:to-orange-500 bg-clip-text text-transparent tracking-tight mb-1">
-                          {dateRange === '7d' ? "Today's Overview" : "Sales Overview"}
-                        </h3>
-                        <p className="text-sm text-neutral-600 dark:text-neutral-400 font-bold flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse"></span>
-                          Sales data for selected period
-                        </p>
-                      </div>
+                    <div>
+                      <h3 className="text-3xl font-black bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 dark:from-orange-400 dark:via-amber-400 dark:to-orange-500 bg-clip-text text-transparent tracking-tight mb-1">
+                        {dateRange === '7d' ? "Today's Overview" : "Sales Overview"}
+                      </h3>
+                      <p className="text-sm text-neutral-600 dark:text-neutral-400 font-bold flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse"></span>
+                        Sales data for selected period
+                      </p>
                     </div>
                     <div className="flex items-center gap-3 bg-gradient-to-r from-white via-neutral-50 to-white dark:from-neutral-800 dark:via-neutral-700 dark:to-neutral-800 rounded-2xl p-2 border-2 border-neutral-200/60 dark:border-neutral-600/60 shadow-lg backdrop-blur-sm">
                       {(['1d', '7d', '30d'] as const).map((range) => (
@@ -861,76 +853,6 @@ const StaffPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Quick Actions */}
-              <div className="mb-12">
-                <div className="mb-8">
-                  <h3 className="text-2xl sm:text-3xl font-black text-neutral-900 dark:text-white tracking-tight mb-1">
-                    Quick Actions
-                  </h3>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
-                    Fast access to key functions
-                  </p>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {quickActions.map((action, index) => (
-                    <button
-                      key={index}
-                      onClick={() => navigate(action.path)}
-                      className="group relative bg-white dark:bg-neutral-800 rounded-2xl p-6 transition-all duration-300 border border-neutral-200 dark:border-neutral-700 hover:border-orange-400 dark:hover:border-orange-500 hover:shadow-md text-left"
-                    >
-                      <div className="flex items-start justify-between mb-4">
-                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center shadow-md`}>
-                          <FontAwesomeIcon icon={action.icon} className="h-6 w-6 text-white" />
-                        </div>
-                      </div>
-                      <div>
-                        <h4 className="text-lg font-bold text-neutral-900 dark:text-white mb-1.5 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
-                          {action.title}
-                        </h4>
-                        <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                          {action.description}
-                        </p>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Management Section */}
-              <div>
-                <div className="mb-8">
-                  <h3 className="text-2xl sm:text-3xl font-black text-neutral-900 dark:text-white tracking-tight mb-1">
-                    Management
-                  </h3>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
-                    View and manage all records
-                  </p>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {managementCards.map((card, index) => (
-                    <button
-                      key={index}
-                      onClick={() => navigate(card.path)}
-                      className="group bg-white dark:bg-neutral-800 rounded-2xl p-6 transition-all duration-300 border border-neutral-200 dark:border-neutral-700 hover:border-orange-400 dark:hover:border-orange-500 hover:shadow-md text-left"
-                    >
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="w-12 h-12 rounded-xl bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center group-hover:bg-orange-100 dark:group-hover:bg-orange-900/30 transition-colors">
-                          <FontAwesomeIcon icon={card.icon} className="h-6 w-6 text-orange-600 dark:text-orange-400" />
-                        </div>
-                      </div>
-                      <div>
-                        <h4 className="text-lg font-bold text-neutral-900 dark:text-white mb-1.5 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
-                          {card.title}
-                        </h4>
-                        <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                          {card.description}
-                        </p>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
               {/* Helpful Tips */}
               <div className="mt-7 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-5">
                 <div className="flex items-start gap-4">
@@ -944,7 +866,7 @@ const StaffPage: React.FC = () => {
                       <span>💡 Quick Tip</span>
                     </h4>
                     <p className="text-sm text-blue-800 dark:text-blue-400 leading-relaxed">
-                      Use the sidebar to navigate between different sections. Click on quick actions above for faster access to commonly used features. Pro tip: Use keyboard shortcuts for even faster navigation!
+                      Use the sidebar to navigate between different sections for faster access to commonly used features.
                     </p>
                   </div>
                 </div>

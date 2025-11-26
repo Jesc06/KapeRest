@@ -27,7 +27,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
       {/* Sidebar */}
       <aside className={`fixed left-0 top-0 h-screen flex flex-col border-r border-neutral-200 dark:border-neutral-700 bg-gradient-to-b from-white to-stone-50 dark:from-neutral-900 dark:to-neutral-900 transition-[width] duration-300 ease-in-out z-40 shadow-xl ${
         !isOpen ? '-translate-x-full' : 'translate-x-0'
-      } lg:translate-x-0 ${isExpanded ? 'w-72' : 'w-24'}`}>
+      } lg:translate-x-0 ${isExpanded ? 'w-80' : 'w-28'}`}>
       
       {/* Header with Branding */}
       <div className="sticky top-0 flex items-center justify-center border-b border-neutral-200 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-sm px-4 py-5 transition-all duration-300">
@@ -37,8 +37,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
               <FontAwesomeIcon icon={faCoffee} className="text-xl" />
             </div>
             <div className="flex-1 min-w-0 flex flex-col justify-center">
-              <h2 className="text-2xl font-black text-neutral-900 dark:text-white tracking-tight leading-tight">KapeRest</h2>
-              <p className="text-sm font-semibold text-orange-600 dark:text-orange-400 uppercase tracking-wide leading-none">Cashier</p>
+              <h2 className="text-3xl font-black text-neutral-900 dark:text-white tracking-tight leading-tight">KapeRest</h2>
+              <p className="text-base font-semibold text-orange-600 dark:text-orange-400 uppercase tracking-wide leading-none">Cashier</p>
             </div>
           </div>
         ) : (

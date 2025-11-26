@@ -183,7 +183,7 @@ const SalesPage: React.FC = () => {
       <div className="relative z-10 flex h-screen overflow-hidden">
         <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
 
-        <div className={`flex h-screen w-full flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-72' : 'lg:ml-24'}`}>
+        <div className={`flex h-screen w-full flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
           {/* Premium Header with Glass Morphism */}
           <div className="sticky top-0 z-20 border-b border-orange-200/30 dark:border-neutral-700/50 bg-white/70 dark:bg-neutral-900/70 backdrop-blur-xl shadow-lg shadow-orange-500/5">
             <div className="px-5 sm:px-7 md:px-9 py-5">
