@@ -23,6 +23,7 @@ interface Product {
   category: string;
   description: string;
   image: string;
+  isAvailable?: string;
 }
 
 interface CartItem extends Product {
@@ -133,6 +134,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
             category: item.category,
             description: item.description,
             image: imageUrl || '',
+            isAvailable: item.isAvailable,
           };
         });
         
@@ -164,6 +166,12 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
   // Add product to cart
   const handleAddToCart = (product: Product) => {
+    // Check if product is out of stock
+    if (product.isAvailable && product.isAvailable.toLowerCase() === 'out of stock') {
+      console.log('Product out of stock:', product.name);
+      return;
+    }
+    
     if (onAddToCart) {
       onAddToCart(product);
     } else {
@@ -460,10 +468,10 @@ const MainPanel: React.FC<MainPanelProps> = ({
         // Wait for all purchases to complete
         const results = await Promise.all(purchasePromises);
         
-        // Display all receipts
+        // Log receipts to console for reference
         if (results.length > 0) {
           const receipts = results.map(r => r.receipt).join('\n\n---\n\n');
-          alert(`Purchase Successful!\n\n${receipts}`);
+          console.log('Purchase Receipts:\n', receipts);
         }
       }
 
@@ -478,7 +486,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
         }
         setPurchaseSuccess(false);
         setSelectedDiscount('');
-      }, 2000);
+      }, 1000);
 
     } catch (err) {
       console.error('=== PURCHASE ERROR ===');
@@ -489,9 +497,6 @@ const MainPanel: React.FC<MainPanelProps> = ({
       
       const errorMsg = err instanceof Error ? err.message : 'Failed to complete purchase. Please try again.';
       setPurchaseError(errorMsg);
-      
-      // Show alert for immediate user feedback
-      alert(`Purchase Failed\n\n${errorMsg}\n\nPlease check the console for more details or contact support.`);
     } finally {
       setProcessingPurchase(false);
     }
@@ -633,11 +638,17 @@ const MainPanel: React.FC<MainPanelProps> = ({
               ) : (
                 <div className="grid gap-6 auto-rows-max" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}>
                   {filteredProducts.length > 0 ? (
-                    filteredProducts.map(product => (
+                    filteredProducts.map(product => {
+                      const isOutOfStock = !!(product.isAvailable && product.isAvailable.toLowerCase() === 'out of stock');
+                      return (
                     <div
                       key={product.id}
-                      onClick={() => handleAddToCart(product)}
-                      className="product-card-motion group cursor-pointer rounded-2xl border-2 border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/20 hover:border-orange-400 dark:hover:border-orange-500 active:scale-95 hover:-translate-y-2 overflow-hidden flex flex-col relative"
+                      onClick={() => !isOutOfStock && handleAddToCart(product)}
+                      className={`product-card-motion group rounded-2xl border-2 border-stone-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 transition-all duration-300 overflow-hidden flex flex-col relative ${
+                        isOutOfStock 
+                          ? 'opacity-60 cursor-not-allowed' 
+                          : 'cursor-pointer hover:shadow-2xl hover:shadow-orange-500/20 hover:border-orange-400 dark:hover:border-orange-500 active:scale-95 hover:-translate-y-2'
+                      }`}
                     >
                       {/* Product Image */}
                       <div className="relative w-full aspect-square overflow-hidden bg-gradient-to-br from-orange-50 via-amber-50 to-stone-100 dark:from-neutral-700 dark:via-neutral-750 dark:to-neutral-800">
@@ -645,35 +656,66 @@ const MainPanel: React.FC<MainPanelProps> = ({
                           <img
                             src={product.image}
                             alt={product.name}
-                            className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:rotate-2"
+                            className={`w-full h-full object-cover transition-all duration-500 ${!isOutOfStock && 'group-hover:scale-110 group-hover:rotate-2'}`}
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 to-amber-100 dark:from-neutral-700 dark:to-neutral-600 group-hover:from-orange-100 group-hover:to-amber-200 dark:group-hover:from-neutral-650 dark:group-hover:to-neutral-550 transition-all duration-300">
                             <FontAwesomeIcon icon={faCoffee} className="h-12 w-12 text-orange-300 dark:text-orange-500/50" />
                           </div>
                         )}
+                        
+                        {/* Out of Stock Overlay */}
+                        {isOutOfStock && (
+                          <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
+                            <div className="text-center px-4">
+                              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-500 mb-3">
+                                <FontAwesomeIcon icon={faTrash} className="h-8 w-8 text-white" />
+                              </div>
+                              <p className="text-white font-black text-lg uppercase tracking-wider">Out of Stock</p>
+                            </div>
+                          </div>
+                        )}
+                        
                         {/* Gradient Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                        {!isOutOfStock && (
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                        )}
                         
                         {/* Category Badge */}
-                        <div className="absolute top-3 right-3 px-3 py-1 rounded-full text-[10px] font-bold bg-white/90 dark:bg-neutral-900/90 backdrop-blur-sm text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-500/30 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                          {product.category}
-                        </div>
+                        {!isOutOfStock && (
+                          <div className="absolute top-3 right-3 px-3 py-1 rounded-full text-[10px] font-bold bg-white/90 dark:bg-neutral-900/90 backdrop-blur-sm text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-500/30 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                            {product.category}
+                          </div>
+                        )}
+                        
+
                       </div>
 
                       {/* Content - Bottom Section */}
                       <div className="flex-1 flex flex-col p-5 bg-gradient-to-b from-white to-stone-50/50 dark:from-neutral-800 dark:to-neutral-850/50">
                         <div className="flex-1 min-w-0 mb-4">
-                          <h4 className="font-bold text-base leading-tight text-neutral-900 dark:text-white line-clamp-2 mb-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">
+                          <h4 className={`font-bold text-base leading-tight line-clamp-2 mb-2 transition-colors duration-300 ${
+                            isOutOfStock 
+                              ? 'text-neutral-400 dark:text-neutral-600' 
+                              : 'text-neutral-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400'
+                          }`}>
                             {product.name}
                           </h4>
                           {product.description && (
-                            <p className="text-xs text-stone-600 dark:text-stone-400 line-clamp-2 mb-2">
+                            <p className={`text-xs line-clamp-2 mb-2 ${
+                              isOutOfStock 
+                                ? 'text-neutral-400 dark:text-neutral-600' 
+                                : 'text-stone-600 dark:text-stone-400'
+                            }`}>
                               {product.description}
                             </p>
                           )}
-                          <div className="flex items-center gap-2 text-[11px] text-stone-500 dark:text-stone-400">
-                            <div className="h-1 w-1 rounded-full bg-orange-500"></div>
+                          <div className={`flex items-center gap-2 text-[11px] ${
+                            isOutOfStock 
+                              ? 'text-neutral-400 dark:text-neutral-600' 
+                              : 'text-stone-500 dark:text-stone-400'
+                          }`}>
+                            <div className={`h-1 w-1 rounded-full ${isOutOfStock ? 'bg-neutral-400' : 'bg-orange-500'}`}></div>
                             <span className="font-medium">{product.category}</span>
                           </div>
                         </div>
@@ -681,27 +723,43 @@ const MainPanel: React.FC<MainPanelProps> = ({
                         {/* Footer */}
                         <div className="flex items-center justify-between gap-3 pt-4 border-t border-stone-200 dark:border-neutral-700">
                           <div className="flex flex-col">
-                            <span className="text-[10px] text-stone-500 dark:text-stone-400 font-medium uppercase tracking-wider mb-0.5">Price</span>
-                            <span className="text-xl font-black bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-400 dark:to-orange-300 bg-clip-text text-transparent">
+                            <span className={`text-[10px] font-medium uppercase tracking-wider mb-0.5 ${
+                              isOutOfStock 
+                                ? 'text-neutral-400 dark:text-neutral-600' 
+                                : 'text-stone-500 dark:text-stone-400'
+                            }`}>Price</span>
+                            <span className={`text-xl font-black ${
+                              isOutOfStock 
+                                ? 'text-neutral-400 dark:text-neutral-600' 
+                                : 'bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-400 dark:to-orange-300 bg-clip-text text-transparent'
+                            }`}>
                               ₱{product.price}
                             </span>
                           </div>
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleAddToCart(product);
+                              if (!isOutOfStock) handleAddToCart(product);
                             }}
-                            className="group/btn inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 dark:from-orange-500 dark:to-orange-400 dark:hover:from-orange-600 dark:hover:to-orange-500 p-3 text-white transition-all duration-200 hover:shadow-lg hover:shadow-orange-500/50 active:scale-90 shadow-md hover:scale-110"
+                            disabled={isOutOfStock}
+                            className={`group/btn inline-flex items-center justify-center rounded-xl p-3 text-white transition-all duration-200 shadow-md ${
+                              isOutOfStock
+                                ? 'bg-neutral-400 dark:bg-neutral-600 cursor-not-allowed opacity-50'
+                                : 'bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 dark:from-orange-500 dark:to-orange-400 dark:hover:from-orange-600 dark:hover:to-orange-500 hover:shadow-lg hover:shadow-orange-500/50 active:scale-90 hover:scale-110'
+                            }`}
                           >
-                            <FontAwesomeIcon icon={faPlus} className="h-4 w-4 group-hover/btn:rotate-90 transition-transform duration-300" />
+                            <FontAwesomeIcon icon={faPlus} className={`h-4 w-4 ${!isOutOfStock && 'group-hover/btn:rotate-90'} transition-transform duration-300`} />
                           </button>
                         </div>
                       </div>
 
                       {/* Shine Effect on Hover */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700 pointer-events-none"></div>
+                      {!isOutOfStock && (
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700 pointer-events-none"></div>
+                      )}
                     </div>
-                  ))
+                    );
+                  })
                 ) : (
                   <div className="col-span-full flex items-center justify-center py-24">
                     <div className="text-center">

@@ -4,8 +4,6 @@ import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "r
 import { AnimatePresence } from "framer-motion";
 import LoginUI from "../Components/Login";
 import Register from "../Components/Register";
-import Navbar from "../Components/Navbar";
-import Home from "./Home";
 import { CashierPage, BuyItem } from "../Components/Cashier";
 import SalesPage from "../Components/Cashier/SalesPage";
 import ChangePassword from "../Components/Cashier/ChangePassword";
@@ -38,10 +36,9 @@ const App: React.FC = () => {
 
     return (
       <>
-        {!hideNavbar && <Navbar />}
         <AnimatePresence mode="wait" initial={false}>
           <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<LoginUI />} />
             <Route path="/login" element={<LoginUI />} />
             <Route path="/register" element={<Register />} />
             <Route path="/cashier" element={<CashierPage />} />
@@ -69,7 +66,7 @@ const App: React.FC = () => {
             <Route path="/admin/branch" element={<BranchPage />} />
             <Route path="/admin/sales" element={<AdminSalesPage />} />
             <Route path="/admin/audit-trail" element={<AuditTrailPage />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </AnimatePresence>
       </>
@@ -78,7 +75,6 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      {/* Navbar rendered inside AnimatedRoutes for route-aware visibility */}
       <AnimatedRoutes />
       {/* Floating Voice Navigation Button - Available on all pages */}
       <FloatingVoiceButton />
