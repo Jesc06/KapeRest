@@ -7,3 +7,5 @@ export { default as UpdateItem } from './UpdateItem';
 export { default as StocksList } from './StocksList';
 export { default as SupplierList } from './SupplierList';
 export { default as LogoutPanel } from './LogoutPanel';
+export { default as VoiceNavigator } from './VoiceNavigator';
+export { default as FloatingVoiceButton } from './FloatingVoiceButton';

@@ -29,6 +29,7 @@ import AccountsPage from "../Components/Admin/AccountsPage";
 import InventoryPage from "../Components/Admin/InventoryPage";
 import AdminSalesPage from "../Components/Admin/SalesPage";
 import AuditTrailPage from "../Components/Admin/AuditTrailPage";
+import { FloatingVoiceButton } from "../Components/Shared";
 
 const App: React.FC = () => {
   const AnimatedRoutes: React.FC = () => {
@@ -79,6 +80,8 @@ const App: React.FC = () => {
     <Router>
       {/* Navbar rendered inside AnimatedRoutes for route-aware visibility */}
       <AnimatedRoutes />
+      {/* Floating Voice Navigation Button - Available on all pages */}
+      <FloatingVoiceButton />
     </Router>
   );
 };
