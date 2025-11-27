@@ -233,86 +233,114 @@
 
       setIsLoading(true);
 
-      try {
-        const token = localStorage.getItem('accessToken');
-        
-        if (!token) {
-          throw new Error('No authentication token found. Please login again.');
-        }
-        
-        // Create FormData for file upload
-        const apiFormData = new FormData();
-        apiFormData.append('Item_name', formData.itemName);
-        apiFormData.append('Price', formData.price);
-        apiFormData.append('Category', formData.category);
-        apiFormData.append('Description', formData.description);
-        apiFormData.append('Image', formData.image);
-        apiFormData.append('IsAvailable', 'Yes');
-        
-        // Build Products.Json from selectedProducts
-        // Convert to PascalCase for C# backend compatibility
-        const productsPayload = selectedProducts.map(p => ({
-          ProductOfSupplierId: p.productOfSupplierId,
-          QuantityUsed: p.quantityUsed
-        }));
-        
-        const productsJsonString = productsPayload.length > 0 
-          ? JSON.stringify(productsPayload)
-          : '[]';
-        
-        apiFormData.append('ProductsJson', productsJsonString);
-        console.log('ProductsJson being sent:', productsJsonString);
-        console.log('Selected Products Array:', selectedProducts);
-        console.log('Products Payload (PascalCase):', productsPayload);
-        console.log('Number of products being sent:', productsPayload.length);
-        
-        // Log each product being sent
-        productsPayload.forEach((prod, index) => {
-          console.log(`Product ${index + 1}:`, {
-            ProductOfSupplierId: prod.ProductOfSupplierId,
-            QuantityUsed: prod.QuantityUsed
+      // Retry logic for API cold start issues
+      const maxRetries = 3; // Increase to 3 attempts
+      let lastError: Error | null = null;
+
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          const token = localStorage.getItem('accessToken');
+          
+          if (!token) {
+            throw new Error('No authentication token found. Please login again.');
+          }
+          
+          // Create FormData for file upload
+          const apiFormData = new FormData();
+          apiFormData.append('Item_name', formData.itemName);
+          apiFormData.append('Price', formData.price);
+          apiFormData.append('Category', formData.category);
+          apiFormData.append('Description', formData.description);
+          apiFormData.append('Image', formData.image);
+          apiFormData.append('IsAvailable', 'Yes');
+          
+          // Build Products.Json from selectedProducts
+          const productsPayload = selectedProducts.map(p => ({
+            ProductOfSupplierId: p.productOfSupplierId,
+            QuantityUsed: p.quantityUsed
+          }));
+          
+          const productsJsonString = productsPayload.length > 0 
+            ? JSON.stringify(productsPayload)
+            : '[]';
+          
+          apiFormData.append('ProductsJson', productsJsonString);
+          
+          if (attempt === 1) {
+            console.log('ProductsJson being sent:', productsJsonString);
+            console.log('Number of products being sent:', productsPayload.length);
+          }
+
+          console.log(`🔄 Attempt ${attempt} of ${maxRetries}...`);
+
+          const response = await fetch(`${API_BASE_URL}/MenuItem/CreateMenuItem`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+            body: apiFormData
           });
-        });
 
-        const response = await fetch(`${API_BASE_URL}/MenuItem/CreateMenuItem`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-          body: apiFormData
-        });
+          console.log(`✅ Response received: ${response.status}`);
 
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error('Error response:', errorText);
-          throw new Error(errorText || 'Failed to add menu item');
+          if (!response.ok) {
+            let errorText = '';
+            try {
+              errorText = await response.text();
+              console.error('❌ Error response:', errorText);
+            } catch (e) {
+              console.error('Could not read error response');
+            }
+            throw new Error(errorText || `Failed to add menu item (Status: ${response.status})`);
+          }
+
+          const result = await response.json();
+          console.log('✅ Menu item created successfully:', result);
+          
+          setSuccess('Item added successfully!');
+          setFormData({
+            itemName: '',
+            price: '',
+            category: '',
+            description: '',
+            image: null,
+            imagePreview: null,
+          });
+          setSelectedProducts([]);
+          setCurrentProduct('');
+          setCurrentQuantity('');
+
+          setTimeout(() => {
+            navigate('/staff');
+          }, 2000);
+          
+          // Success - break out of retry loop
+          return;
+
+        } catch (err) {
+          lastError = err instanceof Error ? err : new Error('Unknown error');
+          console.error(`❌ Attempt ${attempt} failed:`, lastError.message);
+          
+          // If connection refused and not last attempt, wait longer
+          if (attempt < maxRetries) {
+            const waitTime = attempt === 1 ? 2000 : 1500; // Wait 2s after first fail, 1.5s after
+            console.log(`⏳ Retrying in ${waitTime/1000} seconds...`);
+            await new Promise(resolve => setTimeout(resolve, waitTime));
+          }
         }
-
-        const result = await response.json();
-        console.log('Menu item created successfully:', result);
-        
-        setSuccess('Item added successfully!');
-        setFormData({
-          itemName: '',
-          price: '',
-          category: '',
-          description: '',
-          image: null,
-          imagePreview: null,
-        });
-        setSelectedProducts([]);
-        setCurrentProduct('');
-        setCurrentQuantity('');
-
-        setTimeout(() => {
-          navigate('/staff');
-        }, 2000);
-      } catch (err) {
-        console.error('Error adding menu item:', err);
-        setError(err instanceof Error ? err.message : 'Failed to add item. Please try again.');
-      } finally {
-        setIsLoading(false);
       }
+
+      // All retries failed
+      if (lastError) {
+        console.error('💥 === All attempts failed ===');
+        console.error('The API crashed on first request. This is a backend issue.');
+        console.error('Error message:', lastError.message);
+        console.error('================================');
+        
+        setError('API connection issue. Please try again or check if the API is running properly.');
+      }
+      
+      setIsLoading(false);
     };
 
     return (
