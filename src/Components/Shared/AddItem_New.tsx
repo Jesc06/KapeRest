@@ -353,7 +353,7 @@ const AddItem: React.FC = () => {
                 {/* Sidebar Toggle - Desktop Only */}
                 <button
                   onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                  className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white transition-all duration-200 active:scale-95 shadow-lg shadow-orange-500/25"
+                  className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                 >
                   <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                 </button>
@@ -378,7 +378,7 @@ const AddItem: React.FC = () => {
                   </div>
                   <div>
                     <h2 className="text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300 bg-clip-text text-transparent">Add Menu Item</h2>
-                    <p className="text-sm text-neutral-600 dark:text-stone-400 mt-1">Create a new menu item for your store</p>
+                    <p className="text-sm text-stone-600 dark:text-stone-400 mt-1">Create a new menu item for your store</p>
                   </div>
                 </div>
               </div>
@@ -418,7 +418,7 @@ const AddItem: React.FC = () => {
                           : 'bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700'
                       }`}>
                         <FontAwesomeIcon icon={faBox} className={`h-4 w-4 transition-colors duration-300 ${
-                          formData.itemName ? 'text-white' : 'text-neutral-400 dark:text-stone-500'
+                          formData.itemName ? 'text-white' : 'text-stone-400 dark:text-stone-500'
                         }`} />
                       </div>
                     </div>
@@ -428,7 +428,7 @@ const AddItem: React.FC = () => {
                       id="itemName"
                       value={formData.itemName}
                       onChange={handleChange}
-                      className="w-full pl-16 pr-5 py-4 text-base font-medium rounded-2xl border-2 transition-all duration-300 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none border-neutral-200 dark:border-stone-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 hover:border-orange-300 dark:hover:border-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full pl-16 pr-5 py-4 text-base font-medium rounded-2xl border-2 transition-all duration-300 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-neutral-500 focus:outline-none border-neutral-200 dark:border-stone-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 hover:border-orange-300 dark:hover:border-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
                       placeholder="Enter item name (e.g., Iced Latte)"
                       disabled={isLoading}
                     />
@@ -451,7 +451,7 @@ const AddItem: React.FC = () => {
                             : 'bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700'
                         }`}>
                           <FontAwesomeIcon icon={faTag} className={`h-4 w-4 transition-colors duration-300 ${
-                            formData.price ? 'text-white' : 'text-neutral-400 dark:text-stone-500'
+                            formData.price ? 'text-white' : 'text-stone-400 dark:text-stone-500'
                           }`} />
                         </div>
                       </div>
@@ -461,7 +461,7 @@ const AddItem: React.FC = () => {
                         id="price"
                         value={formData.price}
                         onChange={handleChange}
-                        className="w-full pl-16 pr-5 py-4 text-base font-medium rounded-2xl border-2 transition-all duration-300 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none border-neutral-200 dark:border-stone-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 hover:border-orange-300 dark:hover:border-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full pl-16 pr-5 py-4 text-base font-medium rounded-2xl border-2 transition-all duration-300 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-neutral-500 focus:outline-none border-neutral-200 dark:border-stone-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 hover:border-orange-300 dark:hover:border-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
                         placeholder="0.00"
                         step="0.01"
                         min="0"
@@ -489,7 +489,7 @@ const AddItem: React.FC = () => {
                             : 'bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700'
                         }`}>
                           <FontAwesomeIcon icon={faList} className={`h-4 w-4 transition-colors duration-300 ${
-                            formData.category ? 'text-white' : 'text-neutral-400 dark:text-stone-500'
+                            formData.category ? 'text-white' : 'text-stone-400 dark:text-stone-500'
                           }`} />
                         </div>
                       </div>
@@ -498,7 +498,7 @@ const AddItem: React.FC = () => {
                         id="category"
                         value={formData.category}
                         onChange={handleChange}
-                        className="w-full pl-16 pr-5 py-4 text-base font-medium rounded-2xl border-2 transition-all duration-300 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white focus:outline-none border-neutral-200 dark:border-stone-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 hover:border-orange-300 dark:hover:border-orange-600 disabled:opacity-50 disabled:cursor-not-allowed appearance-none cursor-pointer"
+                        className="w-full pl-16 pr-5 py-4 text-base font-medium rounded-2xl border-2 transition-all duration-300 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white focus:outline-none border-neutral-200 dark:border-stone-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 hover:border-orange-300 dark:hover:border-orange-600 disabled:opacity-50 disabled:cursor-not-allowed appearance-none cursor-pointer"
                         disabled={isLoading}
                       >
                         <option value="">Select category</option>
@@ -525,7 +525,7 @@ const AddItem: React.FC = () => {
                             : 'bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700'
                         }`}>
                           <FontAwesomeIcon icon={faFileAlt} className={`h-4 w-4 transition-colors duration-300 ${
-                            formData.description ? 'text-white' : 'text-neutral-400 dark:text-stone-500'
+                            formData.description ? 'text-white' : 'text-stone-400 dark:text-stone-500'
                           }`} />
                         </div>
                       </div>
@@ -534,7 +534,7 @@ const AddItem: React.FC = () => {
                         id="description"
                         value={formData.description}
                         onChange={handleChange}
-                        className="w-full pl-16 pr-5 py-4 text-base font-medium rounded-2xl border-2 transition-all duration-300 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none border-neutral-200 dark:border-stone-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 hover:border-orange-300 dark:hover:border-orange-600 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full pl-16 pr-5 py-4 text-base font-medium rounded-2xl border-2 transition-all duration-300 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-neutral-500 focus:outline-none border-neutral-200 dark:border-stone-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 hover:border-orange-300 dark:hover:border-orange-600 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
                         rows={4}
                         maxLength={200}
                         placeholder="Describe your item (e.g., Rich espresso with steamed milk and ice)"
@@ -546,7 +546,7 @@ const AddItem: React.FC = () => {
                       >
                         Description <span className="text-red-500">*</span>
                       </label>
-                      <div className="absolute bottom-3 right-4 text-xs font-medium text-neutral-400 dark:text-stone-500">
+                      <div className="absolute bottom-3 right-4 text-xs font-medium text-stone-400 dark:text-stone-500">
                         {formData.description.length}/200
                       </div>
                     </div>
@@ -563,7 +563,7 @@ const AddItem: React.FC = () => {
                             : 'bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700'
                         }`}>
                           <FontAwesomeIcon icon={faBox} className={`h-4 w-4 transition-colors duration-300 ${
-                            productItem ? 'text-white' : 'text-neutral-400 dark:text-stone-500'
+                            productItem ? 'text-white' : 'text-stone-400 dark:text-stone-500'
                           }`} />
                         </div>
                       </div>
@@ -573,7 +573,7 @@ const AddItem: React.FC = () => {
                         id="productItem"
                         value={productItem}
                         onChange={(e) => setProductItem(e.target.value)}
-                        className="w-full pl-16 pr-5 py-4 text-base font-medium rounded-2xl border-2 transition-all duration-300 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none border-neutral-200 dark:border-stone-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 hover:border-orange-300 dark:hover:border-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full pl-16 pr-5 py-4 text-base font-medium rounded-2xl border-2 transition-all duration-300 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-neutral-500 focus:outline-none border-neutral-200 dark:border-stone-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 hover:border-orange-300 dark:hover:border-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
                         placeholder="Enter product item name"
                         disabled={isLoading}
                       />
@@ -594,7 +594,7 @@ const AddItem: React.FC = () => {
                             : 'bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700'
                         }`}>
                           <FontAwesomeIcon icon={faList} className={`h-4 w-4 transition-colors duration-300 ${
-                            quantity ? 'text-white' : 'text-neutral-400 dark:text-stone-500'
+                            quantity ? 'text-white' : 'text-stone-400 dark:text-stone-500'
                           }`} />
                         </div>
                       </div>
@@ -604,7 +604,7 @@ const AddItem: React.FC = () => {
                         id="quantity"
                         value={quantity}
                         onChange={(e) => setQuantity(e.target.value)}
-                        className="w-full pl-16 pr-5 py-4 text-base font-medium rounded-2xl border-2 transition-all duration-300 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none border-neutral-200 dark:border-stone-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 hover:border-orange-300 dark:hover:border-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full pl-16 pr-5 py-4 text-base font-medium rounded-2xl border-2 transition-all duration-300 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-neutral-500 focus:outline-none border-neutral-200 dark:border-stone-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 hover:border-orange-300 dark:hover:border-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
                         placeholder="Enter quantity"
                         min="0"
                         step="1"
@@ -624,7 +624,7 @@ const AddItem: React.FC = () => {
                     <div className="flex items-center justify-between">
                       <label className="flex items-center gap-2 text-sm font-bold text-stone-800 dark:text-stone-200">
                         <FontAwesomeIcon icon={faBox} className="text-orange-600 dark:text-orange-400" />
-                        Products Used <span className="text-neutral-400 dark:text-stone-500 font-normal">(Optional)</span>
+                        Products Used <span className="text-stone-400 dark:text-stone-500 font-normal">(Optional)</span>
                       </label>
                       <button
                         type="button"
@@ -644,7 +644,7 @@ const AddItem: React.FC = () => {
                           return (
                             <div key={product.productOfSupplierId} className="flex items-center gap-4 p-4 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/30 border-2 border-orange-200 dark:border-orange-800/50 rounded-xl shadow-sm hover:shadow-md transition-all duration-200">
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm font-bold text-neutral-900 dark:text-white truncate">{product.productName}</p>
+                                <p className="text-sm font-bold text-stone-900 dark:text-white truncate">{product.productName}</p>
                                 <div className="flex items-center gap-3 mt-1.5">
                                   <div className="flex items-center gap-1.5">
                                     <span className="text-xs font-semibold text-neutral-500 dark:text-stone-400">Quantity:</span>
@@ -689,7 +689,7 @@ const AddItem: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <label className="flex items-center gap-2 text-sm font-bold text-stone-800 dark:text-stone-200">
                       <FontAwesomeIcon icon={faImage} className="text-orange-600 dark:text-orange-400" />
-                      Item Image <span className="text-neutral-400 dark:text-stone-500 font-normal">(Optional)</span>
+                      Item Image <span className="text-stone-400 dark:text-stone-500 font-normal">(Optional)</span>
                     </label>
                     <span className="text-xs font-medium text-neutral-500 dark:text-stone-400">
                       Max 5MB
@@ -709,10 +709,10 @@ const AddItem: React.FC = () => {
                         <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-100 to-orange-50 dark:from-orange-950/50 dark:to-orange-900/30 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg shadow-orange-500/10">
                           <FontAwesomeIcon icon={faImage} className="h-8 w-8 text-orange-600 dark:text-orange-400" />
                         </div>
-                        <p className="text-base font-bold text-neutral-900 dark:text-white mb-1">
+                        <p className="text-base font-bold text-stone-900 dark:text-white mb-1">
                           Click to upload or drag and drop
                         </p>
-                        <p className="text-sm text-neutral-600 dark:text-stone-400">
+                        <p className="text-sm text-stone-600 dark:text-stone-400">
                           PNG, JPG, GIF up to 5MB
                         </p>
                         <div className="mt-4 px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-sm font-semibold rounded-xl group-hover:shadow-lg group-hover:shadow-orange-500/30 transition-all duration-300">
@@ -775,7 +775,7 @@ const AddItem: React.FC = () => {
                     type="button"
                     onClick={() => navigate('/staff')}
                     disabled={isLoading}
-                    className="flex-1 px-8 py-4 bg-stone-50 dark:bg-stone-800 hover:bg-stone-50 dark:hover:bg-stone-700 disabled:bg-neutral-50 dark:disabled:bg-neutral-900 text-neutral-900 dark:text-white text-base font-bold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl active:scale-[0.98] disabled:cursor-not-allowed flex items-center justify-center gap-3 group border-2 border-neutral-200 dark:border-stone-700 hover:border-neutral-300 dark:hover:border-neutral-600"
+                    className="flex-1 px-8 py-4 bg-stone-50 dark:bg-stone-800 hover:bg-stone-50 dark:hover:bg-stone-700 disabled:bg-neutral-50 dark:disabled:bg-neutral-900 text-stone-900 dark:text-white text-base font-bold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl active:scale-[0.98] disabled:cursor-not-allowed flex items-center justify-center gap-3 group border-2 border-neutral-200 dark:border-stone-700 hover:border-neutral-300 dark:hover:border-neutral-600"
                   >
                     <FontAwesomeIcon icon={faArrowLeft} className="h-5 w-5 transition-transform duration-300 group-hover:-translate-x-1" />
                     <span>Cancel</span>
@@ -787,7 +787,7 @@ const AddItem: React.FC = () => {
                   <p className="text-neutral-500 dark:text-stone-400">
                     <span className="text-red-500 font-semibold">*</span> Required fields
                   </p>
-                  <p className="text-neutral-400 dark:text-stone-500">
+                  <p className="text-stone-400 dark:text-stone-500">
                     All data will be saved securely
                   </p>
                 </div>
@@ -822,7 +822,7 @@ const AddItem: React.FC = () => {
                   placeholder="Search products..."
                   value={searchProduct}
                   onChange={(e) => setSearchProduct(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-stone-50/90 dark:bg-neutral-800/90 border border-white/50 dark:border-stone-700 rounded-lg text-neutral-900 dark:text-white placeholder-stone-500 focus:outline-none focus:border-white"
+                  className="w-full px-4 py-2.5 bg-stone-50/90 dark:bg-neutral-800/90 border border-white/50 dark:border-stone-700 rounded-lg text-stone-900 dark:text-white placeholder-stone-500 focus:outline-none focus:border-white"
                 />
               </div>
             </div>
@@ -839,7 +839,7 @@ const AddItem: React.FC = () => {
                     return (
                       <div key={product.id} className="flex items-center gap-4 p-4 bg-neutral-50 dark:bg-stone-800 rounded-xl border-2 border-neutral-200 dark:border-stone-700 hover:border-orange-400 dark:hover:border-orange-600 transition-all duration-200">
                         <div className="flex-1 min-w-0">
-                          <p className="font-bold text-neutral-900 dark:text-white mb-2">{product.productName}</p>
+                          <p className="font-bold text-stone-900 dark:text-white mb-2">{product.productName}</p>
                           <div className="flex items-center gap-2">
                             <span className="text-xs font-semibold text-neutral-500 dark:text-stone-400">Available Stock:</span>
                             <span className={`px-2.5 py-1 text-xs font-bold rounded-lg ${
@@ -855,14 +855,14 @@ const AddItem: React.FC = () => {
                         </div>
                         
                         <div className="flex flex-col items-center gap-1">
-                          <label className="text-xs font-semibold text-neutral-600 dark:text-stone-400">Quantity</label>
+                          <label className="text-xs font-semibold text-stone-600 dark:text-stone-400">Quantity</label>
                           <input
                             type="number"
                             min="1"
                             max={product.stocks}
                             value={quantity}
                             onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-                            className="w-24 px-3 py-2.5 bg-stone-50 dark:bg-stone-900 border-2 border-neutral-300 dark:border-stone-600 rounded-lg text-center text-neutral-900 dark:text-white font-bold focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
+                            className="w-24 px-3 py-2.5 bg-stone-50 dark:bg-stone-900 border-2 border-neutral-300 dark:border-stone-600 rounded-lg text-center text-stone-900 dark:text-white font-bold focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
                           />
                         </div>
                         
@@ -883,7 +883,7 @@ const AddItem: React.FC = () => {
                 
                 {products.filter(p => p.productName.toLowerCase().includes(searchProduct.toLowerCase())).length === 0 && (
                   <div className="text-center py-8">
-                    <p className="text-neutral-600 dark:text-stone-400">No products found</p>
+                    <p className="text-stone-600 dark:text-stone-400">No products found</p>
                   </div>
                 )}
               </div>

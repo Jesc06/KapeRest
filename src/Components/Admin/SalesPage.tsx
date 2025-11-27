@@ -172,7 +172,7 @@ const SalesPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full" style={{ backgroundColor: '#FAFAFA' }}>
+    <div className="min-h-screen w-full bg-stone-50 dark:bg-stone-900">
       {/* Animated Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 -right-40 w-96 h-96 bg-orange-300/20 dark:bg-orange-500/10 rounded-full blur-3xl animate-pulse"></div>
@@ -198,14 +198,14 @@ const SalesPage: React.FC = () => {
 
                   <button
                     onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                    className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-orange-700 text-white transition-all duration-200 active:scale-95 shadow-xl shadow-orange-500/30"
+                    className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                   >
                     <FontAwesomeIcon icon={faBars} className="h-4 w-4" />
                   </button>
 
                   <div>
-                    <h1 className="text-xl font-black text-neutral-900 dark:text-white tracking-tight">Sales Analytics</h1>
-                    <p className="text-sm font-medium text-neutral-600 dark:text-stone-400">Track and analyze revenue</p>
+                    <h1 className="text-xl font-black text-stone-900 dark:text-white tracking-tight">Sales Analytics</h1>
+                    <p className="text-sm font-medium text-stone-600 dark:text-stone-400">Track and analyze revenue</p>
                   </div>
                 </div>
 
@@ -215,14 +215,14 @@ const SalesPage: React.FC = () => {
                     <div className="relative flex items-center gap-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-2 border-stone-200 dark:border-stone-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
                       <FontAwesomeIcon
                         icon={faSearch}
-                        className="h-5 w-5 text-neutral-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors"
+                        className="h-5 w-5 text-stone-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors"
                       />
                       <input
                         type="text"
                         placeholder="Search by transaction ID, product, or cashier..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="flex-1 bg-transparent text-sm font-medium text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none"
+                        className="flex-1 bg-transparent text-sm font-medium text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-neutral-500 focus:outline-none"
                       />
                       {searchTerm && (
                         <span className="text-xs font-bold text-orange-600 dark:text-orange-400 px-2 py-1 rounded-md bg-orange-100 dark:bg-orange-900/30">
@@ -249,7 +249,7 @@ const SalesPage: React.FC = () => {
                 {/* Left Side - Period Filters and Branch */}
                 <div className="flex items-center gap-3 flex-wrap">
                   {/* Period Label Badge */}
-                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-stone-100 to-stone-200 dark:from-neutral-800 dark:to-neutral-700 border border-stone-300 dark:border-stone-600">
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-stone-100 to-stone-200 dark:from-stone-800 dark:to-stone-700 border border-stone-300 dark:border-stone-600">
                     <div className="h-2 w-2 rounded-full bg-orange-600 animate-pulse"></div>
                     <span className="text-sm font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Period</span>
                   </div>
@@ -267,7 +267,7 @@ const SalesPage: React.FC = () => {
                         }`}
                       >
                         {filterPeriod === period && (
-                          <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent animate-pulse"></div>
+                          <div className="absolute inset-0 bg-gradient-to-r from-stone-50/20 to-transparent animate-pulse"></div>
                         )}
                         <span className="relative z-10">{period.charAt(0).toUpperCase() + period.slice(1)}</span>
                       </button>
@@ -277,7 +277,7 @@ const SalesPage: React.FC = () => {
                   {/* Premium Branch Filter */}
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-amber-400/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <div className="relative flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-stone-50 to-stone-100 dark:from-neutral-800 dark:to-neutral-700 border-2 border-stone-200 dark:border-stone-600 hover:border-orange-300 dark:hover:border-orange-600 transition-all shadow-md hover:shadow-lg">
+                    <div className="relative flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-stone-50 to-stone-100 dark:from-stone-800 dark:to-stone-700 border-2 border-stone-200 dark:border-stone-600 hover:border-orange-300 dark:hover:border-orange-600 transition-all shadow-md hover:shadow-lg">
                       <FontAwesomeIcon icon={faBuilding} className="h-4 w-4 text-orange-500 dark:text-orange-400" />
                       <select
                         value={filterBranch}
@@ -329,7 +329,7 @@ const SalesPage: React.FC = () => {
                         <FontAwesomeIcon icon={icon} className={`h-3.5 w-3.5 relative z-10 ${isGenerating === type ? '' : 'text-orange-500'}`} />
                         <span className="relative z-10">{label}</span>
                         {isGenerating === type && (
-                          <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent animate-pulse"></div>
+                          <div className="absolute inset-0 bg-gradient-to-r from-stone-50/20 to-transparent animate-pulse"></div>
                         )}
                       </button>
                     ))}
@@ -341,7 +341,7 @@ const SalesPage: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-7">
                 {/* Total Sales Card - Orange Gradient */}
                 <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 p-6 shadow-2xl shadow-orange-500/30 hover:shadow-orange-500/50 transition-all duration-300 hover:scale-105">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-stone-50/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   <div className="absolute top-0 right-0 w-32 h-32 bg-stone-50/5 rounded-full -mr-16 -mt-16"></div>
                   <div className="relative flex items-start justify-between">
                     <div className="flex-1">
@@ -359,7 +359,7 @@ const SalesPage: React.FC = () => {
 
                 {/* Total Transactions Card - Green Gradient */}
                 <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 via-green-600 to-teal-600 p-6 shadow-2xl shadow-emerald-500/30 hover:shadow-emerald-500/50 transition-all duration-300 hover:scale-105">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-stone-50/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   <div className="absolute top-0 right-0 w-32 h-32 bg-stone-50/5 rounded-full -mr-16 -mt-16"></div>
                   <div className="relative flex items-start justify-between">
                     <div className="flex-1">
@@ -377,7 +377,7 @@ const SalesPage: React.FC = () => {
 
                 {/* Average Sale Card - Blue Gradient */}
                 <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-600 p-6 shadow-2xl shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-stone-50/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   <div className="absolute top-0 right-0 w-32 h-32 bg-stone-50/5 rounded-full -mr-16 -mt-16"></div>
                   <div className="relative flex items-start justify-between">
                     <div className="flex-1">
@@ -398,7 +398,7 @@ const SalesPage: React.FC = () => {
               <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-stone-50 dark:bg-stone-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-stone-700 transition-all duration-300">
                 
                 {/* Table Header with Gradient */}
-                <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-white via-orange-50/30 to-white dark:from-neutral-800 dark:via-orange-950/20 dark:to-neutral-800">
+                <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-stone-50 via-orange-50/30 to-stone-50 dark:from-stone-800 dark:via-orange-950/20 dark:to-stone-800">
                   <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-orange-500 to-orange-600"></div>
                   
                   <div className="px-7 sm:px-9 py-7">
@@ -408,8 +408,8 @@ const SalesPage: React.FC = () => {
                           <FontAwesomeIcon icon={faReceipt} className="h-7 w-7 text-white" />
                         </div>
                         <div>
-                          <h3 className="text-2xl font-black text-neutral-900 dark:text-white tracking-tight">Sales Records</h3>
-                          <p className="text-sm font-medium text-neutral-600 dark:text-stone-400 mt-0.5">Complete transaction history</p>
+                          <h3 className="text-2xl font-black text-stone-900 dark:text-white tracking-tight">Sales Records</h3>
+                          <p className="text-sm font-medium text-stone-600 dark:text-stone-400 mt-0.5">Complete transaction history</p>
                         </div>
                       </div>
                       
@@ -418,10 +418,10 @@ const SalesPage: React.FC = () => {
                           <div className="h-2 w-2 rounded-full bg-orange-600 animate-pulse"></div>
                           <span className="text-sm font-bold uppercase tracking-wider text-orange-700 dark:text-orange-400">Active</span>
                         </div>
-                        <div className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-600 border border-stone-300 dark:border-stone-600">
+                        <div className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-stone-100 to-stone-200 dark:from-stone-700 dark:to-stone-600 border border-stone-300 dark:border-stone-600">
                           <div className="flex items-baseline gap-2">
-                            <span className="text-sm font-bold uppercase tracking-wider text-neutral-600 dark:text-stone-400">Records</span>
-                            <span className="text-2xl font-black text-neutral-900 dark:text-white">{filteredSales.length}</span>
+                            <span className="text-sm font-bold uppercase tracking-wider text-stone-600 dark:text-stone-400">Records</span>
+                            <span className="text-2xl font-black text-stone-900 dark:text-white">{filteredSales.length}</span>
                           </div>
                         </div>
                       </div>
@@ -451,7 +451,7 @@ const SalesPage: React.FC = () => {
                   ) : (
                     <table className="w-full">
                       <thead className="sticky top-0 z-10">
-                        <tr className="bg-gradient-to-r from-stone-50 via-stone-100/80 to-stone-50 dark:from-neutral-800 dark:via-neutral-750 dark:to-neutral-800 border-b-2 border-stone-300 dark:border-stone-700 backdrop-blur-sm">
+                        <tr className="bg-gradient-to-r from-stone-50 via-stone-100/80 to-stone-50 dark:from-stone-800 dark:via-stone-750 dark:to-stone-800 border-b-2 border-stone-300 dark:border-stone-700 backdrop-blur-sm">
                           <th className="px-7 py-4 text-left">
                             <div className="flex items-center gap-2">
                               <div className="h-2 w-2 rounded-full bg-gradient-to-r from-orange-500 to-orange-600"></div>
@@ -500,7 +500,7 @@ const SalesPage: React.FC = () => {
                               </span>
                             </td>
                             <td className="px-7 py-5">
-                              <span className="text-sm font-semibold text-neutral-900 dark:text-white">
+                              <span className="text-sm font-semibold text-stone-900 dark:text-white">
                                 {sale.menuItemName}
                               </span>
                             </td>
@@ -520,7 +520,7 @@ const SalesPage: React.FC = () => {
                               </div>
                             </td>
                             <td className="px-7 py-5 text-right">
-                              <span className="text-sm font-bold text-neutral-900 dark:text-white tabular-nums">
+                              <span className="text-sm font-bold text-stone-900 dark:text-white tabular-nums">
                                 ₱{sale.subtotal.toFixed(2)}
                               </span>
                             </td>
@@ -553,7 +553,7 @@ const SalesPage: React.FC = () => {
                             </td>
                             <td className="px-7 py-5">
                               <div className="flex flex-col gap-1">
-                                <span className="text-sm font-semibold text-neutral-900 dark:text-white">
+                                <span className="text-sm font-semibold text-stone-900 dark:text-white">
                                   {formatDate(sale.dateTime).split(',')[0]}
                                 </span>
                                 <span className="text-xs font-medium text-stone-500 dark:text-stone-400 flex items-center gap-1.5">

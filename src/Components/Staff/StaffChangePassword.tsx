@@ -131,7 +131,7 @@ const StaffChangePassword: React.FC = () => {
                 {/* Sidebar Toggle - Desktop Only */}
                 <button
                   onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                  className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white transition-all duration-200 active:scale-95 shadow-lg shadow-orange-500/25"
+                  className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                 >
                   <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                 </button>
@@ -156,7 +156,7 @@ const StaffChangePassword: React.FC = () => {
                   </div>
                   <div>
                     <h2 className="text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300 bg-clip-text text-transparent">Change Password</h2>
-                    <p className="text-sm text-neutral-600 dark:text-stone-400 mt-1">Update your password to keep your account secure</p>
+                    <p className="text-sm text-stone-600 dark:text-stone-400 mt-1">Update your password to keep your account secure</p>
                   </div>
                 </div>
               </div>
@@ -186,12 +186,12 @@ const StaffChangePassword: React.FC = () => {
                       Email Address
                     </label>
                     <div className="relative">
-                      <FontAwesomeIcon icon={faEnvelope} className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400 dark:text-stone-500 pointer-events-none" />
+                      <FontAwesomeIcon icon={faEnvelope} className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400 dark:text-stone-500 pointer-events-none" />
                       <input
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 text-sm rounded-lg border border-neutral-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-neutral-900 dark:text-white placeholder-stone-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200"
+                        className="w-full pl-10 pr-4 py-3 text-sm rounded-lg border border-neutral-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white placeholder-stone-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200"
                         placeholder="your@email.com"
                         disabled={isLoading}
                       />
@@ -204,19 +204,19 @@ const StaffChangePassword: React.FC = () => {
                       Current Password
                     </label>
                     <div className="relative group">
-                      <FontAwesomeIcon icon={faLock} className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400 dark:text-stone-500 pointer-events-none" />
+                      <FontAwesomeIcon icon={faLock} className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400 dark:text-stone-500 pointer-events-none" />
                       <input
                         type={showCurrentPassword ? 'text' : 'password'}
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
-                        className="w-full pl-10 pr-10 py-3 text-sm rounded-lg border border-neutral-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-neutral-900 dark:text-white placeholder-stone-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200"
+                        className="w-full pl-10 pr-10 py-3 text-sm rounded-lg border border-neutral-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white placeholder-stone-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200"
                         placeholder="••••••••"
                         disabled={isLoading}
                       />
                       <button
                         type="button"
                         onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-stone-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
+                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 dark:text-stone-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
                       >
                         <FontAwesomeIcon icon={showCurrentPassword ? faEyeSlash : faEye} className="h-4 w-4" />
                       </button>
@@ -229,19 +229,19 @@ const StaffChangePassword: React.FC = () => {
                       New Password
                     </label>
                     <div className="relative group">
-                      <FontAwesomeIcon icon={faLock} className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400 dark:text-stone-500 pointer-events-none" />
+                      <FontAwesomeIcon icon={faLock} className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400 dark:text-stone-500 pointer-events-none" />
                       <input
                         type={showNewPassword ? 'text' : 'password'}
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
-                        className="w-full pl-10 pr-10 py-3 text-sm rounded-lg border border-neutral-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-neutral-900 dark:text-white placeholder-stone-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200"
+                        className="w-full pl-10 pr-10 py-3 text-sm rounded-lg border border-neutral-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white placeholder-stone-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200"
                         placeholder="••••••••"
                         disabled={isLoading}
                       />
                       <button
                         type="button"
                         onClick={() => setShowNewPassword(!showNewPassword)}
-                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-stone-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
+                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 dark:text-stone-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
                       >
                         <FontAwesomeIcon icon={showNewPassword ? faEyeSlash : faEye} className="h-4 w-4" />
                       </button>
@@ -253,7 +253,7 @@ const StaffChangePassword: React.FC = () => {
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
                           <p className="text-sm font-semibold text-stone-700 dark:text-stone-300">Password Strength</p>
-                          <p className="text-sm font-bold text-neutral-900 dark:text-white">{strengthScore}%</p>
+                          <p className="text-sm font-bold text-stone-900 dark:text-white">{strengthScore}%</p>
                         </div>
 
                         <div className="w-full bg-neutral-200 h-2.5 rounded-full overflow-hidden dark:bg-stone-700">
@@ -270,19 +270,19 @@ const StaffChangePassword: React.FC = () => {
                         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-sm">
                           <li className="flex items-center gap-2">
                             <FontAwesomeIcon icon={passwordStrength.hasMinLength ? faCheckCircle : faTimesCircle} className={`${passwordStrength.hasMinLength ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600'} h-4 w-4`} />
-                            <span className={passwordStrength.hasMinLength ? 'text-neutral-900 dark:text-white font-medium' : 'text-neutral-500 dark:text-stone-400'}>8+ characters</span>
+                            <span className={passwordStrength.hasMinLength ? 'text-stone-900 dark:text-white font-medium' : 'text-neutral-500 dark:text-stone-400'}>8+ characters</span>
                           </li>
                           <li className="flex items-center gap-2">
                             <FontAwesomeIcon icon={passwordStrength.hasUppercase ? faCheckCircle : faTimesCircle} className={`${passwordStrength.hasUppercase ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600'} h-4 w-4`} />
-                            <span className={passwordStrength.hasUppercase ? 'text-neutral-900 dark:text-white font-medium' : 'text-neutral-500 dark:text-stone-400'}>Uppercase (A-Z)</span>
+                            <span className={passwordStrength.hasUppercase ? 'text-stone-900 dark:text-white font-medium' : 'text-neutral-500 dark:text-stone-400'}>Uppercase (A-Z)</span>
                           </li>
                           <li className="flex items-center gap-2">
                             <FontAwesomeIcon icon={passwordStrength.hasLowercase ? faCheckCircle : faTimesCircle} className={`${passwordStrength.hasLowercase ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600'} h-4 w-4`} />
-                            <span className={passwordStrength.hasLowercase ? 'text-neutral-900 dark:text-white font-medium' : 'text-neutral-500 dark:text-stone-400'}>Lowercase (a-z)</span>
+                            <span className={passwordStrength.hasLowercase ? 'text-stone-900 dark:text-white font-medium' : 'text-neutral-500 dark:text-stone-400'}>Lowercase (a-z)</span>
                           </li>
                           <li className="flex items-center gap-2">
                             <FontAwesomeIcon icon={passwordStrength.hasNumber ? faCheckCircle : faTimesCircle} className={`${passwordStrength.hasNumber ? 'text-green-500' : 'text-neutral-300 dark:text-neutral-600'} h-4 w-4`} />
-                            <span className={passwordStrength.hasNumber ? 'text-neutral-900 dark:text-white font-medium' : 'text-neutral-500 dark:text-stone-400'}>Number (0-9)</span>
+                            <span className={passwordStrength.hasNumber ? 'text-stone-900 dark:text-white font-medium' : 'text-neutral-500 dark:text-stone-400'}>Number (0-9)</span>
                           </li>
                         </ul>
                       </div>
@@ -295,19 +295,19 @@ const StaffChangePassword: React.FC = () => {
                       Confirm Password
                     </label>
                     <div className="relative group">
-                      <FontAwesomeIcon icon={faLock} className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400 dark:text-stone-500 pointer-events-none" />
+                      <FontAwesomeIcon icon={faLock} className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400 dark:text-stone-500 pointer-events-none" />
                       <input
                         type={showConfirmPassword ? 'text' : 'password'}
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="w-full pl-10 pr-10 py-3 text-sm rounded-lg border border-neutral-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-neutral-900 dark:text-white placeholder-stone-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200"
+                        className="w-full pl-10 pr-10 py-3 text-sm rounded-lg border border-neutral-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white placeholder-stone-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 dark:focus:border-orange-400 dark:focus:ring-orange-400/20 transition-all duration-200"
                         placeholder="••••••••"
                         disabled={isLoading}
                       />
                       <button
                         type="button"
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-stone-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
+                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 dark:text-stone-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
                       >
                         <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} className="h-4 w-4" />
                       </button>

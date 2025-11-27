@@ -229,7 +229,7 @@ const Register: React.FC = () => {
                 Create your account 
                 <span aria-hidden="true" className="coffee-emoji text-[24px]">☕</span>
               </h1>
-              <p className="mt-1.5 text-base text-neutral-600 dark:text-stone-400">Professional POS Management</p>
+              <p className="mt-1.5 text-base text-stone-600 dark:text-stone-400">Professional POS Management</p>
             </div>
                         <div className="h-px w-full bg-gradient-to-r from-neutral-300 via-neutral-400 to-neutral-300 mb-6 dark:from-neutral-800 dark:via-neutral-700 dark:to-neutral-800" aria-hidden />
             <form onSubmit={handleSubmit} noValidate className="space-y-4" aria-busy={isLoading}>
@@ -260,7 +260,7 @@ const Register: React.FC = () => {
                         onFocus={() => setFocusField('firstName')}
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
-                        className={`peer block w-full rounded-lg border bg-white pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-stone-50 dark:placeholder:text-neutral-500
+                        className={`peer block w-full rounded-lg border bg-white pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-stone-400 dark:bg-neutral-900/60 dark:text-stone-50 dark:placeholder:text-neutral-500
                           ${validFirst ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400' : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
                           ${isLoading ? 'opacity-90' : ''}`}
                         placeholder="Juan"
@@ -286,7 +286,7 @@ const Register: React.FC = () => {
                         onFocus={() => setFocusField('middleName')}
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
-                        className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-3.5 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-stone-50 dark:placeholder:text-neutral-500
+                        className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-3.5 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-stone-400 dark:bg-neutral-900/60 dark:text-stone-50 dark:placeholder:text-neutral-500
                           ${validMiddle ? 'border-neutral-300 focus:ring-1 focus:ring-amber-500 focus:border-amber-500 dark:border-stone-700 dark:focus:ring-amber-400 dark:focus:border-amber-400' : 'border-neutral-300 dark:border-stone-700'}
                           ${isLoading ? 'opacity-90' : ''}`}
                         placeholder="Cruz"
@@ -307,7 +307,7 @@ const Register: React.FC = () => {
                         onFocus={() => setFocusField('lastName')}
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
-                        className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-stone-50 dark:placeholder:text-neutral-500
+                        className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-stone-400 dark:bg-neutral-900/60 dark:text-stone-50 dark:placeholder:text-neutral-500
                           ${validLast ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400' : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
                           ${isLoading ? 'opacity-90' : ''}`}
                         placeholder="Dela Cruz"
@@ -336,7 +336,7 @@ const Register: React.FC = () => {
                         onFocus={() => setFocusField('email')}
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
-                        className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-stone-50 dark:placeholder:text-neutral-500
+                        className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-stone-400 dark:bg-neutral-900/60 dark:text-stone-50 dark:placeholder:text-neutral-500
                           ${validEmail ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400' : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
                           ${isLoading ? 'opacity-90' : ''}`}
                         placeholder="you@company.com"
@@ -367,7 +367,7 @@ const Register: React.FC = () => {
                         onFocus={() => setFocusField('password')}
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
-                        className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-stone-50 dark:placeholder:text-neutral-500
+                        className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-stone-400 dark:bg-neutral-900/60 dark:text-stone-50 dark:placeholder:text-neutral-500
                           ${validPassword ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400' : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
                           ${isLoading ? 'opacity-90' : ''}`}
                         placeholder="••••••••"
@@ -449,7 +449,7 @@ const Register: React.FC = () => {
                         aria-invalid={errors.role ? 'true' : 'false'}
                         aria-describedby={errors.role ? 'role-error' : undefined}
                       >
-                        <span className={`block truncate ${!role ? 'text-neutral-400 dark:text-stone-500' : 'text-stone-900 dark:text-stone-50'}`}>
+                        <span className={`block truncate ${!role ? 'text-stone-400 dark:text-stone-500' : 'text-stone-900 dark:text-stone-50'}`}>
                           {role || 'Select role...'}
                         </span>
                         {/* Chevron */}
@@ -574,7 +574,7 @@ const Register: React.FC = () => {
                         aria-invalid={errors.branch ? 'true' : 'false'}
                         aria-describedby={errors.branch ? 'branch-error' : undefined}
                       >
-                        <span className={`block truncate ${!branch ? 'text-neutral-400 dark:text-stone-500' : 'text-stone-900 dark:text-stone-50'}`}>
+                        <span className={`block truncate ${!branch ? 'text-stone-400 dark:text-stone-500' : 'text-stone-900 dark:text-stone-50'}`}>
                           {role !== 'Staff' && loadingBranches ? 'Loading branches...' : (branch || 'Select branch...')}
                         </span>
                         <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
@@ -706,7 +706,7 @@ const Register: React.FC = () => {
                         aria-invalid={errors.assignedCashier ? 'true' : 'false'}
                         aria-describedby={errors.assignedCashier ? 'cashier-error' : undefined}
                       >
-                        <span className={`block truncate ${!assignedCashier ? 'text-neutral-400 dark:text-stone-500' : 'text-stone-900 dark:text-stone-50'}`}>
+                        <span className={`block truncate ${!assignedCashier ? 'text-stone-400 dark:text-stone-500' : 'text-stone-900 dark:text-stone-50'}`}>
                           {loadingCashiers ? 'Loading cashiers...' : (assignedCashier || 'Select cashier...')}
                         </span>
                         <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
@@ -792,7 +792,7 @@ const Register: React.FC = () => {
                 )}
               </button>
             </form>
-            <p className="mt-6 text-center text-[13px] text-neutral-600 dark:text-stone-400">Already have an account? <Link to="/login" className="font-medium text-neutral-800 hover:underline focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 focus:ring-offset-white rounded dark:text-orange-300 dark:hover:text-orange-200 dark:focus:ring-orange-200 dark:focus:ring-offset-neutral-900">Sign in</Link></p>
+            <p className="mt-6 text-center text-[13px] text-stone-600 dark:text-stone-400">Already have an account? <Link to="/login" className="font-medium text-neutral-800 hover:underline focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 focus:ring-offset-white rounded dark:text-orange-300 dark:hover:text-orange-200 dark:focus:ring-orange-200 dark:focus:ring-offset-neutral-900">Sign in</Link></p>
           </div>
        
         </div>

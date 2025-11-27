@@ -79,7 +79,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                 <FontAwesomeIcon icon={faCoffee} className="text-xl" />
               </div>
               <div className="flex-1 min-w-0 flex flex-col justify-center">
-                <h2 className="text-3xl font-black text-neutral-900 dark:text-white tracking-tight leading-tight">KapeRest</h2>
+                <h2 className="text-3xl font-black text-stone-900 dark:text-white tracking-tight leading-tight">KapeRest</h2>
                 <p className="text-base font-semibold text-orange-600 dark:text-orange-400 uppercase tracking-wide leading-none">Staff Portal</p>
               </div>
             </div>
@@ -154,7 +154,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                     className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-md text-sm transition-all duration-200 ${
                       isAddSupplier
                         ? "text-orange-600 dark:text-orange-400 bg-orange-50/60 dark:bg-orange-950/20 font-medium"
-                        : "text-neutral-600 dark:text-stone-400 hover:text-neutral-900 dark:hover:text-neutral-300 hover:bg-stone-100/50 dark:hover:bg-stone-800/30"
+                        : "text-stone-600 dark:text-stone-400 hover:text-neutral-900 dark:hover:text-neutral-300 hover:bg-stone-100/50 dark:hover:bg-stone-800/30"
                     }`}
                   >
                     <FontAwesomeIcon icon={faPlus} className="text-xs w-4 flex-shrink-0" />
@@ -169,7 +169,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                     className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-md text-sm transition-all duration-200 ${
                       isSupplierList
                         ? "text-orange-600 dark:text-orange-400 bg-orange-50/60 dark:bg-orange-950/20 font-medium"
-                        : "text-neutral-600 dark:text-stone-400 hover:text-neutral-900 dark:hover:text-neutral-300 hover:bg-stone-100/50 dark:hover:bg-stone-800/30"
+                        : "text-stone-600 dark:text-stone-400 hover:text-neutral-900 dark:hover:text-neutral-300 hover:bg-stone-100/50 dark:hover:bg-stone-800/30"
                     }`}
                   >
                     <FontAwesomeIcon icon={faList} className="text-xs w-4 flex-shrink-0" />
@@ -219,7 +219,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                     className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-md text-sm transition-all duration-200 ${
                       isAddItem
                         ? "text-orange-600 dark:text-orange-400 bg-orange-50/60 dark:bg-orange-950/20 font-medium"
-                        : "text-neutral-600 dark:text-stone-400 hover:text-neutral-900 dark:hover:text-neutral-300 hover:bg-stone-100/50 dark:hover:bg-stone-800/30"
+                        : "text-stone-600 dark:text-stone-400 hover:text-neutral-900 dark:hover:text-neutral-300 hover:bg-stone-100/50 dark:hover:bg-stone-800/30"
                     }`}
                   >
                     <FontAwesomeIcon icon={faPlus} className="text-xs w-4 flex-shrink-0" />
@@ -234,7 +234,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                     className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-md text-sm transition-all duration-200 ${
                       isMenuItemList
                         ? "text-orange-600 dark:text-orange-400 bg-orange-50/60 dark:bg-orange-950/20 font-medium"
-                        : "text-neutral-600 dark:text-stone-400 hover:text-neutral-900 dark:hover:text-neutral-300 hover:bg-stone-100/50 dark:hover:bg-stone-800/30"
+                        : "text-stone-600 dark:text-stone-400 hover:text-neutral-900 dark:hover:text-neutral-300 hover:bg-stone-100/50 dark:hover:bg-stone-800/30"
                     }`}
                   >
                     <FontAwesomeIcon icon={faList} className="text-xs w-4 flex-shrink-0" />
@@ -284,7 +284,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                     className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-md text-sm transition-all duration-200 ${
                       isAddStocks
                         ? "text-orange-600 dark:text-orange-400 bg-orange-50/60 dark:bg-orange-950/20 font-medium"
-                        : "text-neutral-600 dark:text-stone-400 hover:text-neutral-900 dark:hover:text-neutral-300 hover:bg-stone-100/50 dark:hover:bg-stone-800/30"
+                        : "text-stone-600 dark:text-stone-400 hover:text-neutral-900 dark:hover:text-neutral-300 hover:bg-stone-100/50 dark:hover:bg-stone-800/30"
                     }`}
                   >
                     <FontAwesomeIcon icon={faPlus} className="text-xs w-4 flex-shrink-0" />
@@ -299,7 +299,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
                     className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-md text-sm transition-all duration-200 ${
                       isStocksList
                         ? "text-orange-600 dark:text-orange-400 bg-orange-50/60 dark:bg-orange-950/20 font-medium"
-                        : "text-neutral-600 dark:text-stone-400 hover:text-neutral-900 dark:hover:text-neutral-300 hover:bg-stone-100/50 dark:hover:bg-stone-800/30"
+                        : "text-stone-600 dark:text-stone-400 hover:text-neutral-900 dark:hover:text-neutral-300 hover:bg-stone-100/50 dark:hover:bg-stone-800/30"
                     }`}
                   >
                     <FontAwesomeIcon icon={faList} className="text-xs w-4 flex-shrink-0" />
@@ -377,7 +377,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
       {isOpen && (
         <button
           onClick={onClose}
-          className="fixed right-4 top-4 z-40 lg:hidden flex h-10 w-10 items-center justify-center rounded-lg bg-stone-50 dark:bg-stone-900 text-neutral-600 dark:text-stone-400 transition-all duration-200 shadow-lg border border-neutral-200 dark:border-stone-700"
+          className="fixed right-4 top-4 z-40 lg:hidden flex h-10 w-10 items-center justify-center rounded-lg bg-stone-50 dark:bg-stone-900 text-stone-600 dark:text-stone-400 transition-all duration-200 shadow-lg border border-neutral-200 dark:border-stone-700"
         >
           <FontAwesomeIcon icon={faTimes} className="h-4 w-4" />
         </button>

@@ -299,13 +299,13 @@ const StocksList: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full" style={{ backgroundColor: '#FAFAFA' }}>
+    <div className="min-h-screen w-full bg-stone-50 dark:bg-stone-900">
       <div className="flex h-screen overflow-hidden">
         <StaffSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
 
         <div className={`flex h-screen flex-1 flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
           {/* Premium Header */}
-          <div className="sticky top-0 z-20 backdrop-blur-xl bg-stone-50/80 dark:bg-neutral-900/80 border-b border-stone-200/50 dark:border-stone-700/50 shadow-lg shadow-black/5">
+          <div className="sticky top-0 z-20 backdrop-blur-xl bg-stone-50/90 dark:bg-stone-900/95 border-b border-stone-200/50 dark:border-stone-700/50 shadow-lg shadow-black/5">
             <div className="px-4 sm:px-6 md:px-8 py-4">
               <div className="flex items-center justify-between gap-3 sm:gap-4">
                 <div className="flex items-center gap-3">
@@ -318,15 +318,15 @@ const StocksList: React.FC = () => {
 
                   <button
                     onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                    className="hidden lg:flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-800 hover:from-orange-100 hover:to-orange-200 dark:hover:from-orange-900/40 dark:hover:to-orange-800/40 text-stone-700 dark:text-stone-300 hover:text-orange-600 dark:hover:text-orange-400 border border-stone-300 dark:border-stone-600 shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 hover:scale-105"
+                    className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                   >
                     <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                   </button>
 
                   <div className="hidden sm:flex items-center gap-3">
                     <div>
-                      <h1 className="text-xl font-black text-neutral-900 dark:text-white tracking-tight">Stocks Inventory</h1>
-                      <p className="text-xs font-medium text-neutral-600 dark:text-stone-400">Manage stock levels</p>
+                      <h1 className="text-xl font-black text-stone-900 dark:text-white tracking-tight">Stocks Inventory</h1>
+                      <p className="text-xs font-medium text-stone-600 dark:text-stone-400">Manage stock levels</p>
                     </div>
                   </div>
                 </div>
@@ -335,13 +335,13 @@ const StocksList: React.FC = () => {
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-amber-500/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div className="relative flex items-center gap-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-2 border-stone-200 dark:border-stone-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
-                      <FontAwesomeIcon icon={faSearch} className="h-5 w-5 text-neutral-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors" />
+                      <FontAwesomeIcon icon={faSearch} className="h-5 w-5 text-stone-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors" />
                       <input
                         type="text"
                         placeholder="Search stocks..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="flex-1 bg-transparent text-sm font-medium text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none"
+                        className="flex-1 bg-transparent text-sm font-medium text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-neutral-500 focus:outline-none"
                       />
                       {searchTerm && (
                         <span className="text-xs font-bold text-orange-600 dark:text-orange-400 px-2 py-1 rounded-md bg-orange-100 dark:bg-orange-900/30">
@@ -357,7 +357,7 @@ const StocksList: React.FC = () => {
 
               {/* Filter Section */}
               <div className="flex items-center gap-3 flex-wrap mt-4">
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-stone-100 to-stone-200 dark:from-neutral-800 dark:to-neutral-700 border border-stone-300 dark:border-stone-600">
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-stone-100 to-stone-200 dark:from-stone-800 dark:to-stone-700 border border-stone-300 dark:border-stone-600">
                   <div className="h-2 w-2 rounded-full bg-orange-600 animate-pulse"></div>
                   <span className="text-xs font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Filter</span>
                 </div>
@@ -374,7 +374,7 @@ const StocksList: React.FC = () => {
                       }`}
                     >
                       {filterCategory === filter && (
-                        <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent animate-pulse"></div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-transparent animate-pulse"></div>
                       )}
                       <span className="relative z-10 capitalize">{filter}</span>
                     </button>
@@ -390,7 +390,7 @@ const StocksList: React.FC = () => {
 
               {/* Table Section */}
               <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-stone-50 dark:bg-stone-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-stone-700">
-                <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-white via-orange-50/30 to-white dark:from-neutral-800 dark:via-orange-950/20 dark:to-neutral-800">
+                <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-stone-50 via-orange-50/30 to-stone-50 dark:from-stone-800 dark:via-orange-950/20 dark:to-stone-800">
                   <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-orange-500 to-orange-600"></div>
                   
                   <div className="px-6 sm:px-8 py-6">
@@ -400,8 +400,8 @@ const StocksList: React.FC = () => {
                           <FontAwesomeIcon icon={faBox} className="h-7 w-7 text-white" />
                         </div>
                         <div>
-                          <h3 className="text-2xl font-black text-neutral-900 dark:text-white tracking-tight">Stocks Catalog</h3>
-                          <p className="text-sm font-medium text-neutral-600 dark:text-stone-400 mt-0.5">Complete inventory list</p>
+                          <h3 className="text-2xl font-black text-stone-900 dark:text-white tracking-tight">Stocks Catalog</h3>
+                          <p className="text-sm font-medium text-stone-600 dark:text-stone-400 mt-0.5">Complete inventory list</p>
                         </div>
                       </div>
                       
@@ -409,7 +409,7 @@ const StocksList: React.FC = () => {
                         onClick={() => navigate('/staff/add-stocks')}
                         className="relative flex items-center gap-2.5 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl transition-all duration-300 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:scale-105 active:scale-95 overflow-hidden group"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-orange-500/20 to-transparent"></div>
                         <FontAwesomeIcon icon={faPlus} className="relative h-4 w-4" />
                         <span className="relative text-sm">Add Stock</span>
                       </button>
@@ -422,21 +422,21 @@ const StocksList: React.FC = () => {
                     <div className="flex items-center justify-center py-20">
                       <div className="text-center">
                         <div className="inline-block h-12 w-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                        <p className="text-neutral-600 dark:text-stone-400">Loading stocks...</p>
+                        <p className="text-stone-600 dark:text-stone-400">Loading stocks...</p>
                       </div>
                     </div>
                   ) : filteredStocks.length === 0 ? (
                     <div className="flex items-center justify-center py-20">
                       <div className="text-center">
                         <FontAwesomeIcon icon={faBox} className="h-16 w-16 text-neutral-300 dark:text-neutral-700 mb-4" />
-                        <p className="text-neutral-600 dark:text-stone-400 text-lg font-medium">No stocks found</p>
+                        <p className="text-stone-600 dark:text-stone-400 text-lg font-medium">No stocks found</p>
                         <p className="text-neutral-500 dark:text-stone-500 text-sm mt-2">Try adjusting your search or filter</p>
                       </div>
                     </div>
                   ) : (
                     <table className="w-full">
                       <thead>
-                        <tr className="border-b border-orange-100 dark:border-stone-700 bg-orange-50/50 dark:bg-neutral-800/50">
+                        <tr className="border-b border-orange-100 dark:border-stone-700 bg-orange-50/50 dark:bg-stone-800/50">
                           <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Product Name</th>
                           <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Supplier</th>
                           <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Cashier</th>
@@ -451,16 +451,16 @@ const StocksList: React.FC = () => {
                       <tbody className="divide-y divide-orange-100 dark:divide-neutral-800">
                         {filteredStocks.map((stock) => (
                           <tr key={stock.id} className="hover:bg-orange-50/30 dark:hover:bg-stone-800/30 transition-colors duration-150">
-                            <td className="px-6 py-4 text-sm font-medium text-neutral-900 dark:text-white">
+                            <td className="px-6 py-4 text-sm font-medium text-stone-900 dark:text-white">
                               {stock.productName}
                             </td>
-                            <td className="px-6 py-4 text-sm text-neutral-600 dark:text-stone-400">
+                            <td className="px-6 py-4 text-sm text-stone-600 dark:text-stone-400">
                               {stock.supplierName}
                             </td>
-                            <td className="px-6 py-4 text-sm text-neutral-600 dark:text-stone-400">
+                            <td className="px-6 py-4 text-sm text-stone-600 dark:text-stone-400">
                               {getCashierName(stock)}
                             </td>
-                            <td className="px-6 py-4 text-sm text-neutral-600 dark:text-stone-400">
+                            <td className="px-6 py-4 text-sm text-stone-600 dark:text-stone-400">
                               {getBranchName(stock)}
                             </td>
                             <td className="px-6 py-4 text-sm">
@@ -474,13 +474,13 @@ const StocksList: React.FC = () => {
                                 {stock.stocks}
                               </span>
                             </td>
-                            <td className="px-6 py-4 text-sm text-neutral-600 dark:text-stone-400">
+                            <td className="px-6 py-4 text-sm text-stone-600 dark:text-stone-400">
                               {stock.units}
                             </td>
-                            <td className="px-6 py-4 text-sm font-medium text-neutral-900 dark:text-white">
+                            <td className="px-6 py-4 text-sm font-medium text-stone-900 dark:text-white">
                               ₱{stock.costPrice.toFixed(2)}
                             </td>
-                            <td className="px-6 py-4 text-sm text-neutral-600 dark:text-stone-400">
+                            <td className="px-6 py-4 text-sm text-stone-600 dark:text-stone-400">
                               {formatDate(stock.transactionDate)}
                             </td>
                             <td className="px-6 py-4 text-center">
@@ -524,8 +524,8 @@ const StocksList: React.FC = () => {
                   <FontAwesomeIcon icon={faBoxes} className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-neutral-900 dark:text-white">Edit Stock</h2>
-                  <p className="text-sm text-neutral-600 dark:text-stone-400">Update stock information</p>
+                  <h2 className="text-xl font-bold text-stone-900 dark:text-white">Edit Stock</h2>
+                  <p className="text-sm text-stone-600 dark:text-stone-400">Update stock information</p>
                 </div>
               </div>
               <button
@@ -533,7 +533,7 @@ const StocksList: React.FC = () => {
                 className="p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors"
                 disabled={isSaving}
               >
-                <FontAwesomeIcon icon={faTimes} className="h-5 w-5 text-neutral-600 dark:text-stone-400" />
+                <FontAwesomeIcon icon={faTimes} className="h-5 w-5 text-stone-600 dark:text-stone-400" />
               </button>
             </div>
 
@@ -546,7 +546,7 @@ const StocksList: React.FC = () => {
                     type="text"
                     value={editingStock.productName}
                     onChange={(e) => setEditingStock({ ...editingStock, productName: e.target.value })}
-                    className="w-full px-4 py-3 bg-neutral-50 dark:bg-stone-800 border-2 border-neutral-200 dark:border-stone-700 rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 bg-stone-50 dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl text-stone-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
                     placeholder="Enter product name"
                   />
                 </div>
@@ -558,7 +558,7 @@ const StocksList: React.FC = () => {
                       type="number"
                       value={editingStock.stocks}
                       onChange={(e) => setEditingStock({ ...editingStock, stocks: parseInt(e.target.value) || 0 })}
-                      className="w-full px-4 py-3 bg-neutral-50 dark:bg-stone-800 border-2 border-neutral-200 dark:border-stone-700 rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 bg-stone-50 dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl text-stone-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
                       placeholder="Quantity"
                       min="0"
                     />
@@ -570,7 +570,7 @@ const StocksList: React.FC = () => {
                       type="text"
                       value={editingStock.units}
                       onChange={(e) => setEditingStock({ ...editingStock, units: e.target.value })}
-                      className="w-full px-4 py-3 bg-neutral-50 dark:bg-stone-800 border-2 border-neutral-200 dark:border-stone-700 rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 bg-stone-50 dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl text-stone-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
                       placeholder="e.g., kg, pcs"
                     />
                   </div>
@@ -582,7 +582,7 @@ const StocksList: React.FC = () => {
                       step="0.01"
                       value={editingStock.costPrice}
                       onChange={(e) => setEditingStock({ ...editingStock, costPrice: parseFloat(e.target.value) || 0 })}
-                      className="w-full px-4 py-3 bg-neutral-50 dark:bg-stone-800 border-2 border-neutral-200 dark:border-stone-700 rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 bg-stone-50 dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl text-stone-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
                       placeholder="0.00"
                       min="0"
                     />
@@ -595,7 +595,7 @@ const StocksList: React.FC = () => {
                     type="text"
                     value={editingStock.supplierName}
                     onChange={(e) => setEditingStock({ ...editingStock, supplierName: e.target.value })}
-                    className="w-full px-4 py-3 bg-neutral-50 dark:bg-stone-800 border-2 border-neutral-200 dark:border-stone-700 rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 bg-stone-50 dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl text-stone-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
                     placeholder="Supplier name"
                   />
                 </div>
@@ -603,12 +603,12 @@ const StocksList: React.FC = () => {
             </div>
             
             {/* Footer */}
-            <div className="sticky bottom-0 px-6 py-4 bg-neutral-50 dark:bg-neutral-800/50 border-t border-neutral-200 dark:border-stone-700 flex gap-3">
+            <div className="sticky bottom-0 px-6 py-4 bg-stone-50 dark:bg-stone-800/50 border-t border-stone-200 dark:border-stone-700 flex gap-3">
               <button
                 type="button"
                 onClick={() => setEditingStock(null)}
                 disabled={isSaving}
-                className="flex-1 px-6 py-3 bg-neutral-200 dark:bg-stone-700 hover:bg-neutral-300 dark:hover:bg-stone-600 text-neutral-900 dark:text-white font-bold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
+                className="flex-1 px-6 py-3 bg-stone-200 dark:bg-stone-700 hover:bg-stone-300 dark:hover:bg-stone-600 text-stone-900 dark:text-white font-bold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
               >
                 Cancel
               </button>
@@ -645,8 +645,8 @@ const StocksList: React.FC = () => {
                   <FontAwesomeIcon icon={faTrash} className="h-6 w-6 text-red-600 dark:text-red-400" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-neutral-900 dark:text-white">Delete Stock</h3>
-                  <p className="text-sm text-neutral-600 dark:text-stone-400">This action cannot be undone</p>
+                  <h3 className="text-xl font-bold text-stone-900 dark:text-white">Delete Stock</h3>
+                  <p className="text-sm text-stone-600 dark:text-stone-400">This action cannot be undone</p>
                 </div>
               </div>
               
@@ -666,7 +666,7 @@ const StocksList: React.FC = () => {
                     setShowDeleteConfirm(false);
                     setDeleteId(null);
                   }}
-                  className="flex-1 px-4 py-2.5 bg-neutral-200 dark:bg-stone-700 hover:bg-neutral-300 dark:hover:bg-stone-600 text-neutral-900 dark:text-white font-medium rounded-lg transition-colors"
+                  className="flex-1 px-4 py-2.5 bg-stone-200 dark:bg-stone-700 hover:bg-stone-300 dark:hover:bg-stone-600 text-stone-900 dark:text-white font-medium rounded-lg transition-colors"
                 >
                   Cancel
                 </button>

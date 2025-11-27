@@ -602,7 +602,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
                     className={`group rounded-full px-6 py-3 text-sm font-bold transition-all duration-300 border-2 whitespace-nowrap relative overflow-hidden ${
                       selectedCategory === category
                         ? 'border-transparent bg-gradient-to-r from-orange-600 to-orange-500 text-white shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40 scale-105'
-                        : 'border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white hover:border-orange-400 dark:hover:border-orange-500 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:scale-105 active:scale-95'
+                        : 'border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white hover:border-orange-400 dark:hover:border-orange-500 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:scale-105 active:scale-95'
                     }`}
                   >
                     <span className="relative z-10">{category}</span>
@@ -632,7 +632,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
                 <div className="flex items-center justify-center py-20">
                   <div className="text-center">
                     <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-orange-600 border-r-transparent"></div>
-                    <p className="mt-4 text-sm font-medium text-neutral-600 dark:text-stone-400">Loading menu items...</p>
+                    <p className="mt-4 text-sm font-medium text-stone-600 dark:text-stone-400">Loading menu items...</p>
                   </div>
                 </div>
               ) : (
@@ -853,7 +853,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
                     <div className="flex items-center gap-1.5 flex-shrink-0 bg-stone-50 dark:bg-stone-900 rounded-lg p-1 border-2 border-stone-200 dark:border-stone-700 shadow-sm">
                       <button
                         onClick={() => onUpdateQuantity(item.id, Math.max(1, item.quantity - 1))}
-                        className="flex h-8 w-8 min-w-[32px] items-center justify-center rounded-md bg-stone-100 dark:bg-stone-800 hover:bg-orange-100 dark:hover:bg-orange-900/30 text-neutral-900 dark:text-white font-bold transition-all duration-200 active:scale-90 hover:text-orange-600 dark:hover:text-orange-400 border border-transparent hover:border-orange-300 dark:hover:border-orange-600"
+                        className="flex h-8 w-8 min-w-[32px] items-center justify-center rounded-md bg-stone-100 dark:bg-stone-800 hover:bg-orange-100 dark:hover:bg-orange-900/30 text-stone-900 dark:text-white font-bold transition-all duration-200 active:scale-90 hover:text-orange-600 dark:hover:text-orange-400 border border-transparent hover:border-orange-300 dark:hover:border-orange-600"
                       >
                         <FontAwesomeIcon icon={faMinus} className="h-3.5 w-3.5" />
                       </button>

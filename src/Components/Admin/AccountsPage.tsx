@@ -218,7 +218,7 @@ const AccountsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full" style={{ backgroundColor: '#FAFAFA' }}>
+    <div className="min-h-screen w-full bg-stone-50 dark:bg-stone-900">
       <div className="flex h-screen overflow-hidden">
         <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
       
@@ -244,14 +244,14 @@ const AccountsPage: React.FC = () => {
                   <div className="relative flex items-center gap-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-2 border-stone-200 dark:border-stone-700 focus-within:border-purple-500 dark:focus-within:border-purple-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
                     <FontAwesomeIcon
                       icon={faSearch}
-                      className="h-5 w-5 text-neutral-400 dark:text-stone-500 group-focus-within:text-purple-500 transition-colors"
+                      className="h-5 w-5 text-stone-400 dark:text-stone-500 group-focus-within:text-purple-500 transition-colors"
                     />
                     <input
                       type="text"
                       placeholder="Search accounts by name or email..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="flex-1 bg-transparent text-sm font-medium text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none"
+                      className="flex-1 bg-transparent text-sm font-medium text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-stone-500 focus:outline-none"
                     />
                     {searchQuery && (
                       <span className="text-xs font-bold text-purple-600 dark:text-purple-400 px-2 py-1 rounded-md bg-purple-100 dark:bg-purple-900/30">
@@ -267,14 +267,14 @@ const AccountsPage: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                    className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-800 hover:from-orange-100 hover:to-orange-200 dark:hover:from-orange-900/40 dark:hover:to-orange-800/40 text-stone-700 dark:text-stone-300 hover:text-orange-600 dark:hover:text-orange-400 border border-stone-300 dark:border-stone-600 shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 hover:scale-105"
+                    className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                   >
                     <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                   </button>
 
                   <div>
-                    <h1 className="text-xl font-black text-neutral-900 dark:text-white tracking-tight">Account Management</h1>
-                    <p className="text-xs font-medium text-neutral-600 dark:text-stone-400">Review pending registrations</p>
+                    <h1 className="text-xl font-black text-stone-900 dark:text-white tracking-tight">Account Management</h1>
+                    <p className="text-xs font-medium text-stone-600 dark:text-stone-400">Review pending registrations</p>
                   </div>
                 </div>
 
@@ -284,14 +284,14 @@ const AccountsPage: React.FC = () => {
                     <div className="relative flex items-center gap-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-2 border-stone-200 dark:border-stone-700 focus-within:border-purple-500 dark:focus-within:border-purple-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
                       <FontAwesomeIcon
                         icon={faSearch}
-                        className="h-5 w-5 text-neutral-400 dark:text-stone-500 group-focus-within:text-purple-500 transition-colors"
+                        className="h-5 w-5 text-stone-400 dark:text-stone-500 group-focus-within:text-purple-500 transition-colors"
                       />
                       <input
                         type="text"
                         placeholder="Search accounts by name or email..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="flex-1 bg-transparent text-sm font-medium text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none"
+                        className="flex-1 bg-transparent text-sm font-medium text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-stone-500 focus:outline-none"
                       />
                       {searchQuery && (
                         <span className="text-xs font-bold text-purple-600 dark:text-purple-400 px-2 py-1 rounded-md bg-purple-100 dark:bg-purple-900/30">
@@ -333,7 +333,7 @@ const AccountsPage: React.FC = () => {
                     ))}
                   </select>
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg className="w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 text-stone-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
                     </svg>
                   </div>
@@ -353,7 +353,7 @@ const AccountsPage: React.FC = () => {
                     ))}
                   </select>
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg className="w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 text-stone-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
                     </svg>
                   </div>
@@ -362,7 +362,7 @@ const AccountsPage: React.FC = () => {
 
               {/* Accounts Table */}
               <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-stone-50 dark:bg-stone-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-stone-700">
-                <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-purple-500/20 bg-gradient-to-r from-white via-purple-50/30 to-white dark:from-neutral-800 dark:via-purple-950/20 dark:to-neutral-800">
+                <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-purple-500/20 bg-gradient-to-r from-stone-50 via-purple-50/30 to-stone-50 dark:from-stone-800 dark:via-purple-950/20 dark:to-stone-800">
                   <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-purple-500 to-purple-600"></div>
                   
                   <div className="px-6 sm:px-8 py-6">
@@ -372,8 +372,8 @@ const AccountsPage: React.FC = () => {
                           <FontAwesomeIcon icon={faUsers} className="h-7 w-7 text-white" />
                         </div>
                         <div>
-                          <h3 className="text-2xl font-black text-neutral-900 dark:text-white tracking-tight">Pending Accounts</h3>
-                          <p className="text-sm font-medium text-neutral-600 dark:text-stone-400 mt-0.5">Registration requests awaiting approval</p>
+                          <h3 className="text-2xl font-black text-stone-900 dark:text-white tracking-tight">Pending Accounts</h3>
+                          <p className="text-sm font-medium text-stone-600 dark:text-stone-400 mt-0.5">Registration requests awaiting approval</p>
                         </div>
                       </div>
                     </div>
@@ -381,8 +381,8 @@ const AccountsPage: React.FC = () => {
                 </div>
 
                 <div className="overflow-x-auto flex-1">
-                  <table className="w-full text-sm text-left text-neutral-600 dark:text-stone-300">
-                  <thead className="text-xs text-stone-700 dark:text-stone-200 uppercase bg-stone-50 dark:bg-neutral-700/50 border-b-2 border-stone-200 dark:border-stone-700">
+                  <table className="w-full text-sm text-left text-stone-600 dark:text-stone-300">
+                  <thead className="text-xs text-stone-700 dark:text-stone-200 uppercase bg-stone-50 dark:bg-stone-700/50 border-b-2 border-stone-200 dark:border-stone-700">
                     <tr>
                       <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-wider text-stone-700 dark:text-stone-300">
                         User
@@ -410,7 +410,7 @@ const AccountsPage: React.FC = () => {
                         <td colSpan={6} className="px-6 py-12 text-center">
                           <div className="flex flex-col items-center gap-3">
                             <div className="w-12 h-12 border-4 border-orange-200 dark:border-orange-900 border-t-orange-600 dark:border-t-orange-400 rounded-full animate-spin"></div>
-                            <p className="text-sm font-medium text-neutral-500 dark:text-stone-400">Loading accounts...</p>
+                            <p className="text-sm font-medium text-stone-500 dark:text-stone-400">Loading accounts...</p>
                           </div>
                         </td>
                       </tr>
@@ -423,7 +423,7 @@ const AccountsPage: React.FC = () => {
                             </div>
                             <div>
                               <p className="text-sm font-bold text-red-600 dark:text-red-400 mb-1">Failed to load accounts</p>
-                              <p className="text-xs text-neutral-500 dark:text-stone-400">{error}</p>
+                              <p className="text-xs text-stone-500 dark:text-stone-400">{error}</p>
                             </div>
                           </div>
                         </td>
@@ -437,8 +437,8 @@ const AccountsPage: React.FC = () => {
                                 <FontAwesomeIcon icon={faUserCircle} className="h-5 w-5 text-white" />
                               </div>
                               <div>
-                                <p className="text-sm font-black text-neutral-900 dark:text-white">{getFullName(account)}</p>
-                                <p className="text-xs font-medium text-neutral-500 dark:text-stone-400">ID: {account.id}</p>
+                                <p className="text-sm font-black text-stone-900 dark:text-white">{getFullName(account)}</p>
+                                <p className="text-xs font-medium text-stone-500 dark:text-stone-400">ID: {account.id}</p>
                               </div>
                             </div>
                           </td>
@@ -468,11 +468,11 @@ const AccountsPage: React.FC = () => {
                                 </div>
                                 <div className="flex items-center gap-2 mt-1">
                                   <FontAwesomeIcon icon={faMapMarkerAlt} className="h-3 w-3 text-neutral-400" />
-                                  <span className="text-xs font-medium text-neutral-500 dark:text-stone-400">{account.branch.location}</span>
+                                  <span className="text-xs font-medium text-stone-500 dark:text-stone-400">{account.branch.location}</span>
                                 </div>
                               </div>
                             ) : (
-                              <span className="text-sm font-medium text-neutral-400 dark:text-stone-500">No branch</span>
+                              <span className="text-sm font-medium text-stone-400 dark:text-stone-500">No branch</span>
                             )}
                           </td>
                           <td className="px-6 py-4 align-middle">
@@ -514,9 +514,9 @@ const AccountsPage: React.FC = () => {
                         <tr>
                           <td colSpan={6} className="px-6 py-12 text-center">
                             <div className="flex flex-col items-center gap-3">
-                              <FontAwesomeIcon icon={faUsers} className="h-16 w-16 text-neutral-300 dark:text-neutral-600" />
-                              <p className="text-lg font-bold text-neutral-500 dark:text-stone-400">No accounts found</p>
-                              <p className="text-sm text-neutral-400 dark:text-stone-500">Try adjusting your filters or search query</p>
+                              <FontAwesomeIcon icon={faUsers} className="h-16 w-16 text-neutral-300 dark:text-stone-600" />
+                              <p className="text-lg font-bold text-stone-500 dark:text-stone-400">No accounts found</p>
+                              <p className="text-sm text-stone-400 dark:text-stone-500">Try adjusting your filters or search query</p>
                             </div>
                           </td>
                         </tr>

@@ -108,7 +108,7 @@ const Login: React.FC = () => {
             {/* Brand */}
             <div className="mb-6">
               <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-neutral-900 flex items-center gap-2 dark:text-neutral-50">KapeRest <span aria-hidden="true" className="coffee-emoji text-[24px]">☕</span></h1>
-              <p className="mt-1.5 text-base text-neutral-600 dark:text-stone-400">Professional POS Management</p>
+              <p className="mt-1.5 text-base text-stone-600 dark:text-stone-400">Professional POS Management</p>
             </div>
             <div className="h-px w-full bg-gradient-to-r from-neutral-300 via-neutral-400 to-neutral-300 mb-6 dark:from-neutral-800 dark:via-neutral-700 dark:to-neutral-800" aria-hidden />
             {/* Form */}
@@ -137,7 +137,7 @@ const Login: React.FC = () => {
                       onFocus={() => setEmailFocused(true)}
                       onBlur={() => setEmailFocused(false)}
                       disabled={isLoading}
-                      className={`peer block w-full rounded-lg border bg-white pr-10 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-stone-50 dark:placeholder:text-neutral-500
+                      className={`peer block w-full rounded-lg border bg-white pr-10 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-stone-400 dark:bg-neutral-900/60 dark:text-stone-50 dark:placeholder:text-neutral-500
                         ${emailValid && email.trim().length > 0
                           ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400'
                           : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
@@ -174,7 +174,7 @@ const Login: React.FC = () => {
                       onFocus={() => setPasswordFocused(true)}
                       onBlur={() => setPasswordFocused(false)}
                       disabled={isLoading}
-                      className={`peer block w-full rounded-lg border bg-white pr-10 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-stone-50 dark:placeholder:text-neutral-500
+                      className={`peer block w-full rounded-lg border bg-white pr-10 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-stone-400 dark:bg-neutral-900/60 dark:text-stone-50 dark:placeholder:text-neutral-500
                         ${passwordValid
                           ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400'
                           : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
@@ -233,7 +233,7 @@ const Login: React.FC = () => {
               </button>
             </form>
             {/* Secondary */}
-            <p className="mt-6 text-center text-[13px] text-neutral-600 dark:text-stone-400">
+            <p className="mt-6 text-center text-[13px] text-stone-600 dark:text-stone-400">
               Don't have an account? <Link to="/register" className="font-medium text-neutral-800 hover:underline focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 focus:ring-offset-white rounded dark:text-orange-300 dark:hover:text-orange-200 dark:focus:ring-orange-400 dark:focus:ring-offset-neutral-950">Sign up</Link>
             </p>
           </div>

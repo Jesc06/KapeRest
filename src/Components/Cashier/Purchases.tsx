@@ -239,7 +239,7 @@ const Purchases: React.FC = () => {
                       <h2 className="text-2xl sm:text-3xl font-bold text-stone-900 dark:text-stone-100 mb-1">
                         Purchase History
                       </h2>
-                      <p className="text-neutral-600 dark:text-stone-400 text-sm font-medium">
+                      <p className="text-stone-600 dark:text-stone-400 text-sm font-medium">
                         View all purchase transactions and details
                       </p>
                     </div>
@@ -283,7 +283,7 @@ const Purchases: React.FC = () => {
               </div>
 
               {/* Results Count */}
-              <div className="mb-4 text-sm text-neutral-600 dark:text-stone-400">
+              <div className="mb-4 text-sm text-stone-600 dark:text-stone-400">
                 Showing <span className="font-bold text-orange-600 dark:text-orange-400">{filteredPurchases.length}</span> of {purchases.length} purchases
               </div>
 
@@ -295,7 +295,7 @@ const Purchases: React.FC = () => {
                       <FontAwesomeIcon icon={faReceipt} className="text-4xl text-orange-500 animate-pulse" />
                     </div>
                     <h3 className="text-xl font-bold text-stone-900 dark:text-stone-100 mb-2">Loading purchases...</h3>
-                    <p className="text-neutral-600 dark:text-stone-400">Please wait while we fetch your transaction history</p>
+                    <p className="text-stone-600 dark:text-stone-400">Please wait while we fetch your transaction history</p>
                   </div>
                 ) : filteredPurchases.length === 0 ? (
                   <div className="bg-stone-50 dark:bg-stone-800 rounded-2xl p-12 text-center border border-stone-200 dark:border-stone-700">
@@ -303,7 +303,7 @@ const Purchases: React.FC = () => {
                       <FontAwesomeIcon icon={faReceipt} className="text-4xl text-orange-500" />
                     </div>
                     <h3 className="text-xl font-bold text-stone-900 dark:text-stone-100 mb-2">No purchases found</h3>
-                    <p className="text-neutral-600 dark:text-stone-400">Try adjusting your search or filter criteria</p>
+                    <p className="text-stone-600 dark:text-stone-400">Try adjusting your search or filter criteria</p>
                   </div>
                 ) : (
                   filteredPurchases.map((purchase) => (
@@ -322,7 +322,7 @@ const Purchases: React.FC = () => {
                               <h3 className="text-lg font-bold text-stone-900 dark:text-stone-100 mb-1 truncate">
                                 {purchase.menuItemName || 'No Items'}
                               </h3>
-                              <div className="flex flex-wrap items-center gap-2 text-sm text-neutral-600 dark:text-stone-400">
+                              <div className="flex flex-wrap items-center gap-2 text-sm text-stone-600 dark:text-stone-400">
                                 <span className="flex items-center gap-1 font-mono text-xs bg-orange-50 dark:bg-orange-900/20 px-2 py-0.5 rounded">
                                   <FontAwesomeIcon icon={faReceipt} className="text-xs" />
                                   {purchase.receiptNumber || `#${purchase.id}`}
@@ -416,7 +416,7 @@ const Purchases: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className="bg-stone-50 dark:bg-stone-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-bold text-neutral-900 dark:text-white">Request Void</h3>
+              <h3 className="text-xl font-bold text-stone-900 dark:text-white">Request Void</h3>
               <button
                 onClick={() => setShowVoidModal(false)}
                 className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 transition-colors"
@@ -425,7 +425,7 @@ const Purchases: React.FC = () => {
               </button>
             </div>
             
-            <p className="text-sm text-neutral-600 dark:text-stone-400 mb-4">
+            <p className="text-sm text-stone-600 dark:text-stone-400 mb-4">
               Please provide a reason for requesting to void this transaction. This will be sent to staff for approval.
             </p>
 
@@ -434,7 +434,7 @@ const Purchases: React.FC = () => {
               onChange={(e) => setVoidReason(e.target.value)}
               placeholder="Enter reason for void request..."
               rows={4}
-              className="w-full px-4 py-3 bg-neutral-50 dark:bg-stone-900 border border-neutral-200 dark:border-stone-700 rounded-lg text-neutral-900 dark:text-white placeholder-stone-400 focus:outline-none focus:border-orange-500 transition-colors duration-200 resize-none"
+              className="w-full px-4 py-3 bg-neutral-50 dark:bg-stone-900 border border-neutral-200 dark:border-stone-700 rounded-lg text-stone-900 dark:text-white placeholder-stone-400 focus:outline-none focus:border-orange-500 transition-colors duration-200 resize-none"
             />
 
             <div className="flex gap-3 mt-6">

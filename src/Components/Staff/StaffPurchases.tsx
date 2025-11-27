@@ -211,7 +211,7 @@ const StaffPurchases: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full" style={{ backgroundColor: '#FAFAFA' }}>
+    <div className="min-h-screen w-full bg-stone-50 dark:bg-stone-900">
       <div className="flex h-screen overflow-hidden">
         <StaffSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
 
@@ -230,15 +230,15 @@ const StaffPurchases: React.FC = () => {
 
                   <button
                     onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                    className="hidden lg:flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-800 hover:from-orange-100 hover:to-orange-200 dark:hover:from-orange-900/40 dark:hover:to-orange-800/40 text-stone-700 dark:text-stone-300 hover:text-orange-600 dark:hover:text-orange-400 border border-stone-300 dark:border-stone-600 shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 hover:scale-105"
+                    className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                   >
                     <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                   </button>
 
                   <div className="hidden sm:flex items-center gap-3">
                     <div>
-                      <h1 className="text-xl font-black text-neutral-900 dark:text-white tracking-tight">Purchases</h1>
-                      <p className="text-xs font-medium text-neutral-600 dark:text-stone-400">Transaction history</p>
+                      <h1 className="text-xl font-black text-stone-900 dark:text-white tracking-tight">Purchases</h1>
+                      <p className="text-xs font-medium text-stone-600 dark:text-stone-400">Transaction history</p>
                     </div>
                   </div>
                 </div>
@@ -247,13 +247,13 @@ const StaffPurchases: React.FC = () => {
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-amber-500/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div className="relative flex items-center gap-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-2 border-stone-200 dark:border-stone-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
-                      <FontAwesomeIcon icon={faSearch} className="h-5 w-5 text-neutral-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors" />
+                      <FontAwesomeIcon icon={faSearch} className="h-5 w-5 text-stone-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors" />
                       <input
                         type="text"
                         placeholder="Search purchases..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="flex-1 bg-transparent text-sm font-medium text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none"
+                        className="flex-1 bg-transparent text-sm font-medium text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-neutral-500 focus:outline-none"
                       />
                       {searchTerm && (
                         <span className="text-xs font-bold text-orange-600 dark:text-orange-400 px-2 py-1 rounded-md bg-orange-100 dark:bg-orange-900/30">
@@ -362,7 +362,7 @@ const StaffPurchases: React.FC = () => {
 
               {/* Table Section */}
               <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-stone-50 dark:bg-stone-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-stone-700">
-                <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-white via-orange-50/30 to-white dark:from-neutral-800 dark:via-orange-950/20 dark:to-neutral-800">
+                <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-stone-50 via-orange-50/30 to-stone-50 dark:from-stone-800 dark:via-orange-950/20 dark:to-stone-800">
                   <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-orange-500 to-orange-600"></div>
                   
                   <div className="px-6 sm:px-8 py-6">
@@ -372,8 +372,8 @@ const StaffPurchases: React.FC = () => {
                           <FontAwesomeIcon icon={faShoppingCart} className="h-7 w-7 text-white" />
                         </div>
                         <div>
-                          <h3 className="text-2xl font-black text-neutral-900 dark:text-white tracking-tight">Purchase History</h3>
-                          <p className="text-sm font-medium text-neutral-600 dark:text-stone-400 mt-0.5">All transaction records</p>
+                          <h3 className="text-2xl font-black text-stone-900 dark:text-white tracking-tight">Purchase History</h3>
+                          <p className="text-sm font-medium text-stone-600 dark:text-stone-400 mt-0.5">All transaction records</p>
                         </div>
                       </div>
                     </div>
@@ -385,14 +385,14 @@ const StaffPurchases: React.FC = () => {
                     <div className="flex items-center justify-center py-20">
                       <div className="text-center">
                         <div className="inline-block h-12 w-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                        <p className="text-neutral-600 dark:text-stone-400">Loading purchases...</p>
+                        <p className="text-stone-600 dark:text-stone-400">Loading purchases...</p>
                       </div>
                     </div>
                   ) : filteredPurchases.length === 0 ? (
                     <div className="flex items-center justify-center py-20">
                       <div className="text-center">
                         <FontAwesomeIcon icon={faShoppingCart} className="h-16 w-16 text-neutral-300 dark:text-neutral-700 mb-4" />
-                        <p className="text-neutral-600 dark:text-stone-400 text-lg font-medium">No purchases found</p>
+                        <p className="text-stone-600 dark:text-stone-400 text-lg font-medium">No purchases found</p>
                         <p className="text-neutral-500 dark:text-stone-500 text-sm mt-2">Try adjusting your search</p>
                       </div>
                     </div>
@@ -420,7 +420,7 @@ const StaffPurchases: React.FC = () => {
                             className="hover:bg-orange-50/50 dark:hover:bg-stone-800/30 transition-colors duration-150"
                           >
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm font-semibold text-neutral-900 dark:text-white">
+                              <div className="text-sm font-semibold text-stone-900 dark:text-white">
                                 #{purchase.id}
                               </div>
                             </td>
@@ -430,27 +430,27 @@ const StaffPurchases: React.FC = () => {
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-neutral-900 dark:text-white">
+                              <div className="text-sm text-stone-900 dark:text-white">
                                 {purchase.menuItemName}
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-neutral-600 dark:text-stone-400">
+                              <div className="text-sm text-stone-600 dark:text-stone-400">
                                 {formatDate(purchase.dateTime)}
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-right">
-                              <div className="text-sm font-medium text-neutral-900 dark:text-white">
+                              <div className="text-sm font-medium text-stone-900 dark:text-white">
                                 ₱{purchase.subtotal.toFixed(2)}
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-right">
-                              <div className="text-sm text-neutral-600 dark:text-stone-400">
+                              <div className="text-sm text-stone-600 dark:text-stone-400">
                                 ₱{purchase.tax.toFixed(2)}
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-right">
-                              <div className="text-sm text-neutral-600 dark:text-stone-400">
+                              <div className="text-sm text-stone-600 dark:text-stone-400">
                                 ₱{purchase.discount.toFixed(2)}
                               </div>
                             </td>
@@ -460,7 +460,7 @@ const StaffPurchases: React.FC = () => {
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-neutral-900 dark:text-white">
+                              <div className="text-sm text-stone-900 dark:text-white">
                                 {purchase.paymentMethod}
                               </div>
                             </td>
@@ -487,7 +487,7 @@ const StaffPurchases: React.FC = () => {
                                 disabled={purchase.status === "Voided"}
                                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all duration-200 text-sm font-medium ${
                                   purchase.status === "Voided"
-                                    ? "bg-neutral-100 dark:bg-stone-800 text-neutral-400 dark:text-neutral-600 cursor-not-allowed opacity-50"
+                                    ? "bg-stone-100 dark:bg-stone-800 text-stone-400 dark:text-stone-600 cursor-not-allowed opacity-50"
                                     : "bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 active:scale-95 cursor-pointer"
                                 }`}
                                 title={purchase.status === "Voided" ? "Already voided" : "Void this purchase"}

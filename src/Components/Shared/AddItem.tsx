@@ -367,7 +367,7 @@
 
                   <button
                     onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                    className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white transition-all duration-200 active:scale-95 shadow-lg shadow-orange-500/25"
+                    className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                   >
                     <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                   </button>
@@ -388,7 +388,7 @@
                     </div>
                     <div className="min-w-0 flex-1">
                       <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300 bg-clip-text text-transparent truncate">Add Menu Item</h2>
-                      <p className="text-xs sm:text-sm text-neutral-600 dark:text-stone-400 mt-1">Create a new menu item for your store</p>
+                      <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 mt-1">Create a new menu item for your store</p>
                     </div>
                   </div>
                 </div>
@@ -426,7 +426,7 @@
                       name="itemName"
                       value={formData.itemName}
                       onChange={handleChange}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all text-sm sm:text-base"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:text-stone-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all text-sm sm:text-base"
                       placeholder="e.g., Iced Latte"
                       disabled={isLoading}
                     />
@@ -446,7 +446,7 @@
                           name="price"
                           value={formData.price}
                           onChange={handleChange}
-                          className="w-full pl-8 sm:pl-9 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all text-sm sm:text-base"
+                          className="w-full pl-8 sm:pl-9 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:text-stone-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all text-sm sm:text-base"
                           placeholder="0.00"
                           step="0.01"
                           min="0"
@@ -464,7 +464,7 @@
                         name="category"
                         value={formData.category}
                         onChange={handleChange}
-                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 appearance-none cursor-pointer transition-all text-sm sm:text-base"
+                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 appearance-none cursor-pointer transition-all text-sm sm:text-base"
                         disabled={isLoading}
                       >
                         <option value="">Select category</option>
@@ -486,7 +486,7 @@
                       name="description"
                       value={formData.description}
                       onChange={handleChange}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 resize-none transition-all text-sm sm:text-base"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:text-stone-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 resize-none transition-all text-sm sm:text-base"
                       rows={4}
                       placeholder="Brief description of the menu item"
                       disabled={isLoading}
@@ -506,7 +506,7 @@
                           <select
                             value={currentProduct}
                             onChange={(e) => setCurrentProduct(e.target.value)}
-                            className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 appearance-none cursor-pointer transition-all text-sm sm:text-base"
+                            className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 appearance-none cursor-pointer transition-all text-sm sm:text-base"
                             disabled={isLoading}
                           >
                             <option value="">Select a product</option>
@@ -523,7 +523,7 @@
                             type="number"
                             value={currentQuantity}
                             onChange={(e) => setCurrentQuantity(e.target.value)}
-                            className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all text-sm sm:text-base"
+                            className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:text-stone-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all text-sm sm:text-base"
                             placeholder="Quantity"
                             min="0"
                             step="1"
@@ -557,7 +557,7 @@
                                   className="flex items-center justify-between gap-3 p-3 sm:p-4 bg-stone-50 dark:bg-stone-900 rounded-lg sm:rounded-xl border border-neutral-200 dark:border-stone-700 shadow-sm hover:shadow-md transition-all"
                                 >
                                 <div className="flex-1 min-w-0">
-                                  <p className="text-xs sm:text-sm font-medium text-neutral-900 dark:text-white truncate">
+                                  <p className="text-xs sm:text-sm font-medium text-stone-900 dark:text-white truncate">
                                     {product?.productName || `Product #${item.productOfSupplierId}`}
                                   </p>
                                   <p className="text-xs text-neutral-500 dark:text-stone-400">
@@ -655,7 +655,7 @@
                       type="button"
                       onClick={() => navigate('/staff')}
                       disabled={isLoading}
-                      className="flex-1 px-4 sm:px-6 py-3 sm:py-3.5 bg-neutral-200 dark:bg-stone-800 hover:bg-neutral-300 dark:hover:bg-stone-700 text-neutral-900 dark:text-white font-semibold rounded-xl disabled:cursor-not-allowed disabled:opacity-50 flex items-center justify-center gap-2.5 transition-all duration-200 active:scale-[0.98] shadow-sm hover:shadow-md text-sm sm:text-base"
+                      className="flex-1 px-4 sm:px-6 py-3 sm:py-3.5 bg-neutral-200 dark:bg-stone-800 hover:bg-neutral-300 dark:hover:bg-stone-700 text-stone-900 dark:text-white font-semibold rounded-xl disabled:cursor-not-allowed disabled:opacity-50 flex items-center justify-center gap-2.5 transition-all duration-200 active:scale-[0.98] shadow-sm hover:shadow-md text-sm sm:text-base"
                     >
                       <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4 sm:h-5 sm:w-5" />
                       <span>Cancel</span>

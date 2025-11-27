@@ -297,14 +297,14 @@ const StaffSales: React.FC<StaffSalesProps> = ({
             <div className="relative flex items-center gap-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-2 border-stone-200 dark:border-stone-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
               <FontAwesomeIcon
                 icon={faSearch}
-                className="h-5 w-5 text-neutral-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors"
+                className="h-5 w-5 text-stone-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors"
               />
                 <input
                 type="text"
                 placeholder="Search receipts, item, cashier, status..."
                 value={searchText}
                 onChange={e => setSearchText(e.target.value)}
-                className="flex-1 bg-transparent text-sm font-medium text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none"
+                className="flex-1 bg-transparent text-sm font-medium text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-neutral-500 focus:outline-none"
               />
               {searchText && (
                 <span className="text-xs font-bold text-orange-600 dark:text-orange-400 px-2 py-1 rounded-md bg-orange-100 dark:bg-orange-900/30">
@@ -320,15 +320,15 @@ const StaffSales: React.FC<StaffSalesProps> = ({
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarExpanded(!sidebarExpanded)}
-              className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-800 hover:from-orange-100 hover:to-orange-200 dark:hover:from-orange-900/40 dark:hover:to-orange-800/40 text-stone-700 dark:text-stone-300 hover:text-orange-600 dark:hover:text-orange-400 border border-stone-300 dark:border-stone-600 shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 hover:scale-105"
+              className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 dark:from-stone-700 dark:to-stone-800 hover:from-orange-100 hover:to-orange-200 dark:hover:from-orange-900/40 dark:hover:to-orange-800/40 text-stone-700 dark:text-stone-300 hover:text-orange-600 dark:hover:text-orange-400 border border-stone-300 dark:border-stone-600 shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 hover:scale-105"
               title={sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
             >
               <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
             </button>
 
             <div>
-              <h1 className="text-xl font-black text-neutral-900 dark:text-white tracking-tight">Sales Analytics</h1>
-              <p className="text-xs font-medium text-neutral-600 dark:text-stone-400">Track and analyze revenue</p>
+              <h1 className="text-xl font-black text-stone-900 dark:text-white tracking-tight">Sales Analytics</h1>
+              <p className="text-xs font-medium text-stone-600 dark:text-stone-400">Track and analyze revenue</p>
             </div>
           </div>
 
@@ -338,14 +338,14 @@ const StaffSales: React.FC<StaffSalesProps> = ({
               <div className="relative flex items-center gap-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-2 border-stone-200 dark:border-stone-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
                 <FontAwesomeIcon
                   icon={faSearch}
-                  className="h-5 w-5 text-neutral-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors"
+                  className="h-5 w-5 text-stone-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors"
                 />
                 <input
                   type="text"
                   placeholder="Search receipts, item, cashier, status..."
                   value={searchText}
                   onChange={e => setSearchText(e.target.value)}
-                  className="flex-1 bg-transparent text-sm font-medium text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none"
+                  className="flex-1 bg-transparent text-sm font-medium text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-neutral-500 focus:outline-none"
                 />
                 {searchText && (
                   <span className="text-xs font-bold text-orange-600 dark:text-orange-400 px-2 py-1 rounded-md bg-orange-100 dark:bg-orange-900/30">
@@ -519,8 +519,8 @@ const StaffSales: React.FC<StaffSalesProps> = ({
                     <FontAwesomeIcon icon={faCoffee} className="h-7 w-7 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-black text-neutral-900 dark:text-white tracking-tight">Sales Records</h3>
-                    <p className="text-sm font-medium text-neutral-600 dark:text-stone-400 mt-0.5">Complete transaction history</p>
+                    <h3 className="text-2xl font-black text-stone-900 dark:text-white tracking-tight">Sales Records</h3>
+                    <p className="text-sm font-medium text-stone-600 dark:text-stone-400 mt-0.5">Complete transaction history</p>
                   </div>
                 </div>
                 
@@ -531,8 +531,8 @@ const StaffSales: React.FC<StaffSalesProps> = ({
                   </div>
                   <div className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-600 border border-stone-300 dark:border-stone-600">
                     <div className="flex items-baseline gap-2">
-                      <span className="text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-stone-400">Records</span>
-                      <span className="text-2xl font-black text-neutral-900 dark:text-white">{filteredSales.length}</span>
+                      <span className="text-xs font-bold uppercase tracking-wider text-stone-600 dark:text-stone-400">Records</span>
+                      <span className="text-2xl font-black text-stone-900 dark:text-white">{filteredSales.length}</span>
                     </div>
                   </div>
                 </div>
@@ -550,8 +550,8 @@ const StaffSales: React.FC<StaffSalesProps> = ({
                       <FontAwesomeIcon icon={faSpinner} className="h-12 w-12 text-white animate-spin" />
                     </div>
                   </div>
-                  <h4 className="text-2xl font-black text-neutral-900 dark:text-white mb-3">Loading sales...</h4>
-                  <p className="text-base font-medium text-neutral-600 dark:text-stone-400 leading-relaxed mb-6">Please wait while we retrieve sales data.</p>
+                  <h4 className="text-2xl font-black text-stone-900 dark:text-white mb-3">Loading sales...</h4>
+                  <p className="text-base font-medium text-stone-600 dark:text-stone-400 leading-relaxed mb-6">Please wait while we retrieve sales data.</p>
                 </div>
               </div>
             ) : error ? (
@@ -562,8 +562,8 @@ const StaffSales: React.FC<StaffSalesProps> = ({
                       <FontAwesomeIcon icon={faSpinner} className="h-12 w-12 text-red-600" />
                     </div>
                   </div>
-                  <h4 className="text-2xl font-black text-neutral-900 dark:text-white mb-3">Error loading sales</h4>
-                  <p className="text-base font-medium text-neutral-600 dark:text-stone-400 leading-relaxed mb-6">{error}</p>
+                  <h4 className="text-2xl font-black text-stone-900 dark:text-white mb-3">Error loading sales</h4>
+                  <p className="text-base font-medium text-stone-600 dark:text-stone-400 leading-relaxed mb-6">{error}</p>
                 </div>
               </div>
             ) : filteredSales.length > 0 ? (
@@ -618,7 +618,7 @@ const StaffSales: React.FC<StaffSalesProps> = ({
                         </span>
                       </td>
                       <td className="px-6 py-5 text-left">
-                        <span className="text-sm font-bold text-neutral-900 dark:text-white">{record.menuItemName || '—'}</span>
+                        <span className="text-sm font-bold text-stone-900 dark:text-white">{record.menuItemName || '—'}</span>
                       </td>
                       <td className="px-6 py-5 text-left hidden sm:table-cell">
                         <span className="text-sm text-stone-700 dark:text-stone-300">{record.fullName ?? record.username ?? '—'}</span>
@@ -630,7 +630,7 @@ const StaffSales: React.FC<StaffSalesProps> = ({
                         <span className="text-sm font-semibold text-stone-700 dark:text-stone-300">{formatDate(record.dateTime)}</span>
                       </td>
                       <td className="px-6 py-5 text-right">
-                        <span className="text-sm font-bold text-neutral-900 dark:text-white tabular-nums">
+                        <span className="text-sm font-bold text-stone-900 dark:text-white tabular-nums">
                           ₱{record.subtotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </span>
                       </td>
@@ -683,10 +683,10 @@ const StaffSales: React.FC<StaffSalesProps> = ({
                     </div>
                   </div>
                   
-                  <h4 className="text-2xl font-black text-neutral-900 dark:text-white mb-3">
+                  <h4 className="text-2xl font-black text-stone-900 dark:text-white mb-3">
                     No Sales Found
                   </h4>
-                  <p className="text-base font-medium text-neutral-600 dark:text-stone-400 leading-relaxed mb-6">
+                  <p className="text-base font-medium text-stone-600 dark:text-stone-400 leading-relaxed mb-6">
                     We couldn't find any sales matching your current filters. Try adjusting your search criteria or date range.
                   </p>
                   

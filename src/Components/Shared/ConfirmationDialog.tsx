@@ -30,7 +30,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ isOpen, onClose
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-neutral-100 dark:bg-stone-800 hover:bg-neutral-200 dark:hover:bg-stone-700 text-neutral-600 dark:text-stone-400 flex items-center justify-center transition-all duration-200 z-10"
+            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-neutral-100 dark:bg-stone-800 hover:bg-neutral-200 dark:hover:bg-stone-700 text-stone-600 dark:text-stone-400 flex items-center justify-center transition-all duration-200 z-10"
           >
             <FontAwesomeIcon icon={faTimes} className="h-4 w-4" />
           </button>
@@ -42,10 +42,10 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ isOpen, onClose
                 <FontAwesomeIcon icon={faExclamationTriangle} className="h-8 w-8 text-white animate-pulse" />
               </div>
               <div className="flex-1 pt-1">
-                <h3 id="confirmation-dialog-title" className="text-2xl font-black text-neutral-900 dark:text-white mb-2">
+                <h3 id="confirmation-dialog-title" className="text-2xl font-black text-stone-900 dark:text-white mb-2">
                   {title}
                 </h3>
-                <p className="text-sm leading-relaxed text-neutral-600 dark:text-stone-400 font-medium">
+                <p className="text-sm leading-relaxed text-stone-600 dark:text-stone-400 font-medium">
                   {message}
                 </p>
               </div>

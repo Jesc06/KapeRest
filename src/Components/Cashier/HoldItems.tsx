@@ -288,7 +288,7 @@ const HoldItems: React.FC = () => {
                       <h2 className="text-2xl sm:text-3xl font-bold text-stone-900 dark:text-stone-100 mb-1">
                         Hold Items
                       </h2>
-                      <p className="text-neutral-600 dark:text-stone-400 text-sm font-medium">
+                      <p className="text-stone-600 dark:text-stone-400 text-sm font-medium">
                         Manage temporarily held orders - Resume or remove items
                       </p>
                     </div>
@@ -332,7 +332,7 @@ const HoldItems: React.FC = () => {
               </div>
 
               {/* Results Count */}
-              <div className="mb-4 text-sm text-neutral-600 dark:text-stone-400">
+              <div className="mb-4 text-sm text-stone-600 dark:text-stone-400">
                 Showing <span className="font-bold text-yellow-600 dark:text-yellow-400">{filteredHoldItems.length}</span> of {holdItems.length} hold items
               </div>
 
@@ -341,7 +341,7 @@ const HoldItems: React.FC = () => {
                 {loading ? (
                   <div className="bg-stone-50 dark:bg-stone-800 rounded-2xl p-12 text-center border border-stone-200 dark:border-stone-700">
                     <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-yellow-600 border-r-transparent mb-4"></div>
-                    <p className="text-sm font-medium text-neutral-600 dark:text-stone-400">Loading hold transactions...</p>
+                    <p className="text-sm font-medium text-stone-600 dark:text-stone-400">Loading hold transactions...</p>
                   </div>
                 ) : error ? (
                   <div className="bg-stone-50 dark:bg-stone-800 rounded-2xl p-12 text-center border border-red-200 dark:border-red-800">
@@ -349,7 +349,7 @@ const HoldItems: React.FC = () => {
                       <FontAwesomeIcon icon={faPause} className="text-4xl text-red-500" />
                     </div>
                     <h3 className="text-xl font-bold text-red-600 dark:text-red-400 mb-2">Failed to load hold items</h3>
-                    <p className="text-neutral-600 dark:text-stone-400">{error}</p>
+                    <p className="text-stone-600 dark:text-stone-400">{error}</p>
                   </div>
                 ) : filteredHoldItems.length === 0 ? (
                   <div className="bg-stone-50 dark:bg-stone-800 rounded-2xl p-12 text-center border border-stone-200 dark:border-stone-700">
@@ -357,7 +357,7 @@ const HoldItems: React.FC = () => {
                       <FontAwesomeIcon icon={faPause} className="text-4xl text-yellow-500" />
                     </div>
                     <h3 className="text-xl font-bold text-stone-900 dark:text-stone-100 mb-2">No hold items found</h3>
-                    <p className="text-neutral-600 dark:text-stone-400">Try adjusting your search or filter criteria</p>
+                    <p className="text-stone-600 dark:text-stone-400">Try adjusting your search or filter criteria</p>
                   </div>
                 ) : (
                   filteredHoldItems.map((item) => (
@@ -376,7 +376,7 @@ const HoldItems: React.FC = () => {
                               <h3 className="text-lg font-bold text-stone-900 dark:text-stone-100 mb-1 truncate">
                                 {item.menuItemName}
                               </h3>
-                              <div className="flex flex-wrap items-center gap-2 text-sm text-neutral-600 dark:text-stone-400">
+                              <div className="flex flex-wrap items-center gap-2 text-sm text-stone-600 dark:text-stone-400">
                                 <span className="flex items-center gap-1">
                                   <FontAwesomeIcon icon={faHashtag} className="text-xs" />
                                   Hold ID: {item.id}

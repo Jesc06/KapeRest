@@ -277,7 +277,7 @@ const AddSupplier: React.FC = () => {
 
                 <button
                   onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                  className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white transition-all duration-200 active:scale-95 shadow-lg shadow-orange-500/25"
+                  className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                 >
                   <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                 </button>
@@ -300,7 +300,7 @@ const AddSupplier: React.FC = () => {
                   </div>
                   <div>
                     <h2 className="text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300 bg-clip-text text-transparent">Add Supplier</h2>
-                    <p className="text-sm text-neutral-600 dark:text-stone-400 mt-1">Create a new supplier profile with all essential contact information</p>
+                    <p className="text-sm text-stone-600 dark:text-stone-400 mt-1">Create a new supplier profile with all essential contact information</p>
                   </div>
                 </div>
               </div>
@@ -340,7 +340,7 @@ const AddSupplier: React.FC = () => {
                     value={formData.supplierName}
                     onChange={handleChange}
                     onBlur={() => handleFieldBlur('supplierName')}
-                    className={`w-full px-4 py-3.5 text-base rounded-lg border bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
+                    className={`w-full px-4 py-3.5 text-base rounded-lg border bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:text-stone-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
                       fieldErrors.supplierName
                         ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500'
                         : 'border-neutral-300 dark:border-stone-700 focus:border-orange-500 focus:ring-orange-500'
@@ -366,7 +366,7 @@ const AddSupplier: React.FC = () => {
                     value={formData.contactPerson}
                     onChange={handleChange}
                     onBlur={() => handleFieldBlur('contactPerson')}
-                    className={`w-full px-4 py-3.5 text-base rounded-lg border bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
+                    className={`w-full px-4 py-3.5 text-base rounded-lg border bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:text-stone-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
                       fieldErrors.contactPerson
                         ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500'
                         : 'border-neutral-300 dark:border-stone-700 focus:border-orange-500 focus:ring-orange-500'
@@ -394,7 +394,7 @@ const AddSupplier: React.FC = () => {
                       value={formData.phoneNumber}
                       onChange={handleChange}
                       onBlur={() => handleFieldBlur('phoneNumber')}
-                      className={`w-full px-4 py-3.5 text-base rounded-lg border bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
+                      className={`w-full px-4 py-3.5 text-base rounded-lg border bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:text-stone-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
                         fieldErrors.phoneNumber
                           ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500'
                           : 'border-neutral-300 dark:border-stone-700 focus:border-orange-500 focus:ring-orange-500'
@@ -420,7 +420,7 @@ const AddSupplier: React.FC = () => {
                       value={formData.email}
                       onChange={handleChange}
                       onBlur={() => handleFieldBlur('email')}
-                      className={`w-full px-4 py-3.5 text-base rounded-lg border bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
+                      className={`w-full px-4 py-3.5 text-base rounded-lg border bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:text-stone-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
                         fieldErrors.email
                           ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500'
                           : 'border-neutral-300 dark:border-stone-700 focus:border-orange-500 focus:ring-orange-500'
@@ -447,7 +447,7 @@ const AddSupplier: React.FC = () => {
                     value={formData.address}
                     onChange={handleChange}
                     onBlur={() => handleFieldBlur('address')}
-                    className={`w-full px-4 py-3.5 text-base rounded-lg border bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
+                    className={`w-full px-4 py-3.5 text-base rounded-lg border bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:text-stone-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
                       fieldErrors.address
                         ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500'
                         : 'border-neutral-300 dark:border-stone-700 focus:border-orange-500 focus:ring-orange-500'
@@ -493,7 +493,7 @@ const AddSupplier: React.FC = () => {
                     type="button"
                     onClick={() => navigate('/staff')}
                     disabled={isLoading}
-                    className="flex-1 px-4 py-2.5 bg-neutral-200 dark:bg-stone-800 hover:bg-neutral-300 dark:hover:bg-stone-700 text-neutral-900 dark:text-white font-medium rounded-lg disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="flex-1 px-4 py-2.5 bg-neutral-200 dark:bg-stone-800 hover:bg-neutral-300 dark:hover:bg-stone-700 text-stone-900 dark:text-white font-medium rounded-lg disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4" />
                     <span>Cancel</span>

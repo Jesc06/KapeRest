@@ -37,7 +37,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
               <FontAwesomeIcon icon={faCoffee} className="text-xl" />
             </div>
             <div className="flex-1 min-w-0 flex flex-col justify-center">
-              <h2 className="text-3xl font-black text-neutral-900 dark:text-white tracking-tight leading-tight">KapeRest</h2>
+              <h2 className="text-3xl font-black text-stone-900 dark:text-white tracking-tight leading-tight">KapeRest</h2>
               <p className="text-base font-semibold text-orange-600 dark:text-orange-400 uppercase tracking-wide leading-none">Cashier</p>
             </div>
           </div>
@@ -139,7 +139,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
       {isOpen && (
         <button
           onClick={onClose}
-          className="fixed right-4 top-4 z-40 lg:hidden flex h-10 w-10 items-center justify-center rounded-lg bg-stone-50 dark:bg-stone-900 text-neutral-600 dark:text-stone-400 transition-all duration-200 shadow-lg border border-neutral-200 dark:border-stone-700"
+          className="fixed right-4 top-4 z-40 lg:hidden flex h-10 w-10 items-center justify-center rounded-lg bg-stone-50 dark:bg-stone-900 text-stone-600 dark:text-stone-400 transition-all duration-200 shadow-lg border border-neutral-200 dark:border-stone-700"
         >
           <FontAwesomeIcon icon={faTimes} className="h-4 w-4" />
         </button>

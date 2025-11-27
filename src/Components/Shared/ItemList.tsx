@@ -199,7 +199,7 @@ const ItemList: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full" style={{ backgroundColor: '#FAFAFA' }}>
+    <div className="min-h-screen w-full bg-stone-50 dark:bg-stone-900">
       <div className="flex h-screen overflow-hidden">
         <StaffSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
 
@@ -218,15 +218,15 @@ const ItemList: React.FC = () => {
 
                   <button
                     onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                    className="hidden lg:flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-800 hover:from-orange-100 hover:to-orange-200 dark:hover:from-orange-900/40 dark:hover:to-orange-800/40 text-stone-700 dark:text-stone-300 hover:text-orange-600 dark:hover:text-orange-400 border border-stone-300 dark:border-stone-600 shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 hover:scale-105"
+                    className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                   >
                     <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                   </button>
 
                   <div className="hidden sm:flex items-center gap-3">
                     <div>
-                      <h1 className="text-xl font-black text-neutral-900 dark:text-white tracking-tight">Menu Items</h1>
-                      <p className="text-xs font-medium text-neutral-600 dark:text-stone-400">Manage your menu catalog</p>
+                      <h1 className="text-xl font-black text-stone-900 dark:text-white tracking-tight">Menu Items</h1>
+                      <p className="text-xs font-medium text-stone-600 dark:text-stone-400">Manage your menu catalog</p>
                     </div>
                   </div>
                 </div>
@@ -237,14 +237,14 @@ const ItemList: React.FC = () => {
                     <div className="relative flex items-center gap-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-2 border-stone-200 dark:border-stone-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
                       <FontAwesomeIcon
                         icon={faSearch}
-                        className="h-5 w-5 text-neutral-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors"
+                        className="h-5 w-5 text-stone-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors"
                       />
                       <input
                         type="text"
                         placeholder="Search menu items..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="flex-1 bg-transparent text-sm font-medium text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none"
+                        className="flex-1 bg-transparent text-sm font-medium text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-neutral-500 focus:outline-none"
                       />
                       {searchTerm && (
                         <span className="text-xs font-bold text-orange-600 dark:text-orange-400 px-2 py-1 rounded-md bg-orange-100 dark:bg-orange-900/30">
@@ -370,7 +370,7 @@ const ItemList: React.FC = () => {
               {/* Table Section */}
               <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-stone-50 dark:bg-stone-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-stone-700">
                 {/* Table Header */}
-                <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-white via-orange-50/30 to-white dark:from-neutral-800 dark:via-orange-950/20 dark:to-neutral-800">
+                <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-stone-50 via-orange-50/30 to-stone-50 dark:from-stone-800 dark:via-orange-950/20 dark:to-stone-800">
                   <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-orange-500 to-orange-600"></div>
                   
                   <div className="px-6 sm:px-8 py-6">
@@ -380,8 +380,8 @@ const ItemList: React.FC = () => {
                           <FontAwesomeIcon icon={faCoffee} className="h-7 w-7 text-white" />
                         </div>
                         <div>
-                          <h3 className="text-2xl font-black text-neutral-900 dark:text-white tracking-tight">Menu Catalog</h3>
-                          <p className="text-sm font-medium text-neutral-600 dark:text-stone-400 mt-0.5">Complete item inventory</p>
+                          <h3 className="text-2xl font-black text-stone-900 dark:text-white tracking-tight">Menu Catalog</h3>
+                          <p className="text-sm font-medium text-stone-600 dark:text-stone-400 mt-0.5">Complete item inventory</p>
                         </div>
                       </div>
                       
@@ -390,7 +390,7 @@ const ItemList: React.FC = () => {
                           onClick={() => navigate('/staff/add-item')}
                           className="relative flex items-center gap-2.5 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl transition-all duration-300 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:scale-105 active:scale-95 overflow-hidden group"
                         >
-                          <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent"></div>
+                          <div className="absolute inset-0 bg-gradient-to-t from-orange-500/20 to-transparent"></div>
                           <FontAwesomeIcon icon={faPlus} className="relative h-4 w-4" />
                           <span className="relative text-sm">Add Item</span>
                         </button>
@@ -406,7 +406,7 @@ const ItemList: React.FC = () => {
                         <div className="absolute inset-0 bg-orange-500/20 rounded-full blur-xl"></div>
                         <div className="relative h-16 w-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-6"></div>
                       </div>
-                      <p className="text-neutral-600 dark:text-stone-400 font-medium text-lg">Loading menu items...</p>
+                      <p className="text-stone-600 dark:text-stone-400 font-medium text-lg">Loading menu items...</p>
                     </div>
                   </div>
                 ) : filteredItems.length === 0 ? (
@@ -418,7 +418,7 @@ const ItemList: React.FC = () => {
                           <FontAwesomeIcon icon={faCoffee} className="h-10 w-10 text-orange-500 dark:text-orange-400" />
                         </div>
                       </div>
-                      <p className="text-neutral-600 dark:text-stone-400 text-xl font-bold mb-2">No menu items found</p>
+                      <p className="text-stone-600 dark:text-stone-400 text-xl font-bold mb-2">No menu items found</p>
                       <p className="text-neutral-500 dark:text-stone-500 text-sm">Try adjusting your search or add a new item</p>
                     </div>
                   </div>
@@ -426,7 +426,7 @@ const ItemList: React.FC = () => {
                   <div className="overflow-x-auto flex-1">
                     <table className="w-full">
                       <thead>
-                        <tr className="border-b-2 border-orange-200/60 dark:border-stone-700 bg-gradient-to-r from-orange-50 via-amber-50 to-orange-50 dark:from-neutral-800/50 dark:via-neutral-700/50 dark:to-neutral-800/50">
+                        <tr className="border-b-2 border-orange-200/60 dark:border-stone-700 bg-gradient-to-r from-orange-50 via-amber-50 to-orange-50 dark:from-stone-800/50 dark:via-stone-700/50 dark:to-stone-800/50">
                           <th className="px-6 py-4 text-left text-xs font-black text-orange-700 dark:text-orange-400 uppercase tracking-wider">Item Name</th>
                           <th className="px-6 py-4 text-left text-xs font-black text-orange-700 dark:text-orange-400 uppercase tracking-wider">Price</th>
                           <th className="px-6 py-4 text-left text-xs font-black text-orange-700 dark:text-orange-400 uppercase tracking-wider">Description</th>
@@ -438,7 +438,7 @@ const ItemList: React.FC = () => {
                         {filteredItems.map((item) => (
                           <tr
                             key={item.id}
-                            className="hover:bg-gradient-to-r hover:from-orange-50/50 hover:via-amber-50/30 hover:to-orange-50/50 dark:hover:from-neutral-800/40 dark:hover:via-neutral-700/30 dark:hover:to-neutral-800/40 transition-all duration-300"
+                            className="hover:bg-gradient-to-r hover:from-orange-50/50 hover:via-amber-50/30 hover:to-orange-50/50 dark:hover:from-stone-800/40 dark:hover:via-stone-700/30 dark:hover:to-stone-800/40 transition-all duration-300"
                           >
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="flex items-center gap-3">
@@ -453,7 +453,7 @@ const ItemList: React.FC = () => {
                                     }}
                                   />
                                 </div>
-                                <div className="text-sm font-bold text-neutral-900 dark:text-white">
+                                <div className="text-sm font-bold text-stone-900 dark:text-white">
                                   {item.itemName}
                                 </div>
                               </div>
@@ -464,7 +464,7 @@ const ItemList: React.FC = () => {
                               </div>
                             </td>
                             <td className="px-6 py-4">
-                              <div className="text-sm text-neutral-600 dark:text-stone-400 max-w-xs truncate">
+                              <div className="text-sm text-stone-600 dark:text-stone-400 max-w-xs truncate">
                                 {item.description}
                               </div>
                             </td>

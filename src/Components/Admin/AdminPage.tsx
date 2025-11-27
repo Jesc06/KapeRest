@@ -109,7 +109,7 @@ const AdminPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen w-full relative overflow-hidden" style={{ backgroundColor: '#FAFAFA' }}>
+    <div className="min-h-screen w-full relative overflow-hidden bg-stone-50 dark:bg-stone-900">
       {/* Premium Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 -right-40 w-96 h-96 bg-gradient-to-br from-orange-300/20 via-amber-300/15 to-yellow-300/10 dark:from-orange-500/10 dark:via-amber-500/8 dark:to-yellow-500/5 rounded-full blur-3xl animate-pulse"></div>
@@ -141,7 +141,7 @@ const AdminPage: React.FC = () => {
                   {/* Sidebar Toggle - Desktop Only */}
                   <button
                     onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                    className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-700 hover:bg-stone-100 dark:hover:bg-stone-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
+                    className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                   >
                     <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                   </button>
@@ -158,7 +158,7 @@ const AdminPage: React.FC = () => {
 
           {/* Main Content */}
           <main className="flex-1 flex flex-col min-h-0 overflow-hidden">
-            <div className="flex-1 flex flex-col gap-8 px-6 sm:px-8 lg:px-10 py-8 sm:py-10 md:py-12 overflow-auto" style={{ backgroundColor: '#FAFAFA' }}>
+            <div className="flex-1 flex flex-col gap-8 px-6 sm:px-8 lg:px-10 py-8 sm:py-10 md:py-12 overflow-auto bg-stone-50 dark:bg-stone-900">
               {/* Floating Elements */}
               <div className="absolute top-10 right-10 w-20 h-20 bg-gradient-to-br from-orange-400/10 to-amber-400/10 rounded-full blur-2xl animate-pulse" style={{ animationDuration: '3s' }}></div>
               <div className="absolute bottom-20 left-10 w-32 h-32 bg-gradient-to-br from-rose-400/10 to-pink-400/10 rounded-full blur-2xl animate-pulse" style={{ animationDuration: '4s', animationDelay: '1s' }}></div>
@@ -213,10 +213,10 @@ const AdminPage: React.FC = () => {
               {/* Performance Metrics Section */}
               <section className="mb-16 sm:mb-20">
                 <div className="mb-8">
-                  <h3 className="text-2xl sm:text-3xl font-black text-neutral-900 dark:text-white tracking-tight mb-2">
+                  <h3 className="text-2xl sm:text-3xl font-black text-stone-900 dark:text-white tracking-tight mb-2">
                     Performance Metrics
                   </h3>
-                  <p className="text-sm text-neutral-600 dark:text-stone-400 font-medium">
+                  <p className="text-sm text-stone-600 dark:text-stone-400 font-medium">
                     Real-time overview of your business performance
                   </p>
                 </div>
@@ -265,10 +265,10 @@ const AdminPage: React.FC = () => {
               <div className="mb-12 sm:mb-16">
                 {/* Premium Header */}
                 <div className="mb-8">
-                  <h3 className="text-2xl sm:text-3xl font-black text-neutral-900 dark:text-white tracking-tight mb-1">
+                  <h3 className="text-2xl sm:text-3xl font-black text-stone-900 dark:text-white tracking-tight mb-1">
                     Sales Overview
                   </h3>
-                  <p className="text-sm text-neutral-600 dark:text-stone-400 font-medium">
+                  <p className="text-sm text-stone-600 dark:text-stone-400 font-medium">
                     Monitor your sales performance with real-time analytics
                   </p>
                 </div>
@@ -281,16 +281,16 @@ const AdminPage: React.FC = () => {
 
                   {/* Period Filters Row */}
                   <div className="mb-6">
-                    <label className="block text-sm font-black uppercase tracking-wider text-neutral-600 dark:text-stone-400 mb-4">
+                    <label className="block text-sm font-black uppercase tracking-wider text-stone-600 dark:text-stone-400 mb-4">
                       Time Period
                     </label>
-                    <div className="inline-flex items-center gap-1 bg-gradient-to-br from-white to-stone-50 dark:from-neutral-900 dark:to-neutral-950 border-2 border-stone-200 dark:border-stone-700 rounded-xl p-1.5 shadow-lg">
+                    <div className="inline-flex items-center gap-1 bg-gradient-to-br from-stone-50 to-stone-100 dark:from-stone-800 dark:to-stone-900 border-2 border-stone-200 dark:border-stone-700 rounded-xl p-1.5 shadow-lg">
                       <button
                         onClick={() => setSelectedPeriod('today')}
                         className={`px-6 py-3 rounded-lg text-sm font-black uppercase tracking-wide transition-all duration-300 ${
                           selectedPeriod === 'today'
                             ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-xl scale-105'
-                            : 'text-neutral-600 dark:text-stone-400 hover:bg-orange-50 dark:hover:bg-stone-800 hover:text-orange-600 dark:hover:text-orange-400'
+                            : 'text-stone-600 dark:text-stone-400 hover:bg-orange-50 dark:hover:bg-stone-800 hover:text-orange-600 dark:hover:text-orange-400'
                         }`}
                       >
                         Today
@@ -300,7 +300,7 @@ const AdminPage: React.FC = () => {
                         className={`px-6 py-3 rounded-lg text-sm font-black uppercase tracking-wide transition-all duration-300 ${
                           selectedPeriod === 'monthly'
                             ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-xl scale-105'
-                            : 'text-neutral-600 dark:text-stone-400 hover:bg-orange-50 dark:hover:bg-stone-800 hover:text-orange-600 dark:hover:text-orange-400'
+                            : 'text-stone-600 dark:text-stone-400 hover:bg-orange-50 dark:hover:bg-stone-800 hover:text-orange-600 dark:hover:text-orange-400'
                         }`}
                       >
                         Monthly
@@ -310,7 +310,7 @@ const AdminPage: React.FC = () => {
                         className={`px-6 py-3 rounded-lg text-sm font-black uppercase tracking-wide transition-all duration-300 ${
                           selectedPeriod === 'yearly'
                             ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-xl scale-105'
-                            : 'text-neutral-600 dark:text-stone-400 hover:bg-orange-50 dark:hover:bg-stone-800 hover:text-orange-600 dark:hover:text-orange-400'
+                            : 'text-stone-600 dark:text-stone-400 hover:bg-orange-50 dark:hover:bg-stone-800 hover:text-orange-600 dark:hover:text-orange-400'
                         }`}
                       >
                         Yearly
@@ -320,7 +320,7 @@ const AdminPage: React.FC = () => {
                         className={`px-6 py-3 rounded-lg text-sm font-black uppercase tracking-wide transition-all duration-300 flex items-center gap-2 ${
                           selectedPeriod === 'custom'
                             ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-xl scale-105'
-                            : 'text-neutral-600 dark:text-stone-400 hover:bg-orange-50 dark:hover:bg-stone-800 hover:text-orange-600 dark:hover:text-orange-400'
+                            : 'text-stone-600 dark:text-stone-400 hover:bg-orange-50 dark:hover:bg-stone-800 hover:text-orange-600 dark:hover:text-orange-400'
                         }`}
                       >
                         <FontAwesomeIcon icon={faCalendar} className="h-4 w-4" />
@@ -332,19 +332,19 @@ const AdminPage: React.FC = () => {
                   {/* Custom Date Range */}
                   {selectedPeriod === 'custom' && (
                     <div className="mb-5 pb-5 border-b border-stone-200 dark:border-stone-700">
-                      <label className="block text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-stone-400 mb-3">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-stone-600 dark:text-stone-400 mb-3">
                         Date Range
                       </label>
                       <div className="flex items-center gap-4">
                         <div className="flex-1">
-                          <label className="block text-xs font-semibold text-neutral-500 dark:text-stone-400 mb-2">
+                          <label className="block text-xs font-semibold text-stone-500 dark:text-stone-400 mb-2">
                             From
                           </label>
                           <input
                             type="date"
                             value={customStartDate}
                             onChange={(e) => setCustomStartDate(e.target.value)}
-                            className="w-full px-4 py-3 rounded-lg border-2 border-orange-200 dark:border-orange-800 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 shadow-sm"
+                            className="w-full px-4 py-3 rounded-lg border-2 border-orange-200 dark:border-orange-800 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 shadow-sm"
                           />
                         </div>
                         <div className="flex items-end pb-3">
@@ -353,14 +353,14 @@ const AdminPage: React.FC = () => {
                           </svg>
                         </div>
                         <div className="flex-1">
-                          <label className="block text-xs font-semibold text-neutral-500 dark:text-stone-400 mb-2">
+                          <label className="block text-xs font-semibold text-stone-500 dark:text-stone-400 mb-2">
                             To
                           </label>
                           <input
                             type="date"
                             value={customEndDate}
                             onChange={(e) => setCustomEndDate(e.target.value)}
-                            className="w-full px-4 py-3 rounded-lg border-2 border-orange-200 dark:border-orange-800 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 shadow-sm"
+                            className="w-full px-4 py-3 rounded-lg border-2 border-orange-200 dark:border-orange-800 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 shadow-sm"
                           />
                         </div>
                       </div>
@@ -369,13 +369,13 @@ const AdminPage: React.FC = () => {
 
                   {/* Branch and Account Filters */}
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-stone-400 mb-3">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-stone-600 dark:text-stone-400 mb-3">
                       Filter by Location & Account
                     </label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {/* Branch Filter */}
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 dark:text-stone-400 mb-2">
+                        <label className="block text-xs font-semibold text-stone-500 dark:text-stone-400 mb-2">
                           Branch Location
                         </label>
                         <div className="relative">
@@ -385,7 +385,7 @@ const AdminPage: React.FC = () => {
                               setSelectedBranch(e.target.value);
                               setSelectedAccount('all');
                             }}
-                            className="w-full appearance-none pl-12 pr-12 py-3 rounded-lg border-2 border-stone-200 dark:border-stone-700 bg-gradient-to-br from-white to-orange-50/30 dark:from-neutral-800 dark:to-orange-950/20 text-neutral-900 dark:text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer"
+                            className="w-full appearance-none pl-12 pr-12 py-3 rounded-lg border-2 border-stone-200 dark:border-stone-700 bg-gradient-to-br from-stone-50 to-orange-50/30 dark:from-stone-800 dark:to-orange-950/20 text-stone-900 dark:text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer"
                           >
                             {branches.map(branch => (
                               <option key={branch.id} value={branch.id}>
@@ -406,7 +406,7 @@ const AdminPage: React.FC = () => {
 
                       {/* Account Filter */}
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 dark:text-stone-400 mb-2">
+                        <label className="block text-xs font-semibold text-stone-500 dark:text-stone-400 mb-2">
                           Staff / Cashier
                         </label>
                         <div className="relative">
@@ -416,8 +416,8 @@ const AdminPage: React.FC = () => {
                             disabled={selectedBranch === 'all'}
                             className={`w-full appearance-none pl-12 pr-12 py-3 rounded-lg border-2 text-sm font-semibold shadow-sm transition-all duration-200 ${
                               selectedBranch === 'all'
-                                ? 'border-neutral-200 dark:border-stone-700 bg-neutral-100 dark:bg-stone-800/50 text-neutral-400 dark:text-stone-500 cursor-not-allowed'
-                                : 'border-stone-200 dark:border-stone-700 bg-gradient-to-br from-white to-orange-50/30 dark:from-neutral-800 dark:to-orange-950/20 text-neutral-900 dark:text-white hover:shadow-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 cursor-pointer'
+                                ? 'border-stone-200 dark:border-stone-700 bg-stone-100 dark:bg-stone-800/50 text-stone-400 dark:text-stone-500 cursor-not-allowed'
+                                : 'border-stone-200 dark:border-stone-700 bg-gradient-to-br from-stone-50 to-orange-50/30 dark:from-stone-800 dark:to-orange-950/20 text-stone-900 dark:text-white hover:shadow-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 cursor-pointer'
                             }`}
                           >
                             {accounts.map(account => (
@@ -461,7 +461,7 @@ const AdminPage: React.FC = () => {
 
                   {/* Chart Header */}
                   <div className="mb-8 pb-6 border-b-2 border-stone-200 dark:border-stone-700">
-                    <h4 className="text-xl font-black text-neutral-900 dark:text-white uppercase tracking-wide flex items-center gap-3">
+                    <h4 className="text-xl font-black text-stone-900 dark:text-white uppercase tracking-wide flex items-center gap-3">
                       <div className="w-1.5 h-7 bg-gradient-to-b from-orange-400 via-orange-500 to-amber-500 rounded-full"></div>
                       Sales Overview
                     </h4>
@@ -514,9 +514,9 @@ const AdminPage: React.FC = () => {
                       <div className="w-1 h-5 bg-gradient-to-b from-orange-400 to-amber-500 rounded-full"></div>
                       Sales Trend
                     </h5>
-                    <div className="relative h-80 bg-gradient-to-br from-neutral-50 to-orange-50/30 dark:from-neutral-900 dark:to-orange-950/20 rounded-2xl p-8 border-2 border-neutral-200 dark:border-stone-700">
+                    <div className="relative h-80 bg-gradient-to-br from-stone-50 to-orange-50/30 dark:from-stone-900 dark:to-orange-950/20 rounded-2xl p-8 border-2 border-stone-200 dark:border-stone-700">
                       {/* Y-axis labels */}
-                      <div className="absolute left-2 top-8 bottom-12 flex flex-col justify-between text-xs font-bold text-neutral-500 dark:text-stone-400">
+                      <div className="absolute left-2 top-8 bottom-12 flex flex-col justify-between text-xs font-bold text-stone-500 dark:text-stone-400">
                         <span>₱{maxSales.toLocaleString()}</span>
                         <span>₱{(maxSales * 0.75).toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
                         <span>₱{(maxSales * 0.5).toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
@@ -529,7 +529,7 @@ const AdminPage: React.FC = () => {
                         {/* Grid lines */}
                         <div className="absolute inset-0 flex flex-col justify-between">
                           {[0, 1, 2, 3, 4].map((i) => (
-                            <div key={i} className="w-full border-t border-neutral-300/50 dark:border-stone-600/50"></div>
+                            <div key={i} className="w-full border-t border-stone-300/50 dark:border-stone-600/50"></div>
                           ))}
                         </div>
                         
@@ -641,10 +641,10 @@ const AdminPage: React.FC = () => {
                     <FontAwesomeIcon icon={faShieldAlt} className="h-7 w-7 lg:h-8 lg:w-8 text-white" aria-hidden="true" />
                   </div>
                   <div className="flex-1 space-y-3">
-                    <h3 className="text-lg font-black text-neutral-900 dark:text-white flex items-center gap-2">
+                    <h3 className="text-lg font-black text-stone-900 dark:text-white flex items-center gap-2">
                       <span>Administrator Privileges</span>
                     </h3>
-                    <p className="text-sm text-neutral-600 dark:text-stone-400 leading-relaxed font-medium">
+                    <p className="text-sm text-stone-600 dark:text-stone-400 leading-relaxed font-medium">
                       You have full system access with comprehensive control over all administrative functions. Navigate through the system to manage user accounts, configure business settings, monitor inventory levels, and oversee multi-branch operations.
                     </p>
                     <div className="pt-2 flex items-center gap-2">

@@ -113,7 +113,7 @@ const StaffPage: React.FC = () => {
   const statsCards = salesOverview ? [salesOverview] : [];
 
   return (
-    <div className="min-h-screen w-full relative overflow-hidden" style={{ backgroundColor: '#FAFAFA' }}>
+    <div className="min-h-screen w-full relative overflow-hidden bg-stone-50 dark:bg-stone-900">
       {/* Animated Background Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Gradient Orbs */}
@@ -168,7 +168,7 @@ const StaffPage: React.FC = () => {
                 {/* Sidebar Toggle - Desktop Only */}
                 <button
                   onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                  className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-orange-200 dark:border-stone-700 bg-gradient-to-br from-orange-50 to-amber-50 dark:bg-stone-700 hover:from-orange-100 hover:to-amber-100 dark:hover:bg-stone-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95 shadow-sm shadow-orange-500/10"
+                  className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                 >
                   <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                 </button>
@@ -244,12 +244,12 @@ const StaffPage: React.FC = () => {
                       <h3 className="text-3xl font-black bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 dark:from-orange-400 dark:via-amber-400 dark:to-orange-500 bg-clip-text text-transparent tracking-tight mb-1">
                         {dateRange === '7d' ? "Today's Overview" : "Sales Overview"}
                       </h3>
-                      <p className="text-sm text-neutral-600 dark:text-stone-400 font-bold flex items-center gap-2">
+                      <p className="text-sm text-stone-600 dark:text-stone-400 font-bold flex items-center gap-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse"></span>
                         Sales data for selected period
                       </p>
                     </div>
-                    <div className="flex items-center gap-3 bg-gradient-to-r from-white via-neutral-50 to-white dark:from-neutral-800 dark:via-neutral-700 dark:to-neutral-800 rounded-2xl p-2 border-2 border-neutral-200/60 dark:border-stone-600/60 shadow-lg backdrop-blur-sm">
+                    <div className="flex items-center gap-3 bg-gradient-to-r from-stone-50 via-stone-100 to-stone-50 dark:from-stone-800 dark:via-stone-700 dark:to-stone-800 rounded-2xl p-2 border-2 border-stone-200/60 dark:border-stone-600/60 shadow-lg backdrop-blur-sm">
                       {(['1d', '7d', '30d'] as const).map((range) => (
                         <button
                           key={range}
@@ -257,10 +257,10 @@ const StaffPage: React.FC = () => {
                           className={`relative px-5 py-2.5 rounded-xl text-sm font-black transition-all duration-300 ${
                             dateRange === range
                               ? 'bg-gradient-to-r from-orange-500 to-amber-600 text-white shadow-xl shadow-orange-500/30 scale-105'
-                              : 'text-neutral-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-600 hover:scale-105 active:scale-95'
+                              : 'text-stone-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-600 hover:scale-105 active:scale-95'
                           }`}
                         >
-                          {dateRange === range && <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent rounded-xl"></div>}
+                          {dateRange === range && <div className="absolute inset-0 bg-gradient-to-t from-orange-500/20 to-transparent rounded-xl"></div>}
                           <span className="relative">{range === '1d' ? '1 Day' : range === '7d' ? '7 Days' : '30 Days'}</span>
                         </button>
                       ))}
@@ -271,27 +271,27 @@ const StaffPage: React.FC = () => {
                           className={`relative px-5 py-2.5 rounded-xl text-sm font-black transition-all duration-300 flex items-center gap-2.5 ${
                             dateRange === 'custom'
                               ? 'bg-gradient-to-r from-orange-500 to-amber-600 text-white shadow-xl shadow-orange-500/30 scale-105'
-                              : 'text-neutral-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-600 hover:scale-105 active:scale-95'
+                              : 'text-stone-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-600 hover:scale-105 active:scale-95'
                           }`}
                         >
-                          {dateRange === 'custom' && <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent rounded-xl"></div>}
+                          {dateRange === 'custom' && <div className="absolute inset-0 bg-gradient-to-t from-orange-500/20 to-transparent rounded-xl"></div>}
                           <FontAwesomeIcon icon={faCalendarDays} className="relative h-4 w-4" />
                           <span className="relative">Custom</span>
                         </button>
 
                         {/* Calendar Picker Dropdown */}
                         {showCalendar && (
-                          <div className="absolute top-full right-0 mt-3 bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-800 dark:to-neutral-900 rounded-2xl shadow-2xl p-6 z-50 border-2 border-neutral-200/60 dark:border-stone-700/60 w-96 backdrop-blur-xl">
+                          <div className="absolute top-full right-0 mt-3 bg-gradient-to-br from-stone-50 to-stone-100 dark:from-stone-800 dark:to-stone-900 rounded-2xl shadow-2xl p-6 z-50 border-2 border-stone-200/60 dark:border-stone-700/60 w-96 backdrop-blur-xl">
                             <div className="flex items-center justify-between mb-6">
                               <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-600 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/30">
                                   <FontAwesomeIcon icon={faCalendarDays} className="h-5 w-5 text-white" />
                                 </div>
-                                <h4 className="font-black text-neutral-900 dark:text-white text-lg">Select Date Range</h4>
+                                <h4 className="font-black text-stone-900 dark:text-white text-lg">Select Date Range</h4>
                               </div>
                               <button
                                 onClick={() => setShowCalendar(false)}
-                                className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 text-neutral-600 dark:text-stone-300 hover:text-red-600 dark:hover:text-red-400 transition-all duration-300 hover:scale-110 active:scale-95"
+                                className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 text-stone-600 dark:text-stone-300 hover:text-red-600 dark:hover:text-red-400 transition-all duration-300 hover:scale-110 active:scale-95"
                               >
                                 <FontAwesomeIcon icon={faX} className="h-4 w-4" />
                               </button>
@@ -299,7 +299,7 @@ const StaffPage: React.FC = () => {
 
                             <div className="space-y-4 mb-6">
                               <div>
-                                <label className="text-xs font-black uppercase tracking-widest text-neutral-600 dark:text-stone-400 block mb-3 flex items-center gap-2">
+                                <label className="text-xs font-black uppercase tracking-widest text-stone-600 dark:text-stone-400 block mb-3 flex items-center gap-2">
                                   <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
                                   From Date
                                 </label>
@@ -307,11 +307,11 @@ const StaffPage: React.FC = () => {
                                   type="date"
                                   value={customStartDate}
                                   onChange={(e) => setCustomStartDate(e.target.value)}
-                                  className="w-full px-4 py-3 rounded-xl border-2 border-neutral-300 dark:border-stone-600 bg-stone-50 dark:bg-stone-700 text-neutral-900 dark:text-white text-sm font-bold focus:border-orange-500 dark:focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300"
+                                  className="w-full px-4 py-3 rounded-xl border-2 border-neutral-300 dark:border-stone-600 bg-stone-50 dark:bg-stone-700 text-stone-900 dark:text-white text-sm font-bold focus:border-orange-500 dark:focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300"
                                 />
                               </div>
                               <div>
-                                <label className="text-xs font-black uppercase tracking-widest text-neutral-600 dark:text-stone-400 block mb-3 flex items-center gap-2">
+                                <label className="text-xs font-black uppercase tracking-widest text-stone-600 dark:text-stone-400 block mb-3 flex items-center gap-2">
                                   <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
                                   To Date
                                 </label>
@@ -319,7 +319,7 @@ const StaffPage: React.FC = () => {
                                   type="date"
                                   value={customEndDate}
                                   onChange={(e) => setCustomEndDate(e.target.value)}
-                                  className="w-full px-4 py-3 rounded-xl border-2 border-neutral-300 dark:border-stone-600 bg-stone-50 dark:bg-stone-700 text-neutral-900 dark:text-white text-sm font-bold focus:border-orange-500 dark:focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300"
+                                  className="w-full px-4 py-3 rounded-xl border-2 border-neutral-300 dark:border-stone-600 bg-stone-50 dark:bg-stone-700 text-stone-900 dark:text-white text-sm font-bold focus:border-orange-500 dark:focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300"
                                 />
                               </div>
                             </div>
@@ -332,7 +332,7 @@ const StaffPage: React.FC = () => {
                                 }}
                                 className="relative flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-amber-600 text-white font-black text-sm shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 overflow-hidden"
                               >
-                                <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent"></div>
+                                <div className="absolute inset-0 bg-gradient-to-t from-orange-500/20 to-transparent"></div>
                                 <span className="relative">Apply Range</span>
                               </button>
                               <button
@@ -351,7 +351,7 @@ const StaffPage: React.FC = () => {
                 <div className="grid grid-cols-1 gap-6">
                   {loading ? (
                     <div className="bg-stone-50 dark:bg-stone-800 rounded-2xl p-6 border border-neutral-200 dark:border-stone-700">
-                      <p className="text-center text-neutral-600 dark:text-stone-400">Loading sales data...</p>
+                      <p className="text-center text-stone-600 dark:text-stone-400">Loading sales data...</p>
                     </div>
                   ) : error ? (
                     <div className="bg-red-50 dark:bg-red-900/20 rounded-2xl p-6 border border-red-200 dark:border-red-800">
@@ -367,7 +367,7 @@ const StaffPage: React.FC = () => {
                       return (
                       <div
                         key={index}
-                        className="group relative bg-gradient-to-br from-white via-white to-neutral-50/50 dark:from-neutral-800 dark:via-neutral-800 dark:to-neutral-900/50 rounded-3xl p-8 border-2 border-neutral-200/80 dark:border-stone-700/80 hover:border-orange-400/60 dark:hover:border-orange-500/60 shadow-xl hover:shadow-2xl hover:shadow-orange-500/10 transition-all duration-500 backdrop-blur-sm"
+                        className="group relative bg-gradient-to-br from-stone-50 via-stone-50 to-stone-100/50 dark:from-stone-800 dark:via-stone-800 dark:to-stone-900/50 rounded-3xl p-8 border-2 border-stone-200/80 dark:border-stone-700/80 hover:border-orange-400/60 dark:hover:border-orange-500/60 shadow-xl hover:shadow-2xl hover:shadow-orange-500/10 transition-all duration-500 backdrop-blur-sm"
                       >
                         <div className="flex items-start justify-between mb-8">
                         <div className="relative">
@@ -389,11 +389,11 @@ const StaffPage: React.FC = () => {
                       </div>
                       
                       <div className="mb-8">
-                        <p className="text-xs font-black uppercase tracking-widest text-neutral-600 dark:text-stone-400 mb-3 flex items-center gap-2">
+                        <p className="text-xs font-black uppercase tracking-widest text-stone-600 dark:text-stone-400 mb-3 flex items-center gap-2">
                           <span className="w-2 h-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 shadow-lg shadow-orange-500/50"></span>
                           {stat.title}
                         </p>
-                        <p className="text-5xl font-black bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-700 dark:from-white dark:via-neutral-100 dark:to-neutral-200 bg-clip-text text-transparent leading-none mb-4">{stat.value}</p>
+                        <p className="text-5xl font-black bg-gradient-to-br from-stone-900 via-stone-800 to-stone-700 dark:from-white dark:via-stone-100 dark:to-stone-200 bg-clip-text text-transparent leading-none mb-4">{stat.value}</p>
                         <div className="flex items-center gap-3 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 px-4 py-2 rounded-xl border border-orange-200/50 dark:border-orange-800/50">
                           <div className="relative">
                             <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full blur-sm"></div>
@@ -415,10 +415,10 @@ const StaffPage: React.FC = () => {
                             </div>
                             <div>
                               <p className="text-xl font-black bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 dark:from-orange-400 dark:via-amber-400 dark:to-orange-500 bg-clip-text text-transparent mb-1">Revenue Trend Analysis</p>
-                              <p className="text-xs text-neutral-600 dark:text-stone-400 font-bold">Interactive sales performance visualization</p>
+                              <p className="text-xs text-stone-600 dark:text-stone-400 font-bold">Interactive sales performance visualization</p>
                             </div>
                           </div>
-                          <div className="flex items-center gap-4 bg-gradient-to-r from-white via-neutral-50 to-white dark:from-neutral-800 dark:via-neutral-700 dark:to-neutral-800 px-6 py-3 rounded-2xl border-2 border-neutral-200/60 dark:border-stone-600/60 shadow-xl backdrop-blur-sm">
+                          <div className="flex items-center gap-4 bg-gradient-to-r from-stone-50 via-stone-100 to-stone-50 dark:from-stone-800 dark:via-stone-700 dark:to-stone-800 px-6 py-3 rounded-2xl border-2 border-stone-200/60 dark:border-stone-600/60 shadow-xl backdrop-blur-sm">
                             <div className="flex items-center gap-2.5">
                               <div className="relative">
                                 <div className="absolute inset-0 bg-green-500 rounded-full blur-sm opacity-50"></div>
@@ -436,7 +436,7 @@ const StaffPage: React.FC = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="relative h-[28rem] bg-gradient-to-br from-orange-50/50 via-amber-50/30 to-white dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900 rounded-3xl p-10 overflow-hidden border-2 border-orange-200/60 dark:border-stone-700/60 shadow-2xl shadow-orange-500/10">
+                        <div className="relative h-[28rem] bg-gradient-to-br from-orange-50/50 via-amber-50/30 to-stone-50 dark:from-stone-900 dark:via-stone-800 dark:to-stone-900 rounded-3xl p-10 overflow-hidden border-2 border-orange-200/60 dark:border-stone-700/60 shadow-2xl shadow-orange-500/10">
                           {/* Enhanced Ambient Effects */}
                           <div className="absolute inset-0 rounded-3xl overflow-hidden">
                             <div className="absolute inset-0 bg-gradient-to-br from-orange-500/8 via-amber-500/8 to-orange-500/8 pointer-events-none"></div>
@@ -453,7 +453,7 @@ const StaffPage: React.FC = () => {
                               return (
                                 <div key={i} className="absolute w-full flex items-center transition-all duration-300" style={{ top: `${i * 20}%`, left: 0 }}>
                                   <div className="flex items-center gap-3 w-24 justify-end pr-4">
-                                    <span className="text-xs font-black text-stone-700 dark:text-stone-300 bg-gradient-to-r from-white to-neutral-50 dark:from-neutral-800 dark:to-neutral-700 px-3 py-1.5 rounded-lg shadow-md border border-neutral-200/50 dark:border-stone-600/50">
+                                    <span className="text-xs font-black text-stone-700 dark:text-stone-300 bg-gradient-to-r from-stone-50 to-stone-100 dark:from-stone-800 dark:to-stone-700 px-3 py-1.5 rounded-lg shadow-md border border-stone-200/50 dark:border-stone-600/50">
                                       ₱{Math.round(value).toLocaleString()}
                                     </span>
                                   </div>
@@ -623,7 +623,7 @@ const StaffPage: React.FC = () => {
                                             ? 'bg-gradient-to-br from-green-500 via-green-600 to-emerald-600 border-green-300/50 shadow-green-500/50' 
                                             : 'bg-gradient-to-br from-red-500 via-red-600 to-rose-600 border-red-300/50 shadow-red-500/50'
                                         } group-hover/point:shadow-3xl`}>
-                                          <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent rounded-xl"></div>
+                                          <div className="absolute inset-0 bg-gradient-to-t from-orange-500/20 to-transparent rounded-xl"></div>
                                           <span className="relative text-xs font-black text-white flex items-center gap-1">
                                             <span>{isIncrease ? '▲' : '▼'}</span>
                                             <span>{percentChange}%</span>
@@ -662,7 +662,7 @@ const StaffPage: React.FC = () => {
                                             : 'from-red-400 via-red-500 to-rose-600'
                                         }`}></div>
                                         {/* Inner Highlight */}
-                                        <div className="absolute inset-[2px] rounded-full bg-gradient-to-br from-white/40 to-transparent"></div>
+                                        <div className="absolute inset-[2px] rounded-full bg-gradient-to-br from-orange-500/40 to-transparent"></div>
                                       </div>
                                       
                                       {/* Enhanced Premium Tooltip with Glass Morphism */}
@@ -676,7 +676,7 @@ const StaffPage: React.FC = () => {
                                         }`}>
                                           {/* Animated Shimmer Effect */}
                                           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent rounded-2xl animate-pulse"></div>
-                                          <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/20 to-transparent"></div>
+                                          <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-orange-500/20 to-transparent"></div>
                                           
                                           <div className="relative">
                                             <p className="text-xs font-black text-white/95 mb-3 uppercase tracking-widest flex items-center gap-2">
@@ -742,7 +742,7 @@ const StaffPage: React.FC = () => {
                                           ? 'text-green-700 dark:text-green-300 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/40 dark:to-green-800/40 border-green-200 dark:border-green-700 shadow-green-500/20' 
                                           : 'text-red-700 dark:text-red-300 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/40 dark:to-red-800/40 border-red-200 dark:border-red-700 shadow-red-500/20'
                                       } group-hover/point:scale-125 group-hover/point:shadow-2xl group-hover/point:-translate-y-1`}>
-                                        <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white/40 dark:to-white/10 rounded-lg"></div>
+                                        <div className="absolute inset-0 bg-gradient-to-t from-transparent to-orange-500/10 rounded-lg"></div>
                                         <span className="relative text-xs font-black">
                                           {dateLabel}
                                         </span>
@@ -805,7 +805,7 @@ const StaffPage: React.FC = () => {
                   })
                   ) : (
                     <div className="bg-stone-50 dark:bg-stone-800 rounded-2xl p-6 border border-neutral-200 dark:border-stone-700">
-                      <p className="text-center text-neutral-600 dark:text-stone-400">No sales data available for the selected period.</p>
+                      <p className="text-center text-stone-600 dark:text-stone-400">No sales data available for the selected period.</p>
                     </div>
                   )}
                 </div>

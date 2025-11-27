@@ -110,17 +110,17 @@ const LogoutPanel: React.FC<LogoutPanelProps> = () => {
             <FontAwesomeIcon icon={faUser} className="h-4.5 w-4.5" />
           </div>
           <div className="hidden md:flex flex-col items-start flex-1 min-w-0">
-            <p className="text-sm font-bold text-neutral-900 dark:text-white truncate w-full">{userRole}</p>
-            <p className="text-xs font-medium text-neutral-600 dark:text-stone-400">Account</p>
+            <p className="text-sm font-bold text-stone-900 dark:text-white truncate w-full">{userRole}</p>
+            <p className="text-xs font-medium text-stone-600 dark:text-stone-400">Account</p>
           </div>
-          <FontAwesomeIcon icon={faChevronDown} className={`h-4 w-4 text-neutral-600 dark:text-stone-400 transition-transform duration-300 flex-shrink-0 ${showUserMenu ? 'rotate-180' : ''}`} />
+          <FontAwesomeIcon icon={faChevronDown} className={`h-4 w-4 text-stone-600 dark:text-stone-400 transition-transform duration-300 flex-shrink-0 ${showUserMenu ? 'rotate-180' : ''}`} />
         </button>
 
         {/* Dropdown Menu */}
         {showUserMenu && (
           <div className="absolute right-0 top-full mt-3 w-64 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 shadow-xl overflow-hidden z-[9999] animate-in fade-in-0 zoom-in-95 duration-200">
             <div className="px-5 py-4 border-b border-stone-200 dark:border-stone-700">
-              <p className="text-xs font-bold uppercase tracking-widest text-neutral-600 dark:text-stone-400">Account</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-stone-600 dark:text-stone-400">Account</p>
               <p className="text-sm font-semibold text-stone-900 dark:text-stone-100 mt-1">{userRole}</p>
             </div>
 

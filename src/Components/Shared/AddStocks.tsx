@@ -270,7 +270,7 @@ const AddStocks: React.FC = () => {
                 {/* Sidebar Toggle - Desktop Only */}
                 <button
                   onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                  className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white transition-all duration-200 active:scale-95 shadow-lg shadow-orange-500/25"
+                  className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                 >
                   <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                 </button>
@@ -295,7 +295,7 @@ const AddStocks: React.FC = () => {
                   </div>
                   <div>
                     <h2 className="text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300 bg-clip-text text-transparent">Add Stock</h2>
-                    <p className="text-sm text-neutral-600 dark:text-stone-400 mt-1">Add new product stock to your inventory system</p>
+                    <p className="text-sm text-stone-600 dark:text-stone-400 mt-1">Add new product stock to your inventory system</p>
                   </div>
                 </div>
               </div>
@@ -335,7 +335,7 @@ const AddStocks: React.FC = () => {
                     name="productName"
                     value={formData.productName}
                     onChange={handleChange}
-                    className="w-full px-4 py-3.5 text-base rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
+                    className="w-full px-4 py-3.5 text-base rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:text-stone-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
                     placeholder="e.g., Arabica Coffee Beans"
                     disabled={isLoading}
                   />
@@ -355,7 +355,7 @@ const AddStocks: React.FC = () => {
                         name="costPrice"
                         value={formData.costPrice}
                         onChange={handleChange}
-                        className="w-full pl-8 pr-4 py-3.5 text-base rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
+                        className="w-full pl-8 pr-4 py-3.5 text-base rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:text-stone-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
                         placeholder="0.00"
                         step="0.01"
                         disabled={isLoading}
@@ -373,7 +373,7 @@ const AddStocks: React.FC = () => {
                       name="stocks"
                       value={formData.stocks}
                       onChange={handleChange}
-                      className="w-full px-4 py-3.5 text-base rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
+                      className="w-full px-4 py-3.5 text-base rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:text-stone-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
                       placeholder="0"
                       min="0"
                       disabled={isLoading}
@@ -392,7 +392,7 @@ const AddStocks: React.FC = () => {
                       name="units"
                       value={formData.units}
                       onChange={handleChange}
-                      className="w-full px-4 py-3.5 text-base rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
+                      className="w-full px-4 py-3.5 text-base rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
                       disabled={isLoading}
                     >
                       <option value="">Select unit</option>
@@ -413,7 +413,7 @@ const AddStocks: React.FC = () => {
                       name="supplierId"
                       value={formData.supplierId}
                       onChange={handleChange}
-                      className="w-full px-4 py-3.5 text-base rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
+                      className="w-full px-4 py-3.5 text-base rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 disabled:opacity-50"
                       disabled={isLoading}
                     >
                       <option value="">Select supplier</option>
@@ -450,7 +450,7 @@ const AddStocks: React.FC = () => {
                     type="button"
                     onClick={() => navigate('/staff')}
                     disabled={isLoading}
-                    className="flex-1 px-4 py-2.5 bg-neutral-200 dark:bg-stone-800 hover:bg-neutral-300 dark:hover:bg-stone-700 text-neutral-900 dark:text-white font-medium rounded-lg disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="flex-1 px-4 py-2.5 bg-neutral-200 dark:bg-stone-800 hover:bg-neutral-300 dark:hover:bg-stone-700 text-stone-900 dark:text-white font-medium rounded-lg disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4" />
                     <span>Cancel</span>

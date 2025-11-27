@@ -29,18 +29,18 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
       )}
 
       {/* Sidebar */}
-      <aside className={`fixed left-0 top-0 h-screen flex flex-col flex-shrink-0 border-r border-neutral-200 dark:border-stone-700 bg-gradient-to-b from-white to-stone-50 dark:from-neutral-900 dark:to-neutral-900 transition-all duration-300 ease-in-out z-40 shadow-xl ${
+      <aside className={`fixed left-0 top-0 h-screen flex flex-col flex-shrink-0 border-r border-stone-200 dark:border-stone-700 bg-gradient-to-b from-stone-50 to-stone-100 dark:from-stone-900 dark:to-stone-900 transition-all duration-300 ease-in-out z-40 shadow-xl ${
         !isOpen ? '-translate-x-full' : 'translate-x-0'
       } lg:translate-x-0 ${isExpanded ? 'w-80' : 'w-28'}`}>
       {/* Header with Branding */}
-        <div className="sticky top-0 flex items-center justify-center border-b border-neutral-200 dark:border-stone-700 bg-stone-50/80 dark:bg-neutral-900/80 backdrop-blur-sm px-4 py-5 transition-all duration-300">
+        <div className="sticky top-0 flex items-center justify-center border-b border-stone-200 dark:border-stone-700 bg-stone-50/80 dark:bg-stone-900/80 backdrop-blur-sm px-4 py-5 transition-all duration-300">
           {isExpanded ? (
             <div className="flex items-center gap-3 w-full">
               <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg">
                 <FontAwesomeIcon icon={faCoffee} className="text-xl" />
               </div>
               <div className="flex-1 min-w-0 flex flex-col justify-center">
-                <h2 className="text-3xl font-black text-neutral-900 dark:text-white tracking-tight leading-tight">KapeRest</h2>
+                <h2 className="text-3xl font-black text-stone-900 dark:text-white tracking-tight leading-tight">KapeRest</h2>
                 <p className="text-base font-semibold text-orange-600 dark:text-orange-400 uppercase tracking-wide leading-none">Admin Portal</p>
               </div>
             </div>
@@ -71,7 +71,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
           {/* Divider - Operations */}
           {isExpanded && (
             <div className="my-3 pt-1">
-              <div className="border-t border-neutral-200 dark:border-stone-700"></div>
+              <div className="border-t border-stone-200 dark:border-stone-700"></div>
             </div>
           )}
 
@@ -108,7 +108,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
           {/* Divider - Inventory & Products */}
           {isExpanded && (
             <div className="my-3 pt-1">
-              <div className="border-t border-neutral-200 dark:border-stone-700"></div>
+              <div className="border-t border-stone-200 dark:border-stone-700"></div>
             </div>
           )}
 
@@ -130,7 +130,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
           {/* Divider - Financial */}
           {isExpanded && (
             <div className="my-3 pt-1">
-              <div className="border-t border-neutral-200 dark:border-stone-700"></div>
+              <div className="border-t border-stone-200 dark:border-stone-700"></div>
             </div>
           )}
 
@@ -167,7 +167,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
           {/* Divider - System */}
           {isExpanded && (
             <div className="my-3 pt-1">
-              <div className="border-t border-neutral-200 dark:border-stone-700"></div>
+              <div className="border-t border-stone-200 dark:border-stone-700"></div>
             </div>
           )}
 
@@ -192,7 +192,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
       {isOpen && (
         <button
           onClick={onClose}
-          className="fixed right-4 top-4 z-40 lg:hidden flex h-10 w-10 items-center justify-center rounded-lg bg-stone-50 dark:bg-stone-900 text-neutral-600 dark:text-stone-400 transition-all duration-200 shadow-lg border border-neutral-200 dark:border-stone-700"
+          className="fixed right-4 top-4 z-40 lg:hidden flex h-10 w-10 items-center justify-center rounded-lg bg-stone-50 dark:bg-stone-900 text-stone-600 dark:text-stone-400 transition-all duration-200 shadow-lg border border-stone-200 dark:border-stone-700"
         >
           <FontAwesomeIcon icon={faTimes} className="h-4 w-4" />
         </button>

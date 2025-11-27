@@ -192,7 +192,7 @@ const BranchPage: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen w-full" style={{ backgroundColor: '#FAFAFA' }}>
+    <div className="min-h-screen w-full bg-stone-50 dark:bg-stone-900">
       <div className="flex h-screen overflow-hidden">
         <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
       
@@ -211,15 +211,15 @@ const BranchPage: React.FC = () => {
 
                   <button
                     onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                    className="hidden lg:flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-800 hover:from-orange-100 hover:to-orange-200 dark:hover:from-orange-900/40 dark:hover:to-orange-800/40 text-stone-700 dark:text-stone-300 hover:text-orange-600 dark:hover:text-orange-400 border border-stone-300 dark:border-stone-600 shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 hover:scale-105"
+                    className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                   >
                     <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                   </button>
 
                   <div className="hidden sm:flex items-center gap-3">
                     <div>
-                      <h1 className="text-xl font-black text-neutral-900 dark:text-white tracking-tight">Branch Management</h1>
-                      <p className="text-xs font-medium text-neutral-600 dark:text-stone-400">Manage locations and staff</p>
+                      <h1 className="text-xl font-black text-stone-900 dark:text-white tracking-tight">Branch Management</h1>
+                      <p className="text-xs font-medium text-stone-600 dark:text-stone-400">Manage locations and staff</p>
                     </div>
                   </div>
                 </div>
@@ -240,14 +240,14 @@ const BranchPage: React.FC = () => {
                   <div className="relative flex items-center gap-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-2 border-stone-200 dark:border-stone-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
                     <FontAwesomeIcon
                       icon={faSearch}
-                      className="h-5 w-5 text-neutral-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors"
+                      className="h-5 w-5 text-stone-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors"
                     />
                     <input
                       type="text"
                       placeholder="Search branches..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="flex-1 bg-transparent text-sm font-medium text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none"
+                      className="flex-1 bg-transparent text-sm font-medium text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-stone-500 focus:outline-none"
                     />
                     {searchQuery && (
                       <span className="text-xs font-bold text-orange-600 dark:text-orange-400 px-2 py-1 rounded-md bg-orange-100 dark:bg-orange-900/30">
@@ -315,7 +315,7 @@ const BranchPage: React.FC = () => {
                     ))}
                   </select>
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg className="w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 text-stone-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
                     </svg>
                   </div>
@@ -324,7 +324,7 @@ const BranchPage: React.FC = () => {
 
               {/* Branches Table */}
               <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-stone-50 dark:bg-stone-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-stone-700">
-                <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-white via-orange-50/30 to-white dark:from-neutral-800 dark:via-orange-950/20 dark:to-neutral-800">
+                <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-stone-50 via-orange-50/30 to-stone-50 dark:from-stone-800 dark:via-orange-950/20 dark:to-stone-800">
                   <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-orange-500 to-orange-600"></div>
                   
                   <div className="px-6 sm:px-8 py-6">
@@ -334,8 +334,8 @@ const BranchPage: React.FC = () => {
                           <FontAwesomeIcon icon={faBuilding} className="h-7 w-7 text-white" />
                         </div>
                         <div>
-                          <h3 className="text-2xl font-black text-neutral-900 dark:text-white tracking-tight">Branch Locations</h3>
-                          <p className="text-sm font-medium text-neutral-600 dark:text-stone-400 mt-0.5">All branch records</p>
+                          <h3 className="text-2xl font-black text-stone-900 dark:text-white tracking-tight">Branch Locations</h3>
+                          <p className="text-sm font-medium text-stone-600 dark:text-stone-400 mt-0.5">All branch records</p>
                         </div>
                       </div>
                     </div>
@@ -369,7 +369,7 @@ const BranchPage: React.FC = () => {
                           <td colSpan={5} className="px-6 py-20 text-center">
                             <div className="flex flex-col items-center justify-center">
                               <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-orange-600 border-r-transparent mb-4"></div>
-                              <p className="text-sm font-medium text-neutral-600 dark:text-stone-400">Loading branches...</p>
+                              <p className="text-sm font-medium text-stone-600 dark:text-stone-400">Loading branches...</p>
                             </div>
                           </td>
                         </tr>
@@ -381,7 +381,7 @@ const BranchPage: React.FC = () => {
                                 <FontAwesomeIcon icon={faBuilding} className="h-8 w-8 text-red-400 dark:text-red-500" />
                               </div>
                               <p className="text-base font-bold text-red-600 dark:text-red-400 mb-2">Failed to load branches</p>
-                              <p className="text-sm text-neutral-500 dark:text-stone-400">{error}</p>
+                              <p className="text-sm text-stone-500 dark:text-stone-400">{error}</p>
                             </div>
                           </td>
                         </tr>
@@ -394,8 +394,8 @@ const BranchPage: React.FC = () => {
                                   <FontAwesomeIcon icon={faBuilding} className="h-5 w-5 text-white" />
                                 </div>
                                 <div>
-                                  <p className="text-sm font-black text-neutral-900 dark:text-white">{branch.branchName}</p>
-                                  <p className="text-xs font-medium text-neutral-500 dark:text-stone-400">ID: {branch.id}</p>
+                                  <p className="text-sm font-black text-stone-900 dark:text-white">{branch.branchName}</p>
+                                  <p className="text-xs font-medium text-stone-500 dark:text-stone-400">ID: {branch.id}</p>
                                 </div>
                               </div>
                             </td>
@@ -443,8 +443,8 @@ const BranchPage: React.FC = () => {
                           <td colSpan={5} className="px-6 py-12 text-center">
                             <div className="flex flex-col items-center gap-3">
                               <FontAwesomeIcon icon={faBuilding} className="h-16 w-16 text-neutral-300 dark:text-neutral-600" />
-                              <p className="text-lg font-bold text-neutral-500 dark:text-stone-400">No branches found</p>
-                              <p className="text-sm text-neutral-400 dark:text-stone-500">Try adjusting your filters or search query</p>
+                              <p className="text-lg font-bold text-stone-500 dark:text-stone-400">No branches found</p>
+                              <p className="text-sm text-stone-400 dark:text-stone-500">Try adjusting your filters or search query</p>
                             </div>
                           </td>
                         </tr>

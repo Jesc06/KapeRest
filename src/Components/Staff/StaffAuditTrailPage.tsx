@@ -102,7 +102,7 @@ const StaffAuditTrailPage: React.FC = () => {
       case 'Logout':
         return 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400';
       default:
-        return 'bg-neutral-100 text-neutral-700 dark:bg-stone-800 dark:text-stone-400';
+        return 'bg-stone-100 text-stone-700 dark:bg-stone-800 dark:text-stone-400';
     }
   };
 
@@ -113,13 +113,13 @@ const StaffAuditTrailPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full" style={{ backgroundColor: '#FAFAFA' }}>
+    <div className="min-h-screen w-full bg-stone-50 dark:bg-stone-900">
       <div className="flex h-screen overflow-hidden">
         <StaffSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} isExpanded={isSidebarExpanded} />
 
         <div className={`flex h-screen flex-1 flex-col transition-all duration-300 ${isSidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
           {/* Premium Header */}
-          <div className="sticky top-0 z-20 backdrop-blur-xl bg-stone-50/80 dark:bg-neutral-900/80 border-b border-stone-200/50 dark:border-stone-700/50 shadow-lg shadow-black/5">
+          <div className="sticky top-0 z-20 backdrop-blur-xl bg-stone-50/90 dark:bg-stone-900/95 border-b border-stone-200/50 dark:border-stone-700/50 shadow-lg shadow-black/5">
             <div className="px-4 sm:px-6 md:px-8 py-4">
               <div className="flex items-center justify-between gap-3 sm:gap-4">
                 <div className="flex items-center gap-3">
@@ -132,15 +132,15 @@ const StaffAuditTrailPage: React.FC = () => {
 
                   <button
                     onClick={toggleSidebar}
-                    className="hidden lg:flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-800 hover:from-orange-100 hover:to-orange-200 dark:hover:from-orange-900/40 dark:hover:to-orange-800/40 text-stone-700 dark:text-stone-300 hover:text-orange-600 dark:hover:text-orange-400 border border-stone-300 dark:border-stone-600 shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 hover:scale-105"
+                    className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                   >
                     <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                   </button>
 
                   <div className="hidden sm:flex items-center gap-3">
                     <div>
-                      <h1 className="text-xl font-black text-neutral-900 dark:text-white tracking-tight">Audit Trail</h1>
-                      <p className="text-xs font-medium text-neutral-600 dark:text-stone-400">Activity log history</p>
+                      <h1 className="text-xl font-black text-stone-900 dark:text-white tracking-tight">Audit Trail</h1>
+                      <p className="text-xs font-medium text-stone-600 dark:text-stone-400">Activity log history</p>
                     </div>
                   </div>
                 </div>
@@ -149,13 +149,13 @@ const StaffAuditTrailPage: React.FC = () => {
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-amber-500/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div className="relative flex items-center gap-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-2 border-stone-200 dark:border-stone-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
-                      <FontAwesomeIcon icon={faSearch} className="h-5 w-5 text-neutral-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors" />
+                      <FontAwesomeIcon icon={faSearch} className="h-5 w-5 text-stone-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors" />
                       <input
                         type="text"
                         placeholder="Search user or description..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="flex-1 bg-transparent text-sm font-medium text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none"
+                        className="flex-1 bg-transparent text-sm font-medium text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-neutral-500 focus:outline-none"
                       />
                       {searchTerm && (
                         <span className="text-xs font-bold text-orange-600 dark:text-orange-400 px-2 py-1 rounded-md bg-orange-100 dark:bg-orange-900/30">
@@ -246,7 +246,7 @@ const StaffAuditTrailPage: React.FC = () => {
 
               {/* Table Section */}
               <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-stone-50 dark:bg-stone-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-stone-700">
-                <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-white via-orange-50/30 to-white dark:from-neutral-800 dark:via-orange-950/20 dark:to-neutral-800">
+                <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-stone-50 via-orange-50/30 to-stone-50 dark:from-stone-800 dark:via-orange-950/20 dark:to-stone-800">
                   <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-orange-500 to-orange-600"></div>
                   
                   <div className="px-6 sm:px-8 py-6">
@@ -256,8 +256,8 @@ const StaffAuditTrailPage: React.FC = () => {
                           <FontAwesomeIcon icon={faClipboardList} className="h-7 w-7 text-white" />
                         </div>
                         <div>
-                          <h3 className="text-2xl font-black text-neutral-900 dark:text-white tracking-tight">Audit History</h3>
-                          <p className="text-sm font-medium text-neutral-600 dark:text-stone-400 mt-0.5">All activity records</p>
+                          <h3 className="text-2xl font-black text-stone-900 dark:text-white tracking-tight">Audit History</h3>
+                          <p className="text-sm font-medium text-stone-600 dark:text-stone-400 mt-0.5">All activity records</p>
                         </div>
                       </div>
                     </div>
@@ -269,21 +269,21 @@ const StaffAuditTrailPage: React.FC = () => {
                     <div className="flex items-center justify-center py-20">
                       <div className="text-center">
                         <div className="inline-block h-12 w-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                        <p className="text-neutral-600 dark:text-stone-400">Loading audit logs...</p>
+                        <p className="text-stone-600 dark:text-stone-400">Loading audit logs...</p>
                       </div>
                     </div>
                   ) : filteredLogs.length === 0 ? (
                     <div className="flex items-center justify-center py-20">
                       <div className="text-center">
                         <FontAwesomeIcon icon={faClipboardList} className="h-16 w-16 text-neutral-300 dark:text-neutral-700 mb-4" />
-                        <p className="text-neutral-600 dark:text-stone-400 text-lg font-medium">No audit logs found</p>
+                        <p className="text-stone-600 dark:text-stone-400 text-lg font-medium">No audit logs found</p>
                         <p className="text-neutral-500 dark:text-stone-500 text-sm mt-2">Try adjusting your search</p>
                       </div>
                     </div>
                   ) : (
                     <table className="w-full">
                       <thead>
-                        <tr className="border-b border-orange-100 dark:border-stone-700 bg-orange-50/50 dark:bg-neutral-800/50">
+                        <tr className="border-b border-orange-100 dark:border-stone-700 bg-orange-50/50 dark:bg-stone-800/50">
                           <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Date & Time</th>
                           <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Username</th>
                           <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Role</th>
@@ -301,11 +301,11 @@ const StaffAuditTrailPage: React.FC = () => {
                             >
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="flex flex-col">
-                                  <span className="text-sm font-medium text-neutral-900 dark:text-white flex items-center gap-1.5">
+                                  <span className="text-sm font-medium text-stone-900 dark:text-white flex items-center gap-1.5">
                                     <FontAwesomeIcon icon={faCalendarAlt} className="h-3.5 w-3.5 text-orange-500" />
                                     {date}
                                   </span>
-                                  <span className="text-xs text-neutral-600 dark:text-stone-400 flex items-center gap-1.5 mt-1">
+                                  <span className="text-xs text-stone-600 dark:text-stone-400 flex items-center gap-1.5 mt-1">
                                     <FontAwesomeIcon icon={faClock} className="h-3 w-3" />
                                     {time}
                                   </span>
@@ -314,7 +314,7 @@ const StaffAuditTrailPage: React.FC = () => {
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="flex items-center gap-2">
                                   <FontAwesomeIcon icon={faUser} className="h-4 w-4 text-orange-500" />
-                                  <span className="text-sm font-semibold text-neutral-900 dark:text-white">{log.username}</span>
+                                  <span className="text-sm font-semibold text-stone-900 dark:text-white">{log.username}</span>
                                 </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
@@ -328,7 +328,7 @@ const StaffAuditTrailPage: React.FC = () => {
                                 </span>
                               </td>
                               <td className="px-6 py-4">
-                                <div className="text-sm text-neutral-600 dark:text-stone-400">{log.description || '-'}</div>
+                                <div className="text-sm text-stone-600 dark:text-stone-400">{log.description || '-'}</div>
                               </td>
                             </tr>
                           );

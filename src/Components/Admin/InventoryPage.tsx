@@ -136,7 +136,7 @@ const InventoryPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full" style={{ backgroundColor: '#FAFAFA' }}>
+    <div className="min-h-screen w-full bg-stone-50 dark:bg-stone-900">
       <div className="flex h-screen overflow-hidden">
         <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
 
@@ -162,14 +162,14 @@ const InventoryPage: React.FC = () => {
                   <div className="relative flex items-center gap-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-2 border-stone-200 dark:border-stone-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
                     <FontAwesomeIcon
                       icon={faSearch}
-                      className="h-5 w-5 text-neutral-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors"
+                      className="h-5 w-5 text-stone-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors"
                     />
                     <input
                       type="text"
                       placeholder="Search products, suppliers, branch, staff..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="flex-1 bg-transparent text-sm font-medium text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none"
+                      className="flex-1 bg-transparent text-sm font-medium text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-neutral-500 focus:outline-none"
                     />
                     {searchTerm && (
                       <span className="text-xs font-bold text-orange-600 dark:text-orange-400 px-2 py-1 rounded-md bg-orange-100 dark:bg-orange-900/30">
@@ -185,14 +185,14 @@ const InventoryPage: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                    className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-800 hover:from-orange-100 hover:to-orange-200 dark:hover:from-orange-900/40 dark:hover:to-orange-800/40 text-stone-700 dark:text-stone-300 hover:text-orange-600 dark:hover:text-orange-400 border border-stone-300 dark:border-stone-600 shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 hover:scale-105"
+                    className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                   >
                     <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                   </button>
 
                   <div>
-                    <h1 className="text-xl font-black text-neutral-900 dark:text-white tracking-tight">Inventory Management</h1>
-                    <p className="text-xs font-medium text-neutral-600 dark:text-stone-400">Stock levels and product details</p>
+                    <h1 className="text-xl font-black text-stone-900 dark:text-white tracking-tight">Inventory Management</h1>
+                    <p className="text-xs font-medium text-stone-600 dark:text-stone-400">Stock levels and product details</p>
                   </div>
                 </div>
 
@@ -202,14 +202,14 @@ const InventoryPage: React.FC = () => {
                     <div className="relative flex items-center gap-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-2 border-stone-200 dark:border-stone-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
                       <FontAwesomeIcon
                         icon={faSearch}
-                        className="h-5 w-5 text-neutral-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors"
+                        className="h-5 w-5 text-stone-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors"
                       />
                       <input
                         type="text"
                         placeholder="Search products, suppliers, branch, staff..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="flex-1 bg-transparent text-sm font-medium text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none"
+                        className="flex-1 bg-transparent text-sm font-medium text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-neutral-500 focus:outline-none"
                       />
                       {searchTerm && (
                         <span className="text-xs font-bold text-orange-600 dark:text-orange-400 px-2 py-1 rounded-md bg-orange-100 dark:bg-orange-900/30">
@@ -330,7 +330,7 @@ const InventoryPage: React.FC = () => {
 
               {/* Table */}
               <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-stone-50 dark:bg-stone-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-stone-700">
-                <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-white via-orange-50/30 to-white dark:from-neutral-800 dark:via-orange-950/20 dark:to-neutral-800">
+                <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-stone-50 via-orange-50/30 to-stone-50 dark:from-stone-800 dark:via-orange-950/20 dark:to-stone-800">
                   <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-orange-500 to-orange-600"></div>
                   
                   <div className="px-6 sm:px-8 py-6">
@@ -340,8 +340,8 @@ const InventoryPage: React.FC = () => {
                           <FontAwesomeIcon icon={faBoxes} className="h-7 w-7 text-white" />
                         </div>
                         <div>
-                          <h3 className="text-2xl font-black text-neutral-900 dark:text-white tracking-tight">Inventory Records</h3>
-                          <p className="text-sm font-medium text-neutral-600 dark:text-stone-400 mt-0.5">All stock entries and details</p>
+                          <h3 className="text-2xl font-black text-stone-900 dark:text-white tracking-tight">Inventory Records</h3>
+                          <p className="text-sm font-medium text-stone-600 dark:text-stone-400 mt-0.5">All stock entries and details</p>
                         </div>
                       </div>
                     </div>
@@ -383,25 +383,25 @@ const InventoryPage: React.FC = () => {
                     ) : (
                       filteredStocks.map((stock) => (
                         <tr key={stock.id} className="hover:bg-orange-50 dark:hover:bg-stone-700/50 transition-colors">
-                          <td className="px-6 py-4 text-sm font-medium text-neutral-900 dark:text-white">{stock.productName}</td>
+                          <td className="px-6 py-4 text-sm font-medium text-stone-900 dark:text-white">{stock.productName}</td>
                           <td className="px-6 py-4 text-sm">
                             <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStockBadgeColor(stock.stocks)}`}>
                               {stock.stocks}
                             </span>
                           </td>
-                          <td className="px-6 py-4 text-sm text-neutral-600 dark:text-stone-400 uppercase">{stock.units}</td>
-                          <td className="px-6 py-4 text-sm text-neutral-600 dark:text-stone-400">₱{stock.costPrice.toFixed(2)}</td>
-                          <td className="px-6 py-4 text-sm font-semibold text-neutral-900 dark:text-white">₱{(stock.stocks * stock.costPrice).toLocaleString()}</td>
-                          <td className="px-6 py-4 text-sm text-neutral-600 dark:text-stone-400">{stock.supplierName}</td>
-                          <td className="px-6 py-4 text-sm text-neutral-600 dark:text-stone-400">{stock.branch.branchName}</td>
-                          <td className="px-6 py-4 text-sm text-neutral-600 dark:text-stone-400">
+                          <td className="px-6 py-4 text-sm text-stone-600 dark:text-stone-400 uppercase">{stock.units}</td>
+                          <td className="px-6 py-4 text-sm text-stone-600 dark:text-stone-400">₱{stock.costPrice.toFixed(2)}</td>
+                          <td className="px-6 py-4 text-sm font-semibold text-stone-900 dark:text-white">₱{(stock.stocks * stock.costPrice).toLocaleString()}</td>
+                          <td className="px-6 py-4 text-sm text-stone-600 dark:text-stone-400">{stock.supplierName}</td>
+                          <td className="px-6 py-4 text-sm text-stone-600 dark:text-stone-400">{stock.branch.branchName}</td>
+                          <td className="px-6 py-4 text-sm text-stone-600 dark:text-stone-400">
                             {stock.cashier ? (
                               <span>{stock.cashier.firstName || ''} {stock.cashier.lastName || ''}</span>
                             ) : (
                               <span className="text-neutral-400 italic">Unassigned</span>
                             )}
                           </td>
-                          <td className="px-6 py-4 text-sm text-neutral-600 dark:text-stone-400">{formatDate(stock.transactionDate)}</td>
+                          <td className="px-6 py-4 text-sm text-stone-600 dark:text-stone-400">{formatDate(stock.transactionDate)}</td>
                           <td className="px-6 py-4 text-sm">
                             <div className="flex items-center justify-center gap-2">
                               <button
