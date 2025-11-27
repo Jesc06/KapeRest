@@ -217,7 +217,7 @@ const StaffPurchases: React.FC = () => {
 
         <div className={`flex h-screen flex-1 flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
           {/* Premium Header */}
-          <div className="sticky top-0 z-20 backdrop-blur-xl bg-white/80 dark:bg-neutral-900/80 border-b border-stone-200/50 dark:border-neutral-700/50 shadow-lg shadow-black/5">
+          <div className="sticky top-0 z-20 backdrop-blur-xl bg-stone-50/90 dark:bg-stone-900/95 border-b border-stone-200/50 dark:border-stone-700/50 shadow-lg shadow-black/5">
             <div className="px-4 sm:px-6 md:px-8 py-4">
               <div className="flex items-center justify-between gap-3 sm:gap-4">
                 <div className="flex items-center gap-3">
@@ -230,7 +230,7 @@ const StaffPurchases: React.FC = () => {
 
                   <button
                     onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                    className="hidden lg:flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-800 hover:from-orange-100 hover:to-orange-200 dark:hover:from-orange-900/40 dark:hover:to-orange-800/40 text-neutral-700 dark:text-neutral-300 hover:text-orange-600 dark:hover:text-orange-400 border border-stone-300 dark:border-neutral-600 shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 hover:scale-105"
+                    className="hidden lg:flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-800 hover:from-orange-100 hover:to-orange-200 dark:hover:from-orange-900/40 dark:hover:to-orange-800/40 text-stone-700 dark:text-stone-300 hover:text-orange-600 dark:hover:text-orange-400 border border-stone-300 dark:border-stone-600 shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 hover:scale-105"
                   >
                     <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                   </button>
@@ -238,7 +238,7 @@ const StaffPurchases: React.FC = () => {
                   <div className="hidden sm:flex items-center gap-3">
                     <div>
                       <h1 className="text-xl font-black text-neutral-900 dark:text-white tracking-tight">Purchases</h1>
-                      <p className="text-xs font-medium text-neutral-600 dark:text-neutral-400">Transaction history</p>
+                      <p className="text-xs font-medium text-neutral-600 dark:text-stone-400">Transaction history</p>
                     </div>
                   </div>
                 </div>
@@ -246,8 +246,8 @@ const StaffPurchases: React.FC = () => {
                 <div className="flex-1 max-w-xl">
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-amber-500/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div className="relative flex items-center gap-3 bg-white dark:bg-neutral-800 rounded-xl border-2 border-stone-200 dark:border-neutral-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
-                      <FontAwesomeIcon icon={faSearch} className="h-5 w-5 text-neutral-400 dark:text-neutral-500 group-focus-within:text-orange-500 transition-colors" />
+                    <div className="relative flex items-center gap-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-2 border-stone-200 dark:border-stone-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
+                      <FontAwesomeIcon icon={faSearch} className="h-5 w-5 text-neutral-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors" />
                       <input
                         type="text"
                         placeholder="Search purchases..."
@@ -273,7 +273,7 @@ const StaffPurchases: React.FC = () => {
                   >
                     <FontAwesomeIcon icon={faBell} className="h-6 w-6" />
                     {voidRequestCount > 0 && (
-                      <span className="absolute -top-0.5 -right-0.5 min-w-[22px] h-[22px] px-1.5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg animate-pulse border-2 border-white dark:border-neutral-900">
+                      <span className="absolute -top-0.5 -right-0.5 min-w-[22px] h-[22px] px-1.5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg animate-pulse border-2 border-white dark:border-stone-900">
                         {voidRequestCount > 9 ? '9+' : voidRequestCount}
                       </span>
                     )}
@@ -298,7 +298,7 @@ const StaffPurchases: React.FC = () => {
                     className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
                       selectedPaymentMethod === 'all'
                         ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30'
-                        : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-orange-500 dark:hover:border-orange-500'
+                        : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-orange-500 dark:hover:border-orange-500'
                     }`}
                   >
                     All Payments
@@ -308,7 +308,7 @@ const StaffPurchases: React.FC = () => {
                     className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
                       selectedPaymentMethod === 'Cash'
                         ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30'
-                        : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-orange-500 dark:hover:border-orange-500'
+                        : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-orange-500 dark:hover:border-orange-500'
                     }`}
                   >
                     Cash
@@ -318,7 +318,7 @@ const StaffPurchases: React.FC = () => {
                     className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
                       selectedPaymentMethod === 'GCash'
                         ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30'
-                        : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-orange-500 dark:hover:border-orange-500'
+                        : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-orange-500 dark:hover:border-orange-500'
                     }`}
                   >
                     GCash
@@ -332,7 +332,7 @@ const StaffPurchases: React.FC = () => {
                     className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
                       selectedStatus === 'all'
                         ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/30'
-                        : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-green-500 dark:hover:border-green-500'
+                        : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-green-500 dark:hover:border-green-500'
                     }`}
                   >
                     All Status
@@ -342,7 +342,7 @@ const StaffPurchases: React.FC = () => {
                     className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
                       selectedStatus === 'Completed'
                         ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/30'
-                        : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-green-500 dark:hover:border-green-500'
+                        : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-green-500 dark:hover:border-green-500'
                     }`}
                   >
                     Completed
@@ -352,7 +352,7 @@ const StaffPurchases: React.FC = () => {
                     className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
                       selectedStatus === 'Voided'
                         ? 'bg-gradient-to-r from-red-500 to-rose-600 text-white shadow-lg shadow-red-500/30'
-                        : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-red-500 dark:hover:border-red-500'
+                        : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-red-500 dark:hover:border-red-500'
                     }`}
                   >
                     Voided
@@ -361,7 +361,7 @@ const StaffPurchases: React.FC = () => {
               </div>
 
               {/* Table Section */}
-              <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-white dark:bg-neutral-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-neutral-700">
+              <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-stone-50 dark:bg-stone-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-stone-700">
                 <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-white via-orange-50/30 to-white dark:from-neutral-800 dark:via-orange-950/20 dark:to-neutral-800">
                   <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-orange-500 to-orange-600"></div>
                   
@@ -373,7 +373,7 @@ const StaffPurchases: React.FC = () => {
                         </div>
                         <div>
                           <h3 className="text-2xl font-black text-neutral-900 dark:text-white tracking-tight">Purchase History</h3>
-                          <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mt-0.5">All transaction records</p>
+                          <p className="text-sm font-medium text-neutral-600 dark:text-stone-400 mt-0.5">All transaction records</p>
                         </div>
                       </div>
                     </div>
@@ -385,39 +385,39 @@ const StaffPurchases: React.FC = () => {
                     <div className="flex items-center justify-center py-20">
                       <div className="text-center">
                         <div className="inline-block h-12 w-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                        <p className="text-neutral-600 dark:text-neutral-400">Loading purchases...</p>
+                        <p className="text-neutral-600 dark:text-stone-400">Loading purchases...</p>
                       </div>
                     </div>
                   ) : filteredPurchases.length === 0 ? (
                     <div className="flex items-center justify-center py-20">
                       <div className="text-center">
                         <FontAwesomeIcon icon={faShoppingCart} className="h-16 w-16 text-neutral-300 dark:text-neutral-700 mb-4" />
-                        <p className="text-neutral-600 dark:text-neutral-400 text-lg font-medium">No purchases found</p>
-                        <p className="text-neutral-500 dark:text-neutral-500 text-sm mt-2">Try adjusting your search</p>
+                        <p className="text-neutral-600 dark:text-stone-400 text-lg font-medium">No purchases found</p>
+                        <p className="text-neutral-500 dark:text-stone-500 text-sm mt-2">Try adjusting your search</p>
                       </div>
                     </div>
                   ) : (
                     <table className="w-full">
                       <thead>
-                        <tr className="border-b border-orange-100 dark:border-neutral-800 bg-orange-50/50 dark:bg-neutral-800/50">
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Sale ID</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Receipt No.</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Item Name</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Date & Time</th>
-                          <th className="px-6 py-4 text-right text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Subtotal</th>
-                          <th className="px-6 py-4 text-right text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Tax</th>
-                          <th className="px-6 py-4 text-right text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Discount</th>
-                          <th className="px-6 py-4 text-right text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Total</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Payment</th>
-                          <th className="px-6 py-4 text-center text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Status</th>
-                          <th className="px-6 py-4 text-center text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Actions</th>
+                        <tr className="border-b border-orange-100 dark:border-stone-700 bg-orange-50/50 dark:bg-stone-800/50">
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Sale ID</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Receipt No.</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Item Name</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Date & Time</th>
+                          <th className="px-6 py-4 text-right text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Subtotal</th>
+                          <th className="px-6 py-4 text-right text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Tax</th>
+                          <th className="px-6 py-4 text-right text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Discount</th>
+                          <th className="px-6 py-4 text-right text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Total</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Payment</th>
+                          <th className="px-6 py-4 text-center text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Status</th>
+                          <th className="px-6 py-4 text-center text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Actions</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-orange-100 dark:divide-neutral-800">
                         {filteredPurchases.map((purchase) => (
                           <tr
                             key={purchase.id}
-                            className="hover:bg-orange-50/50 dark:hover:bg-neutral-800/30 transition-colors duration-150"
+                            className="hover:bg-orange-50/50 dark:hover:bg-stone-800/30 transition-colors duration-150"
                           >
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="text-sm font-semibold text-neutral-900 dark:text-white">
@@ -435,7 +435,7 @@ const StaffPurchases: React.FC = () => {
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-neutral-600 dark:text-neutral-400">
+                              <div className="text-sm text-neutral-600 dark:text-stone-400">
                                 {formatDate(purchase.dateTime)}
                               </div>
                             </td>
@@ -445,12 +445,12 @@ const StaffPurchases: React.FC = () => {
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-right">
-                              <div className="text-sm text-neutral-600 dark:text-neutral-400">
+                              <div className="text-sm text-neutral-600 dark:text-stone-400">
                                 ₱{purchase.tax.toFixed(2)}
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-right">
-                              <div className="text-sm text-neutral-600 dark:text-neutral-400">
+                              <div className="text-sm text-neutral-600 dark:text-stone-400">
                                 ₱{purchase.discount.toFixed(2)}
                               </div>
                             </td>
@@ -487,7 +487,7 @@ const StaffPurchases: React.FC = () => {
                                 disabled={purchase.status === "Voided"}
                                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all duration-200 text-sm font-medium ${
                                   purchase.status === "Voided"
-                                    ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-600 cursor-not-allowed opacity-50"
+                                    ? "bg-neutral-100 dark:bg-stone-800 text-neutral-400 dark:text-neutral-600 cursor-not-allowed opacity-50"
                                     : "bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 active:scale-95 cursor-pointer"
                                 }`}
                                 title={purchase.status === "Voided" ? "Already voided" : "Void this purchase"}

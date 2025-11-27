@@ -401,24 +401,24 @@ const UpdateItem: React.FC<UpdateItemProps> = ({ isOpen, onClose, itemId, onSucc
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="relative w-full max-w-4xl max-h-[90vh] bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl overflow-hidden">
+      <div className="relative w-full max-w-4xl max-h-[90vh] bg-stone-50 dark:bg-stone-900 rounded-2xl shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
+        <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900">
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg">
               <FontAwesomeIcon icon={faBox} className="h-5 w-5 text-white" />
             </div>
             <div>
               <h2 className="text-xl font-bold text-neutral-900 dark:text-white">Update Menu Item</h2>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">Edit the details of your menu item</p>
+              <p className="text-sm text-neutral-600 dark:text-stone-400">Edit the details of your menu item</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
+            className="p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors"
             disabled={isLoading}
           >
-            <FontAwesomeIcon icon={faTimes} className="h-5 w-5 text-neutral-600 dark:text-neutral-400" />
+            <FontAwesomeIcon icon={faTimes} className="h-5 w-5 text-neutral-600 dark:text-stone-400" />
           </button>
         </div>
 
@@ -428,7 +428,7 @@ const UpdateItem: React.FC<UpdateItemProps> = ({ isOpen, onClose, itemId, onSucc
             <div className="flex items-center justify-center py-20">
               <div className="text-center">
                 <div className="inline-block h-12 w-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                <p className="text-neutral-600 dark:text-neutral-400">Loading item details...</p>
+                <p className="text-neutral-600 dark:text-stone-400">Loading item details...</p>
               </div>
             </div>
           ) : (
@@ -502,7 +502,7 @@ const UpdateItem: React.FC<UpdateItemProps> = ({ isOpen, onClose, itemId, onSucc
 
                 {/* Item Name */}
                 <div>
-                  <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+                  <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">
                     Item Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -510,7 +510,7 @@ const UpdateItem: React.FC<UpdateItemProps> = ({ isOpen, onClose, itemId, onSucc
                     name="itemName"
                     value={formData.itemName}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all"
+                    className="w-full px-4 py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all"
                     placeholder="e.g., Iced Latte"
                     disabled={isLoading}
                   />
@@ -519,17 +519,17 @@ const UpdateItem: React.FC<UpdateItemProps> = ({ isOpen, onClose, itemId, onSucc
                 {/* Price and Category */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+                    <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">
                       Price <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
-                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500 dark:text-neutral-400 font-medium">₱</span>
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500 dark:text-stone-400 font-medium">₱</span>
                       <input
                         type="number"
                         name="price"
                         value={formData.price}
                         onChange={handleChange}
-                        className="w-full pl-9 pr-4 py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all"
+                        className="w-full pl-9 pr-4 py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all"
                         placeholder="0.00"
                         step="0.01"
                         min="0"
@@ -539,14 +539,14 @@ const UpdateItem: React.FC<UpdateItemProps> = ({ isOpen, onClose, itemId, onSucc
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+                    <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">
                       Category <span className="text-red-500">*</span>
                     </label>
                     <select
                       name="category"
                       value={formData.category}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 appearance-none cursor-pointer transition-all"
+                      className="w-full px-4 py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 appearance-none cursor-pointer transition-all"
                       disabled={isLoading}
                     >
                       <option value="">Select category</option>
@@ -561,14 +561,14 @@ const UpdateItem: React.FC<UpdateItemProps> = ({ isOpen, onClose, itemId, onSucc
 
                 {/* Availability */}
                 <div>
-                  <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+                  <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">
                     Availability <span className="text-red-500">*</span>
                   </label>
                   <select
                     name="isAvailable"
                     value={formData.isAvailable}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 appearance-none cursor-pointer transition-all"
+                    className="w-full px-4 py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 appearance-none cursor-pointer transition-all"
                     disabled={isLoading}
                   >
                     <option value="Available">Available</option>
@@ -578,14 +578,14 @@ const UpdateItem: React.FC<UpdateItemProps> = ({ isOpen, onClose, itemId, onSucc
 
                 {/* Description */}
                 <div>
-                  <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+                  <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">
                     Description <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     name="description"
                     value={formData.description}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 resize-none transition-all"
+                    className="w-full px-4 py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 resize-none transition-all"
                     rows={4}
                     placeholder="Brief description of the menu item"
                     disabled={isLoading}
@@ -594,17 +594,17 @@ const UpdateItem: React.FC<UpdateItemProps> = ({ isOpen, onClose, itemId, onSucc
 
                 {/* Product Items */}
                 <div>
-                  <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+                  <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">
                     Product Items (Optional)
                   </label>
                   
-                  <div className="space-y-4 p-5 bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-800/50 dark:to-neutral-800/30 rounded-xl border border-neutral-200 dark:border-neutral-700">
+                  <div className="space-y-4 p-5 bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-800/50 dark:to-neutral-800/30 rounded-xl border border-neutral-200 dark:border-stone-700">
                     <div className="flex flex-col gap-3">
                       <div>
                         <select
                           value={currentProduct}
                           onChange={(e) => setCurrentProduct(e.target.value)}
-                          className="w-full px-4 py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 appearance-none cursor-pointer transition-all"
+                          className="w-full px-4 py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 appearance-none cursor-pointer transition-all"
                           disabled={isLoading}
                         >
                           <option value="">Select a product</option>
@@ -621,7 +621,7 @@ const UpdateItem: React.FC<UpdateItemProps> = ({ isOpen, onClose, itemId, onSucc
                           type="number"
                           value={currentQuantity}
                           onChange={(e) => setCurrentQuantity(e.target.value)}
-                          className="flex-1 px-4 py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all"
+                          className="flex-1 px-4 py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all"
                           placeholder="Quantity"
                           min="0"
                           step="1"
@@ -641,7 +641,7 @@ const UpdateItem: React.FC<UpdateItemProps> = ({ isOpen, onClose, itemId, onSucc
 
                     {selectedProducts.length > 0 && (
                       <div className="space-y-3">
-                        <p className="text-sm font-semibold text-neutral-700 dark:text-neutral-300 flex items-center gap-2">
+                        <p className="text-sm font-semibold text-stone-700 dark:text-stone-300 flex items-center gap-2">
                           <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
                           <span>Selected Products ({selectedProducts.length})</span>
                         </p>
@@ -651,13 +651,13 @@ const UpdateItem: React.FC<UpdateItemProps> = ({ isOpen, onClose, itemId, onSucc
                             return (
                               <div
                                 key={item.productOfSupplierId}
-                                className="flex items-center justify-between gap-3 p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm hover:shadow-md transition-all"
+                                className="flex items-center justify-between gap-3 p-4 bg-stone-50 dark:bg-stone-900 rounded-xl border border-neutral-200 dark:border-stone-700 shadow-sm hover:shadow-md transition-all"
                               >
                                 <div className="flex-1">
                                   <p className="text-sm font-medium text-neutral-900 dark:text-white">
                                     {product?.productName || `Product #${item.productOfSupplierId}`}
                                   </p>
-                                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                                  <p className="text-xs text-neutral-500 dark:text-stone-400">
                                     Quantity: {item.quantityUsed}
                                   </p>
                                 </div>
@@ -680,12 +680,12 @@ const UpdateItem: React.FC<UpdateItemProps> = ({ isOpen, onClose, itemId, onSucc
 
                 {/* Image Upload */}
                 <div>
-                  <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+                  <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">
                     Item Image <span className="text-red-500">*</span>
                   </label>
                   
                   {!formData.imagePreview ? (
-                    <div className="relative border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-xl p-8 hover:border-orange-400 dark:hover:border-orange-500 cursor-pointer bg-neutral-50 dark:bg-neutral-800/50 transition-all duration-200">
+                    <div className="relative border-2 border-dashed border-neutral-300 dark:border-stone-600 rounded-xl p-8 hover:border-orange-400 dark:hover:border-orange-500 cursor-pointer bg-neutral-50 dark:bg-neutral-800/50 transition-all duration-200">
                       <input
                         type="file"
                         accept="image/*"
@@ -697,12 +697,12 @@ const UpdateItem: React.FC<UpdateItemProps> = ({ isOpen, onClose, itemId, onSucc
                         <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500/10 to-orange-600/10 flex items-center justify-center mb-3">
                           <FontAwesomeIcon icon={faImage} className="h-7 w-7 text-orange-500" />
                         </div>
-                        <p className="text-base font-semibold text-neutral-700 dark:text-neutral-300">Click to upload image</p>
-                        <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">PNG, JPG, JPEG up to 5MB</p>
+                        <p className="text-base font-semibold text-stone-700 dark:text-stone-300">Click to upload image</p>
+                        <p className="text-sm text-neutral-500 dark:text-stone-400 mt-1">PNG, JPG, JPEG up to 5MB</p>
                       </div>
                     </div>
                   ) : (
-                    <div className="relative rounded-xl overflow-hidden border-2 border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800">
+                    <div className="relative rounded-xl overflow-hidden border-2 border-neutral-300 dark:border-stone-700 bg-neutral-100 dark:bg-stone-800">
                       <img
                         src={formData.imagePreview}
                         alt="Preview"
@@ -728,7 +728,7 @@ const UpdateItem: React.FC<UpdateItemProps> = ({ isOpen, onClose, itemId, onSucc
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-3 pt-4 border-t border-neutral-200 dark:border-neutral-800">
+                <div className="flex gap-3 pt-4 border-t border-neutral-200 dark:border-stone-700">
                   <button
                     type="submit"
                     disabled={isLoading}
@@ -751,7 +751,7 @@ const UpdateItem: React.FC<UpdateItemProps> = ({ isOpen, onClose, itemId, onSucc
                     type="button"
                     onClick={onClose}
                     disabled={isLoading}
-                    className="flex-1 px-6 py-3.5 bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white font-semibold rounded-xl disabled:cursor-not-allowed disabled:opacity-50 flex items-center justify-center gap-2.5 transition-all duration-200 active:scale-[0.98] shadow-sm hover:shadow-md"
+                    className="flex-1 px-6 py-3.5 bg-neutral-200 dark:bg-stone-800 hover:bg-neutral-300 dark:hover:bg-stone-700 text-neutral-900 dark:text-white font-semibold rounded-xl disabled:cursor-not-allowed disabled:opacity-50 flex items-center justify-center gap-2.5 transition-all duration-200 active:scale-[0.98] shadow-sm hover:shadow-md"
                   >
                     <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
                     <span>Cancel</span>

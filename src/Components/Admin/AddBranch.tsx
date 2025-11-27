@@ -107,17 +107,23 @@ const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
         console.log('Branch added successfully:', result);
         setApiSuccess(true);
 
-        // Call parent onSubmit callback with full branch data
-        onSubmit(result);
+        // Reset form first
+        setBranchName('');
+        setLocation('');
+        setErrors({});
 
-        // Reset form and close after success
+        // Call parent onSubmit callback with full branch data
+        try {
+          onSubmit(result);
+        } catch (err) {
+          console.error('Error in onSubmit callback:', err);
+        }
+
+        // Close modal after brief delay
         setTimeout(() => {
-          setBranchName('');
-          setLocation('');
-          setErrors({});
           setApiSuccess(false);
           onClose();
-        }, 1500);
+        }, 1000);
 
       } catch (err) {
         console.error('Error adding branch:', err);
@@ -141,24 +147,24 @@ const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="relative w-full max-w-2xl bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl overflow-hidden">
+      <div className="relative w-full max-w-2xl bg-stone-50 dark:bg-stone-900 rounded-2xl shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
+        <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900">
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg">
               <FontAwesomeIcon icon={faBuilding} className="h-5 w-5 text-white" />
             </div>
             <div>
               <h2 className="text-xl font-bold text-neutral-900 dark:text-white">Add New Branch</h2>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">Create a new branch location</p>
+              <p className="text-sm text-neutral-600 dark:text-stone-400">Create a new branch location</p>
             </div>
           </div>
           <button
             onClick={handleClose}
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
+            className="p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors"
             disabled={isSubmitting}
           >
-            <FontAwesomeIcon icon={faTimes} className="h-5 w-5 text-neutral-600 dark:text-neutral-400" />
+            <FontAwesomeIcon icon={faTimes} className="h-5 w-5 text-neutral-600 dark:text-stone-400" />
           </button>
         </div>
 
@@ -166,7 +172,7 @@ const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/* Branch Name */}
           <div>
-            <label className="block text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-2">
+            <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2">
               Branch Name
             </label>
             <input
@@ -174,10 +180,10 @@ const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
               value={branchName}
               onChange={(e) => setBranchName(e.target.value)}
               placeholder="Enter branch name (e.g., Main Branch, SM Mall of Asia)"
-              className={`w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-800 border-2 ${
+              className={`w-full px-4 py-3 bg-neutral-50 dark:bg-stone-800 border-2 ${
                 errors.branchName
                   ? 'border-red-500 focus:ring-red-500'
-                  : 'border-neutral-200 dark:border-neutral-700 focus:ring-orange-500'
+                  : 'border-neutral-200 dark:border-stone-700 focus:ring-orange-500'
               } rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
             />
             {errors.branchName && (
@@ -189,7 +195,7 @@ const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
 
           {/* Location */}
           <div>
-            <label className="block text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-2">
+            <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2">
               Location
             </label>
             <input
@@ -197,10 +203,10 @@ const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               placeholder="Enter location (e.g., Manila, Makati, Quezon City)"
-              className={`w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-800 border-2 ${
+              className={`w-full px-4 py-3 bg-neutral-50 dark:bg-stone-800 border-2 ${
                 errors.location
                   ? 'border-red-500 focus:ring-red-500'
-                  : 'border-neutral-200 dark:border-neutral-700 focus:ring-orange-500'
+                  : 'border-neutral-200 dark:border-stone-700 focus:ring-orange-500'
               } rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
             />
             {errors.location && (
@@ -226,12 +232,12 @@ const AddBranch: React.FC<AddBranchProps> = ({ isOpen, onClose, onSubmit }) => {
         </form>
 
         {/* Footer */}
-        <div className="sticky bottom-0 px-6 py-4 bg-neutral-50 dark:bg-neutral-800/50 border-t border-neutral-200 dark:border-neutral-800 flex gap-3">
+        <div className="sticky bottom-0 px-6 py-4 bg-neutral-50 dark:bg-stone-800/50 border-t border-neutral-200 dark:border-stone-700 flex gap-3">
           <button
             type="button"
             onClick={handleClose}
             disabled={isSubmitting}
-            className="flex-1 px-6 py-3 bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 text-neutral-900 dark:text-white font-bold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
+            className="flex-1 px-6 py-3 bg-neutral-200 dark:bg-stone-700 hover:bg-neutral-300 dark:hover:bg-stone-600 text-neutral-900 dark:text-white font-bold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
           >
             Cancel
           </button>

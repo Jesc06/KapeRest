@@ -108,7 +108,7 @@ const Login: React.FC = () => {
             {/* Brand */}
             <div className="mb-6">
               <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-neutral-900 flex items-center gap-2 dark:text-neutral-50">KapeRest <span aria-hidden="true" className="coffee-emoji text-[24px]">☕</span></h1>
-              <p className="mt-1.5 text-base text-neutral-600 dark:text-neutral-400">Professional POS Management</p>
+              <p className="mt-1.5 text-base text-neutral-600 dark:text-stone-400">Professional POS Management</p>
             </div>
             <div className="h-px w-full bg-gradient-to-r from-neutral-300 via-neutral-400 to-neutral-300 mb-6 dark:from-neutral-800 dark:via-neutral-700 dark:to-neutral-800" aria-hidden />
             {/* Form */}
@@ -125,7 +125,7 @@ const Login: React.FC = () => {
               <div className="space-y-5">
                 {/* Email Field (stacked label, larger target) */}
                 <div className="relative">
-                  <label htmlFor="email" className="block text-[13px] font-medium text-neutral-700 tracking-wide dark:text-neutral-300">Email</label>
+                  <label htmlFor="email" className="block text-[13px] font-medium text-neutral-700 tracking-wide dark:text-stone-300">Email</label>
                   <div className="mt-1 relative">
                     <input
                       id="email"
@@ -137,10 +137,10 @@ const Login: React.FC = () => {
                       onFocus={() => setEmailFocused(true)}
                       onBlur={() => setEmailFocused(false)}
                       disabled={isLoading}
-                      className={`peer block w-full rounded-lg border bg-white pr-10 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-neutral-100 dark:placeholder:text-neutral-500
+                      className={`peer block w-full rounded-lg border bg-white pr-10 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-stone-50 dark:placeholder:text-neutral-500
                         ${emailValid && email.trim().length > 0
                           ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400'
-                          : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-neutral-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
+                          : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
                         ${isLoading ? 'opacity-90' : ''}`}
                       placeholder="you@company.com"
                       aria-invalid={errors.email ? 'true' : 'false'}
@@ -158,7 +158,7 @@ const Login: React.FC = () => {
                 </div>
                 {/* Password Field with Caps Lock indicator */}
                 <div className="relative">
-                  <label htmlFor="password" className="flex items-center justify-between text-[13px] font-medium text-neutral-700 tracking-wide dark:text-neutral-300">
+                  <label htmlFor="password" className="flex items-center justify-between text-[13px] font-medium text-neutral-700 tracking-wide dark:text-stone-300">
                     <span>Password</span>
                     {capsOn && <span className="text-[10px] font-medium text-orange-600 dark:text-orange-300">CAPS ON</span>}
                   </label>
@@ -174,10 +174,10 @@ const Login: React.FC = () => {
                       onFocus={() => setPasswordFocused(true)}
                       onBlur={() => setPasswordFocused(false)}
                       disabled={isLoading}
-                      className={`peer block w-full rounded-lg border bg-white pr-10 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-neutral-100 dark:placeholder:text-neutral-500
+                      className={`peer block w-full rounded-lg border bg-white pr-10 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-neutral-400 dark:bg-neutral-900/60 dark:text-stone-50 dark:placeholder:text-neutral-500
                         ${passwordValid
                           ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400'
-                          : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-neutral-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
+                          : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
                         ${isLoading ? 'opacity-90' : ''}`}
                       placeholder="••••••••"
                       aria-invalid={errors.password ? 'true' : 'false'}
@@ -201,18 +201,18 @@ const Login: React.FC = () => {
                 </div>
               </div>
               <div className="flex items-center justify-between">
-                <label className="group relative inline-flex items-center gap-2 pl-[2px] text-[11px] font-medium text-neutral-700 select-none leading-none cursor-pointer dark:text-neutral-300">
+                <label className="group relative inline-flex items-center gap-2 pl-[2px] text-[11px] font-medium text-neutral-700 select-none leading-none cursor-pointer dark:text-stone-300">
                   <input
                     type="checkbox"
                     disabled={isLoading}
-                    className="peer relative h-4 w-4 shrink-0 appearance-none rounded-[5px] border border-neutral-300 bg-white transition-colors before:absolute before:inset-0 before:rounded-[4px] before:bg-neutral-900 before:scale-0 before:opacity-0 before:transition checked:before:scale-100 checked:before:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 disabled:opacity-60 cursor-pointer dark:border-neutral-700 dark:bg-neutral-800 dark:before:bg-orange-400 dark:focus-visible:ring-orange-400"
+                    className="peer relative h-4 w-4 shrink-0 appearance-none rounded-[5px] border border-neutral-300 bg-white transition-colors before:absolute before:inset-0 before:rounded-[4px] before:bg-neutral-900 before:scale-0 before:opacity-0 before:transition checked:before:scale-100 checked:before:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 disabled:opacity-60 cursor-pointer dark:border-stone-700 dark:bg-stone-800 dark:before:bg-orange-400 dark:focus-visible:ring-orange-400"
                   />
                   <svg viewBox="0 0 20 20" className="pointer-events-none absolute left-[6px] h-[10px] w-[10px] text-white opacity-0 transition-opacity peer-checked:opacity-100" aria-hidden>
                     <path d="M6 10.5l2.25 2.25L14 7.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                   <span className="translate-y-[0.5px]">Remember me</span>
                 </label>
-                <span className="text-[11px] text-neutral-500 leading-none dark:text-neutral-400">v1.0.0</span>
+                <span className="text-[11px] text-neutral-500 leading-none dark:text-stone-400">v1.0.0</span>
               </div>
               <button
                 type="submit"
@@ -233,7 +233,7 @@ const Login: React.FC = () => {
               </button>
             </form>
             {/* Secondary */}
-            <p className="mt-6 text-center text-[13px] text-neutral-600 dark:text-neutral-400">
+            <p className="mt-6 text-center text-[13px] text-neutral-600 dark:text-stone-400">
               Don't have an account? <Link to="/register" className="font-medium text-neutral-800 hover:underline focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 focus:ring-offset-white rounded dark:text-orange-300 dark:hover:text-orange-200 dark:focus:ring-orange-400 dark:focus:ring-offset-neutral-950">Sign up</Link>
             </p>
           </div>

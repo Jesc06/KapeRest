@@ -41,34 +41,10 @@ const StaffSales: React.FC<StaffSalesProps> = ({
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [isGenerating, setIsGenerating] = useState<PeriodFilter | null>(null);
 
-  // Helper function to get date range based on period
-  const getDateRange = (period: PeriodFilter): { start: Date; end: Date } => {
-    const start = new Date();
-
-    switch (period) {
-      case 'daily':
-        start.setHours(0, 0, 0, 0);
-        break;
-      case 'monthly':
-        start.setDate(1);
-        start.setHours(0, 0, 0, 0);
-        break;
-      case 'yearly':
-        start.setMonth(0, 1);
-        start.setHours(0, 0, 0, 0);
-        break;
-    }
-
-    return { start, end: new Date() };
-  };
-
-  // Filter sales data
+  // Filter sales data - API already filters by period, so we only filter by search
   const filteredSales = useMemo(() => {
-    const { start, end } = getDateRange(selectedPeriod);
-
+    // Remove date filtering - show all sales from API
     return salesState.filter(record => {
-      const recordDate = new Date(record.dateTime);
-      const matchesDate = recordDate >= start && recordDate <= end;
       const matchesSearch =
         (record.receiptNumber ?? '').toString().toLowerCase().includes(searchText.toLowerCase()) ||
         (record.status ?? '').toLowerCase().includes(searchText.toLowerCase()) ||
@@ -77,9 +53,9 @@ const StaffSales: React.FC<StaffSalesProps> = ({
         (record.fullName ?? '').toLowerCase().includes(searchText.toLowerCase()) ||
         (record.branchName ?? '').toLowerCase().includes(searchText.toLowerCase());
 
-      return matchesDate && matchesSearch;
+      return matchesSearch;
     });
-  }, [salesState, searchText, selectedPeriod]);
+  }, [salesState, searchText]);
 
   // Fetch sales data for current cashier and period
   useEffect(() => {
@@ -89,6 +65,7 @@ const StaffSales: React.FC<StaffSalesProps> = ({
       try {
         const token = localStorage.getItem('accessToken');
         if (!token) {
+          console.error('No access token found');
           setLoading(false);
           return;
         }
@@ -103,9 +80,12 @@ const StaffSales: React.FC<StaffSalesProps> = ({
         const cashierId = decoded.cashierId as string | undefined;
 
         if (!cashierId) {
+          console.error('Cashier ID not found in token');
           setLoading(false);
           return;
         }
+
+        console.log('Fetching sales for cashierId:', cashierId, 'period:', period);
 
         let endpoint = '';
         switch (period) {
@@ -123,18 +103,24 @@ const StaffSales: React.FC<StaffSalesProps> = ({
             break;
         }
 
-        const response = await fetch(`${API_BASE_URL}/CashierSalesReport/${endpoint}?cashierId=${cashierId}`, {
+        const url = `${API_BASE_URL}/CashierSalesReport/${endpoint}?cashierId=${cashierId}`;
+        console.log('Fetching from URL:', url);
+
+        const response = await fetch(url, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         });
 
+        console.log('Response status:', response.status);
+
         if (!response.ok) {
           throw new Error(`Failed to fetch sales: ${response.status}`);
         }
 
         const data = await response.json();
+        console.log('Sales data received:', data);
 
         // Map the API DTO into our sales record shape
         const mapped: SalesRecord[] = data.map((item: any) => ({
@@ -154,9 +140,11 @@ const StaffSales: React.FC<StaffSalesProps> = ({
           status: item.status ?? 'Pending',
         }));
 
+        console.log('Mapped sales records:', mapped.length);
         setSalesState(mapped);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error fetching sales');
+        const errorMsg = err instanceof Error ? err.message : 'Unknown error fetching sales';
+        setError(errorMsg);
         console.error('Error fetching sales data:', err);
       } finally {
         setLoading(false);
@@ -289,7 +277,7 @@ const StaffSales: React.FC<StaffSalesProps> = ({
       <StaffSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
 
       {/* Premium Top Bar with Glass Effect */}
-      <div className="sticky top-0 z-30 backdrop-blur-xl bg-white/80 dark:bg-neutral-900/80 border-b border-stone-200/50 dark:border-neutral-700/50 shadow-lg shadow-black/5 transition-all duration-300">
+      <div className="sticky top-0 z-30 backdrop-blur-xl bg-stone-50/90 dark:bg-stone-900/95 border-b border-stone-200/50 dark:border-stone-700/50 shadow-lg shadow-black/5 transition-all duration-300">
         <div className="px-4 sm:px-6 md:px-8 py-4">
         {/* Mobile Top Section */}
         <div className="block lg:hidden">
@@ -306,10 +294,10 @@ const StaffSales: React.FC<StaffSalesProps> = ({
           {/* Mobile Search Bar */}
           <div className="relative group mb-4">
             <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-amber-500/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div className="relative flex items-center gap-3 bg-white dark:bg-neutral-800 rounded-xl border-2 border-stone-200 dark:border-neutral-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
+            <div className="relative flex items-center gap-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-2 border-stone-200 dark:border-stone-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
               <FontAwesomeIcon
                 icon={faSearch}
-                className="h-5 w-5 text-neutral-400 dark:text-neutral-500 group-focus-within:text-orange-500 transition-colors"
+                className="h-5 w-5 text-neutral-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors"
               />
                 <input
                 type="text"
@@ -332,7 +320,7 @@ const StaffSales: React.FC<StaffSalesProps> = ({
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarExpanded(!sidebarExpanded)}
-              className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-800 hover:from-orange-100 hover:to-orange-200 dark:hover:from-orange-900/40 dark:hover:to-orange-800/40 text-neutral-700 dark:text-neutral-300 hover:text-orange-600 dark:hover:text-orange-400 border border-stone-300 dark:border-neutral-600 shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 hover:scale-105"
+              className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-800 hover:from-orange-100 hover:to-orange-200 dark:hover:from-orange-900/40 dark:hover:to-orange-800/40 text-stone-700 dark:text-stone-300 hover:text-orange-600 dark:hover:text-orange-400 border border-stone-300 dark:border-stone-600 shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 hover:scale-105"
               title={sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
             >
               <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
@@ -340,17 +328,17 @@ const StaffSales: React.FC<StaffSalesProps> = ({
 
             <div>
               <h1 className="text-xl font-black text-neutral-900 dark:text-white tracking-tight">Sales Analytics</h1>
-              <p className="text-xs font-medium text-neutral-600 dark:text-neutral-400">Track and analyze revenue</p>
+              <p className="text-xs font-medium text-neutral-600 dark:text-stone-400">Track and analyze revenue</p>
             </div>
           </div>
 
           <div className="flex-1 max-w-xl">
             <div className="relative group">
               <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-amber-500/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div className="relative flex items-center gap-3 bg-white dark:bg-neutral-800 rounded-xl border-2 border-stone-200 dark:border-neutral-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
+              <div className="relative flex items-center gap-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-2 border-stone-200 dark:border-stone-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
                 <FontAwesomeIcon
                   icon={faSearch}
-                  className="h-5 w-5 text-neutral-400 dark:text-neutral-500 group-focus-within:text-orange-500 transition-colors"
+                  className="h-5 w-5 text-neutral-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors"
                 />
                 <input
                   type="text"
@@ -374,9 +362,9 @@ const StaffSales: React.FC<StaffSalesProps> = ({
         {/* Period Filter with Premium Design */}
         <div className="flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-stone-100 to-stone-200 dark:from-neutral-800 dark:to-neutral-700 border border-stone-300 dark:border-neutral-600">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-stone-100 to-stone-200 dark:from-neutral-800 dark:to-neutral-700 border border-stone-300 dark:border-stone-600">
               <div className="h-2 w-2 rounded-full bg-orange-600 animate-pulse"></div>
-              <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Period</span>
+              <span className="text-xs font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Period</span>
             </div>
             
             <div className="flex gap-2">
@@ -387,7 +375,7 @@ const StaffSales: React.FC<StaffSalesProps> = ({
                   className={`group relative flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-all duration-300 overflow-hidden ${
                     selectedPeriod === filter.value
                       ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/40 scale-105'
-                      : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-orange-300 dark:hover:border-orange-700 hover:scale-105 active:scale-95'
+                      : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-orange-300 dark:hover:border-orange-700 hover:scale-105 active:scale-95'
                   }`}
                 >
                   {selectedPeriod === filter.value && (
@@ -420,8 +408,8 @@ const StaffSales: React.FC<StaffSalesProps> = ({
                   disabled={isGenerating !== null}
                   className={`group relative flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold transition-colors duration-200 overflow-hidden
                     ${isGenerating === t
-                      ? 'bg-white text-orange-600 shadow-sm scale-105 border border-orange-200'
-                      : 'bg-white/95 text-orange-700 hover:bg-white hover:shadow-sm'}
+                      ? 'bg-stone-50 text-orange-600 shadow-sm scale-105 border border-orange-200'
+                      : 'bg-stone-50/95 text-orange-700 hover:bg-stone-50 hover:shadow-sm'}
                     disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
                   <FontAwesomeIcon icon={isGenerating === t ? faSpinner : icon} className={`h-4 w-4 relative z-10 ${isGenerating === t ? 'animate-spin' : ''}`} />
@@ -443,17 +431,17 @@ const StaffSales: React.FC<StaffSalesProps> = ({
           {/* Total Transactions Card */}
           <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 p-6 shadow-xl shadow-orange-500/20 hover:shadow-2xl hover:shadow-orange-500/30 transition-all duration-500 hover:-translate-y-2">
             <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-3xl transform translate-x-8 -translate-y-8"></div>
-              <div className="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full blur-2xl transform -translate-x-4 translate-y-4"></div>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-stone-50 rounded-full blur-3xl transform translate-x-8 -translate-y-8"></div>
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-stone-50 rounded-full blur-2xl transform -translate-x-4 translate-y-4"></div>
             </div>
             
             <div className="relative z-10">
               <div className="flex items-start justify-between mb-4">
-                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm shadow-lg">
+                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-stone-50/20 backdrop-blur-sm shadow-lg">
                   <FontAwesomeIcon icon={faReceipt} className="h-7 w-7 text-white" />
                 </div>
-                <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/20 backdrop-blur-sm">
-                  <div className="h-1.5 w-1.5 rounded-full bg-white animate-pulse"></div>
+                <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-stone-50/20 backdrop-blur-sm">
+                  <div className="h-1.5 w-1.5 rounded-full bg-stone-50 animate-pulse"></div>
                   <span className="text-xs font-bold text-white">Live</span>
                 </div>
               </div>
@@ -469,16 +457,16 @@ const StaffSales: React.FC<StaffSalesProps> = ({
           {/* Total Revenue Card */}
           <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 via-green-600 to-teal-700 p-6 shadow-xl shadow-green-500/20 hover:shadow-2xl hover:shadow-green-500/30 transition-all duration-500 hover:-translate-y-2">
             <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-3xl transform translate-x-8 -translate-y-8"></div>
-              <div className="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full blur-2xl transform -translate-x-4 translate-y-4"></div>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-stone-50 rounded-full blur-3xl transform translate-x-8 -translate-y-8"></div>
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-stone-50 rounded-full blur-2xl transform -translate-x-4 translate-y-4"></div>
             </div>
             
             <div className="relative z-10">
               <div className="flex items-start justify-between mb-4">
-                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm shadow-lg">
+                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-stone-50/20 backdrop-blur-sm shadow-lg">
                   <FontAwesomeIcon icon={faMoneyBillWave} className="h-7 w-7 text-white" />
                 </div>
-                <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/20 backdrop-blur-sm">
+                <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-stone-50/20 backdrop-blur-sm">
                   <FontAwesomeIcon icon={faChartLine} className="h-3 w-3 text-white" />
                 </div>
               </div>
@@ -494,16 +482,16 @@ const StaffSales: React.FC<StaffSalesProps> = ({
           {/* Tax Collected Card */}
           <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-700 p-6 shadow-xl shadow-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/30 transition-all duration-500 hover:-translate-y-2">
             <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-3xl transform translate-x-8 -translate-y-8"></div>
-              <div className="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full blur-2xl transform -translate-x-4 translate-y-4"></div>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-stone-50 rounded-full blur-3xl transform translate-x-8 -translate-y-8"></div>
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-stone-50 rounded-full blur-2xl transform -translate-x-4 translate-y-4"></div>
             </div>
             
             <div className="relative z-10">
               <div className="flex items-start justify-between mb-4">
-                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm shadow-lg">
+                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-stone-50/20 backdrop-blur-sm shadow-lg">
                   <FontAwesomeIcon icon={faChartLine} className="h-7 w-7 text-white" />
                 </div>
-                <div className="text-xs font-bold text-white/80 px-2 py-1 rounded-lg bg-white/20 backdrop-blur-sm">
+                <div className="text-xs font-bold text-white/80 px-2 py-1 rounded-lg bg-stone-50/20 backdrop-blur-sm">
                   12% VAT
                 </div>
               </div>
@@ -518,7 +506,7 @@ const StaffSales: React.FC<StaffSalesProps> = ({
         </div>
 
         {/* Premium Sales Table */}
-        <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-white dark:bg-neutral-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-neutral-700 transition-all duration-300">
+        <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-stone-50 dark:bg-stone-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-stone-700 transition-all duration-300">
           
           {/* Table Header with Gradient */}
           <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-white via-orange-50/30 to-white dark:from-neutral-800 dark:via-orange-950/20 dark:to-neutral-800">
@@ -532,7 +520,7 @@ const StaffSales: React.FC<StaffSalesProps> = ({
                   </div>
                   <div>
                     <h3 className="text-2xl font-black text-neutral-900 dark:text-white tracking-tight">Sales Records</h3>
-                    <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mt-0.5">Complete transaction history</p>
+                    <p className="text-sm font-medium text-neutral-600 dark:text-stone-400 mt-0.5">Complete transaction history</p>
                   </div>
                 </div>
                 
@@ -541,9 +529,9 @@ const StaffSales: React.FC<StaffSalesProps> = ({
                     <div className="h-2 w-2 rounded-full bg-orange-600 animate-pulse"></div>
                     <span className="text-xs font-bold uppercase tracking-wider text-orange-700 dark:text-orange-400">Active</span>
                   </div>
-                  <div className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-600 border border-stone-300 dark:border-neutral-600">
+                  <div className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-600 border border-stone-300 dark:border-stone-600">
                     <div className="flex items-baseline gap-2">
-                      <span className="text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400">Records</span>
+                      <span className="text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-stone-400">Records</span>
                       <span className="text-2xl font-black text-neutral-900 dark:text-white">{filteredSales.length}</span>
                     </div>
                   </div>
@@ -563,7 +551,7 @@ const StaffSales: React.FC<StaffSalesProps> = ({
                     </div>
                   </div>
                   <h4 className="text-2xl font-black text-neutral-900 dark:text-white mb-3">Loading sales...</h4>
-                  <p className="text-base font-medium text-neutral-600 dark:text-neutral-400 leading-relaxed mb-6">Please wait while we retrieve sales data.</p>
+                  <p className="text-base font-medium text-neutral-600 dark:text-stone-400 leading-relaxed mb-6">Please wait while we retrieve sales data.</p>
                 </div>
               </div>
             ) : error ? (
@@ -575,45 +563,45 @@ const StaffSales: React.FC<StaffSalesProps> = ({
                     </div>
                   </div>
                   <h4 className="text-2xl font-black text-neutral-900 dark:text-white mb-3">Error loading sales</h4>
-                  <p className="text-base font-medium text-neutral-600 dark:text-neutral-400 leading-relaxed mb-6">{error}</p>
+                  <p className="text-base font-medium text-neutral-600 dark:text-stone-400 leading-relaxed mb-6">{error}</p>
                 </div>
               </div>
             ) : filteredSales.length > 0 ? (
               <table className="w-full">
                 <thead className="sticky top-0 z-10">
-                  <tr className="bg-gradient-to-r from-stone-50 via-stone-100/80 to-stone-50 dark:from-neutral-800 dark:via-neutral-750 dark:to-neutral-800 border-b-2 border-stone-300 dark:border-neutral-700 backdrop-blur-sm">
+                  <tr className="bg-gradient-to-r from-stone-50 via-stone-100/80 to-stone-50 dark:from-neutral-800 dark:via-neutral-750 dark:to-neutral-800 border-b-2 border-stone-300 dark:border-stone-700 backdrop-blur-sm">
                         <th className="px-6 py-4 text-left">
                           <div className="flex items-center gap-2">
                             <div className="h-2 w-2 rounded-full bg-gradient-to-r from-orange-500 to-orange-600"></div>
-                            <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Receipt #</span>
+                            <span className="text-xs font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Receipt #</span>
                           </div>
                         </th>
                         <th className="px-6 py-4 text-left">
-                          <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Item</span>
+                          <span className="text-xs font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Item</span>
                         </th>
                         <th className="px-6 py-4 text-left hidden sm:table-cell">
-                          <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Cashier</span>
+                          <span className="text-xs font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Cashier</span>
                         </th>
                         <th className="px-6 py-4 text-left hidden lg:table-cell">
-                          <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Branch</span>
+                          <span className="text-xs font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Branch</span>
                         </th>
                     <th className="px-6 py-4 text-left">
-                      <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Date & Time</span>
+                      <span className="text-xs font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Date & Time</span>
                     </th>
                     <th className="px-6 py-4 text-right">
-                      <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Subtotal</span>
+                      <span className="text-xs font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Subtotal</span>
                     </th>
                     <th className="px-6 py-4 text-right">
-                      <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Tax</span>
+                      <span className="text-xs font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Tax</span>
                     </th>
                     <th className="px-6 py-4 text-right">
-                      <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Discount</span>
+                      <span className="text-xs font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Discount</span>
                     </th>
                     <th className="px-6 py-4 text-right">
-                      <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Total</span>
+                      <span className="text-xs font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Total</span>
                     </th>
                     <th className="px-6 py-4 text-center">
-                      <span className="text-xs font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Status</span>
+                      <span className="text-xs font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Status</span>
                     </th>
                   </tr>
                 </thead>
@@ -621,7 +609,7 @@ const StaffSales: React.FC<StaffSalesProps> = ({
                   {filteredSales.map((record, index) => (
                     <tr
                       key={record.id ?? record.receiptNumber ?? index}
-                      className="group relative bg-white dark:bg-neutral-800 hover:bg-gradient-to-r hover:from-orange-50/50 hover:via-orange-50/30 hover:to-transparent dark:hover:from-orange-950/20 dark:hover:via-orange-950/10 dark:hover:to-transparent transition-all duration-300 cursor-pointer"
+                      className="group relative bg-stone-50 dark:bg-stone-800 hover:bg-gradient-to-r hover:from-orange-50/50 hover:via-orange-50/30 hover:to-transparent dark:hover:from-orange-950/20 dark:hover:via-orange-950/10 dark:hover:to-transparent transition-all duration-300 cursor-pointer"
                     >
                       <td className="px-6 py-5 relative">
                         <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-orange-500 to-orange-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -633,13 +621,13 @@ const StaffSales: React.FC<StaffSalesProps> = ({
                         <span className="text-sm font-bold text-neutral-900 dark:text-white">{record.menuItemName || '—'}</span>
                       </td>
                       <td className="px-6 py-5 text-left hidden sm:table-cell">
-                        <span className="text-sm text-neutral-700 dark:text-neutral-300">{record.fullName ?? record.username ?? '—'}</span>
+                        <span className="text-sm text-stone-700 dark:text-stone-300">{record.fullName ?? record.username ?? '—'}</span>
                       </td>
                       <td className="px-6 py-5 text-left hidden lg:table-cell">
-                        <span className="text-sm text-neutral-700 dark:text-neutral-300">{record.branchName ?? '—'}</span>
+                        <span className="text-sm text-stone-700 dark:text-stone-300">{record.branchName ?? '—'}</span>
                       </td>
                       <td className="px-6 py-5">
-                        <span className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">{formatDate(record.dateTime)}</span>
+                        <span className="text-sm font-semibold text-stone-700 dark:text-stone-300">{formatDate(record.dateTime)}</span>
                       </td>
                       <td className="px-6 py-5 text-right">
                         <span className="text-sm font-bold text-neutral-900 dark:text-white tabular-nums">
@@ -673,8 +661,8 @@ const StaffSales: React.FC<StaffSalesProps> = ({
                             record.status === 'Completed'
                               ? 'bg-white'
                               : record.status === 'Pending'
-                              ? 'bg-white animate-pulse'
-                              : 'bg-white/70'
+                              ? 'bg-stone-50 animate-pulse'
+                              : 'bg-stone-50/70'
                           }`}></div>
                           {record.status || 'Pending'}
                         </span>
@@ -698,7 +686,7 @@ const StaffSales: React.FC<StaffSalesProps> = ({
                   <h4 className="text-2xl font-black text-neutral-900 dark:text-white mb-3">
                     No Sales Found
                   </h4>
-                  <p className="text-base font-medium text-neutral-600 dark:text-neutral-400 leading-relaxed mb-6">
+                  <p className="text-base font-medium text-neutral-600 dark:text-stone-400 leading-relaxed mb-6">
                     We couldn't find any sales matching your current filters. Try adjusting your search criteria or date range.
                   </p>
                   

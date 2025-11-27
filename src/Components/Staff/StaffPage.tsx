@@ -151,16 +151,16 @@ const StaffPage: React.FC = () => {
         <StaffSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
 
         {/* Main Content */}
-        <div className={`flex h-screen flex-1 flex-col bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
+        <div className={`flex h-screen flex-1 flex-col bg-stone-50/90 dark:bg-stone-900/95 backdrop-blur-xl transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
           {/* Top Bar - Minimal Header */}
-          <div className="sticky top-0 z-20 border-b border-orange-200/50 dark:border-neutral-700/50 bg-white/90 dark:bg-neutral-800/90 px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 transition-all duration-300 backdrop-blur-xl shadow-sm shadow-orange-500/5">
+          <div className="sticky top-0 z-20 border-b border-orange-200/50 dark:border-stone-700/50 bg-stone-50/90 dark:bg-stone-800/90 px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 transition-all duration-300 backdrop-blur-xl shadow-sm shadow-orange-500/5">
             <div className="flex items-center justify-between gap-3">
               {/* Left: Controls & Title */}
               <div className="flex items-center gap-2 flex-1 min-w-0">
                 {/* Hamburger - Mobile Only */}
                 <button
                   onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className="lg:hidden flex-shrink-0 h-9 w-9 flex items-center justify-center rounded-lg border border-orange-200 dark:border-neutral-700 bg-gradient-to-br from-orange-50 to-amber-50 dark:bg-neutral-700 hover:from-orange-100 hover:to-amber-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95 shadow-sm shadow-orange-500/10"
+                  className="lg:hidden flex-shrink-0 h-9 w-9 flex items-center justify-center rounded-lg border border-orange-200 dark:border-stone-700 bg-gradient-to-br from-orange-50 to-amber-50 dark:bg-stone-700 hover:from-orange-100 hover:to-amber-100 dark:hover:bg-stone-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95 shadow-sm shadow-orange-500/10"
                 >
                   <FontAwesomeIcon icon={faBars} className="h-4 w-4" />
                 </button>
@@ -168,13 +168,13 @@ const StaffPage: React.FC = () => {
                 {/* Sidebar Toggle - Desktop Only */}
                 <button
                   onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                  className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-orange-200 dark:border-neutral-700 bg-gradient-to-br from-orange-50 to-amber-50 dark:bg-neutral-700 hover:from-orange-100 hover:to-amber-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95 shadow-sm shadow-orange-500/10"
+                  className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-orange-200 dark:border-stone-700 bg-gradient-to-br from-orange-50 to-amber-50 dark:bg-stone-700 hover:from-orange-100 hover:to-amber-100 dark:hover:bg-stone-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95 shadow-sm shadow-orange-500/10"
                 >
                   <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                 </button>
 
                 {/* Title */}
-                <h1 className="text-base sm:text-lg md:text-xl font-bold text-neutral-900 dark:text-stone-100 truncate">Staff Portal</h1>
+                <h1 className="text-base sm:text-lg md:text-xl font-bold text-stone-900 dark:text-stone-100 truncate">Staff Portal</h1>
               </div>
 
               {/* Right: Logout Panel */}
@@ -199,18 +199,18 @@ const StaffPage: React.FC = () => {
                   
                   {/* Enhanced Floating Particles Effect */}
                   <div className="absolute inset-0 overflow-hidden">
-                    <div className="absolute top-10 left-10 w-2 h-2 bg-white/40 rounded-full animate-ping"></div>
-                    <div className="absolute top-20 right-20 w-3 h-3 bg-white/30 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
-                    <div className="absolute bottom-10 left-1/3 w-2 h-2 bg-white/40 rounded-full animate-ping" style={{ animationDelay: '2s' }}></div>
+                    <div className="absolute top-10 left-10 w-2 h-2 bg-stone-50/40 rounded-full animate-ping"></div>
+                    <div className="absolute top-20 right-20 w-3 h-3 bg-stone-50/30 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
+                    <div className="absolute bottom-10 left-1/3 w-2 h-2 bg-stone-50/40 rounded-full animate-ping" style={{ animationDelay: '2s' }}></div>
                     <div className="absolute top-1/2 right-1/4 w-2 h-2 bg-yellow-300/50 rounded-full animate-bounce" style={{ animationDuration: '3s' }}></div>
-                    <div className="absolute bottom-1/3 left-1/4 w-3 h-3 bg-white/30 rounded-full animate-bounce" style={{ animationDuration: '4s', animationDelay: '0.5s' }}></div>
+                    <div className="absolute bottom-1/3 left-1/4 w-3 h-3 bg-stone-50/30 rounded-full animate-bounce" style={{ animationDuration: '4s', animationDelay: '0.5s' }}></div>
                     <div className="absolute top-1/3 left-2/3 w-2 h-2 bg-orange-200/40 rounded-full animate-pulse" style={{ animationDuration: '2s', animationDelay: '1s' }}></div>
                   </div>
                   
                   <div className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-14 lg:gap-20">
                     <div className="flex-1">
                       <div className="flex items-start gap-8 mb-10">
-                        <div className="w-28 h-28 bg-white/25 backdrop-blur-md rounded-3xl flex items-center justify-center border-2 border-white/50 shadow-2xl group-hover:scale-110 group-hover:rotate-2 transition-all duration-300 flex-shrink-0">
+                        <div className="w-28 h-28 bg-stone-50/25 backdrop-blur-md rounded-3xl flex items-center justify-center border-2 border-white/50 shadow-2xl group-hover:scale-110 group-hover:rotate-2 transition-all duration-300 flex-shrink-0">
                           <FontAwesomeIcon icon={faWarehouse} className="text-6xl text-white drop-shadow-lg" />
                         </div>
                         <div className="flex-1">
@@ -227,7 +227,7 @@ const StaffPage: React.FC = () => {
                         Welcome to your workspace. Ready to manage suppliers, items, and inventory efficiently.
                       </p>
                     </div>
-                    <div className="w-full lg:w-auto bg-white/20 backdrop-blur-lg rounded-2xl px-10 py-8 border-2 border-white/40 shadow-2xl group-hover:scale-110 group-hover:shadow-3xl transition-all duration-300">
+                    <div className="w-full lg:w-auto bg-stone-50/20 backdrop-blur-lg rounded-2xl px-10 py-8 border-2 border-white/40 shadow-2xl group-hover:scale-110 group-hover:shadow-3xl transition-all duration-300">
                       <p className="text-white/90 text-sm font-black uppercase tracking-widest mb-5">📅 Today's Date</p>
                       <p className="text-white text-5xl font-black drop-shadow-lg leading-none mb-3">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
                       <p className="text-white/95 text-xl font-bold drop-shadow-lg">{new Date().toLocaleDateString('en-US', { year: 'numeric' })}</p>
@@ -244,12 +244,12 @@ const StaffPage: React.FC = () => {
                       <h3 className="text-3xl font-black bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 dark:from-orange-400 dark:via-amber-400 dark:to-orange-500 bg-clip-text text-transparent tracking-tight mb-1">
                         {dateRange === '7d' ? "Today's Overview" : "Sales Overview"}
                       </h3>
-                      <p className="text-sm text-neutral-600 dark:text-neutral-400 font-bold flex items-center gap-2">
+                      <p className="text-sm text-neutral-600 dark:text-stone-400 font-bold flex items-center gap-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse"></span>
                         Sales data for selected period
                       </p>
                     </div>
-                    <div className="flex items-center gap-3 bg-gradient-to-r from-white via-neutral-50 to-white dark:from-neutral-800 dark:via-neutral-700 dark:to-neutral-800 rounded-2xl p-2 border-2 border-neutral-200/60 dark:border-neutral-600/60 shadow-lg backdrop-blur-sm">
+                    <div className="flex items-center gap-3 bg-gradient-to-r from-white via-neutral-50 to-white dark:from-neutral-800 dark:via-neutral-700 dark:to-neutral-800 rounded-2xl p-2 border-2 border-neutral-200/60 dark:border-stone-600/60 shadow-lg backdrop-blur-sm">
                       {(['1d', '7d', '30d'] as const).map((range) => (
                         <button
                           key={range}
@@ -257,7 +257,7 @@ const StaffPage: React.FC = () => {
                           className={`relative px-5 py-2.5 rounded-xl text-sm font-black transition-all duration-300 ${
                             dateRange === range
                               ? 'bg-gradient-to-r from-orange-500 to-amber-600 text-white shadow-xl shadow-orange-500/30 scale-105'
-                              : 'text-neutral-600 dark:text-neutral-300 hover:bg-white dark:hover:bg-neutral-600 hover:scale-105 active:scale-95'
+                              : 'text-neutral-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-600 hover:scale-105 active:scale-95'
                           }`}
                         >
                           {dateRange === range && <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent rounded-xl"></div>}
@@ -271,7 +271,7 @@ const StaffPage: React.FC = () => {
                           className={`relative px-5 py-2.5 rounded-xl text-sm font-black transition-all duration-300 flex items-center gap-2.5 ${
                             dateRange === 'custom'
                               ? 'bg-gradient-to-r from-orange-500 to-amber-600 text-white shadow-xl shadow-orange-500/30 scale-105'
-                              : 'text-neutral-600 dark:text-neutral-300 hover:bg-white dark:hover:bg-neutral-600 hover:scale-105 active:scale-95'
+                              : 'text-neutral-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-600 hover:scale-105 active:scale-95'
                           }`}
                         >
                           {dateRange === 'custom' && <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent rounded-xl"></div>}
@@ -281,7 +281,7 @@ const StaffPage: React.FC = () => {
 
                         {/* Calendar Picker Dropdown */}
                         {showCalendar && (
-                          <div className="absolute top-full right-0 mt-3 bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-800 dark:to-neutral-900 rounded-2xl shadow-2xl p-6 z-50 border-2 border-neutral-200/60 dark:border-neutral-700/60 w-96 backdrop-blur-xl">
+                          <div className="absolute top-full right-0 mt-3 bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-800 dark:to-neutral-900 rounded-2xl shadow-2xl p-6 z-50 border-2 border-neutral-200/60 dark:border-stone-700/60 w-96 backdrop-blur-xl">
                             <div className="flex items-center justify-between mb-6">
                               <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-600 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/30">
@@ -291,7 +291,7 @@ const StaffPage: React.FC = () => {
                               </div>
                               <button
                                 onClick={() => setShowCalendar(false)}
-                                className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 text-neutral-600 dark:text-neutral-300 hover:text-red-600 dark:hover:text-red-400 transition-all duration-300 hover:scale-110 active:scale-95"
+                                className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 text-neutral-600 dark:text-stone-300 hover:text-red-600 dark:hover:text-red-400 transition-all duration-300 hover:scale-110 active:scale-95"
                               >
                                 <FontAwesomeIcon icon={faX} className="h-4 w-4" />
                               </button>
@@ -299,7 +299,7 @@ const StaffPage: React.FC = () => {
 
                             <div className="space-y-4 mb-6">
                               <div>
-                                <label className="text-xs font-black uppercase tracking-widest text-neutral-600 dark:text-neutral-400 block mb-3 flex items-center gap-2">
+                                <label className="text-xs font-black uppercase tracking-widest text-neutral-600 dark:text-stone-400 block mb-3 flex items-center gap-2">
                                   <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
                                   From Date
                                 </label>
@@ -307,11 +307,11 @@ const StaffPage: React.FC = () => {
                                   type="date"
                                   value={customStartDate}
                                   onChange={(e) => setCustomStartDate(e.target.value)}
-                                  className="w-full px-4 py-3 rounded-xl border-2 border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white text-sm font-bold focus:border-orange-500 dark:focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300"
+                                  className="w-full px-4 py-3 rounded-xl border-2 border-neutral-300 dark:border-stone-600 bg-stone-50 dark:bg-stone-700 text-neutral-900 dark:text-white text-sm font-bold focus:border-orange-500 dark:focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300"
                                 />
                               </div>
                               <div>
-                                <label className="text-xs font-black uppercase tracking-widest text-neutral-600 dark:text-neutral-400 block mb-3 flex items-center gap-2">
+                                <label className="text-xs font-black uppercase tracking-widest text-neutral-600 dark:text-stone-400 block mb-3 flex items-center gap-2">
                                   <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
                                   To Date
                                 </label>
@@ -319,12 +319,12 @@ const StaffPage: React.FC = () => {
                                   type="date"
                                   value={customEndDate}
                                   onChange={(e) => setCustomEndDate(e.target.value)}
-                                  className="w-full px-4 py-3 rounded-xl border-2 border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white text-sm font-bold focus:border-orange-500 dark:focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300"
+                                  className="w-full px-4 py-3 rounded-xl border-2 border-neutral-300 dark:border-stone-600 bg-stone-50 dark:bg-stone-700 text-neutral-900 dark:text-white text-sm font-bold focus:border-orange-500 dark:focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300"
                                 />
                               </div>
                             </div>
 
-                            <div className="flex gap-3 pt-4 border-t-2 border-neutral-200 dark:border-neutral-700">
+                            <div className="flex gap-3 pt-4 border-t-2 border-neutral-200 dark:border-stone-700">
                               <button
                                 onClick={() => {
                                   setDateRange('custom');
@@ -337,7 +337,7 @@ const StaffPage: React.FC = () => {
                               </button>
                               <button
                                 onClick={() => setShowCalendar(false)}
-                                className="flex-1 px-4 py-3 rounded-xl border-2 border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 font-black text-sm hover:bg-neutral-100 dark:hover:bg-neutral-700 hover:scale-105 active:scale-95 transition-all duration-300"
+                                className="flex-1 px-4 py-3 rounded-xl border-2 border-neutral-300 dark:border-stone-600 text-stone-700 dark:text-stone-300 font-black text-sm hover:bg-stone-100 dark:hover:bg-stone-700 hover:scale-105 active:scale-95 transition-all duration-300"
                               >
                                 Cancel
                               </button>
@@ -350,8 +350,8 @@ const StaffPage: React.FC = () => {
                 </div>
                 <div className="grid grid-cols-1 gap-6">
                   {loading ? (
-                    <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 border border-neutral-200 dark:border-neutral-700">
-                      <p className="text-center text-neutral-600 dark:text-neutral-400">Loading sales data...</p>
+                    <div className="bg-stone-50 dark:bg-stone-800 rounded-2xl p-6 border border-neutral-200 dark:border-stone-700">
+                      <p className="text-center text-neutral-600 dark:text-stone-400">Loading sales data...</p>
                     </div>
                   ) : error ? (
                     <div className="bg-red-50 dark:bg-red-900/20 rounded-2xl p-6 border border-red-200 dark:border-red-800">
@@ -367,7 +367,7 @@ const StaffPage: React.FC = () => {
                       return (
                       <div
                         key={index}
-                        className="group relative bg-gradient-to-br from-white via-white to-neutral-50/50 dark:from-neutral-800 dark:via-neutral-800 dark:to-neutral-900/50 rounded-3xl p-8 border-2 border-neutral-200/80 dark:border-neutral-700/80 hover:border-orange-400/60 dark:hover:border-orange-500/60 shadow-xl hover:shadow-2xl hover:shadow-orange-500/10 transition-all duration-500 backdrop-blur-sm"
+                        className="group relative bg-gradient-to-br from-white via-white to-neutral-50/50 dark:from-neutral-800 dark:via-neutral-800 dark:to-neutral-900/50 rounded-3xl p-8 border-2 border-neutral-200/80 dark:border-stone-700/80 hover:border-orange-400/60 dark:hover:border-orange-500/60 shadow-xl hover:shadow-2xl hover:shadow-orange-500/10 transition-all duration-500 backdrop-blur-sm"
                       >
                         <div className="flex items-start justify-between mb-8">
                         <div className="relative">
@@ -389,7 +389,7 @@ const StaffPage: React.FC = () => {
                       </div>
                       
                       <div className="mb-8">
-                        <p className="text-xs font-black uppercase tracking-widest text-neutral-600 dark:text-neutral-400 mb-3 flex items-center gap-2">
+                        <p className="text-xs font-black uppercase tracking-widest text-neutral-600 dark:text-stone-400 mb-3 flex items-center gap-2">
                           <span className="w-2 h-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 shadow-lg shadow-orange-500/50"></span>
                           {stat.title}
                         </p>
@@ -415,10 +415,10 @@ const StaffPage: React.FC = () => {
                             </div>
                             <div>
                               <p className="text-xl font-black bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 dark:from-orange-400 dark:via-amber-400 dark:to-orange-500 bg-clip-text text-transparent mb-1">Revenue Trend Analysis</p>
-                              <p className="text-xs text-neutral-600 dark:text-neutral-400 font-bold">Interactive sales performance visualization</p>
+                              <p className="text-xs text-neutral-600 dark:text-stone-400 font-bold">Interactive sales performance visualization</p>
                             </div>
                           </div>
-                          <div className="flex items-center gap-4 bg-gradient-to-r from-white via-neutral-50 to-white dark:from-neutral-800 dark:via-neutral-700 dark:to-neutral-800 px-6 py-3 rounded-2xl border-2 border-neutral-200/60 dark:border-neutral-600/60 shadow-xl backdrop-blur-sm">
+                          <div className="flex items-center gap-4 bg-gradient-to-r from-white via-neutral-50 to-white dark:from-neutral-800 dark:via-neutral-700 dark:to-neutral-800 px-6 py-3 rounded-2xl border-2 border-neutral-200/60 dark:border-stone-600/60 shadow-xl backdrop-blur-sm">
                             <div className="flex items-center gap-2.5">
                               <div className="relative">
                                 <div className="absolute inset-0 bg-green-500 rounded-full blur-sm opacity-50"></div>
@@ -436,7 +436,7 @@ const StaffPage: React.FC = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="relative h-[28rem] bg-gradient-to-br from-orange-50/50 via-amber-50/30 to-white dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900 rounded-3xl p-10 overflow-hidden border-2 border-orange-200/60 dark:border-neutral-700/60 shadow-2xl shadow-orange-500/10">
+                        <div className="relative h-[28rem] bg-gradient-to-br from-orange-50/50 via-amber-50/30 to-white dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900 rounded-3xl p-10 overflow-hidden border-2 border-orange-200/60 dark:border-stone-700/60 shadow-2xl shadow-orange-500/10">
                           {/* Enhanced Ambient Effects */}
                           <div className="absolute inset-0 rounded-3xl overflow-hidden">
                             <div className="absolute inset-0 bg-gradient-to-br from-orange-500/8 via-amber-500/8 to-orange-500/8 pointer-events-none"></div>
@@ -453,11 +453,11 @@ const StaffPage: React.FC = () => {
                               return (
                                 <div key={i} className="absolute w-full flex items-center transition-all duration-300" style={{ top: `${i * 20}%`, left: 0 }}>
                                   <div className="flex items-center gap-3 w-24 justify-end pr-4">
-                                    <span className="text-xs font-black text-neutral-700 dark:text-neutral-300 bg-gradient-to-r from-white to-neutral-50 dark:from-neutral-800 dark:to-neutral-700 px-3 py-1.5 rounded-lg shadow-md border border-neutral-200/50 dark:border-neutral-600/50">
+                                    <span className="text-xs font-black text-stone-700 dark:text-stone-300 bg-gradient-to-r from-white to-neutral-50 dark:from-neutral-800 dark:to-neutral-700 px-3 py-1.5 rounded-lg shadow-md border border-neutral-200/50 dark:border-stone-600/50">
                                       ₱{Math.round(value).toLocaleString()}
                                     </span>
                                   </div>
-                                  <div className="flex-1 border-t border-dashed border-neutral-300/60 dark:border-neutral-600/60 mr-8 relative">
+                                  <div className="flex-1 border-t border-dashed border-neutral-300/60 dark:border-stone-600/60 mr-8 relative">
                                     <div className="absolute inset-0 border-t border-neutral-200/40 dark:border-neutral-500/40 translate-y-[1px]"></div>
                                   </div>
                                 </div>
@@ -650,7 +650,7 @@ const StaffPage: React.FC = () => {
                                       }`} style={{ width: '22px', height: '22px', left: '-3px', top: '-3px' }}></div>
                                       
                                       {/* Main Enhanced Point */}
-                                      <div className={`relative w-5 h-5 rounded-full border-[3px] bg-white dark:bg-neutral-800 shadow-2xl cursor-pointer transition-all duration-700 group-hover/point:w-8 group-hover/point:h-8 group-hover/point:border-[5px] group-hover/point:shadow-3xl ${
+                                      <div className={`relative w-5 h-5 rounded-full border-[3px] bg-stone-50 dark:bg-stone-800 shadow-2xl cursor-pointer transition-all duration-700 group-hover/point:w-8 group-hover/point:h-8 group-hover/point:border-[5px] group-hover/point:shadow-3xl ${
                                         i === 0 ? 'border-orange-500' : isIncrease ? 'border-green-500' : 'border-red-500'
                                       }`}>
                                         {/* Multi-layer Inner Gradient */}
@@ -680,13 +680,13 @@ const StaffPage: React.FC = () => {
                                           
                                           <div className="relative">
                                             <p className="text-xs font-black text-white/95 mb-3 uppercase tracking-widest flex items-center gap-2">
-                                              <span className="w-1.5 h-1.5 rounded-full bg-white/80 animate-pulse"></span>
+                                              <span className="w-1.5 h-1.5 rounded-full bg-stone-50/80 animate-pulse"></span>
                                               {dateLabel}
                                             </p>
                                             <p className="text-3xl font-black text-white drop-shadow-2xl mb-3">₱{currentValue.toLocaleString()}</p>
                                             {i > 0 && (
                                               <div className="flex items-center justify-center gap-3 pt-3 border-t border-white/40">
-                                                <div className={`p-2 rounded-xl ${isIncrease ? 'bg-white/25' : 'bg-white/25'} backdrop-blur-sm`}>
+                                                <div className={`p-2 rounded-xl ${isIncrease ? 'bg-stone-50/25' : 'bg-stone-50/25'} backdrop-blur-sm`}>
                                                   <FontAwesomeIcon 
                                                     icon={isIncrease ? faArrowUp : faArrowDown} 
                                                     className="h-5 w-5 text-white drop-shadow-lg"
@@ -701,7 +701,7 @@ const StaffPage: React.FC = () => {
                                             {i === 0 && (
                                               <div className="pt-3 border-t border-white/40">
                                                 <p className="text-xs font-black text-white/90 uppercase tracking-wider flex items-center gap-2">
-                                                  <span className="w-2 h-2 rounded-full bg-white/80"></span>
+                                                  <span className="w-2 h-2 rounded-full bg-stone-50/80"></span>
                                                   Starting Point
                                                 </p>
                                               </div>
@@ -797,15 +797,15 @@ const StaffPage: React.FC = () => {
                         </div>
                       </div>
 
-                      <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                      <p className="text-xs text-neutral-500 dark:text-stone-400">
                         {dateRange === '7d' ? 'Last 7 days' : dateRange === '1d' ? 'Last 24 hours' : dateRange === '30d' ? 'Last 30 days' : 'Custom period'} • {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                       </p>
                       </div>
                     );
                   })
                   ) : (
-                    <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 border border-neutral-200 dark:border-neutral-700">
-                      <p className="text-center text-neutral-600 dark:text-neutral-400">No sales data available for the selected period.</p>
+                    <div className="bg-stone-50 dark:bg-stone-800 rounded-2xl p-6 border border-neutral-200 dark:border-stone-700">
+                      <p className="text-center text-neutral-600 dark:text-stone-400">No sales data available for the selected period.</p>
                     </div>
                   )}
                 </div>

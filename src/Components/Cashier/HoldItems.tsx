@@ -243,16 +243,16 @@ const HoldItems: React.FC = () => {
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
 
         {/* Main Content */}
-        <div className={`flex h-screen flex-1 flex-col bg-white dark:bg-neutral-900 transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
+        <div className={`flex h-screen flex-1 flex-col bg-stone-50 dark:bg-stone-900 transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
           {/* Top Bar */}
-          <div className="sticky top-0 z-20 border-b border-stone-200 dark:border-neutral-700 bg-white/95 dark:bg-neutral-800/95 px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 transition-all duration-300 backdrop-blur-sm">
+          <div className="sticky top-0 z-20 border-b border-stone-200 dark:border-stone-700 bg-stone-50/90 dark:bg-stone-800/90 px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 transition-all duration-300 backdrop-blur-sm">
             <div className="flex items-center justify-between gap-3">
               {/* Left: Controls & Title */}
               <div className="flex items-center gap-2 sm:gap-2.5 flex-1 min-w-0">
                 {/* Hamburger - Mobile Only */}
                 <button
                   onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className="lg:hidden flex-shrink-0 h-9 w-9 flex items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
+                  className="lg:hidden flex-shrink-0 h-9 w-9 flex items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-700 hover:bg-stone-100 dark:hover:bg-stone-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                 >
                   <FontAwesomeIcon icon={faBars} className="h-4 w-4" />
                 </button>
@@ -260,13 +260,13 @@ const HoldItems: React.FC = () => {
                 {/* Sidebar Toggle - Desktop Only */}
                 <button
                   onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                  className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
+                  className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-700 hover:bg-stone-100 dark:hover:bg-stone-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                 >
                   <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                 </button>
 
                 {/* Title */}
-                <h1 className="text-base sm:text-lg md:text-xl font-bold text-neutral-900 dark:text-stone-100 truncate">Hold Items</h1>
+                <h1 className="text-base sm:text-lg md:text-xl font-bold text-stone-900 dark:text-stone-100 truncate">Hold Items</h1>
               </div>
 
               {/* Right: Logout Panel */}
@@ -279,16 +279,16 @@ const HoldItems: React.FC = () => {
             <div className="w-full px-4 sm:px-6 md:px-8 py-6 sm:py-8">
               {/* Header Section */}
               <div className="mb-6">
-                <div className="bg-white dark:bg-neutral-800 border-l-4 border-yellow-500 rounded-lg p-6 sm:p-8">
+                <div className="bg-stone-50 dark:bg-stone-800 border-l-4 border-yellow-500 rounded-lg p-6 sm:p-8">
                   <div className="flex items-center gap-4">
                     <div className="w-14 h-14 bg-yellow-100 dark:bg-yellow-900/30 rounded-xl flex items-center justify-center">
                       <FontAwesomeIcon icon={faPause} className="text-3xl text-yellow-600 dark:text-yellow-400" />
                     </div>
                     <div className="flex-1">
-                      <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-stone-100 mb-1">
+                      <h2 className="text-2xl sm:text-3xl font-bold text-stone-900 dark:text-stone-100 mb-1">
                         Hold Items
                       </h2>
-                      <p className="text-neutral-600 dark:text-neutral-400 text-sm font-medium">
+                      <p className="text-neutral-600 dark:text-stone-400 text-sm font-medium">
                         Manage temporarily held orders - Resume or remove items
                       </p>
                     </div>
@@ -308,7 +308,7 @@ const HoldItems: React.FC = () => {
                     placeholder="Search by item name, hold ID, or menu item ID..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-11 pr-4 py-3 bg-white dark:bg-neutral-800 border-2 border-stone-200 dark:border-neutral-700 rounded-xl text-neutral-900 dark:text-stone-100 placeholder-neutral-400 focus:outline-none focus:border-yellow-500 dark:focus:border-yellow-500 transition-colors duration-200"
+                    className="w-full pl-11 pr-4 py-3 bg-stone-50 dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:border-yellow-500 dark:focus:border-yellow-500 transition-colors duration-200"
                   />
                 </div>
 
@@ -320,7 +320,7 @@ const HoldItems: React.FC = () => {
                   <select
                     value={categoryFilter}
                     onChange={(e) => setCategoryFilter(e.target.value)}
-                    className="w-full pl-11 pr-4 py-3 bg-white dark:bg-neutral-800 border-2 border-stone-200 dark:border-neutral-700 rounded-xl text-neutral-900 dark:text-stone-100 focus:outline-none focus:border-yellow-500 dark:focus:border-yellow-500 transition-colors duration-200 appearance-none cursor-pointer"
+                    className="w-full pl-11 pr-4 py-3 bg-stone-50 dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl text-stone-900 dark:text-stone-100 focus:outline-none focus:border-yellow-500 dark:focus:border-yellow-500 transition-colors duration-200 appearance-none cursor-pointer"
                   >
                     {categories.map((category) => (
                       <option key={category} value={category}>
@@ -332,38 +332,38 @@ const HoldItems: React.FC = () => {
               </div>
 
               {/* Results Count */}
-              <div className="mb-4 text-sm text-neutral-600 dark:text-neutral-400">
+              <div className="mb-4 text-sm text-neutral-600 dark:text-stone-400">
                 Showing <span className="font-bold text-yellow-600 dark:text-yellow-400">{filteredHoldItems.length}</span> of {holdItems.length} hold items
               </div>
 
               {/* Hold Items List */}
               <div className="space-y-4">
                 {loading ? (
-                  <div className="bg-white dark:bg-neutral-800 rounded-2xl p-12 text-center border border-stone-200 dark:border-neutral-700">
+                  <div className="bg-stone-50 dark:bg-stone-800 rounded-2xl p-12 text-center border border-stone-200 dark:border-stone-700">
                     <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-yellow-600 border-r-transparent mb-4"></div>
-                    <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Loading hold transactions...</p>
+                    <p className="text-sm font-medium text-neutral-600 dark:text-stone-400">Loading hold transactions...</p>
                   </div>
                 ) : error ? (
-                  <div className="bg-white dark:bg-neutral-800 rounded-2xl p-12 text-center border border-red-200 dark:border-red-800">
+                  <div className="bg-stone-50 dark:bg-stone-800 rounded-2xl p-12 text-center border border-red-200 dark:border-red-800">
                     <div className="w-20 h-20 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                       <FontAwesomeIcon icon={faPause} className="text-4xl text-red-500" />
                     </div>
                     <h3 className="text-xl font-bold text-red-600 dark:text-red-400 mb-2">Failed to load hold items</h3>
-                    <p className="text-neutral-600 dark:text-neutral-400">{error}</p>
+                    <p className="text-neutral-600 dark:text-stone-400">{error}</p>
                   </div>
                 ) : filteredHoldItems.length === 0 ? (
-                  <div className="bg-white dark:bg-neutral-800 rounded-2xl p-12 text-center border border-stone-200 dark:border-neutral-700">
+                  <div className="bg-stone-50 dark:bg-stone-800 rounded-2xl p-12 text-center border border-stone-200 dark:border-stone-700">
                     <div className="w-20 h-20 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                       <FontAwesomeIcon icon={faPause} className="text-4xl text-yellow-500" />
                     </div>
-                    <h3 className="text-xl font-bold text-neutral-900 dark:text-stone-100 mb-2">No hold items found</h3>
-                    <p className="text-neutral-600 dark:text-neutral-400">Try adjusting your search or filter criteria</p>
+                    <h3 className="text-xl font-bold text-stone-900 dark:text-stone-100 mb-2">No hold items found</h3>
+                    <p className="text-neutral-600 dark:text-stone-400">Try adjusting your search or filter criteria</p>
                   </div>
                 ) : (
                   filteredHoldItems.map((item) => (
                     <div
                       key={item.id}
-                      className="bg-white dark:bg-neutral-800 rounded-2xl p-6 border border-stone-200 dark:border-neutral-700 hover:border-yellow-300 dark:hover:border-yellow-700 transition-all duration-300"
+                      className="bg-stone-50 dark:bg-stone-800 rounded-2xl p-6 border border-stone-200 dark:border-stone-700 hover:border-yellow-300 dark:hover:border-yellow-700 transition-all duration-300"
                     >
                       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
                         {/* Left: Item Info */}
@@ -373,10 +373,10 @@ const HoldItems: React.FC = () => {
                               <FontAwesomeIcon icon={faBoxOpen} className="text-yellow-600 dark:text-yellow-400 text-xl" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h3 className="text-lg font-bold text-neutral-900 dark:text-stone-100 mb-1 truncate">
+                              <h3 className="text-lg font-bold text-stone-900 dark:text-stone-100 mb-1 truncate">
                                 {item.menuItemName}
                               </h3>
-                              <div className="flex flex-wrap items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
+                              <div className="flex flex-wrap items-center gap-2 text-sm text-neutral-600 dark:text-stone-400">
                                 <span className="flex items-center gap-1">
                                   <FontAwesomeIcon icon={faHashtag} className="text-xs" />
                                   Hold ID: {item.id}
@@ -402,34 +402,34 @@ const HoldItems: React.FC = () => {
                         <div className="lg:col-span-4 grid grid-cols-2 gap-4">
                           {/* Quantity */}
                           <div>
-                            <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1 font-semibold">Quantity</p>
-                            <p className="text-base font-bold text-neutral-900 dark:text-stone-100">
+                            <p className="text-xs text-neutral-500 dark:text-stone-400 uppercase tracking-wide mb-1 font-semibold">Quantity</p>
+                            <p className="text-base font-bold text-stone-900 dark:text-stone-100">
                               {item.quantity} {item.quantity > 1 ? 'items' : 'item'}
                             </p>
                           </div>
 
                           {/* Discount */}
                           <div>
-                            <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1 font-semibold flex items-center gap-1">
+                            <p className="text-xs text-neutral-500 dark:text-stone-400 uppercase tracking-wide mb-1 font-semibold flex items-center gap-1">
                               <FontAwesomeIcon icon={faPercentage} className="text-xs" />
                               Discount
                             </p>
-                            <p className="text-base font-bold text-neutral-900 dark:text-stone-100">
+                            <p className="text-base font-bold text-stone-900 dark:text-stone-100">
                               {item.discountPercent}%
                             </p>
                           </div>
 
                           {/* Tax */}
                           <div>
-                            <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1 font-semibold">Tax</p>
-                            <p className="text-base font-bold text-neutral-900 dark:text-stone-100">
+                            <p className="text-xs text-neutral-500 dark:text-stone-400 uppercase tracking-wide mb-1 font-semibold">Tax</p>
+                            <p className="text-base font-bold text-stone-900 dark:text-stone-100">
                               {item.tax}%
                             </p>
                           </div>
 
                           {/* Payment Method */}
                           <div>
-                            <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1 font-semibold flex items-center gap-1">
+                            <p className="text-xs text-neutral-500 dark:text-stone-400 uppercase tracking-wide mb-1 font-semibold flex items-center gap-1">
                               <FontAwesomeIcon icon={faCreditCard} className="text-xs" />
                               Payment
                             </p>
@@ -442,11 +442,11 @@ const HoldItems: React.FC = () => {
                         {/* Right: Amount & Actions */}
                         <div className="lg:col-span-3 flex flex-col items-end justify-between">
                           <div className="text-right mb-4">
-                            <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1 font-semibold">Total Amount</p>
+                            <p className="text-xs text-neutral-500 dark:text-stone-400 uppercase tracking-wide mb-1 font-semibold">Total Amount</p>
                             <p className="text-2xl font-black text-yellow-600 dark:text-yellow-400">
                               ₱{item.totalAmount.toFixed(2)}
                             </p>
-                            <div className="flex items-center justify-end gap-1 text-xs text-neutral-500 dark:text-neutral-400 mt-2">
+                            <div className="flex items-center justify-end gap-1 text-xs text-neutral-500 dark:text-stone-400 mt-2">
                               <FontAwesomeIcon icon={faCalendar} />
                               <span>{item.holdDate}</span>
                             </div>
@@ -472,9 +472,9 @@ const HoldItems: React.FC = () => {
                       </div>
 
                       {/* Additional Info Bar */}
-                      <div className="mt-4 pt-4 border-t border-stone-200 dark:border-neutral-700">
-                        <div className="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400">
-                          <span>Menu Item ID: <span className="font-semibold text-neutral-700 dark:text-neutral-300">{item.menuItemId}</span></span>
+                      <div className="mt-4 pt-4 border-t border-stone-200 dark:border-stone-700">
+                        <div className="flex items-center justify-between text-xs text-neutral-500 dark:text-stone-400">
+                          <span>Menu Item ID: <span className="font-semibold text-stone-700 dark:text-stone-300">{item.menuItemId}</span></span>
                         </div>
                       </div>
                     </div>

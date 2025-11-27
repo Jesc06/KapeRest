@@ -239,7 +239,7 @@ const SupplierList: React.FC = () => {
 
         <div className={`flex h-screen flex-1 flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
           {/* Premium Header */}
-          <div className="sticky top-0 z-20 backdrop-blur-xl bg-white/80 dark:bg-neutral-900/80 border-b border-stone-200/50 dark:border-neutral-700/50 shadow-lg shadow-black/5">
+          <div className="sticky top-0 z-20 backdrop-blur-xl bg-stone-50/80 dark:bg-neutral-900/80 border-b border-stone-200/50 dark:border-stone-700/50 shadow-lg shadow-black/5">
             <div className="px-4 sm:px-6 md:px-8 py-4">
               <div className="flex items-center justify-between gap-3 sm:gap-4">
                 <div className="flex items-center gap-3">
@@ -252,7 +252,7 @@ const SupplierList: React.FC = () => {
 
                   <button
                     onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                    className="hidden lg:flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-800 hover:from-orange-100 hover:to-orange-200 dark:hover:from-orange-900/40 dark:hover:to-orange-800/40 text-neutral-700 dark:text-neutral-300 hover:text-orange-600 dark:hover:text-orange-400 border border-stone-300 dark:border-neutral-600 shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 hover:scale-105"
+                    className="hidden lg:flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-800 hover:from-orange-100 hover:to-orange-200 dark:hover:from-orange-900/40 dark:hover:to-orange-800/40 text-stone-700 dark:text-stone-300 hover:text-orange-600 dark:hover:text-orange-400 border border-stone-300 dark:border-stone-600 shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 hover:scale-105"
                   >
                     <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                   </button>
@@ -260,7 +260,7 @@ const SupplierList: React.FC = () => {
                   <div className="hidden sm:flex items-center gap-3">
                     <div>
                       <h1 className="text-xl font-black text-neutral-900 dark:text-white tracking-tight">Suppliers</h1>
-                      <p className="text-xs font-medium text-neutral-600 dark:text-neutral-400">Manage supplier contacts</p>
+                      <p className="text-xs font-medium text-neutral-600 dark:text-stone-400">Manage supplier contacts</p>
                     </div>
                   </div>
                 </div>
@@ -268,8 +268,8 @@ const SupplierList: React.FC = () => {
                 <div className="flex-1 max-w-xl">
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-amber-500/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div className="relative flex items-center gap-3 bg-white dark:bg-neutral-800 rounded-xl border-2 border-stone-200 dark:border-neutral-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
-                      <FontAwesomeIcon icon={faSearch} className="h-5 w-5 text-neutral-400 dark:text-neutral-500 group-focus-within:text-orange-500 transition-colors" />
+                    <div className="relative flex items-center gap-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-2 border-stone-200 dark:border-stone-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
+                      <FontAwesomeIcon icon={faSearch} className="h-5 w-5 text-neutral-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors" />
                       <input
                         type="text"
                         placeholder="Search suppliers..."
@@ -296,7 +296,7 @@ const SupplierList: React.FC = () => {
             <div className="flex-1 flex flex-col gap-6 px-4 sm:px-6 md:px-8 py-6 overflow-auto">
 
               {/* Table Section */}
-              <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-white dark:bg-neutral-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-neutral-700">
+              <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-stone-50 dark:bg-stone-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-stone-700">
                 <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-white via-orange-50/30 to-white dark:from-neutral-800 dark:via-orange-950/20 dark:to-neutral-800">
                   <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-orange-500 to-orange-600"></div>
                   
@@ -308,7 +308,7 @@ const SupplierList: React.FC = () => {
                         </div>
                         <div>
                           <h3 className="text-2xl font-black text-neutral-900 dark:text-white tracking-tight">Supplier Directory</h3>
-                          <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mt-0.5">Complete supplier list</p>
+                          <p className="text-sm font-medium text-neutral-600 dark:text-stone-400 mt-0.5">Complete supplier list</p>
                         </div>
                       </div>
                       
@@ -329,7 +329,7 @@ const SupplierList: React.FC = () => {
                     <div className="flex items-center justify-center py-20">
                       <div className="text-center">
                         <div className="inline-block h-12 w-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                        <p className="text-neutral-600 dark:text-neutral-400">Loading suppliers...</p>
+                        <p className="text-neutral-600 dark:text-stone-400">Loading suppliers...</p>
                       </div>
                     </div>
                   ) : error ? (
@@ -337,35 +337,35 @@ const SupplierList: React.FC = () => {
                       <div className="text-center">
                         <FontAwesomeIcon icon={faTruck} className="h-16 w-16 text-red-300 dark:text-red-700 mb-4" />
                         <p className="text-red-600 dark:text-red-400 text-lg font-medium">Error loading suppliers</p>
-                        <p className="text-neutral-500 dark:text-neutral-500 text-sm mt-2">{error}</p>
+                        <p className="text-neutral-500 dark:text-stone-500 text-sm mt-2">{error}</p>
                       </div>
                     </div>
                   ) : filteredSuppliers.length === 0 ? (
                     <div className="flex items-center justify-center py-20">
                       <div className="text-center">
                         <FontAwesomeIcon icon={faTruck} className="h-16 w-16 text-neutral-300 dark:text-neutral-700 mb-4" />
-                        <p className="text-neutral-600 dark:text-neutral-400 text-lg font-medium">No suppliers found</p>
-                        <p className="text-neutral-500 dark:text-neutral-500 text-sm mt-2">Try adjusting your search</p>
+                        <p className="text-neutral-600 dark:text-stone-400 text-lg font-medium">No suppliers found</p>
+                        <p className="text-neutral-500 dark:text-stone-500 text-sm mt-2">Try adjusting your search</p>
                       </div>
                     </div>
                   ) : (
                     <table className="w-full">
                       <thead>
-                        <tr className="border-b border-orange-100 dark:border-neutral-800 bg-orange-50/50 dark:bg-neutral-800/50">
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Supplier Name</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Contact Person</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Phone Number</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Email</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Address</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Date</th>
-                          <th className="px-6 py-4 text-center text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Actions</th>
+                        <tr className="border-b border-orange-100 dark:border-stone-700 bg-orange-50/50 dark:bg-neutral-800/50">
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Supplier Name</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Contact Person</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Phone Number</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Email</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Address</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Date</th>
+                          <th className="px-6 py-4 text-center text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Actions</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-orange-100 dark:divide-neutral-800">
                         {filteredSuppliers.map((supplier) => (
                           <tr
                             key={supplier.id}
-                            className="hover:bg-orange-50/50 dark:hover:bg-neutral-800/30 transition-colors duration-150"
+                            className="hover:bg-orange-50/50 dark:hover:bg-stone-800/30 transition-colors duration-150"
                           >
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="flex items-center">
@@ -381,16 +381,16 @@ const SupplierList: React.FC = () => {
                               <div className="text-sm text-neutral-900 dark:text-white">{supplier.contactPerson}</div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-neutral-600 dark:text-neutral-400">{supplier.phoneNumber}</div>
+                              <div className="text-sm text-neutral-600 dark:text-stone-400">{supplier.phoneNumber}</div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-neutral-600 dark:text-neutral-400">{supplier.email}</div>
+                              <div className="text-sm text-neutral-600 dark:text-stone-400">{supplier.email}</div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-neutral-600 dark:text-neutral-400">{supplier.address}</div>
+                              <div className="text-sm text-neutral-600 dark:text-stone-400">{supplier.address}</div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-neutral-600 dark:text-neutral-400">{formatDate(supplier.transactionDate)}</div>
+                              <div className="text-sm text-neutral-600 dark:text-stone-400">{formatDate(supplier.transactionDate)}</div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-center">
                               <div className="flex items-center justify-center gap-2">
@@ -425,24 +425,24 @@ const SupplierList: React.FC = () => {
       {/* Edit Supplier Modal */}
       {editingSupplier && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="relative w-full max-w-4xl max-h-[90vh] bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl overflow-hidden">
+          <div className="relative w-full max-w-4xl max-h-[90vh] bg-stone-50 dark:bg-stone-900 rounded-2xl shadow-2xl overflow-hidden">
             {/* Header */}
-            <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
+            <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900">
               <div className="flex items-center gap-3">
                 <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg">
                   <FontAwesomeIcon icon={faTruck} className="h-5 w-5 text-white" />
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-neutral-900 dark:text-white">Edit Supplier</h2>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400">Update supplier information</p>
+                  <p className="text-sm text-neutral-600 dark:text-stone-400">Update supplier information</p>
                 </div>
               </div>
               <button
                 onClick={() => setEditingSupplier(null)}
-                className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
+                className="p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors"
                 disabled={isSaving}
               >
-                <FontAwesomeIcon icon={faTimes} className="h-5 w-5 text-neutral-600 dark:text-neutral-400" />
+                <FontAwesomeIcon icon={faTimes} className="h-5 w-5 text-neutral-600 dark:text-stone-400" />
               </button>
             </div>
 
@@ -450,58 +450,58 @@ const SupplierList: React.FC = () => {
             <div className="overflow-y-auto max-h-[calc(90vh-80px)] p-6">
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-2">Supplier Name</label>
+                  <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2">Supplier Name</label>
                   <input
                     type="text"
                     value={editingSupplier.supplierName}
                     onChange={(e) => setEditingSupplier({ ...editingSupplier, supplierName: e.target.value })}
-                    className="w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-800 border-2 border-neutral-200 dark:border-neutral-700 rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 bg-neutral-50 dark:bg-stone-800 border-2 border-neutral-200 dark:border-stone-700 rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
                     placeholder="Enter supplier name"
                   />
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-2">Contact Person</label>
+                    <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2">Contact Person</label>
                     <input
                       type="text"
                       value={editingSupplier.contactPerson}
                       onChange={(e) => setEditingSupplier({ ...editingSupplier, contactPerson: e.target.value })}
-                      className="w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-800 border-2 border-neutral-200 dark:border-neutral-700 rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 bg-neutral-50 dark:bg-stone-800 border-2 border-neutral-200 dark:border-stone-700 rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
                       placeholder="Contact person name"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-2">Phone Number</label>
+                    <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2">Phone Number</label>
                     <input
                       type="text"
                       value={editingSupplier.phoneNumber}
                       onChange={(e) => setEditingSupplier({ ...editingSupplier, phoneNumber: e.target.value })}
-                      className="w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-800 border-2 border-neutral-200 dark:border-neutral-700 rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 bg-neutral-50 dark:bg-stone-800 border-2 border-neutral-200 dark:border-stone-700 rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
                       placeholder="Phone number"
                     />
                   </div>
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-2">Email</label>
+                  <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2">Email</label>
                   <input
                     type="email"
                     value={editingSupplier.email}
                     onChange={(e) => setEditingSupplier({ ...editingSupplier, email: e.target.value })}
-                    className="w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-800 border-2 border-neutral-200 dark:border-neutral-700 rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 bg-neutral-50 dark:bg-stone-800 border-2 border-neutral-200 dark:border-stone-700 rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
                     placeholder="Email address"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-2">Address</label>
+                  <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2">Address</label>
                   <textarea
                     value={editingSupplier.address}
                     onChange={(e) => setEditingSupplier({ ...editingSupplier, address: e.target.value })}
                     rows={4}
-                    className="w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-800 border-2 border-neutral-200 dark:border-neutral-700 rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all resize-none"
+                    className="w-full px-4 py-3 bg-neutral-50 dark:bg-stone-800 border-2 border-neutral-200 dark:border-stone-700 rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all resize-none"
                     placeholder="Full address"
                   />
                 </div>
@@ -509,12 +509,12 @@ const SupplierList: React.FC = () => {
             </div>
             
             {/* Footer */}
-            <div className="sticky bottom-0 px-6 py-4 bg-neutral-50 dark:bg-neutral-800/50 border-t border-neutral-200 dark:border-neutral-800 flex gap-3">
+            <div className="sticky bottom-0 px-6 py-4 bg-neutral-50 dark:bg-neutral-800/50 border-t border-neutral-200 dark:border-stone-700 flex gap-3">
               <button
                 type="button"
                 onClick={() => setEditingSupplier(null)}
                 disabled={isSaving}
-                className="flex-1 px-6 py-3 bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 text-neutral-900 dark:text-white font-bold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
+                className="flex-1 px-6 py-3 bg-neutral-200 dark:bg-stone-700 hover:bg-neutral-300 dark:hover:bg-stone-600 text-neutral-900 dark:text-white font-bold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
               >
                 Cancel
               </button>
@@ -544,7 +544,7 @@ const SupplierList: React.FC = () => {
       {/* Delete Confirmation Dialog */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl max-w-md w-full">
+          <div className="bg-stone-50 dark:bg-stone-900 rounded-2xl shadow-2xl max-w-md w-full">
             <div className="p-6">
               <div className="flex items-center gap-4 mb-4">
                 <div className="flex-shrink-0 w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
@@ -552,11 +552,11 @@ const SupplierList: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-neutral-900 dark:text-white">Delete Supplier</h3>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400">This action cannot be undone</p>
+                  <p className="text-sm text-neutral-600 dark:text-stone-400">This action cannot be undone</p>
                 </div>
               </div>
               
-              <p className="text-neutral-700 dark:text-neutral-300 mb-6">
+              <p className="text-stone-700 dark:text-stone-300 mb-6">
                 Are you sure you want to delete this supplier? All associated data will be permanently removed.
               </p>
               
@@ -572,7 +572,7 @@ const SupplierList: React.FC = () => {
                     setShowDeleteConfirm(false);
                     setDeleteId(null);
                   }}
-                  className="flex-1 px-4 py-2.5 bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 text-neutral-900 dark:text-white font-medium rounded-lg transition-colors"
+                  className="flex-1 px-4 py-2.5 bg-neutral-200 dark:bg-stone-700 hover:bg-neutral-300 dark:hover:bg-stone-600 text-neutral-900 dark:text-white font-medium rounded-lg transition-colors"
                 >
                   Cancel
                 </button>

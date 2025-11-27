@@ -123,7 +123,7 @@ const BuyItem: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-white dark:bg-neutral-900 text-neutral-900 transition-colors duration-300 dark:text-white overflow-hidden">
+    <div className="relative min-h-screen bg-stone-50 dark:bg-stone-900 text-neutral-900 transition-colors duration-300 dark:text-white overflow-hidden">
       
       <div aria-hidden className="absolute inset-0 z-0 bg-gradient-to-br from-stone-50 via-white to-stone-50 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900 pointer-events-none" />
 

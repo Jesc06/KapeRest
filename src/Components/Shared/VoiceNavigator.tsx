@@ -326,7 +326,7 @@ const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose }) => {
   return (
     <div
       ref={containerRef}
-      className="fixed z-50 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 cursor-move select-none backdrop-blur-xl"
+      className="fixed z-50 bg-stone-50 dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 cursor-move select-none backdrop-blur-xl"
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
@@ -344,7 +344,7 @@ const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose }) => {
         {onClose && (
           <button
             onClick={onClose}
-            className="w-7 h-7 flex items-center justify-center bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full transition-all duration-200 cursor-pointer"
+            className="w-7 h-7 flex items-center justify-center bg-stone-50 bg-opacity-20 hover:bg-opacity-30 rounded-full transition-all duration-200 cursor-pointer"
           >
             <FontAwesomeIcon icon={faTimes} className="text-white text-sm" />
           </button>

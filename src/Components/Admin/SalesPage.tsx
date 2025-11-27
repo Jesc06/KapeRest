@@ -185,7 +185,7 @@ const SalesPage: React.FC = () => {
 
         <div className={`flex h-screen flex-1 flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
           {/* Premium Header with Glass Morphism */}
-          <div className="sticky top-0 z-20 border-b border-orange-200/30 dark:border-neutral-700/50 bg-white/70 dark:bg-neutral-900/70 backdrop-blur-xl shadow-lg shadow-orange-500/5">
+          <div className="sticky top-0 z-20 border-b border-orange-200/30 dark:border-stone-700/50 bg-stone-50/70 dark:bg-stone-900/70 backdrop-blur-xl shadow-lg shadow-orange-500/5">
             <div className="px-5 sm:px-7 md:px-9 py-5">
               <div className="flex items-center justify-between gap-5">
                 <div className="flex items-center gap-4 flex-shrink-0">
@@ -205,17 +205,17 @@ const SalesPage: React.FC = () => {
 
                   <div>
                     <h1 className="text-xl font-black text-neutral-900 dark:text-white tracking-tight">Sales Analytics</h1>
-                    <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Track and analyze revenue</p>
+                    <p className="text-sm font-medium text-neutral-600 dark:text-stone-400">Track and analyze revenue</p>
                   </div>
                 </div>
 
                 <div className="flex-1 max-w-xl">
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-amber-500/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div className="relative flex items-center gap-3 bg-white dark:bg-neutral-800 rounded-xl border-2 border-stone-200 dark:border-neutral-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
+                    <div className="relative flex items-center gap-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-2 border-stone-200 dark:border-stone-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
                       <FontAwesomeIcon
                         icon={faSearch}
-                        className="h-5 w-5 text-neutral-400 dark:text-neutral-500 group-focus-within:text-orange-500 transition-colors"
+                        className="h-5 w-5 text-neutral-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors"
                       />
                       <input
                         type="text"
@@ -249,9 +249,9 @@ const SalesPage: React.FC = () => {
                 {/* Left Side - Period Filters and Branch */}
                 <div className="flex items-center gap-3 flex-wrap">
                   {/* Period Label Badge */}
-                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-stone-100 to-stone-200 dark:from-neutral-800 dark:to-neutral-700 border border-stone-300 dark:border-neutral-600">
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-stone-100 to-stone-200 dark:from-neutral-800 dark:to-neutral-700 border border-stone-300 dark:border-stone-600">
                     <div className="h-2 w-2 rounded-full bg-orange-600 animate-pulse"></div>
-                    <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Period</span>
+                    <span className="text-sm font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Period</span>
                   </div>
 
                   {/* Period Filter Pills */}
@@ -263,7 +263,7 @@ const SalesPage: React.FC = () => {
                         className={`group relative flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-all duration-300 overflow-hidden ${
                           filterPeriod === period
                             ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/40 scale-105'
-                            : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-orange-300 dark:hover:border-orange-700 hover:scale-105 active:scale-95'
+                            : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-orange-300 dark:hover:border-orange-700 hover:scale-105 active:scale-95'
                         }`}
                       >
                         {filterPeriod === period && (
@@ -277,7 +277,7 @@ const SalesPage: React.FC = () => {
                   {/* Premium Branch Filter */}
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-amber-400/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <div className="relative flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-stone-50 to-stone-100 dark:from-neutral-800 dark:to-neutral-700 border-2 border-stone-200 dark:border-neutral-600 hover:border-orange-300 dark:hover:border-orange-600 transition-all shadow-md hover:shadow-lg">
+                    <div className="relative flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-stone-50 to-stone-100 dark:from-neutral-800 dark:to-neutral-700 border-2 border-stone-200 dark:border-stone-600 hover:border-orange-300 dark:hover:border-orange-600 transition-all shadow-md hover:shadow-lg">
                       <FontAwesomeIcon icon={faBuilding} className="h-4 w-4 text-orange-500 dark:text-orange-400" />
                       <select
                         value={filterBranch}
@@ -322,8 +322,8 @@ const SalesPage: React.FC = () => {
                         disabled={isGenerating !== null}
                         className={`group relative flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-semibold transition-colors duration-200 overflow-hidden
                           ${isGenerating === type
-                            ? 'bg-white text-orange-600 shadow-sm scale-105 border border-orange-200'
-                            : 'bg-white/95 text-orange-700 hover:bg-white hover:shadow-sm'}
+                            ? 'bg-stone-50 text-orange-600 shadow-sm scale-105 border border-orange-200'
+                            : 'bg-stone-50/95 text-orange-700 hover:bg-stone-50 hover:shadow-sm'}
                           disabled:opacity-50 disabled:cursor-not-allowed`}
                       >
                         <FontAwesomeIcon icon={icon} className={`h-3.5 w-3.5 relative z-10 ${isGenerating === type ? '' : 'text-orange-500'}`} />
@@ -342,11 +342,11 @@ const SalesPage: React.FC = () => {
                 {/* Total Sales Card - Orange Gradient */}
                 <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 p-6 shadow-2xl shadow-orange-500/30 hover:shadow-orange-500/50 transition-all duration-300 hover:scale-105">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16"></div>
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-stone-50/5 rounded-full -mr-16 -mt-16"></div>
                   <div className="relative flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-3">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-stone-50/20 backdrop-blur-sm">
                           <FontAwesomeIcon icon={faReceipt} className="h-6 w-6 text-white" />
                         </div>
                       </div>
@@ -360,11 +360,11 @@ const SalesPage: React.FC = () => {
                 {/* Total Transactions Card - Green Gradient */}
                 <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 via-green-600 to-teal-600 p-6 shadow-2xl shadow-emerald-500/30 hover:shadow-emerald-500/50 transition-all duration-300 hover:scale-105">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16"></div>
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-stone-50/5 rounded-full -mr-16 -mt-16"></div>
                   <div className="relative flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-3">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-stone-50/20 backdrop-blur-sm">
                           <FontAwesomeIcon icon={faChartLine} className="h-6 w-6 text-white" />
                         </div>
                       </div>
@@ -378,11 +378,11 @@ const SalesPage: React.FC = () => {
                 {/* Average Sale Card - Blue Gradient */}
                 <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-600 p-6 shadow-2xl shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16"></div>
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-stone-50/5 rounded-full -mr-16 -mt-16"></div>
                   <div className="relative flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-3">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-stone-50/20 backdrop-blur-sm">
                           <FontAwesomeIcon icon={faMoneyBill} className="h-6 w-6 text-white" />
                         </div>
                       </div>
@@ -395,7 +395,7 @@ const SalesPage: React.FC = () => {
               </div>
 
               {/* Premium Table */}
-              <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-white dark:bg-neutral-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-neutral-700 transition-all duration-300">
+              <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-stone-50 dark:bg-stone-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-stone-700 transition-all duration-300">
                 
                 {/* Table Header with Gradient */}
                 <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-white via-orange-50/30 to-white dark:from-neutral-800 dark:via-orange-950/20 dark:to-neutral-800">
@@ -409,7 +409,7 @@ const SalesPage: React.FC = () => {
                         </div>
                         <div>
                           <h3 className="text-2xl font-black text-neutral-900 dark:text-white tracking-tight">Sales Records</h3>
-                          <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mt-0.5">Complete transaction history</p>
+                          <p className="text-sm font-medium text-neutral-600 dark:text-stone-400 mt-0.5">Complete transaction history</p>
                         </div>
                       </div>
                       
@@ -418,9 +418,9 @@ const SalesPage: React.FC = () => {
                           <div className="h-2 w-2 rounded-full bg-orange-600 animate-pulse"></div>
                           <span className="text-sm font-bold uppercase tracking-wider text-orange-700 dark:text-orange-400">Active</span>
                         </div>
-                        <div className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-600 border border-stone-300 dark:border-neutral-600">
+                        <div className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-600 border border-stone-300 dark:border-stone-600">
                           <div className="flex items-baseline gap-2">
-                            <span className="text-sm font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400">Records</span>
+                            <span className="text-sm font-bold uppercase tracking-wider text-neutral-600 dark:text-stone-400">Records</span>
                             <span className="text-2xl font-black text-neutral-900 dark:text-white">{filteredSales.length}</span>
                           </div>
                         </div>
@@ -451,39 +451,39 @@ const SalesPage: React.FC = () => {
                   ) : (
                     <table className="w-full">
                       <thead className="sticky top-0 z-10">
-                        <tr className="bg-gradient-to-r from-stone-50 via-stone-100/80 to-stone-50 dark:from-neutral-800 dark:via-neutral-750 dark:to-neutral-800 border-b-2 border-stone-300 dark:border-neutral-700 backdrop-blur-sm">
+                        <tr className="bg-gradient-to-r from-stone-50 via-stone-100/80 to-stone-50 dark:from-neutral-800 dark:via-neutral-750 dark:to-neutral-800 border-b-2 border-stone-300 dark:border-stone-700 backdrop-blur-sm">
                           <th className="px-7 py-4 text-left">
                             <div className="flex items-center gap-2">
                               <div className="h-2 w-2 rounded-full bg-gradient-to-r from-orange-500 to-orange-600"></div>
-                              <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">ID</span>
+                              <span className="text-sm font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">ID</span>
                             </div>
                           </th>
                           <th className="px-7 py-4 text-left">
-                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Menu Item</span>
+                            <span className="text-sm font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Menu Item</span>
                           </th>
                           <th className="px-7 py-4 text-left">
-                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Cashier</span>
+                            <span className="text-sm font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Cashier</span>
                           </th>
                           <th className="px-7 py-4 text-left">
-                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Branch</span>
+                            <span className="text-sm font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Branch</span>
                           </th>
                           <th className="px-7 py-4 text-right">
-                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Subtotal</span>
+                            <span className="text-sm font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Subtotal</span>
                           </th>
                           <th className="px-7 py-4 text-right">
-                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Tax</span>
+                            <span className="text-sm font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Tax</span>
                           </th>
                           <th className="px-7 py-4 text-right">
-                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Discount</span>
+                            <span className="text-sm font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Discount</span>
                           </th>
                           <th className="px-7 py-4 text-right">
-                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Total</span>
+                            <span className="text-sm font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Total</span>
                           </th>
                           <th className="px-7 py-4 text-center">
-                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Status</span>
+                            <span className="text-sm font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Status</span>
                           </th>
                           <th className="px-7 py-4 text-left">
-                            <span className="text-sm font-black uppercase tracking-widest text-neutral-700 dark:text-neutral-300">Date & Time</span>
+                            <span className="text-sm font-black uppercase tracking-widest text-stone-700 dark:text-stone-300">Date & Time</span>
                           </th>
                         </tr>
                       </thead>
@@ -491,7 +491,7 @@ const SalesPage: React.FC = () => {
                         {filteredSales.map((sale) => (
                           <tr
                             key={sale.id}
-                            className="group relative bg-white dark:bg-neutral-800 hover:bg-gradient-to-r hover:from-orange-50/50 hover:via-orange-50/30 hover:to-transparent dark:hover:from-orange-950/20 dark:hover:via-orange-950/10 dark:hover:to-transparent transition-all duration-300 cursor-pointer"
+                            className="group relative bg-stone-50 dark:bg-stone-800 hover:bg-gradient-to-r hover:from-orange-50/50 hover:via-orange-50/30 hover:to-transparent dark:hover:from-orange-950/20 dark:hover:via-orange-950/10 dark:hover:to-transparent transition-all duration-300 cursor-pointer"
                           >
                             <td className="px-7 py-5 relative">
                               <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-orange-500 to-orange-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -505,16 +505,16 @@ const SalesPage: React.FC = () => {
                               </span>
                             </td>
                             <td className="px-7 py-5">
-                              <span className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+                              <span className="text-sm font-semibold text-stone-700 dark:text-stone-300">
                                 {sale.cashierName}
                               </span>
                             </td>
                             <td className="px-7 py-5">
                               <div className="flex flex-col">
-                                <span className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+                                <span className="text-sm font-semibold text-stone-700 dark:text-stone-300">
                                   {sale.branchName}
                                 </span>
-                                <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                                <span className="text-xs text-neutral-500 dark:text-stone-400">
                                   {sale.branchLocation}
                                 </span>
                               </div>

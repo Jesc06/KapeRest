@@ -2,34 +2,63 @@
 @tailwind components;
 @tailwind utilities;
 
-
-/* Global base typography adjustments for cleaner appearance */
+/* Premium Café Color Scheme */
 @layer base {
+	:root {
+		/* Light Mode - Clean Café Colors */
+		--bg-primary: 255 251 245; /* Warm cream white */
+		--bg-secondary: 255 255 255; /* Pure white */
+		--bg-card: 250 250 249; /* Stone white */
+		--text-primary: 41 37 36; /* Rich coffee brown */
+		--text-secondary: 87 83 78; /* Medium brown */
+		--text-muted: 120 113 108; /* Light brown-gray */
+		--border-color: 231 229 228; /* Subtle beige border */
+		--accent-orange: 234 88 12; /* Warm espresso orange */
+	}
+	
+	html.dark {
+		/* Dark Mode - Premium Café Night Colors (matching Login/Register) */
+		--bg-primary: 28 25 23; /* stone-900 - Deep warm brown */
+		--bg-secondary: 32 28 25; /* stone-850 - Warm dark accent */
+		--bg-card: 41 37 36; /* stone-800 - Card background */
+		--text-primary: 250 250 249; /* stone-50 - Cream white text */
+		--text-secondary: 214 211 209; /* stone-300 - Light warm gray */
+		--text-muted: 168 162 158; /* stone-400 - Medium warm gray */
+		--border-color: 68 64 60; /* stone-700 - Dark warm border */
+		--accent-orange: 251 146 60; /* orange-400 - Soft warm orange */
+	}
+
 	html {
 		font-family: theme('fontFamily.sans');
 		-webkit-text-size-adjust: 100%;
 		overflow-x: hidden;
 		width: 100%;
+		background-color: rgb(var(--bg-primary));
+		transition: background-color 0.3s ease;
 	}
+	
 	body {
 		font-feature-settings: 'liga' 'kern';
 		-webkit-font-smoothing: antialiased;
 		text-rendering: optimizeLegibility;
 		overflow-x: hidden;
 		width: 100%;
-		background-color: transparent;
-		color: #1f2937;
+		background-color: rgb(var(--bg-primary));
+		color: rgb(var(--text-primary));
 		transition: background-color 0.3s ease, color 0.3s ease;
 	}
-	#root { min-height: 100%; }
-	html.dark body {
-		background-color: transparent;
-		color: #e5e7eb;
+	
+	#root { 
+		min-height: 100%; 
+		background-color: rgb(var(--bg-primary));
 	}
+	
 	h1,h2,h3,h4,h5,h6 {
 		font-weight: 600;
 		letter-spacing: -0.025em;
+		color: rgb(var(--text-primary));
 	}
+	
 	p,li,span,button,input,label {
 		line-height: 1.625;
 	}

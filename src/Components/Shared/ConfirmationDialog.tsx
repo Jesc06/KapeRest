@@ -26,11 +26,11 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ isOpen, onClose
         {/* Glow effect */}
         <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-red-500/20 via-orange-500/20 to-amber-500/20 blur-2xl"></div>
         
-        <div className="relative rounded-3xl border-2 border-red-200/50 dark:border-red-800/50 bg-white/95 dark:bg-neutral-900/95 shadow-2xl backdrop-blur-xl transform transition-all duration-300 ease-out animate-in fade-in-0 zoom-in-95 overflow-hidden">
+        <div className="relative rounded-3xl border-2 border-red-200/50 dark:border-red-800/50 bg-stone-50/95 dark:bg-stone-900/95 shadow-2xl backdrop-blur-xl transform transition-all duration-300 ease-out animate-in fade-in-0 zoom-in-95 overflow-hidden">
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-600 dark:text-neutral-400 flex items-center justify-center transition-all duration-200 z-10"
+            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-neutral-100 dark:bg-stone-800 hover:bg-neutral-200 dark:hover:bg-stone-700 text-neutral-600 dark:text-stone-400 flex items-center justify-center transition-all duration-200 z-10"
           >
             <FontAwesomeIcon icon={faTimes} className="h-4 w-4" />
           </button>
@@ -45,7 +45,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ isOpen, onClose
                 <h3 id="confirmation-dialog-title" className="text-2xl font-black text-neutral-900 dark:text-white mb-2">
                   {title}
                 </h3>
-                <p className="text-sm leading-relaxed text-neutral-600 dark:text-neutral-400 font-medium">
+                <p className="text-sm leading-relaxed text-neutral-600 dark:text-stone-400 font-medium">
                   {message}
                 </p>
               </div>
@@ -68,7 +68,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ isOpen, onClose
               <button
                 type="button"
                 onClick={onClose}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-6 py-3 text-sm font-bold text-neutral-700 dark:text-neutral-300 shadow-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 hover:border-neutral-400 dark:hover:border-neutral-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-500 transition-all duration-200 transform hover:scale-105 active:scale-95"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-neutral-300 dark:border-stone-600 bg-stone-50 dark:bg-stone-800 px-6 py-3 text-sm font-bold text-stone-700 dark:text-stone-300 shadow-sm hover:bg-stone-50 dark:hover:bg-stone-700 hover:border-neutral-400 dark:hover:border-neutral-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-500 transition-all duration-200 transform hover:scale-105 active:scale-95"
               >
                 <FontAwesomeIcon icon={faTimes} className="h-4 w-4" />
                 Cancel

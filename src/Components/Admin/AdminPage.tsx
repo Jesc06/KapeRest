@@ -125,7 +125,7 @@ const AdminPage: React.FC = () => {
 
         <div className={`flex h-screen flex-1 flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
           {/* Minimal Clean Header */}
-          <div className="sticky top-0 z-20 border-b border-stone-200 dark:border-neutral-700 bg-white/95 dark:bg-neutral-800/95 backdrop-blur-sm">
+          <div className="sticky top-0 z-20 border-b border-stone-200 dark:border-stone-700 bg-stone-50/90 dark:bg-stone-800/90 backdrop-blur-sm">
             <div className="px-4 sm:px-5 md:px-6 py-2.5 sm:py-3">
               <div className="flex items-center justify-between gap-3">
                 {/* Left: Controls & Title */}
@@ -133,7 +133,7 @@ const AdminPage: React.FC = () => {
                   {/* Hamburger - Mobile Only */}
                   <button
                     onClick={() => setSidebarOpen(!sidebarOpen)}
-                    className="lg:hidden flex-shrink-0 h-9 w-9 flex items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
+                    className="lg:hidden flex-shrink-0 h-9 w-9 flex items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-700 hover:bg-stone-100 dark:hover:bg-stone-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                   >
                     <FontAwesomeIcon icon={faBars} className="h-4 w-4" />
                   </button>
@@ -141,13 +141,13 @@ const AdminPage: React.FC = () => {
                   {/* Sidebar Toggle - Desktop Only */}
                   <button
                     onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                    className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-neutral-700 bg-stone-50 dark:bg-neutral-700 hover:bg-stone-100 dark:hover:bg-neutral-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
+                    className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-700 hover:bg-stone-100 dark:hover:bg-stone-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
                   >
                     <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                   </button>
 
                   {/* Title */}
-                  <h1 className="text-base sm:text-lg md:text-xl font-bold text-neutral-900 dark:text-stone-100 truncate">Admin Dashboard</h1>
+                  <h1 className="text-base sm:text-lg md:text-xl font-bold text-stone-900 dark:text-stone-100 truncate">Admin Dashboard</h1>
                 </div>
 
                 {/* Right: Logout Panel */}
@@ -173,18 +173,18 @@ const AdminPage: React.FC = () => {
                   
                   {/* Enhanced Floating Particles Effect */}
                   <div className="absolute inset-0 overflow-hidden">
-                    <div className="absolute top-10 left-10 w-2 h-2 bg-white/40 rounded-full animate-ping"></div>
-                    <div className="absolute top-20 right-20 w-3 h-3 bg-white/30 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
-                    <div className="absolute bottom-10 left-1/3 w-2 h-2 bg-white/40 rounded-full animate-ping" style={{ animationDelay: '2s' }}></div>
+                    <div className="absolute top-10 left-10 w-2 h-2 bg-stone-50/40 rounded-full animate-ping"></div>
+                    <div className="absolute top-20 right-20 w-3 h-3 bg-stone-50/30 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
+                    <div className="absolute bottom-10 left-1/3 w-2 h-2 bg-stone-50/40 rounded-full animate-ping" style={{ animationDelay: '2s' }}></div>
                     <div className="absolute top-1/2 right-1/4 w-2 h-2 bg-yellow-300/50 rounded-full animate-bounce" style={{ animationDuration: '3s' }}></div>
-                    <div className="absolute bottom-1/3 left-1/4 w-3 h-3 bg-white/30 rounded-full animate-bounce" style={{ animationDuration: '4s', animationDelay: '0.5s' }}></div>
+                    <div className="absolute bottom-1/3 left-1/4 w-3 h-3 bg-stone-50/30 rounded-full animate-bounce" style={{ animationDuration: '4s', animationDelay: '0.5s' }}></div>
                     <div className="absolute top-1/3 left-2/3 w-2 h-2 bg-orange-200/40 rounded-full animate-pulse" style={{ animationDuration: '2s', animationDelay: '1s' }}></div>
                   </div>
                   
                   <div className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-14 lg:gap-20">
                     <div className="flex-1">
                       <div className="flex items-start gap-8 mb-10">
-                        <div className="w-28 h-28 bg-white/25 backdrop-blur-md rounded-3xl flex items-center justify-center border-2 border-white/50 shadow-2xl group-hover:scale-110 group-hover:rotate-2 transition-all duration-300 flex-shrink-0">
+                        <div className="w-28 h-28 bg-stone-50/25 backdrop-blur-md rounded-3xl flex items-center justify-center border-2 border-white/50 shadow-2xl group-hover:scale-110 group-hover:rotate-2 transition-all duration-300 flex-shrink-0">
                           <FontAwesomeIcon icon={faShieldAlt} className="text-6xl text-white drop-shadow-lg" />
                         </div>
                         <div className="flex-1">
@@ -201,7 +201,7 @@ const AdminPage: React.FC = () => {
                         Welcome to your comprehensive control center. Manage all aspects of your business operations with full administrative privileges.
                       </p>
                     </div>
-                    <div className="w-full lg:w-auto bg-white/20 backdrop-blur-lg rounded-2xl px-10 py-8 border-2 border-white/40 shadow-2xl group-hover:scale-110 group-hover:shadow-3xl transition-all duration-300">
+                    <div className="w-full lg:w-auto bg-stone-50/20 backdrop-blur-lg rounded-2xl px-10 py-8 border-2 border-white/40 shadow-2xl group-hover:scale-110 group-hover:shadow-3xl transition-all duration-300">
                       <p className="text-white/90 text-sm font-black uppercase tracking-widest mb-5">📅 Today's Date</p>
                       <p className="text-white text-5xl font-black drop-shadow-lg leading-none mb-3">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
                       <p className="text-white/95 text-xl font-bold drop-shadow-lg">{new Date().toLocaleDateString('en-US', { year: 'numeric' })}</p>
@@ -216,7 +216,7 @@ const AdminPage: React.FC = () => {
                   <h3 className="text-2xl sm:text-3xl font-black text-neutral-900 dark:text-white tracking-tight mb-2">
                     Performance Metrics
                   </h3>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
+                  <p className="text-sm text-neutral-600 dark:text-stone-400 font-medium">
                     Real-time overview of your business performance
                   </p>
                 </div>
@@ -228,8 +228,8 @@ const AdminPage: React.FC = () => {
                       className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${stat.color} p-6 shadow-xl shadow-black/10 hover:shadow-2xl hover:shadow-black/20 transition-all duration-500 hover:-translate-y-2 hover:scale-[1.03]`}
                     >
                       <div className="absolute inset-0 opacity-10">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-3xl transform translate-x-8 -translate-y-8 group-hover:scale-110 transition-transform duration-700"></div>
-                        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full blur-2xl transform -translate-x-4 translate-y-4 group-hover:scale-110 transition-transform duration-700"></div>
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-stone-50 rounded-full blur-3xl transform translate-x-8 -translate-y-8 group-hover:scale-110 transition-transform duration-700"></div>
+                        <div className="absolute bottom-0 left-0 w-24 h-24 bg-stone-50 rounded-full blur-2xl transform -translate-x-4 translate-y-4 group-hover:scale-110 transition-transform duration-700"></div>
                       </div>
                       
                       {/* Shimmer Effect */}
@@ -239,10 +239,10 @@ const AdminPage: React.FC = () => {
                       
                       <div className="relative z-10 flex flex-col h-full">
                         <div className="flex items-start justify-between mb-5">
-                          <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/25 backdrop-blur-md shadow-xl shadow-black/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 border border-white/30">
+                          <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-stone-50/25 backdrop-blur-md shadow-xl shadow-black/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 border border-white/30">
                             <FontAwesomeIcon icon={stat.icon} className="h-7 w-7 text-white drop-shadow-lg" />
                           </div>
-                          <span className="text-xs font-black px-3 py-1.5 rounded-lg bg-white/30 backdrop-blur-md text-white flex items-center gap-1.5 shadow-lg border border-white/30">
+                          <span className="text-xs font-black px-3 py-1.5 rounded-lg bg-stone-50/30 backdrop-blur-md text-white flex items-center gap-1.5 shadow-lg border border-white/30">
                             <FontAwesomeIcon
                               icon={stat.isIncrease ? faArrowUp : faArrowDown}
                               className="h-3.5 w-3.5"
@@ -268,29 +268,29 @@ const AdminPage: React.FC = () => {
                   <h3 className="text-2xl sm:text-3xl font-black text-neutral-900 dark:text-white tracking-tight mb-1">
                     Sales Overview
                   </h3>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
+                  <p className="text-sm text-neutral-600 dark:text-stone-400 font-medium">
                     Monitor your sales performance with real-time analytics
                   </p>
                 </div>
 
                 {/* Premium Filters Section */}
-                <div className="bg-white dark:bg-neutral-800 rounded-2xl border-2 border-stone-200 dark:border-neutral-700 p-6 mb-6 shadow-xl border-t-4 border-t-orange-400/30 relative overflow-hidden">
+                <div className="bg-stone-50 dark:bg-stone-800 rounded-2xl border-2 border-stone-200 dark:border-stone-700 p-6 mb-6 shadow-xl border-t-4 border-t-orange-400/30 relative overflow-hidden">
                   {/* Premium accent */}
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 rounded-t-2xl"></div>
                   <div className="absolute top-2 right-2 w-8 h-8 bg-orange-400/10 rounded-full blur-sm"></div>
 
                   {/* Period Filters Row */}
                   <div className="mb-6">
-                    <label className="block text-sm font-black uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-4">
+                    <label className="block text-sm font-black uppercase tracking-wider text-neutral-600 dark:text-stone-400 mb-4">
                       Time Period
                     </label>
-                    <div className="inline-flex items-center gap-1 bg-gradient-to-br from-white to-stone-50 dark:from-neutral-900 dark:to-neutral-950 border-2 border-stone-200 dark:border-neutral-700 rounded-xl p-1.5 shadow-lg">
+                    <div className="inline-flex items-center gap-1 bg-gradient-to-br from-white to-stone-50 dark:from-neutral-900 dark:to-neutral-950 border-2 border-stone-200 dark:border-stone-700 rounded-xl p-1.5 shadow-lg">
                       <button
                         onClick={() => setSelectedPeriod('today')}
                         className={`px-6 py-3 rounded-lg text-sm font-black uppercase tracking-wide transition-all duration-300 ${
                           selectedPeriod === 'today'
                             ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-xl scale-105'
-                            : 'text-neutral-600 dark:text-neutral-400 hover:bg-orange-50 dark:hover:bg-neutral-800 hover:text-orange-600 dark:hover:text-orange-400'
+                            : 'text-neutral-600 dark:text-stone-400 hover:bg-orange-50 dark:hover:bg-stone-800 hover:text-orange-600 dark:hover:text-orange-400'
                         }`}
                       >
                         Today
@@ -300,7 +300,7 @@ const AdminPage: React.FC = () => {
                         className={`px-6 py-3 rounded-lg text-sm font-black uppercase tracking-wide transition-all duration-300 ${
                           selectedPeriod === 'monthly'
                             ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-xl scale-105'
-                            : 'text-neutral-600 dark:text-neutral-400 hover:bg-orange-50 dark:hover:bg-neutral-800 hover:text-orange-600 dark:hover:text-orange-400'
+                            : 'text-neutral-600 dark:text-stone-400 hover:bg-orange-50 dark:hover:bg-stone-800 hover:text-orange-600 dark:hover:text-orange-400'
                         }`}
                       >
                         Monthly
@@ -310,7 +310,7 @@ const AdminPage: React.FC = () => {
                         className={`px-6 py-3 rounded-lg text-sm font-black uppercase tracking-wide transition-all duration-300 ${
                           selectedPeriod === 'yearly'
                             ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-xl scale-105'
-                            : 'text-neutral-600 dark:text-neutral-400 hover:bg-orange-50 dark:hover:bg-neutral-800 hover:text-orange-600 dark:hover:text-orange-400'
+                            : 'text-neutral-600 dark:text-stone-400 hover:bg-orange-50 dark:hover:bg-stone-800 hover:text-orange-600 dark:hover:text-orange-400'
                         }`}
                       >
                         Yearly
@@ -320,7 +320,7 @@ const AdminPage: React.FC = () => {
                         className={`px-6 py-3 rounded-lg text-sm font-black uppercase tracking-wide transition-all duration-300 flex items-center gap-2 ${
                           selectedPeriod === 'custom'
                             ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-xl scale-105'
-                            : 'text-neutral-600 dark:text-neutral-400 hover:bg-orange-50 dark:hover:bg-neutral-800 hover:text-orange-600 dark:hover:text-orange-400'
+                            : 'text-neutral-600 dark:text-stone-400 hover:bg-orange-50 dark:hover:bg-stone-800 hover:text-orange-600 dark:hover:text-orange-400'
                         }`}
                       >
                         <FontAwesomeIcon icon={faCalendar} className="h-4 w-4" />
@@ -331,20 +331,20 @@ const AdminPage: React.FC = () => {
 
                   {/* Custom Date Range */}
                   {selectedPeriod === 'custom' && (
-                    <div className="mb-5 pb-5 border-b border-stone-200 dark:border-neutral-700">
-                      <label className="block text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-3">
+                    <div className="mb-5 pb-5 border-b border-stone-200 dark:border-stone-700">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-stone-400 mb-3">
                         Date Range
                       </label>
                       <div className="flex items-center gap-4">
                         <div className="flex-1">
-                          <label className="block text-xs font-semibold text-neutral-500 dark:text-neutral-400 mb-2">
+                          <label className="block text-xs font-semibold text-neutral-500 dark:text-stone-400 mb-2">
                             From
                           </label>
                           <input
                             type="date"
                             value={customStartDate}
                             onChange={(e) => setCustomStartDate(e.target.value)}
-                            className="w-full px-4 py-3 rounded-lg border-2 border-orange-200 dark:border-orange-800 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 shadow-sm"
+                            className="w-full px-4 py-3 rounded-lg border-2 border-orange-200 dark:border-orange-800 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 shadow-sm"
                           />
                         </div>
                         <div className="flex items-end pb-3">
@@ -353,14 +353,14 @@ const AdminPage: React.FC = () => {
                           </svg>
                         </div>
                         <div className="flex-1">
-                          <label className="block text-xs font-semibold text-neutral-500 dark:text-neutral-400 mb-2">
+                          <label className="block text-xs font-semibold text-neutral-500 dark:text-stone-400 mb-2">
                             To
                           </label>
                           <input
                             type="date"
                             value={customEndDate}
                             onChange={(e) => setCustomEndDate(e.target.value)}
-                            className="w-full px-4 py-3 rounded-lg border-2 border-orange-200 dark:border-orange-800 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 shadow-sm"
+                            className="w-full px-4 py-3 rounded-lg border-2 border-orange-200 dark:border-orange-800 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 shadow-sm"
                           />
                         </div>
                       </div>
@@ -369,13 +369,13 @@ const AdminPage: React.FC = () => {
 
                   {/* Branch and Account Filters */}
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-3">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-stone-400 mb-3">
                       Filter by Location & Account
                     </label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {/* Branch Filter */}
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 dark:text-neutral-400 mb-2">
+                        <label className="block text-xs font-semibold text-neutral-500 dark:text-stone-400 mb-2">
                           Branch Location
                         </label>
                         <div className="relative">
@@ -385,7 +385,7 @@ const AdminPage: React.FC = () => {
                               setSelectedBranch(e.target.value);
                               setSelectedAccount('all');
                             }}
-                            className="w-full appearance-none pl-12 pr-12 py-3 rounded-lg border-2 border-stone-200 dark:border-neutral-700 bg-gradient-to-br from-white to-orange-50/30 dark:from-neutral-800 dark:to-orange-950/20 text-neutral-900 dark:text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer"
+                            className="w-full appearance-none pl-12 pr-12 py-3 rounded-lg border-2 border-stone-200 dark:border-stone-700 bg-gradient-to-br from-white to-orange-50/30 dark:from-neutral-800 dark:to-orange-950/20 text-neutral-900 dark:text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer"
                           >
                             {branches.map(branch => (
                               <option key={branch.id} value={branch.id}>
@@ -406,7 +406,7 @@ const AdminPage: React.FC = () => {
 
                       {/* Account Filter */}
                       <div>
-                        <label className="block text-xs font-semibold text-neutral-500 dark:text-neutral-400 mb-2">
+                        <label className="block text-xs font-semibold text-neutral-500 dark:text-stone-400 mb-2">
                           Staff / Cashier
                         </label>
                         <div className="relative">
@@ -416,8 +416,8 @@ const AdminPage: React.FC = () => {
                             disabled={selectedBranch === 'all'}
                             className={`w-full appearance-none pl-12 pr-12 py-3 rounded-lg border-2 text-sm font-semibold shadow-sm transition-all duration-200 ${
                               selectedBranch === 'all'
-                                ? 'border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800/50 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
-                                : 'border-stone-200 dark:border-neutral-700 bg-gradient-to-br from-white to-orange-50/30 dark:from-neutral-800 dark:to-orange-950/20 text-neutral-900 dark:text-white hover:shadow-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 cursor-pointer'
+                                ? 'border-neutral-200 dark:border-stone-700 bg-neutral-100 dark:bg-stone-800/50 text-neutral-400 dark:text-stone-500 cursor-not-allowed'
+                                : 'border-stone-200 dark:border-stone-700 bg-gradient-to-br from-white to-orange-50/30 dark:from-neutral-800 dark:to-orange-950/20 text-neutral-900 dark:text-white hover:shadow-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 cursor-pointer'
                             }`}
                           >
                             {accounts.map(account => (
@@ -441,7 +441,7 @@ const AdminPage: React.FC = () => {
                     {/* Active Filter Indicator */}
                     {selectedBranch !== 'all' && selectedAccount !== 'all' && (
                       <div className="mt-4 inline-flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 rounded-lg shadow-lg">
-                        <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                        <div className="w-2 h-2 bg-stone-50 rounded-full animate-pulse"></div>
                         <div>
                           <span className="text-xs font-bold uppercase tracking-wider text-white/90 block">Active Filter</span>
                           <span className="text-sm font-semibold text-white">
@@ -454,13 +454,13 @@ const AdminPage: React.FC = () => {
                 </div>
 
                 {/* Premium Sales Chart Card */}
-                <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 sm:p-8 border-2 border-stone-200 dark:border-neutral-700 shadow-2xl border-t-4 border-t-orange-400/30 relative overflow-hidden">
+                <div className="bg-stone-50 dark:bg-stone-800 rounded-2xl p-6 sm:p-8 border-2 border-stone-200 dark:border-stone-700 shadow-2xl border-t-4 border-t-orange-400/30 relative overflow-hidden">
                   {/* Premium accents */}
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 rounded-t-2xl"></div>
                   <div className="absolute top-3 right-3 w-8 h-8 bg-orange-400/10 rounded-full blur-sm"></div>
 
                   {/* Chart Header */}
-                  <div className="mb-8 pb-6 border-b-2 border-stone-200 dark:border-neutral-700">
+                  <div className="mb-8 pb-6 border-b-2 border-stone-200 dark:border-stone-700">
                     <h4 className="text-xl font-black text-neutral-900 dark:text-white uppercase tracking-wide flex items-center gap-3">
                       <div className="w-1.5 h-7 bg-gradient-to-b from-orange-400 via-orange-500 to-amber-500 rounded-full"></div>
                       Sales Overview
@@ -510,13 +510,13 @@ const AdminPage: React.FC = () => {
 
                   {/* Line Graph */}
                   <div>
-                    <h5 className="text-lg font-black text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-6 flex items-center gap-2">
+                    <h5 className="text-lg font-black text-stone-700 dark:text-stone-300 uppercase tracking-wide mb-6 flex items-center gap-2">
                       <div className="w-1 h-5 bg-gradient-to-b from-orange-400 to-amber-500 rounded-full"></div>
                       Sales Trend
                     </h5>
-                    <div className="relative h-80 bg-gradient-to-br from-neutral-50 to-orange-50/30 dark:from-neutral-900 dark:to-orange-950/20 rounded-2xl p-8 border-2 border-neutral-200 dark:border-neutral-700">
+                    <div className="relative h-80 bg-gradient-to-br from-neutral-50 to-orange-50/30 dark:from-neutral-900 dark:to-orange-950/20 rounded-2xl p-8 border-2 border-neutral-200 dark:border-stone-700">
                       {/* Y-axis labels */}
-                      <div className="absolute left-2 top-8 bottom-12 flex flex-col justify-between text-xs font-bold text-neutral-500 dark:text-neutral-400">
+                      <div className="absolute left-2 top-8 bottom-12 flex flex-col justify-between text-xs font-bold text-neutral-500 dark:text-stone-400">
                         <span>₱{maxSales.toLocaleString()}</span>
                         <span>₱{(maxSales * 0.75).toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
                         <span>₱{(maxSales * 0.5).toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
@@ -529,7 +529,7 @@ const AdminPage: React.FC = () => {
                         {/* Grid lines */}
                         <div className="absolute inset-0 flex flex-col justify-between">
                           {[0, 1, 2, 3, 4].map((i) => (
-                            <div key={i} className="w-full border-t border-neutral-300/50 dark:border-neutral-600/50"></div>
+                            <div key={i} className="w-full border-t border-neutral-300/50 dark:border-stone-600/50"></div>
                           ))}
                         </div>
                         
@@ -606,7 +606,7 @@ const AdminPage: React.FC = () => {
                       </div>
                       
                       {/* X-axis labels */}
-                      <div className="ml-16 mt-4 flex justify-between text-sm font-black text-neutral-700 dark:text-neutral-300">
+                      <div className="ml-16 mt-4 flex justify-between text-sm font-black text-stone-700 dark:text-stone-300">
                         {salesData.map((data, i) => {
                           const isToday = i === salesData.length - 1;
                           return (
@@ -620,7 +620,7 @@ const AdminPage: React.FC = () => {
                   </div>
 
                   {/* Premium View Details Button */}
-                  <div className="mt-10 pt-8 border-t-2 border-stone-200 dark:border-neutral-700 text-center">
+                  <div className="mt-10 pt-8 border-t-2 border-stone-200 dark:border-stone-700 text-center">
                     <button
                       onClick={() => navigate('/admin/sales')}
                       className="group inline-flex items-center gap-4 px-10 py-5 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-black text-base uppercase tracking-wide hover:shadow-2xl transition-all duration-500 hover:scale-105 active:scale-95 shadow-xl"
@@ -635,7 +635,7 @@ const AdminPage: React.FC = () => {
               </div>
 
               {/* Administrator Information */}
-              <aside className="bg-white dark:bg-neutral-800 border border-stone-200 dark:border-neutral-700 rounded-2xl p-6 lg:p-8 shadow-lg" role="complementary">
+              <aside className="bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-2xl p-6 lg:p-8 shadow-lg" role="complementary">
                 <div className="flex flex-col sm:flex-row items-start gap-6">
                   <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-lg">
                     <FontAwesomeIcon icon={faShieldAlt} className="h-7 w-7 lg:h-8 lg:w-8 text-white" aria-hidden="true" />
@@ -644,12 +644,12 @@ const AdminPage: React.FC = () => {
                     <h3 className="text-lg font-black text-neutral-900 dark:text-white flex items-center gap-2">
                       <span>Administrator Privileges</span>
                     </h3>
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-medium">
+                    <p className="text-sm text-neutral-600 dark:text-stone-400 leading-relaxed font-medium">
                       You have full system access with comprehensive control over all administrative functions. Navigate through the system to manage user accounts, configure business settings, monitor inventory levels, and oversee multi-branch operations.
                     </p>
                     <div className="pt-2 flex items-center gap-2">
                       <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                      <span className="text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
+                      <span className="text-xs font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wider">
                         System Status: Fully Operational
                       </span>
                     </div>

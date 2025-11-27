@@ -154,24 +154,24 @@ const EditBranch: React.FC<EditBranchProps> = ({ isOpen, onClose, onUpdate, bran
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="relative w-full max-w-2xl bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl overflow-hidden">
+      <div className="relative w-full max-w-2xl bg-stone-50 dark:bg-stone-900 rounded-2xl shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
+        <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900">
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg">
               <FontAwesomeIcon icon={faBuilding} className="h-5 w-5 text-white" />
             </div>
             <div>
               <h2 className="text-xl font-bold text-neutral-900 dark:text-white">Edit Branch</h2>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">Update branch information</p>
+              <p className="text-sm text-neutral-600 dark:text-stone-400">Update branch information</p>
             </div>
           </div>
           <button
             onClick={handleClose}
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
+            className="p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors"
             disabled={isSubmitting}
           >
-            <FontAwesomeIcon icon={faTimes} className="h-5 w-5 text-neutral-600 dark:text-neutral-400" />
+            <FontAwesomeIcon icon={faTimes} className="h-5 w-5 text-neutral-600 dark:text-stone-400" />
           </button>
         </div>
 
@@ -179,7 +179,7 @@ const EditBranch: React.FC<EditBranchProps> = ({ isOpen, onClose, onUpdate, bran
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/* Branch Name */}
           <div>
-            <label className="block text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-2">
+            <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2">
               Branch Name
             </label>
             <input
@@ -187,10 +187,10 @@ const EditBranch: React.FC<EditBranchProps> = ({ isOpen, onClose, onUpdate, bran
               value={branchName}
               onChange={(e) => setBranchName(e.target.value)}
               placeholder="Enter branch name"
-              className={`w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-800 border-2 ${
+              className={`w-full px-4 py-3 bg-neutral-50 dark:bg-stone-800 border-2 ${
                 errors.branchName
                   ? 'border-red-500 focus:ring-red-500'
-                  : 'border-neutral-200 dark:border-neutral-700 focus:ring-orange-500'
+                  : 'border-neutral-200 dark:border-stone-700 focus:ring-orange-500'
               } rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
             />
             {errors.branchName && (
@@ -202,7 +202,7 @@ const EditBranch: React.FC<EditBranchProps> = ({ isOpen, onClose, onUpdate, bran
 
           {/* Location */}
           <div>
-            <label className="block text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-2">
+            <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2">
               Location
             </label>
             <input
@@ -210,10 +210,10 @@ const EditBranch: React.FC<EditBranchProps> = ({ isOpen, onClose, onUpdate, bran
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               placeholder="Enter location"
-              className={`w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-800 border-2 ${
+              className={`w-full px-4 py-3 bg-neutral-50 dark:bg-stone-800 border-2 ${
                 errors.location
                   ? 'border-red-500 focus:ring-red-500'
-                  : 'border-neutral-200 dark:border-neutral-700 focus:ring-orange-500'
+                  : 'border-neutral-200 dark:border-stone-700 focus:ring-orange-500'
               } rounded-xl text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
             />
             {errors.location && (
@@ -239,12 +239,12 @@ const EditBranch: React.FC<EditBranchProps> = ({ isOpen, onClose, onUpdate, bran
         </form>
 
         {/* Footer */}
-        <div className="sticky bottom-0 px-6 py-4 bg-neutral-50 dark:bg-neutral-800/50 border-t border-neutral-200 dark:border-neutral-800 flex gap-3">
+        <div className="sticky bottom-0 px-6 py-4 bg-neutral-50 dark:bg-stone-800/50 border-t border-neutral-200 dark:border-stone-700 flex gap-3">
           <button
             type="button"
             onClick={handleClose}
             disabled={isSubmitting}
-            className="flex-1 px-6 py-3 bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 text-neutral-900 dark:text-white font-bold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
+            className="flex-1 px-6 py-3 bg-neutral-200 dark:bg-stone-700 hover:bg-neutral-300 dark:hover:bg-stone-600 text-neutral-900 dark:text-white font-bold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
           >
             Cancel
           </button>

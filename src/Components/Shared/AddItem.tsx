@@ -355,7 +355,7 @@
           <StaffSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
 
           <div className={`flex h-screen flex-1 flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
-            <div className="sticky top-0 z-20 border-b border-orange-100/50 dark:border-neutral-800/50 bg-white/80 dark:bg-neutral-900/80 px-4 sm:px-6 md:px-8 py-3.5 sm:py-4 shadow-sm backdrop-blur-xl">
+            <div className="sticky top-0 z-20 border-b border-orange-100/50 dark:border-stone-700/50 bg-stone-50/80 dark:bg-stone-900/80 px-4 sm:px-6 md:px-8 py-3.5 sm:py-4 shadow-sm backdrop-blur-xl">
               <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
                   <button
@@ -388,7 +388,7 @@
                     </div>
                     <div className="min-w-0 flex-1">
                       <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300 bg-clip-text text-transparent truncate">Add Menu Item</h2>
-                      <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mt-1">Create a new menu item for your store</p>
+                      <p className="text-xs sm:text-sm text-neutral-600 dark:text-stone-400 mt-1">Create a new menu item for your store</p>
                     </div>
                   </div>
                 </div>
@@ -414,11 +414,11 @@
                 )}
 
                 {/* Form - Improved Design */}
-                <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl border border-neutral-200/50 dark:border-neutral-800/50 shadow-xl shadow-neutral-900/5">
+                <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6 bg-stone-50/80 dark:bg-stone-900/80 backdrop-blur-xl p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl border border-neutral-200/50 dark:border-stone-700/50 shadow-xl shadow-neutral-900/5">
                   
                   {/* Item Name */}
                   <div>
-                    <label className="block text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+                    <label className="block text-xs sm:text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">
                       Item Name <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -426,7 +426,7 @@
                       name="itemName"
                       value={formData.itemName}
                       onChange={handleChange}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all text-sm sm:text-base"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all text-sm sm:text-base"
                       placeholder="e.g., Iced Latte"
                       disabled={isLoading}
                     />
@@ -436,17 +436,17 @@
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                     {/* Price */}
                     <div>
-                      <label className="block text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+                      <label className="block text-xs sm:text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">
                         Price <span className="text-red-500">*</span>
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-neutral-500 dark:text-neutral-400 text-sm sm:text-base font-medium">₱</span>
+                        <span className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-neutral-500 dark:text-stone-400 text-sm sm:text-base font-medium">₱</span>
                         <input
                           type="number"
                           name="price"
                           value={formData.price}
                           onChange={handleChange}
-                          className="w-full pl-8 sm:pl-9 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all text-sm sm:text-base"
+                          className="w-full pl-8 sm:pl-9 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all text-sm sm:text-base"
                           placeholder="0.00"
                           step="0.01"
                           min="0"
@@ -457,14 +457,14 @@
 
                     {/* Category */}
                     <div>
-                      <label className="block text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+                      <label className="block text-xs sm:text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">
                         Category <span className="text-red-500">*</span>
                       </label>
                       <select
                         name="category"
                         value={formData.category}
                         onChange={handleChange}
-                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 appearance-none cursor-pointer transition-all text-sm sm:text-base"
+                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 appearance-none cursor-pointer transition-all text-sm sm:text-base"
                         disabled={isLoading}
                       >
                         <option value="">Select category</option>
@@ -479,14 +479,14 @@
 
                   {/* Description */}
                   <div>
-                    <label className="block text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+                    <label className="block text-xs sm:text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">
                       Description <span className="text-red-500">*</span>
                     </label>
                     <textarea
                       name="description"
                       value={formData.description}
                       onChange={handleChange}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 resize-none transition-all text-sm sm:text-base"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 resize-none transition-all text-sm sm:text-base"
                       rows={4}
                       placeholder="Brief description of the menu item"
                       disabled={isLoading}
@@ -495,18 +495,18 @@
 
                   {/* Product Items - Multiple Selection */}
                   <div>
-                    <label className="block text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+                    <label className="block text-xs sm:text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">
                       Product Items (Optional)
                     </label>
                     
                     {/* Add Product Form */}
-                    <div className="space-y-4 p-3 sm:p-4 lg:p-5 bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-800/50 dark:to-neutral-800/30 rounded-xl border border-neutral-200 dark:border-neutral-700">
+                    <div className="space-y-4 p-3 sm:p-4 lg:p-5 bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-800/50 dark:to-neutral-800/30 rounded-xl border border-neutral-200 dark:border-stone-700">
                       <div className="flex flex-col gap-3">
                         <div>
                           <select
                             value={currentProduct}
                             onChange={(e) => setCurrentProduct(e.target.value)}
-                            className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 appearance-none cursor-pointer transition-all text-sm sm:text-base"
+                            className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 appearance-none cursor-pointer transition-all text-sm sm:text-base"
                             disabled={isLoading}
                           >
                             <option value="">Select a product</option>
@@ -523,7 +523,7 @@
                             type="number"
                             value={currentQuantity}
                             onChange={(e) => setCurrentQuantity(e.target.value)}
-                            className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all text-sm sm:text-base"
+                            className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all text-sm sm:text-base"
                             placeholder="Quantity"
                             min="0"
                             step="1"
@@ -544,7 +544,7 @@
                       {/* Selected Products List */}
                       {selectedProducts.length > 0 && (
                         <div className="space-y-3">
-                          <p className="text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300 flex items-center gap-2">
+                          <p className="text-xs sm:text-sm font-semibold text-stone-700 dark:text-stone-300 flex items-center gap-2">
                             <span className="w-2 h-2 bg-orange-500 rounded-full flex-shrink-0"></span>
                             <span>Selected Products ({selectedProducts.length})</span>
                           </p>
@@ -554,13 +554,13 @@
                               return (
                                 <div
                                   key={item.productOfSupplierId}
-                                  className="flex items-center justify-between gap-3 p-3 sm:p-4 bg-white dark:bg-neutral-900 rounded-lg sm:rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm hover:shadow-md transition-all"
+                                  className="flex items-center justify-between gap-3 p-3 sm:p-4 bg-stone-50 dark:bg-stone-900 rounded-lg sm:rounded-xl border border-neutral-200 dark:border-stone-700 shadow-sm hover:shadow-md transition-all"
                                 >
                                 <div className="flex-1 min-w-0">
                                   <p className="text-xs sm:text-sm font-medium text-neutral-900 dark:text-white truncate">
                                     {product?.productName || `Product #${item.productOfSupplierId}`}
                                   </p>
-                                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                                  <p className="text-xs text-neutral-500 dark:text-stone-400">
                                     Quantity: {item.quantityUsed}
                                   </p>
                                 </div>
@@ -584,12 +584,12 @@
 
                   {/* Image Upload */}
                   <div>
-                    <label className="block text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+                    <label className="block text-xs sm:text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">
                       Item Image <span className="text-red-500">*</span>
                     </label>
                     
                     {!formData.imagePreview ? (
-                      <div className="relative border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-xl p-6 sm:p-8 hover:border-orange-400 dark:hover:border-orange-500 cursor-pointer bg-neutral-50 dark:bg-neutral-800/50 transition-all duration-200">
+                      <div className="relative border-2 border-dashed border-neutral-300 dark:border-stone-600 rounded-xl p-6 sm:p-8 hover:border-orange-400 dark:hover:border-orange-500 cursor-pointer bg-neutral-50 dark:bg-stone-800/50 transition-all duration-200">
                         <input
                           type="file"
                           accept="image/*"
@@ -601,12 +601,12 @@
                           <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-orange-500/10 to-orange-600/10 flex items-center justify-center mb-3">
                             <FontAwesomeIcon icon={faImage} className="h-6 w-6 sm:h-7 sm:w-7 text-orange-500" />
                           </div>
-                          <p className="text-sm sm:text-base font-semibold text-neutral-700 dark:text-neutral-300">Click to upload image</p>
-                          <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-1">PNG, JPG, JPEG up to 5MB</p>
+                          <p className="text-sm sm:text-base font-semibold text-stone-700 dark:text-stone-300">Click to upload image</p>
+                          <p className="text-xs sm:text-sm text-neutral-500 dark:text-stone-400 mt-1">PNG, JPG, JPEG up to 5MB</p>
                         </div>
                       </div>
                     ) : (
-                      <div className="relative rounded-xl overflow-hidden border-2 border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800">
+                      <div className="relative rounded-xl overflow-hidden border-2 border-neutral-300 dark:border-stone-700 bg-neutral-100 dark:bg-stone-800">
                         <img
                           src={formData.imagePreview}
                           alt="Preview"
@@ -632,7 +632,7 @@
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-neutral-200 dark:border-neutral-800">
+                  <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-neutral-200 dark:border-stone-700">
                     <button
                       type="submit"
                       disabled={isLoading}
@@ -655,7 +655,7 @@
                       type="button"
                       onClick={() => navigate('/staff')}
                       disabled={isLoading}
-                      className="flex-1 px-4 sm:px-6 py-3 sm:py-3.5 bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white font-semibold rounded-xl disabled:cursor-not-allowed disabled:opacity-50 flex items-center justify-center gap-2.5 transition-all duration-200 active:scale-[0.98] shadow-sm hover:shadow-md text-sm sm:text-base"
+                      className="flex-1 px-4 sm:px-6 py-3 sm:py-3.5 bg-neutral-200 dark:bg-stone-800 hover:bg-neutral-300 dark:hover:bg-stone-700 text-neutral-900 dark:text-white font-semibold rounded-xl disabled:cursor-not-allowed disabled:opacity-50 flex items-center justify-center gap-2.5 transition-all duration-200 active:scale-[0.98] shadow-sm hover:shadow-md text-sm sm:text-base"
                     >
                       <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4 sm:h-5 sm:w-5" />
                       <span>Cancel</span>
@@ -664,7 +664,7 @@
 
                   {/* Helper Text */}
                   <div className="flex items-center justify-center gap-2 pt-2">
-                    <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 text-center">
+                    <p className="text-xs sm:text-sm text-neutral-500 dark:text-stone-400 text-center">
                       <span className="text-red-500 font-semibold">*</span> Required fields
                     </p>
                   </div>

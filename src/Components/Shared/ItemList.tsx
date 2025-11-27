@@ -205,7 +205,7 @@ const ItemList: React.FC = () => {
 
         <div className={`flex h-screen flex-1 flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
           {/* Premium Header with Glass Morphism */}
-          <div className="sticky top-0 z-20 backdrop-blur-xl bg-white/80 dark:bg-neutral-900/80 border-b border-stone-200/50 dark:border-neutral-700/50 shadow-lg shadow-black/5">
+          <div className="sticky top-0 z-20 backdrop-blur-xl bg-stone-50/90 dark:bg-stone-900/95 border-b border-stone-200/50 dark:border-stone-700/50 shadow-lg shadow-black/5">
             <div className="px-4 sm:px-6 md:px-8 py-4">
               <div className="flex items-center justify-between gap-3 sm:gap-4">
                 <div className="flex items-center gap-3">
@@ -218,7 +218,7 @@ const ItemList: React.FC = () => {
 
                   <button
                     onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                    className="hidden lg:flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-800 hover:from-orange-100 hover:to-orange-200 dark:hover:from-orange-900/40 dark:hover:to-orange-800/40 text-neutral-700 dark:text-neutral-300 hover:text-orange-600 dark:hover:text-orange-400 border border-stone-300 dark:border-neutral-600 shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 hover:scale-105"
+                    className="hidden lg:flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-stone-100 to-stone-200 dark:from-neutral-700 dark:to-neutral-800 hover:from-orange-100 hover:to-orange-200 dark:hover:from-orange-900/40 dark:hover:to-orange-800/40 text-stone-700 dark:text-stone-300 hover:text-orange-600 dark:hover:text-orange-400 border border-stone-300 dark:border-stone-600 shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 hover:scale-105"
                   >
                     <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                   </button>
@@ -226,7 +226,7 @@ const ItemList: React.FC = () => {
                   <div className="hidden sm:flex items-center gap-3">
                     <div>
                       <h1 className="text-xl font-black text-neutral-900 dark:text-white tracking-tight">Menu Items</h1>
-                      <p className="text-xs font-medium text-neutral-600 dark:text-neutral-400">Manage your menu catalog</p>
+                      <p className="text-xs font-medium text-neutral-600 dark:text-stone-400">Manage your menu catalog</p>
                     </div>
                   </div>
                 </div>
@@ -234,10 +234,10 @@ const ItemList: React.FC = () => {
                 <div className="flex-1 max-w-xl">
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-amber-500/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div className="relative flex items-center gap-3 bg-white dark:bg-neutral-800 rounded-xl border-2 border-stone-200 dark:border-neutral-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
+                    <div className="relative flex items-center gap-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-2 border-stone-200 dark:border-stone-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
                       <FontAwesomeIcon
                         icon={faSearch}
-                        className="h-5 w-5 text-neutral-400 dark:text-neutral-500 group-focus-within:text-orange-500 transition-colors"
+                        className="h-5 w-5 text-neutral-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors"
                       />
                       <input
                         type="text"
@@ -271,7 +271,7 @@ const ItemList: React.FC = () => {
                   className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
                     selectedAvailability === 'all'
                       ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30'
-                      : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-orange-500 dark:hover:border-orange-500'
+                      : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-orange-500 dark:hover:border-orange-500'
                   }`}
                 >
                   All Items
@@ -281,7 +281,7 @@ const ItemList: React.FC = () => {
                   className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
                     selectedAvailability === 'available'
                       ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/30'
-                      : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-green-500 dark:hover:border-green-500'
+                      : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-green-500 dark:hover:border-green-500'
                   }`}
                 >
                   Available
@@ -291,7 +291,7 @@ const ItemList: React.FC = () => {
                   className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
                     selectedAvailability === 'unavailable'
                       ? 'bg-gradient-to-r from-red-500 to-rose-600 text-white shadow-lg shadow-red-500/30'
-                      : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-2 border-stone-200 dark:border-neutral-700 hover:border-red-500 dark:hover:border-red-500'
+                      : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-red-500 dark:hover:border-red-500'
                   }`}
                 >
                   Out of Stock
@@ -304,16 +304,16 @@ const ItemList: React.FC = () => {
                   {/* Total Items Card */}
                   <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 p-6 shadow-xl shadow-orange-500/20 hover:shadow-2xl hover:shadow-orange-500/30 transition-all duration-500 hover:-translate-y-2">
                     <div className="absolute inset-0 opacity-10">
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-3xl transform translate-x-8 -translate-y-8"></div>
-                      <div className="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full blur-2xl transform -translate-x-4 translate-y-4"></div>
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-stone-50 rounded-full blur-3xl transform translate-x-8 -translate-y-8"></div>
+                      <div className="absolute bottom-0 left-0 w-24 h-24 bg-stone-50 rounded-full blur-2xl transform -translate-x-4 translate-y-4"></div>
                     </div>
                     <div className="relative z-10">
                       <div className="flex items-start justify-between mb-4">
-                        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm shadow-lg">
+                        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-stone-50/20 backdrop-blur-sm shadow-lg">
                           <FontAwesomeIcon icon={faCoffee} className="h-7 w-7 text-white" />
                         </div>
-                        <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/20 backdrop-blur-sm">
-                          <div className="h-1.5 w-1.5 rounded-full bg-white animate-pulse"></div>
+                        <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-stone-50/20 backdrop-blur-sm">
+                          <div className="h-1.5 w-1.5 rounded-full bg-stone-50 animate-pulse"></div>
                           <span className="text-xs font-bold text-white">Live</span>
                         </div>
                       </div>
@@ -328,12 +328,12 @@ const ItemList: React.FC = () => {
                   {/* Available Items Card */}
                   <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 via-green-600 to-teal-700 p-6 shadow-xl shadow-green-500/20 hover:shadow-2xl hover:shadow-green-500/30 transition-all duration-500 hover:-translate-y-2">
                     <div className="absolute inset-0 opacity-10">
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-3xl transform translate-x-8 -translate-y-8"></div>
-                      <div className="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full blur-2xl transform -translate-x-4 translate-y-4"></div>
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-stone-50 rounded-full blur-3xl transform translate-x-8 -translate-y-8"></div>
+                      <div className="absolute bottom-0 left-0 w-24 h-24 bg-stone-50 rounded-full blur-2xl transform -translate-x-4 translate-y-4"></div>
                     </div>
                     <div className="relative z-10">
                       <div className="flex items-start justify-between mb-4">
-                        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm shadow-lg">
+                        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-stone-50/20 backdrop-blur-sm shadow-lg">
                           <FontAwesomeIcon icon={faCheckCircle} className="h-7 w-7 text-white" />
                         </div>
                       </div>
@@ -348,12 +348,12 @@ const ItemList: React.FC = () => {
                   {/* Unavailable Items Card */}
                   <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-red-500 via-rose-600 to-pink-700 p-6 shadow-xl shadow-red-500/20 hover:shadow-2xl hover:shadow-red-500/30 transition-all duration-500 hover:-translate-y-2">
                     <div className="absolute inset-0 opacity-10">
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-3xl transform translate-x-8 -translate-y-8"></div>
-                      <div className="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full blur-2xl transform -translate-x-4 translate-y-4"></div>
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-stone-50 rounded-full blur-3xl transform translate-x-8 -translate-y-8"></div>
+                      <div className="absolute bottom-0 left-0 w-24 h-24 bg-stone-50 rounded-full blur-2xl transform -translate-x-4 translate-y-4"></div>
                     </div>
                     <div className="relative z-10">
                       <div className="flex items-start justify-between mb-4">
-                        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm shadow-lg">
+                        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-stone-50/20 backdrop-blur-sm shadow-lg">
                           <FontAwesomeIcon icon={faTimesCircle} className="h-7 w-7 text-white" />
                         </div>
                       </div>
@@ -368,7 +368,7 @@ const ItemList: React.FC = () => {
               )}
 
               {/* Table Section */}
-              <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-white dark:bg-neutral-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-neutral-700">
+              <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-stone-50 dark:bg-stone-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-stone-700">
                 {/* Table Header */}
                 <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-white via-orange-50/30 to-white dark:from-neutral-800 dark:via-orange-950/20 dark:to-neutral-800">
                   <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-orange-500 to-orange-600"></div>
@@ -381,7 +381,7 @@ const ItemList: React.FC = () => {
                         </div>
                         <div>
                           <h3 className="text-2xl font-black text-neutral-900 dark:text-white tracking-tight">Menu Catalog</h3>
-                          <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mt-0.5">Complete item inventory</p>
+                          <p className="text-sm font-medium text-neutral-600 dark:text-stone-400 mt-0.5">Complete item inventory</p>
                         </div>
                       </div>
                       
@@ -406,7 +406,7 @@ const ItemList: React.FC = () => {
                         <div className="absolute inset-0 bg-orange-500/20 rounded-full blur-xl"></div>
                         <div className="relative h-16 w-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-6"></div>
                       </div>
-                      <p className="text-neutral-600 dark:text-neutral-400 font-medium text-lg">Loading menu items...</p>
+                      <p className="text-neutral-600 dark:text-stone-400 font-medium text-lg">Loading menu items...</p>
                     </div>
                   </div>
                 ) : filteredItems.length === 0 ? (
@@ -418,15 +418,15 @@ const ItemList: React.FC = () => {
                           <FontAwesomeIcon icon={faCoffee} className="h-10 w-10 text-orange-500 dark:text-orange-400" />
                         </div>
                       </div>
-                      <p className="text-neutral-600 dark:text-neutral-400 text-xl font-bold mb-2">No menu items found</p>
-                      <p className="text-neutral-500 dark:text-neutral-500 text-sm">Try adjusting your search or add a new item</p>
+                      <p className="text-neutral-600 dark:text-stone-400 text-xl font-bold mb-2">No menu items found</p>
+                      <p className="text-neutral-500 dark:text-stone-500 text-sm">Try adjusting your search or add a new item</p>
                     </div>
                   </div>
                 ) : (
                   <div className="overflow-x-auto flex-1">
                     <table className="w-full">
                       <thead>
-                        <tr className="border-b-2 border-orange-200/60 dark:border-neutral-800 bg-gradient-to-r from-orange-50 via-amber-50 to-orange-50 dark:from-neutral-800/50 dark:via-neutral-700/50 dark:to-neutral-800/50">
+                        <tr className="border-b-2 border-orange-200/60 dark:border-stone-700 bg-gradient-to-r from-orange-50 via-amber-50 to-orange-50 dark:from-neutral-800/50 dark:via-neutral-700/50 dark:to-neutral-800/50">
                           <th className="px-6 py-4 text-left text-xs font-black text-orange-700 dark:text-orange-400 uppercase tracking-wider">Item Name</th>
                           <th className="px-6 py-4 text-left text-xs font-black text-orange-700 dark:text-orange-400 uppercase tracking-wider">Price</th>
                           <th className="px-6 py-4 text-left text-xs font-black text-orange-700 dark:text-orange-400 uppercase tracking-wider">Description</th>
@@ -447,7 +447,7 @@ const ItemList: React.FC = () => {
                                   <img
                                     src={item.image.startsWith('data:') ? item.image : `data:image/jpeg;base64,${item.image}`}
                                     alt={item.itemName}
-                                    className="relative w-12 h-12 object-cover rounded-xl border-2 border-orange-200 dark:border-neutral-700 shadow-lg"
+                                    className="relative w-12 h-12 object-cover rounded-xl border-2 border-orange-200 dark:border-stone-700 shadow-lg"
                                     onError={(e) => {
                                       e.currentTarget.src = '/images/placeholder.jpg';
                                     }}
@@ -464,7 +464,7 @@ const ItemList: React.FC = () => {
                               </div>
                             </td>
                             <td className="px-6 py-4">
-                              <div className="text-sm text-neutral-600 dark:text-neutral-400 max-w-xs truncate">
+                              <div className="text-sm text-neutral-600 dark:text-stone-400 max-w-xs truncate">
                                 {item.description}
                               </div>
                             </td>

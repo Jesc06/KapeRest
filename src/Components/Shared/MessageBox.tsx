@@ -49,7 +49,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({ isOpen, onClose, title, message
               {title} <span className="text-xl">☕</span>
             </h3>
             <div className="mt-3">
-              <p className="text-base leading-relaxed text-neutral-700 dark:text-neutral-300">
+              <p className="text-base leading-relaxed text-stone-700 dark:text-stone-300">
                 {message}
               </p>
             </div>

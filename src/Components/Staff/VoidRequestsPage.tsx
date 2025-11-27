@@ -180,7 +180,7 @@ const VoidRequestsPage: React.FC = () => {
 
         <div className={`flex h-screen flex-1 flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
           {/* Header */}
-          <div className="sticky top-0 z-20 border-b border-orange-100/50 dark:border-neutral-800/50 bg-white/80 dark:bg-neutral-900/80 px-4 sm:px-6 md:px-8 py-3.5 sm:py-4 shadow-sm backdrop-blur-xl">
+          <div className="sticky top-0 z-20 border-b border-orange-100/50 dark:border-stone-700/50 bg-stone-50/80 dark:bg-neutral-900/80 px-4 sm:px-6 md:px-8 py-3.5 sm:py-4 shadow-sm backdrop-blur-xl">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
                 <button
@@ -215,7 +215,7 @@ const VoidRequestsPage: React.FC = () => {
                   </div>
                   <div>
                     <h2 className="text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300 bg-clip-text text-transparent">Pending Void Requests</h2>
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">Review and approve/reject void requests from cashiers</p>
+                    <p className="text-sm text-neutral-600 dark:text-stone-400 mt-1">Review and approve/reject void requests from cashiers</p>
                   </div>
                 </div>
               </div>
@@ -223,13 +223,13 @@ const VoidRequestsPage: React.FC = () => {
               {/* Search Section */}
               <div className="mb-6">
                 <div className="relative">
-                  <FontAwesomeIcon icon={faSearch} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-neutral-500 text-sm" />
+                  <FontAwesomeIcon icon={faSearch} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-stone-500 text-sm" />
                   <input
                     type="text"
                     placeholder="Search by receipt number, item name..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-lg text-sm text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:border-orange-500 transition-colors duration-200"
+                    className="w-full pl-10 pr-4 py-2.5 bg-stone-50 dark:bg-stone-900 border border-neutral-200 dark:border-stone-700 rounded-lg text-sm text-neutral-900 dark:text-white placeholder-stone-400 focus:outline-none focus:border-orange-500 transition-colors duration-200"
                   />
                 </div>
               </div>
@@ -237,28 +237,28 @@ const VoidRequestsPage: React.FC = () => {
               {/* Void Requests List */}
               <div className="space-y-4">
                 {isLoading ? (
-                  <div className="bg-white dark:bg-neutral-900 rounded-lg p-12 text-center border border-neutral-200 dark:border-neutral-800">
+                  <div className="bg-stone-50 dark:bg-stone-900 rounded-lg p-12 text-center border border-neutral-200 dark:border-stone-700">
                     <div className="inline-block h-12 w-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                    <p className="text-neutral-600 dark:text-neutral-400">Loading void requests...</p>
+                    <p className="text-neutral-600 dark:text-stone-400">Loading void requests...</p>
                   </div>
                 ) : filteredRequests.length === 0 ? (
-                  <div className="bg-white dark:bg-neutral-900 rounded-lg p-12 text-center border border-neutral-200 dark:border-neutral-800">
+                  <div className="bg-stone-50 dark:bg-stone-900 rounded-lg p-12 text-center border border-neutral-200 dark:border-stone-700">
                     <FontAwesomeIcon icon={faBan} className="h-16 w-16 text-neutral-300 dark:text-neutral-700 mb-4" />
-                    <p className="text-neutral-600 dark:text-neutral-400 text-lg font-medium">No pending void requests</p>
-                    <p className="text-neutral-500 dark:text-neutral-500 text-sm mt-2">All void requests have been processed</p>
+                    <p className="text-neutral-600 dark:text-stone-400 text-lg font-medium">No pending void requests</p>
+                    <p className="text-neutral-500 dark:text-stone-500 text-sm mt-2">All void requests have been processed</p>
                   </div>
                 ) : (
                   filteredRequests.map((request) => (
                     <div
                       key={request.id}
-                      className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-neutral-800 overflow-hidden hover:border-orange-300 dark:hover:border-orange-700 hover:shadow-lg transition-all duration-300"
+                      className="bg-stone-50 dark:bg-stone-900 rounded-xl border border-neutral-200 dark:border-stone-700 overflow-hidden hover:border-orange-300 dark:hover:border-orange-700 hover:shadow-lg transition-all duration-300"
                     >
                       <div className="p-6">
                         <div className="flex flex-col">
                           {/* Transaction Info */}
                           <div className="flex-1">
                             {/* Header with Receipt */}
-                            <div className="flex items-start justify-between mb-4 pb-4 border-b border-neutral-100 dark:border-neutral-800">
+                            <div className="flex items-start justify-between mb-4 pb-4 border-b border-neutral-100 dark:border-stone-700">
                               <div className="flex items-start gap-3">
                                 <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
                                   <FontAwesomeIcon icon={faReceipt} className="text-white text-lg" />
@@ -272,7 +272,7 @@ const VoidRequestsPage: React.FC = () => {
                                       {request.receiptNumber || `#${request.id}`}
                                     </span>
                                     <span className="text-neutral-300 dark:text-neutral-700">•</span>
-                                    <span className="text-neutral-600 dark:text-neutral-400 flex items-center gap-1.5">
+                                    <span className="text-neutral-600 dark:text-stone-400 flex items-center gap-1.5">
                                       <FontAwesomeIcon icon={faCalendar} className="text-xs" />
                                       {formatDate(request.dateTime)}
                                     </span>
@@ -284,15 +284,15 @@ const VoidRequestsPage: React.FC = () => {
                             {/* Transaction Details Grid */}
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
                               <div className="bg-neutral-50 dark:bg-neutral-800/50 rounded-lg p-3">
-                                <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase mb-1 font-medium">Subtotal</p>
+                                <p className="text-xs text-neutral-500 dark:text-stone-400 uppercase mb-1 font-medium">Subtotal</p>
                                 <p className="text-base font-bold text-neutral-900 dark:text-white">₱{request.subtotal.toFixed(2)}</p>
                               </div>
                               <div className="bg-neutral-50 dark:bg-neutral-800/50 rounded-lg p-3">
-                                <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase mb-1 font-medium">Tax</p>
+                                <p className="text-xs text-neutral-500 dark:text-stone-400 uppercase mb-1 font-medium">Tax</p>
                                 <p className="text-base font-bold text-neutral-900 dark:text-white">₱{request.tax.toFixed(2)}</p>
                               </div>
                               <div className="bg-neutral-50 dark:bg-neutral-800/50 rounded-lg p-3">
-                                <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase mb-1 font-medium">Discount</p>
+                                <p className="text-xs text-neutral-500 dark:text-stone-400 uppercase mb-1 font-medium">Discount</p>
                                 <p className="text-base font-bold text-neutral-900 dark:text-white">₱{request.discount.toFixed(2)}</p>
                               </div>
                               <div className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/30 dark:to-orange-900/20 rounded-lg p-3 border border-orange-200 dark:border-orange-800/50">
@@ -307,12 +307,12 @@ const VoidRequestsPage: React.FC = () => {
                                 <FontAwesomeIcon icon={faBan} className="text-orange-600 dark:text-orange-400 text-sm" />
                                 <p className="text-xs font-bold text-orange-700 dark:text-orange-400 uppercase tracking-wide">Void Reason</p>
                               </div>
-                              <p className="text-sm text-neutral-800 dark:text-neutral-200 leading-relaxed">{request.reason || 'No reason provided'}</p>
+                              <p className="text-sm text-stone-800 dark:text-stone-200 leading-relaxed">{request.reason || 'No reason provided'}</p>
                             </div>
                           </div>
 
                           {/* Actions - Bottom Right */}
-                          <div className="flex items-center justify-end gap-3 mt-4 pt-4 border-t border-neutral-100 dark:border-neutral-800">
+                          <div className="flex items-center justify-end gap-3 mt-4 pt-4 border-t border-neutral-100 dark:border-stone-700">
                             <button
                               onClick={() => handleApprove(request.id)}
                               disabled={processing === request.id}
@@ -344,8 +344,8 @@ const VoidRequestsPage: React.FC = () => {
 
               {/* Summary */}
               {!isLoading && filteredRequests.length > 0 && (
-                <div className="mt-6 bg-white dark:bg-neutral-900 p-4 rounded-lg border border-neutral-200 dark:border-neutral-800">
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                <div className="mt-6 bg-stone-50 dark:bg-stone-900 p-4 rounded-lg border border-neutral-200 dark:border-stone-700">
+                  <p className="text-sm text-neutral-600 dark:text-stone-400">
                     <span className="font-bold text-orange-600 dark:text-orange-400">{filteredRequests.length}</span> pending void request{filteredRequests.length !== 1 ? 's' : ''} awaiting approval
                   </p>
                 </div>

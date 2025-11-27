@@ -265,7 +265,7 @@ const AddSupplier: React.FC = () => {
 
         <div className={`flex h-screen flex-1 flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
           {/* Header */}
-          <div className="sticky top-0 z-20 border-b border-orange-100/50 dark:border-neutral-800/50 bg-white/80 dark:bg-neutral-900/80 px-4 sm:px-6 md:px-8 py-3.5 sm:py-4 shadow-sm backdrop-blur-xl">
+          <div className="sticky top-0 z-20 border-b border-orange-100/50 dark:border-stone-700/50 bg-stone-50/80 dark:bg-stone-900/80 px-4 sm:px-6 md:px-8 py-3.5 sm:py-4 shadow-sm backdrop-blur-xl">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
                 <button
@@ -300,7 +300,7 @@ const AddSupplier: React.FC = () => {
                   </div>
                   <div>
                     <h2 className="text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300 bg-clip-text text-transparent">Add Supplier</h2>
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">Create a new supplier profile with all essential contact information</p>
+                    <p className="text-sm text-neutral-600 dark:text-stone-400 mt-1">Create a new supplier profile with all essential contact information</p>
                   </div>
                 </div>
               </div>
@@ -327,11 +327,11 @@ const AddSupplier: React.FC = () => {
               )}
 
               {/* Form - Flat Design */}
-              <form onSubmit={handleSubmit} className="space-y-5 bg-white dark:bg-neutral-900 p-6 rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-sm">
+              <form onSubmit={handleSubmit} className="space-y-5 bg-stone-50 dark:bg-stone-900 p-6 rounded-lg border border-neutral-200 dark:border-stone-700 shadow-sm">
                 
                 {/* Supplier Name */}
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+                  <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1.5">
                     Supplier Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -340,10 +340,10 @@ const AddSupplier: React.FC = () => {
                     value={formData.supplierName}
                     onChange={handleChange}
                     onBlur={() => handleFieldBlur('supplierName')}
-                    className={`w-full px-4 py-3.5 text-base rounded-lg border bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
+                    className={`w-full px-4 py-3.5 text-base rounded-lg border bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
                       fieldErrors.supplierName
                         ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500'
-                        : 'border-neutral-300 dark:border-neutral-700 focus:border-orange-500 focus:ring-orange-500'
+                        : 'border-neutral-300 dark:border-stone-700 focus:border-orange-500 focus:ring-orange-500'
                     }`}
                     placeholder="e.g., ABC Supplies Inc."
                     disabled={isLoading}
@@ -357,7 +357,7 @@ const AddSupplier: React.FC = () => {
 
                 {/* Contact Person */}
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+                  <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1.5">
                     Contact Person <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -366,10 +366,10 @@ const AddSupplier: React.FC = () => {
                     value={formData.contactPerson}
                     onChange={handleChange}
                     onBlur={() => handleFieldBlur('contactPerson')}
-                    className={`w-full px-4 py-3.5 text-base rounded-lg border bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
+                    className={`w-full px-4 py-3.5 text-base rounded-lg border bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
                       fieldErrors.contactPerson
                         ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500'
-                        : 'border-neutral-300 dark:border-neutral-700 focus:border-orange-500 focus:ring-orange-500'
+                        : 'border-neutral-300 dark:border-stone-700 focus:border-orange-500 focus:ring-orange-500'
                     }`}
                     placeholder="e.g., Juan Dela Cruz"
                     disabled={isLoading}
@@ -385,7 +385,7 @@ const AddSupplier: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   {/* Phone Number */}
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1.5">
                       Phone Number <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -394,10 +394,10 @@ const AddSupplier: React.FC = () => {
                       value={formData.phoneNumber}
                       onChange={handleChange}
                       onBlur={() => handleFieldBlur('phoneNumber')}
-                      className={`w-full px-4 py-3.5 text-base rounded-lg border bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
+                      className={`w-full px-4 py-3.5 text-base rounded-lg border bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
                         fieldErrors.phoneNumber
                           ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500'
-                          : 'border-neutral-300 dark:border-neutral-700 focus:border-orange-500 focus:ring-orange-500'
+                          : 'border-neutral-300 dark:border-stone-700 focus:border-orange-500 focus:ring-orange-500'
                       }`}
                       placeholder="e.g., 09123456789"
                       disabled={isLoading}
@@ -411,7 +411,7 @@ const AddSupplier: React.FC = () => {
 
                   {/* Email */}
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1.5">
                       Email Address <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -420,10 +420,10 @@ const AddSupplier: React.FC = () => {
                       value={formData.email}
                       onChange={handleChange}
                       onBlur={() => handleFieldBlur('email')}
-                      className={`w-full px-4 py-3.5 text-base rounded-lg border bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
+                      className={`w-full px-4 py-3.5 text-base rounded-lg border bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
                         fieldErrors.email
                           ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500'
-                          : 'border-neutral-300 dark:border-neutral-700 focus:border-orange-500 focus:ring-orange-500'
+                          : 'border-neutral-300 dark:border-stone-700 focus:border-orange-500 focus:ring-orange-500'
                       }`}
                       placeholder="e.g., supplier@email.com"
                       disabled={isLoading}
@@ -438,7 +438,7 @@ const AddSupplier: React.FC = () => {
 
                 {/* Address */}
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+                  <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1.5">
                     Address <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -447,10 +447,10 @@ const AddSupplier: React.FC = () => {
                     value={formData.address}
                     onChange={handleChange}
                     onBlur={() => handleFieldBlur('address')}
-                    className={`w-full px-4 py-3.5 text-base rounded-lg border bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
+                    className={`w-full px-4 py-3.5 text-base rounded-lg border bg-stone-50 dark:bg-stone-900 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 disabled:opacity-50 ${
                       fieldErrors.address
                         ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500'
-                        : 'border-neutral-300 dark:border-neutral-700 focus:border-orange-500 focus:ring-orange-500'
+                        : 'border-neutral-300 dark:border-stone-700 focus:border-orange-500 focus:ring-orange-500'
                     }`}
                     placeholder="Complete address"
                     disabled={isLoading}
@@ -493,7 +493,7 @@ const AddSupplier: React.FC = () => {
                     type="button"
                     onClick={() => navigate('/staff')}
                     disabled={isLoading}
-                    className="flex-1 px-4 py-2.5 bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white font-medium rounded-lg disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="flex-1 px-4 py-2.5 bg-neutral-200 dark:bg-stone-800 hover:bg-neutral-300 dark:hover:bg-stone-700 text-neutral-900 dark:text-white font-medium rounded-lg disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4" />
                     <span>Cancel</span>
@@ -501,7 +501,7 @@ const AddSupplier: React.FC = () => {
                 </div>
 
                 {/* Helper Text */}
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 pt-1">
+                <p className="text-xs text-neutral-500 dark:text-stone-400 pt-1">
                   <span className="text-red-500">*</span> Required fields
                 </p>
               </form>
