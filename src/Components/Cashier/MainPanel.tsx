@@ -668,9 +668,6 @@ const MainPanel: React.FC<MainPanelProps> = ({
                         {isOutOfStock && (
                           <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
                             <div className="text-center px-4">
-                              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-500 mb-3">
-                                <FontAwesomeIcon icon={faTrash} className="h-8 w-8 text-white" />
-                              </div>
                               <p className="text-white font-black text-lg uppercase tracking-wider">Out of Stock</p>
                             </div>
                           </div>
