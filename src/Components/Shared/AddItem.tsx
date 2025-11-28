@@ -311,7 +311,7 @@
           setCurrentQuantity('');
 
           setTimeout(() => {
-            navigate('/staff');
+            navigate('/staff/items');
           }, 2000);
           
           // Success - break out of retry loop

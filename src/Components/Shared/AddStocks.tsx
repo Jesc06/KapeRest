@@ -223,7 +223,7 @@ const AddStocks: React.FC = () => {
       });
 
       setTimeout(() => {
-        navigate('/staff');
+        navigate('/staff/stocks');
       }, 2000);
     } catch (err) {
       console.error('Error adding stock:', err);

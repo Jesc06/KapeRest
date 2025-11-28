@@ -5,6 +5,8 @@ import { faMicrophone, faStop, faTimes } from '@fortawesome/free-solid-svg-icons
 
 interface VoiceNavigatorProps {
   onClose?: () => void;
+  autoListen?: boolean;
+  onListeningStart?: () => void;
 }
 
 // Route mapping for voice commands
@@ -69,11 +71,11 @@ const routeMapping: { [key: string]: string } = {
   'audit': '/admin/audit-trail',
 };
 
-const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose }) => {
+const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose, autoListen = false, onListeningStart }) => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [manualInput, setManualInput] = useState('');
-  const [status, setStatus] = useState('Type mode recommended for Brave 🚀');
+  const [status, setStatus] = useState('Ready! Click mic or type command 🎤⌨️');
   const [position, setPosition] = useState({ 
     x: (window.innerWidth - 380) / 2, 
     y: (window.innerHeight - 400) / 2 
@@ -91,7 +93,7 @@ const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose }) => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     
     if (!SpeechRecognition) {
-      setStatus('Voice hindi available - Use Type mode');
+      setStatus('Voice not supported - Use Type mode ⌨️');
       setShowManualInput(true);
       return;
     }
@@ -146,19 +148,17 @@ const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose }) => {
       
       let errorMsg = 'May error: ';
       if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
-        errorMsg = 'Brave browser blocks voice. Use Type mode! 👇';
+        errorMsg = 'Mic blocked! Enable mic permission or use Type mode 👇';
         setShowManualInput(true);
       } else if (event.error === 'no-speech') {
-        errorMsg = 'Walang narinig. Subukan ulit o use Type mode.';
-        setShowManualInput(true);
+        errorMsg = 'Walang narinig. Subukan ulit o type command 👇';
       } else if (event.error === 'network') {
-        errorMsg = 'Brave blocks voice API. Use Type mode! ⌨️';
+        errorMsg = 'Network issue. Try Type mode instead ⌨️';
         setShowManualInput(true);
       } else if (event.error === 'aborted') {
-        errorMsg = 'Cancelled. Use Type mode instead.';
-        setShowManualInput(true);
+        errorMsg = 'Cancelled. Click mic again or type 👇';
       } else {
-        errorMsg = 'Voice error. Better use Type mode! ⌨️';
+        errorMsg = 'Voice error. Use Type mode! ⌨️';
         setShowManualInput(true);
       }
       
@@ -169,7 +169,7 @@ const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose }) => {
     recognition.onend = () => {
       setIsListening(false);
       if (status.includes('Nakikinig')) {
-        setStatus('I-click para magsalita');
+        setStatus('Click mic to speak or type command ⌨️');
       }
     };
 
@@ -186,10 +186,24 @@ const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose }) => {
     };
     } catch (error) {
       console.error('Failed to initialize speech recognition:', error);
-      setStatus('Voice blocked by Brave. Use Type mode! ⌨️');
+      setStatus('Voice setup failed. Use Type mode! ⌨️');
       setShowManualInput(true);
     }
   }, [navigate, status]);
+
+  // Auto-start listening when component mounts if autoListen is true
+  useEffect(() => {
+    if (autoListen && recognitionRef.current && !isListening) {
+      // Small delay to ensure component is mounted
+      const timer = setTimeout(() => {
+        toggleListening();
+        if (onListeningStart) {
+          onListeningStart();
+        }
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [autoListen]);
 
   const findMatchingRoute = (text: string): string | null => {
     const lowerText = text.toLowerCase().trim();
@@ -226,7 +240,7 @@ const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose }) => {
     if (!recognitionRef.current) {
       // If voice not supported, switch to manual input
       setShowManualInput(true);
-      setStatus('Voice blocked by Brave. Use Type mode! ⌨️');
+      setStatus('Voice not available. Use Type mode! ⌨️');
       return;
     }
 
@@ -260,7 +274,7 @@ const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose }) => {
         if (error.message && error.message.includes('already')) {
           setStatus('Already listening...');
         } else {
-          setStatus('Brave blocks voice. Use Type mode! ⌨️');
+          setStatus('Cannot start voice. Use Type mode! ⌨️');
           setShowManualInput(true);
         }
       }

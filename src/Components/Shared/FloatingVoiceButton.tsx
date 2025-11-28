@@ -5,6 +5,7 @@ import VoiceNavigator from './VoiceNavigator';
 
 const FloatingVoiceButton: React.FC = () => {
   const [showNavigator, setShowNavigator] = useState(false);
+  const [autoListen, setAutoListen] = useState(false);
   const [position, setPosition] = useState({ x: window.innerWidth - 80, y: window.innerHeight / 2 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -32,7 +33,12 @@ const FloatingVoiceButton: React.FC = () => {
   const handleClick = () => {
     // Only toggle if not dragging
     if (!isDragging) {
-      setShowNavigator(!showNavigator);
+      const willOpen = !showNavigator;
+      setShowNavigator(willOpen);
+      // Automatically start listening when opening
+      if (willOpen) {
+        setAutoListen(true);
+      }
     }
   };
 
@@ -87,7 +93,16 @@ const FloatingVoiceButton: React.FC = () => {
       </button>
 
       {/* Voice Navigator Panel */}
-      {showNavigator && <VoiceNavigator onClose={() => setShowNavigator(false)} />}
+      {showNavigator && (
+        <VoiceNavigator 
+          onClose={() => {
+            setShowNavigator(false);
+            setAutoListen(false);
+          }} 
+          autoListen={autoListen}
+          onListeningStart={() => setAutoListen(false)}
+        />
+      )}
     </>
   );
 };

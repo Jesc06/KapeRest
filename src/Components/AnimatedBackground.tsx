@@ -76,3 +76,4 @@ const AnimatedBackground: React.FC = () => {
 
 export default AnimatedBackground;
 
+

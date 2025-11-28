@@ -149,20 +149,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
             )}
           </button>
 
-          {/* Tax & Discounts */}
-          <button
-            onClick={() => navigate('/admin/tax-discounts')}
-            className={`w-full flex items-center ${isExpanded ? 'justify-start' : 'justify-center'} gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${
-              isTaxDiscounts
-                ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
-                : "text-stone-700 dark:text-stone-300 hover:bg-orange-50/80 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
-            }`}
-          >
-            <FontAwesomeIcon icon={faPercent} className="text-lg flex-shrink-0 w-5 h-5" />
-            {isExpanded && (
-              <span className="flex-1 text-left font-medium truncate">Tax & Discounts</span>
-            )}
-          </button>
+        
 
           {/* Divider - System */}
           {isExpanded && (

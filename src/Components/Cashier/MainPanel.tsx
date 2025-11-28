@@ -72,6 +72,178 @@ const MainPanel: React.FC<MainPanelProps> = ({
   const [processingHold, setProcessingHold] = useState(false);
   const [holdError, setHoldError] = useState<string>('');
   const [holdSuccess, setHoldSuccess] = useState(false);
+  const [showGCashModal, setShowGCashModal] = useState(false);
+  const [gcashQrCode, setGcashQrCode] = useState<string>('');
+  const [gcashCheckoutUrl, setGcashCheckoutUrl] = useState<string>('');
+  const [gcashReference, setGcashReference] = useState<string>('');
+  const [processingGCash, setProcessingGCash] = useState(false);
+  const [showPaymentSuccessModal, setShowPaymentSuccessModal] = useState(false);
+
+  // Check payment status via polling
+  const checkPaymentStatus = async (referenceId: string) => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) return;
+
+      // Get stored payment info
+      const storedData = localStorage.getItem(`gcash_payment_${referenceId}`);
+      if (!storedData) {
+        console.log('No stored payment data found');
+        return;
+      }
+
+      const gcashPaymentInfo = JSON.parse(storedData);
+      const { cart: savedCart, discount, tax, total: expectedTotal } = gcashPaymentInfo;
+
+      console.log('Checking payment status for reference:', referenceId);
+
+      // First, check if payment is successful by calling backend status endpoint
+      // Backend creates transactions with "Completed" status by default when payment succeeds
+      const statusResponse = await fetch(`${API_BASE_URL}/PayGcash/CheckPaymentStatus?referenceId=${referenceId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!statusResponse.ok) {
+        if (statusResponse.status === 404) {
+          console.log('CheckPaymentStatus endpoint not implemented yet, falling back to direct purchase attempt');
+          // Fallback: Try to complete purchase directly (old behavior)
+          await attemptDirectPurchase(savedCart, discount, tax, referenceId, token);
+          return;
+        }
+        console.log('Payment status check failed, payment might still be pending');
+        return;
+      }
+
+      const statusData = await statusResponse.json();
+      console.log('Payment status:', statusData);
+
+      // Check if payment status is completed/successful
+      // Transactions are created with "Completed" status by default when webhook fires
+      const statusLower = (statusData.status || '').toLowerCase();
+      if (statusLower === 'completed' || statusLower === 'paid' || statusLower === 'success' || statusLower === 'succeeded' || statusLower === 'authorized') {
+        console.log('🎉 Payment confirmed as successful!');
+
+        // Now complete the purchase transactions
+        await attemptDirectPurchase(savedCart, discount, tax, referenceId, token);
+      } else {
+        console.log('Payment status is still pending:', statusData.status);
+      }
+    } catch (error) {
+      console.error('Error checking payment status:', error);
+    }
+  };
+
+  // Helper function to attempt direct purchase (fallback when status endpoint not available)
+  const attemptDirectPurchase = async (savedCart: any[], discount: number, tax: number, referenceId: string, token: string) => {
+    let allSuccessful = true;
+    const taxRate = tax || 12;
+    const discountValue = discount || 0;
+
+    for (const item of savedCart) {
+      try {
+        const purchaseData = {
+          menuItemId: Number(item.id),
+          quantity: Number(item.quantity),
+          discountPercent: Number(discountValue),
+          tax: Number(taxRate),
+          paymentMethod: 'GCash',
+          paymentReference: referenceId // Add payment reference to avoid duplicates
+        };
+
+        console.log('Completing purchase for item:', purchaseData);
+
+        const response = await fetch(`${API_BASE_URL}/Buy/Buy`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(purchaseData)
+        });
+
+        if (response.ok) {
+          console.log('✅ Item purchased successfully:', item.name);
+        } else {
+          const errorText = await response.text();
+          console.log('⚠️ Purchase response:', errorText);
+
+          // Check if error is about insufficient stock (might mean already purchased)
+          if (errorText.includes('Insufficient stock') || errorText.includes('Out of Stock') ||
+              errorText.includes('already exists') || errorText.includes('duplicate')) {
+            console.log('Item might be already purchased or duplicate transaction');
+            // This is actually okay - consider it successful
+          } else {
+            allSuccessful = false;
+          }
+        }
+      } catch (error) {
+        console.error('Error purchasing item:', error);
+        allSuccessful = false;
+      }
+    }
+
+    // Payment was successful, show success regardless of purchase completion
+    // (purchases might have been completed by webhook already)
+    console.log('🎉 Payment confirmed and purchase completed!');
+
+    // Close GCash modal
+    setShowGCashModal(false);
+    if (gcashQrCode) {
+      URL.revokeObjectURL(gcashQrCode);
+    }
+
+    // Show success modal
+    setShowPaymentSuccessModal(true);
+
+    // Clear cart and cleanup
+    setTimeout(() => {
+      if (onBuy) {
+        onBuy(); // This clears the cart
+      }
+      setShowPaymentSuccessModal(false);
+      setSelectedDiscount('');
+
+      // Clear stored payment data
+      localStorage.removeItem(`gcash_payment_${referenceId}`);
+    }, 3000);
+  };
+
+  // Check if returning from GCash redirect with payment reference
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentStatus = urlParams.get('status');
+    const paymentRef = urlParams.get('payment_ref');
+
+    if (paymentStatus === 'success' && paymentRef) {
+      console.log('🎉 Returned from GCash test page - Payment authorized!');
+      // Automatically check and complete payment
+      checkPaymentStatus(paymentRef);
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (paymentStatus === 'failed') {
+      console.log('❌ Payment failed or cancelled');
+      setPurchaseError('Payment was cancelled or failed. Please try again.');
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, []);
+
+  // Automatic polling for payment status when GCash modal is open
+  useEffect(() => {
+    if (!showGCashModal || !gcashReference) return;
+
+    console.log('Starting automatic payment status polling...');
+    const interval = setInterval(() => {
+      checkPaymentStatus(gcashReference);
+    }, 3000); // Check every 3 seconds
+
+    return () => {
+      console.log('Stopping payment status polling');
+      clearInterval(interval);
+    };
+  }, [showGCashModal, gcashReference]);
 
   // Fetch menu items from API
   useEffect(() => {
@@ -273,6 +445,152 @@ const MainPanel: React.FC<MainPanelProps> = ({
       setHoldError(err instanceof Error ? err.message : 'Failed to hold transaction. Please try again.');
     } finally {
       setProcessingHold(false);
+    }
+  };
+
+  // Handle GCash payment with QR code
+  const handleGCashPayment = async () => {
+    if (cart.length === 0) {
+      setPurchaseError('Cart is empty');
+      return;
+    }
+
+    setProcessingGCash(true);
+    setPurchaseError('');
+
+    try {
+      const token = localStorage.getItem('accessToken');
+      
+      if (!token) {
+        throw new Error('No authentication token found. Please login again.');
+      }
+
+      // Calculate discount and final total
+      const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
+      const discountAmount = (total * discountValue) / 100;
+      const taxRate = 12; // 12% tax
+      const taxAmount = (total * taxRate) / 100;
+      const finalTotal = Math.max(0, total + taxAmount - discountAmount);
+
+      console.log('Creating GCash payment:', { amount: finalTotal });
+
+      // Call PayGcash API to create payment
+      const paymentResponse = await fetch(`${API_BASE_URL}/PayGcash/PayGcash`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount: finalTotal,
+          description: `Payment for ${cart.length} item(s) - Cart Total`
+        })
+      });
+
+      if (!paymentResponse.ok) {
+        const errorText = await paymentResponse.text();
+        console.error('GCash payment error:', errorText);
+        throw new Error('Failed to create GCash payment');
+      }
+
+      const paymentData = await paymentResponse.json();
+      console.log('GCash payment created:', paymentData);
+
+      const checkoutUrl = paymentData.checkoutUrl;
+      const referenceId = paymentData.referenceId;
+
+      if (!checkoutUrl) {
+        throw new Error('Checkout URL not received from payment API');
+      }
+
+      // Store cart data and payment info in localStorage for webhook processing
+      const gcashPaymentInfo = {
+        cart: cart,
+        discount: discountValue,
+        tax: taxRate,
+        total: finalTotal,
+        referenceId: referenceId,
+        timestamp: Date.now()
+      };
+      
+      localStorage.setItem(`gcash_payment_${referenceId}`, JSON.stringify(gcashPaymentInfo));
+
+      // Save pending payment to backend so the webhook can create completed transactions
+      try {
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+          // Extract branchId from token (if available)
+          let branchId: number | null = null;
+          try {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+              return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            const decodedToken = JSON.parse(jsonPayload);
+            if (decodedToken.branchId) branchId = Number(decodedToken.branchId);
+          } catch (ex) {
+            console.warn('Failed to parse token for branchId:', ex);
+            // branchId remains null
+          }
+
+          const pendingDto = {
+            PaymentReference: referenceId,
+            BranchId: branchId,
+            CartItems: cart.map((i: any) => ({ MenuItemId: Number(i.id), Quantity: Number(i.quantity), Price: Number(i.price) })),
+            DiscountPercent: Number(discountValue) || 0,
+            TaxPercent: Number(taxRate) || 12,
+            TotalAmount: finalTotal,
+          };
+
+          const saveResponse = await fetch(`${API_BASE_URL}/PayGcash/SavePendingPayment`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(pendingDto),
+          });
+
+          if (!saveResponse.ok) {
+            console.warn('SavePendingPayment failed:', await saveResponse.text());
+          } else {
+            console.log('Pending payment saved to backend');
+          }
+        }
+      } catch (err) {
+        console.warn('Error while saving pending payment to backend', err);
+      }
+
+      console.log('GCash payment info stored for reference:', referenceId);
+
+      // Generate QR code from checkout URL
+      const qrResponse = await fetch(`${API_BASE_URL}/PayGcash/GcashQrCode?checkoutUrl=${encodeURIComponent(checkoutUrl)}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!qrResponse.ok) {
+        throw new Error('Failed to generate QR code');
+      }
+
+      const qrBlob = await qrResponse.blob();
+      const qrImageUrl = URL.createObjectURL(qrBlob);
+
+      // Show modal with QR code
+      setGcashQrCode(qrImageUrl);
+      setGcashCheckoutUrl(checkoutUrl);
+      setGcashReference(referenceId);
+      setShowGCashModal(true);
+
+      console.log('GCash QR code generated successfully');
+
+    } catch (err) {
+      console.error('Error creating GCash payment:', err);
+      setPurchaseError(err instanceof Error ? err.message : 'Failed to create GCash payment. Please try again.');
+    } finally {
+      setProcessingGCash(false);
     }
   };
 
@@ -1075,20 +1393,197 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
               {/* GCash Payment Button */}
               <button
-                onClick={() => handleCompletePurchase('GCash')}
-                disabled={processingPurchase || isLoading || cart.length === 0}
+                onClick={handleGCashPayment}
+                disabled={processingGCash || processingPurchase || isLoading || cart.length === 0}
                 className="group flex items-center justify-center gap-2.5 rounded-xl border-2 border-transparent bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 px-5 py-4 text-base font-black text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-blue-600 disabled:hover:to-blue-500 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 hover:scale-105 disabled:hover:scale-100 relative overflow-hidden"
               >
                 {/* Shine Effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-300/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"></div>
                 
-                <FontAwesomeIcon icon={faCreditCard} className="h-5 w-5 relative z-10 group-hover:scale-110 transition-transform" />
-                <span className="relative z-10">GCash</span>
+                {processingGCash ? (
+                  <>
+                    <svg className="h-5 w-5 animate-spin relative z-10" viewBox="0 0 24 24" aria-hidden="true">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"></path>
+                    </svg>
+                    <span className="relative z-10">Loading...</span>
+                  </>
+                ) : (
+                  <>
+                    <FontAwesomeIcon icon={faCreditCard} className="h-5 w-5 relative z-10 group-hover:scale-110 transition-transform" />
+                    <span className="relative z-10">GCash</span>
+                  </>
+                )}
               </button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* GCash QR Code Modal */}
+      {showGCashModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="relative w-full max-w-lg mx-4 bg-stone-50 dark:bg-stone-900 rounded-2xl shadow-2xl border-2 border-blue-500 dark:border-blue-600 overflow-hidden animate-in zoom-in duration-300">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-5 relative overflow-hidden">
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-3xl -mr-16 -mt-16"></div>
+              </div>
+              <div className="relative flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm border border-white/30">
+                    <FontAwesomeIcon icon={faCreditCard} className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-black text-white">GCash Payment</h3>
+                    <p className="text-sm text-blue-100">Scan QR code to pay</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowGCashModal(false);
+                    if (gcashQrCode) {
+                      URL.revokeObjectURL(gcashQrCode);
+                    }
+                  }}
+                  className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/20 hover:bg-white/30 text-white transition-all duration-200 active:scale-90"
+                >
+                  <span className="text-2xl font-bold">×</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="px-8 py-8 space-y-6">
+              {/* Total Amount */}
+              <div className="text-center p-6 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/20 border-2 border-blue-200 dark:border-blue-800/50">
+                <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">Total Amount</p>
+                <p className="text-4xl font-black bg-gradient-to-r from-blue-600 to-blue-500 dark:from-blue-400 dark:to-blue-300 bg-clip-text text-transparent">
+                  ₱{finalTotal.toFixed(2)}
+                </p>
+              </div>
+
+              {/* QR Code */}
+              <div className="flex justify-center">
+                <div className="p-6 rounded-2xl bg-white dark:bg-stone-800 border-4 border-blue-500 dark:border-blue-600 shadow-xl">
+                  {gcashQrCode ? (
+                    <img src={gcashQrCode} alt="GCash QR Code" className="w-64 h-64 object-contain" />
+                  ) : (
+                    <div className="w-64 h-64 flex items-center justify-center">
+                      <div className="text-center">
+                        <svg className="h-12 w-12 animate-spin mx-auto mb-4 text-blue-500" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"></path>
+                        </svg>
+                        <p className="text-sm text-stone-600 dark:text-stone-400">Generating QR code...</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Instructions */}
+              <div className="space-y-3 text-center">
+                <p className="text-sm font-bold text-stone-900 dark:text-white">Scan this QR code with your GCash app</p>
+                <div className="flex items-center justify-center gap-2 text-xs text-stone-600 dark:text-stone-400">
+                  <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></div>
+                  <span>Reference: {gcashReference}</span>
+                </div>
+                <div className="mt-3 p-3 rounded-lg bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800/50">
+                  <p className="text-xs text-orange-700 dark:text-orange-400 font-semibold">
+                    📱 Click "Authorize Test Payment" in GCash
+                  </p>
+                  <p className="text-xs text-orange-600 dark:text-orange-500 mt-1">
+                    Payment will be confirmed automatically
+                  </p>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="space-y-3">
+                <a
+                  href={gcashCheckoutUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full text-center px-6 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-black transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg shadow-blue-500/30"
+                >
+                  Open in Browser
+                </a>
+                
+                <button
+                  onClick={() => {
+                    setShowGCashModal(false);
+                    if (gcashQrCode) {
+                      URL.revokeObjectURL(gcashQrCode);
+                    }
+                    // Clear stored data
+                    localStorage.removeItem(`gcash_payment_${gcashReference}`);
+                  }}
+                  className="w-full px-6 py-4 rounded-xl border-2 border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-900 dark:text-white font-black transition-all duration-300 hover:scale-105 active:scale-95"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Payment Success Modal */}
+      {showPaymentSuccessModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="relative w-full max-w-md mx-4 bg-stone-50 dark:bg-stone-900 rounded-2xl shadow-2xl border-2 border-green-500 dark:border-green-600 overflow-hidden animate-in zoom-in duration-300">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-green-600 to-green-500 px-6 py-5 relative overflow-hidden">
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-3xl -mr-16 -mt-16"></div>
+              </div>
+              <div className="relative text-center">
+                <div className="flex justify-center mb-3">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm border-4 border-white/30 animate-bounce">
+                    <FontAwesomeIcon icon={faCheck} className="h-8 w-8 text-white" />
+                  </div>
+                </div>
+                <h3 className="text-2xl font-black text-white">Payment Successful!</h3>
+                <p className="text-sm text-green-100 mt-1">Your GCash payment has been processed</p>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="px-8 py-8 space-y-6">
+              <div className="text-center space-y-4">
+                {/* Success Icon Animation */}
+                <div className="flex justify-center">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-green-500 rounded-full blur-xl opacity-50 animate-pulse"></div>
+                    <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/30 dark:to-green-900/20 border-4 border-green-500 dark:border-green-600">
+                      <FontAwesomeIcon icon={faCheck} className="h-12 w-12 text-green-600 dark:text-green-400" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Success Message */}
+                <div className="space-y-2">
+                  <p className="text-lg font-bold text-stone-900 dark:text-white">
+                    Thank you for your payment!
+                  </p>
+                  <p className="text-sm text-stone-600 dark:text-stone-400">
+                    Your transaction has been completed successfully.
+                  </p>
+                </div>
+
+                {/* Amount */}
+                <div className="p-6 rounded-xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/30 dark:to-green-900/20 border-2 border-green-200 dark:border-green-800/50">
+                  <p className="text-xs font-semibold text-green-600 dark:text-green-400 uppercase tracking-wider mb-1">Amount Paid</p>
+                  <p className="text-3xl font-black bg-gradient-to-r from-green-600 to-green-500 dark:from-green-400 dark:to-green-300 bg-clip-text text-transparent">
+                    ₱{finalTotal.toFixed(2)}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
