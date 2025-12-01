@@ -3,9 +3,9 @@ import AdminSidebar from './AdminSidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faUsers, faBuilding, faSearch, faCheck, faTimes, faEye, faUserCircle, faEnvelope, faCalendar, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import LogoutPanel from '../Shared/LogoutPanel';
-import { API_BASE_URL } from '../../config/api';
 import MessageBox from '../Shared/MessageBox';
 import ConfirmationDialog from '../Shared/ConfirmationDialog';
+import { apiGet, apiPost, apiDelete, handleApiResponse } from '../../utils/apiHandler';
 
 interface Branch {
   id?: number;
@@ -61,13 +61,9 @@ const AccountsPage: React.FC = () => {
         setIsLoading(true);
         setError(null);
         
-        const response = await fetch(`${API_BASE_URL}/RegisterPendingAccount/GetAllPendingAccounts`);
+        const response = await apiGet('/RegisterPendingAccount/GetAllPendingAccounts');
+        const data = await handleApiResponse(response);
         
-        if (!response.ok) {
-          throw new Error(`Failed to fetch accounts: ${response.status}`);
-        }
-        
-        const data = await response.json();
         console.log('Pending accounts received:', data);
         setAccounts(data || []);
         
@@ -108,24 +104,9 @@ const AccountsPage: React.FC = () => {
 
   // Handle approve/reject
   const handleApprove = async (id: number) => {
-    const token = localStorage.getItem('accessToken');
-    if (!token) {
-      setError('Authentication token not found. Please log in again.');
-      return;
-    }
-
     try {
-      const response = await fetch(`${API_BASE_URL}/RegisterPendingAccount/ApprovePendingAccount/${id}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to approve account: ${response.status}`);
-      }
+      const response = await apiPost(`/RegisterPendingAccount/ApprovePendingAccount/${id}`);
+      await handleApiResponse(response);
 
       setAccounts(accounts.map(acc => 
         acc.id === id ? { ...acc, status: 'Approved' as const } : acc
@@ -161,24 +142,9 @@ const AccountsPage: React.FC = () => {
   };
 
   const handleReject = async (id: number) => {
-    const token = localStorage.getItem('accessToken');
-    if (!token) {
-      setError('Authentication token not found. Please log in again.');
-      return;
-    }
-    
     try {
-      const response = await fetch(`${API_BASE_URL}/RegisterPendingAccount/RejectPendingAccount/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to reject account: ${response.status}`);
-      }
+      const response = await apiDelete(`/RegisterPendingAccount/RejectPendingAccount/${id}`);
+      await handleApiResponse(response);
 
       setAccounts(accounts.map(acc => 
         acc.id === id ? { ...acc, status: 'Rejected' as const } : acc

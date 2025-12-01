@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faSearch, faEdit, faTrash, faBoxes, faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faSearch, faEdit, faTrash, faBoxes, faDownload, faFilter, faTimes, faChartLine, faDollarSign, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import AdminSidebar from './AdminSidebar';
 import LogoutPanel from '../Shared/LogoutPanel';
 import { API_BASE_URL } from '../../config/api';
@@ -35,8 +35,10 @@ const InventoryPage: React.FC = () => {
   const [filterBranch, setFilterBranch] = useState<string>('all');
   const [filterStaff, setFilterStaff] = useState<string>('all');
   const [filterUnit, setFilterUnit] = useState<string>('all');
+  const [filterStock, setFilterStock] = useState<string>('all');
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showFilters, setShowFilters] = useState(false);
 
   // Fetch inventory from API
   useEffect(() => {
@@ -101,7 +103,12 @@ const InventoryPage: React.FC = () => {
     
     const matchesUnit = filterUnit === 'all' || stock.units === filterUnit;
     
-    return matchesSearch && matchesBranch && matchesStaff && matchesUnit;
+    const matchesStockLevel = filterStock === 'all' ||
+      (filterStock === 'low' && stock.stocks < 100) ||
+      (filterStock === 'medium' && stock.stocks >= 100 && stock.stocks < 500) ||
+      (filterStock === 'high' && stock.stocks >= 500);
+    
+    return matchesSearch && matchesBranch && matchesStaff && matchesUnit && matchesStockLevel;
   });
 
   // Calculate stats
@@ -130,10 +137,19 @@ const InventoryPage: React.FC = () => {
   };
 
   const getStockBadgeColor = (stockLevel: number) => {
-    if (stockLevel < 100) return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
-    if (stockLevel < 500) return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400';
-    return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
+    if (stockLevel < 100) return 'bg-red-100 text-red-700 border border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800';
+    if (stockLevel < 500) return 'bg-yellow-100 text-yellow-700 border border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-800';
+    return 'bg-green-100 text-green-700 border border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800';
   };
+
+  const clearFilters = () => {
+    setFilterBranch('all');
+    setFilterStaff('all');
+    setFilterUnit('all');
+    setFilterStock('all');
+  };
+
+  const activeFilters = [filterBranch, filterStaff, filterUnit, filterStock].filter(f => f !== 'all').length;
 
   return (
     <div className="min-h-screen w-full bg-stone-50 dark:bg-stone-900">
@@ -230,201 +246,303 @@ const InventoryPage: React.FC = () => {
             <div className="flex-1 flex flex-col gap-6 px-4 sm:px-6 md:px-8 py-6 overflow-auto">
               
               {/* Stats Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-lg shadow-blue-500/30">
-                  <div className="flex items-center justify-between">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="group relative overflow-hidden bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 hover:scale-[1.02]">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
+                  <div className="relative flex items-center justify-between">
                     <div>
-                      <p className="text-blue-100 text-sm font-medium mb-1">Total Items</p>
-                      <p className="text-3xl font-black">{totalItems}</p>
+                      <p className="text-blue-100 text-xs font-semibold mb-2 tracking-wide uppercase">Total Products</p>
+                      <p className="text-4xl font-black mb-1">{totalItems}</p>
+                      <p className="text-blue-200 text-xs font-medium">items in stock</p>
                     </div>
-                    <div className="h-14 w-14 rounded-xl bg-stone-50/20 flex items-center justify-center">
-                      <FontAwesomeIcon icon={faBoxes} className="h-7 w-7" />
+                    <div className="h-16 w-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+                      <FontAwesomeIcon icon={faBoxes} className="h-8 w-8" />
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-6 text-white shadow-lg shadow-green-500/30">
-                  <div className="flex items-center justify-between">
+                <div className="group relative overflow-hidden bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl p-6 text-white shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40 transition-all duration-300 hover:scale-[1.02]">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
+                  <div className="relative flex items-center justify-between">
                     <div>
-                      <p className="text-green-100 text-sm font-medium mb-1">Total Value</p>
-                      <p className="text-3xl font-black">₱{totalValue.toLocaleString()}</p>
+                      <p className="text-green-100 text-xs font-semibold mb-2 tracking-wide uppercase">Total Value</p>
+                      <p className="text-4xl font-black mb-1">₱{(totalValue / 1000).toFixed(1)}K</p>
+                      <p className="text-green-200 text-xs font-medium">inventory worth</p>
                     </div>
-                    <div className="h-14 w-14 rounded-xl bg-stone-50/20 flex items-center justify-center">
-                      <FontAwesomeIcon icon={faDownload} className="h-7 w-7" />
+                    <div className="h-16 w-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+                      <FontAwesomeIcon icon={faDollarSign} className="h-8 w-8" />
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-6 text-white shadow-lg shadow-orange-500/30">
-                  <div className="flex items-center justify-between">
+                <div className="group relative overflow-hidden bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-6 text-white shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40 transition-all duration-300 hover:scale-[1.02]">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
+                  <div className="relative flex items-center justify-between">
                     <div>
-                      <p className="text-orange-100 text-sm font-medium mb-1">Low Stock</p>
-                      <p className="text-3xl font-black">{lowStockItems}</p>
+                      <p className="text-orange-100 text-xs font-semibold mb-2 tracking-wide uppercase">Low Stock</p>
+                      <p className="text-4xl font-black mb-1">{lowStockItems}</p>
+                      <p className="text-orange-200 text-xs font-medium">needs restock</p>
                     </div>
-                    <div className="h-14 w-14 rounded-xl bg-stone-50/20 flex items-center justify-center">
-                      <FontAwesomeIcon icon={faEdit} className="h-7 w-7" />
+                    <div className="h-16 w-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+                      <FontAwesomeIcon icon={faExclamationTriangle} className="h-8 w-8" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="group relative overflow-hidden bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 transition-all duration-300 hover:scale-[1.02]">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
+                  <div className="relative flex items-center justify-between">
+                    <div>
+                      <p className="text-purple-100 text-xs font-semibold mb-2 tracking-wide uppercase">Filtered Results</p>
+                      <p className="text-4xl font-black mb-1">{filteredStocks.length}</p>
+                      <p className="text-purple-200 text-xs font-medium">items shown</p>
+                    </div>
+                    <div className="h-16 w-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+                      <FontAwesomeIcon icon={faChartLine} className="h-8 w-8" />
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Filter Buttons */}
-              <div className="flex flex-wrap items-center gap-3">
-                <div className="relative">
-                  <select
-                    value={filterBranch}
-                    onChange={(e) => setFilterBranch(e.target.value)}
-                    className="appearance-none px-4 py-2.5 pr-10 rounded-xl bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-orange-500 dark:hover:border-orange-500 font-bold text-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500 cursor-pointer"
-                  >
-                    {branches.map(branch => (
-                      <option key={branch} value={branch}>
-                        {branch === 'all' ? 'All Branches' : branch}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg className="w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
-                    </svg>
+              {/* Filter Section */}
+              <div className="bg-white dark:bg-stone-800 rounded-2xl border border-stone-200 dark:border-stone-700 shadow-lg">
+                <div className="p-4 border-b border-stone-200 dark:border-stone-700">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-lg shadow-orange-500/30">
+                        <FontAwesomeIcon icon={faFilter} className="h-5 w-5 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-base font-bold text-stone-900 dark:text-white">Filters</h3>
+                        <p className="text-xs text-stone-600 dark:text-stone-400">
+                          {activeFilters > 0 ? `${activeFilters} active` : 'No filters applied'}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {activeFilters > 0 && (
+                        <button
+                          onClick={clearFilters}
+                          className="px-4 py-2 text-sm font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors"
+                        >
+                          Clear All
+                        </button>
+                      )}
+                      <button
+                        onClick={() => setShowFilters(!showFilters)}
+                        className="lg:hidden p-2 hover:bg-stone-100 dark:hover:bg-stone-700 rounded-xl transition-colors"
+                      >
+                        <FontAwesomeIcon icon={showFilters ? faTimes : faFilter} className="h-4 w-4 text-stone-600 dark:text-stone-400" />
+                      </button>
+                    </div>
                   </div>
                 </div>
 
-                <div className="relative">
-                  <select
-                    value={filterStaff}
-                    onChange={(e) => setFilterStaff(e.target.value)}
-                    className="appearance-none px-4 py-2.5 pr-10 rounded-xl bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-orange-500 dark:hover:border-orange-500 font-bold text-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500 cursor-pointer"
-                  >
-                    {staff.map(s => (
-                      <option key={s} value={s}>
-                        {s === 'all' ? 'All Staff' : s === 'unassigned' ? 'Unassigned' : s}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg className="w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
-                    </svg>
+                <div className={`p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 ${showFilters ? '' : 'hidden lg:grid'}`}>
+                  <div>
+                    <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-2 uppercase tracking-wide">Branch</label>
+                    <select
+                      value={filterBranch}
+                      onChange={(e) => setFilterBranch(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-xl bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-stone-100 border-2 border-stone-200 dark:border-stone-700 hover:border-orange-500 dark:hover:border-orange-500 font-medium text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 cursor-pointer"
+                    >
+                      {branches.map(branch => (
+                        <option key={branch} value={branch}>
+                          {branch === 'all' ? 'All Branches' : branch}
+                        </option>
+                      ))}
+                    </select>
                   </div>
-                </div>
 
-                <div className="relative">
-                  <select
-                    value={filterUnit}
-                    onChange={(e) => setFilterUnit(e.target.value)}
-                    className="appearance-none px-4 py-2.5 pr-10 rounded-xl bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-orange-500 dark:hover:border-orange-500 font-bold text-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500 cursor-pointer"
-                  >
-                    {units.map(unit => (
-                      <option key={unit} value={unit}>
-                        {unit === 'all' ? 'All Units' : unit.toUpperCase()}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg className="w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
-                    </svg>
+                  <div>
+                    <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-2 uppercase tracking-wide">Staff</label>
+                    <select
+                      value={filterStaff}
+                      onChange={(e) => setFilterStaff(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-xl bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-stone-100 border-2 border-stone-200 dark:border-stone-700 hover:border-orange-500 dark:hover:border-orange-500 font-medium text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 cursor-pointer"
+                    >
+                      {staff.map(s => (
+                        <option key={s} value={s}>
+                          {s === 'all' ? 'All Staff' : s === 'unassigned' ? 'Unassigned' : s}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-2 uppercase tracking-wide">Unit</label>
+                    <select
+                      value={filterUnit}
+                      onChange={(e) => setFilterUnit(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-xl bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-stone-100 border-2 border-stone-200 dark:border-stone-700 hover:border-orange-500 dark:hover:border-orange-500 font-medium text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 cursor-pointer"
+                    >
+                      {units.map(unit => (
+                        <option key={unit} value={unit}>
+                          {unit === 'all' ? 'All Units' : unit.toUpperCase()}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-2 uppercase tracking-wide">Stock Level</label>
+                    <select
+                      value={filterStock}
+                      onChange={(e) => setFilterStock(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-xl bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-stone-100 border-2 border-stone-200 dark:border-stone-700 hover:border-orange-500 dark:hover:border-orange-500 font-medium text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 cursor-pointer"
+                    >
+                      <option value="all">All Levels</option>
+                      <option value="low">Low (&lt; 100)</option>
+                      <option value="medium">Medium (100-499)</option>
+                      <option value="high">High (≥ 500)</option>
+                    </select>
                   </div>
                 </div>
               </div>
 
               {/* Table */}
-              <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-stone-50 dark:bg-stone-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-stone-700">
-                <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-stone-50 via-orange-50/30 to-stone-50 dark:from-stone-800 dark:via-orange-950/20 dark:to-stone-800">
-                  <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-orange-500 to-orange-600"></div>
-                  
-                  <div className="px-6 sm:px-8 py-6">
-                    <div className="flex items-center justify-between flex-wrap gap-4">
-                      <div className="flex items-center gap-4">
-                        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/30">
-                          <FontAwesomeIcon icon={faBoxes} className="h-7 w-7 text-white" />
-                        </div>
-                        <div>
-                          <h3 className="text-2xl font-black text-stone-900 dark:text-white tracking-tight">Inventory Records</h3>
-                          <p className="text-sm font-medium text-stone-600 dark:text-stone-400 mt-0.5">All stock entries and details</p>
-                        </div>
+              <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-white dark:bg-stone-800 shadow-xl border border-stone-200 dark:border-stone-700 overflow-hidden">
+                <div className="flex-shrink-0 px-6 py-5 bg-gradient-to-r from-stone-50 to-orange-50/30 dark:from-stone-800 dark:to-orange-950/20 border-b border-stone-200 dark:border-stone-700">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-lg shadow-orange-500/30">
+                        <FontAwesomeIcon icon={faBoxes} className="h-6 w-6 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-black text-stone-900 dark:text-white">Inventory Records</h3>
+                        <p className="text-xs font-medium text-stone-600 dark:text-stone-400">
+                          Showing {filteredStocks.length} of {totalItems} products
+                        </p>
                       </div>
                     </div>
+                    <button className="hidden md:flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white font-semibold text-sm rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02]">
+                      <FontAwesomeIcon icon={faDownload} className="h-4 w-4" />
+                      <span>Export</span>
+                    </button>
                   </div>
                 </div>
 
                 <div className="overflow-x-auto flex-1">
                   <table className="w-full">
-                  <thead className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
-                    <tr>
-                      <th className="px-6 py-4 text-left text-sm font-semibold">Product Name</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold">Stocks</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold">Units</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold">Cost Price</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold">Total Value</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold">Supplier</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold">Branch</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold">Staff</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold">Date</th>
-                      <th className="px-6 py-4 text-center text-sm font-semibold">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-neutral-100 dark:divide-neutral-700">
-                    {isLoading ? (
+                    <thead className="bg-gradient-to-r from-orange-500 to-amber-600 text-white sticky top-0 z-10">
                       <tr>
-                        <td colSpan={10} className="px-6 py-12 text-center text-neutral-500 dark:text-stone-400">
-                          <div className="inline-block h-12 w-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                          <p className="text-lg font-medium">Loading inventory...</p>
-                        </td>
+                        <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider">Product</th>
+                        <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider">Stock Level</th>
+                        <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider">Unit</th>
+                        <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider">Cost Price</th>
+                        <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider">Total Value</th>
+                        <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider">Supplier</th>
+                        <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider">Branch</th>
+                        <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider">Staff</th>
+                        <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider">Date</th>
+                        <th className="px-6 py-4 text-center text-xs font-bold uppercase tracking-wider">Actions</th>
                       </tr>
-                    ) : filteredStocks.length === 0 ? (
-                      <tr>
-                        <td colSpan={10} className="px-6 py-12 text-center text-neutral-500 dark:text-stone-400">
-                          <FontAwesomeIcon icon={faBoxes} className="text-4xl mb-3 opacity-50" />
-                          <p className="text-lg font-medium">No inventory items found</p>
-                          <p className="text-sm mt-1">Try adjusting your filters</p>
-                        </td>
-                      </tr>
-                    ) : (
-                      filteredStocks.map((stock) => (
-                        <tr key={stock.id} className="hover:bg-orange-50 dark:hover:bg-stone-700/50 transition-colors">
-                          <td className="px-6 py-4 text-sm font-medium text-stone-900 dark:text-white">{stock.productName}</td>
-                          <td className="px-6 py-4 text-sm">
-                            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStockBadgeColor(stock.stocks)}`}>
-                              {stock.stocks}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 text-sm text-stone-600 dark:text-stone-400 uppercase">{stock.units}</td>
-                          <td className="px-6 py-4 text-sm text-stone-600 dark:text-stone-400">₱{stock.costPrice.toFixed(2)}</td>
-                          <td className="px-6 py-4 text-sm font-semibold text-stone-900 dark:text-white">₱{(stock.stocks * stock.costPrice).toLocaleString()}</td>
-                          <td className="px-6 py-4 text-sm text-stone-600 dark:text-stone-400">{stock.supplierName}</td>
-                          <td className="px-6 py-4 text-sm text-stone-600 dark:text-stone-400">{stock.branch.branchName}</td>
-                          <td className="px-6 py-4 text-sm text-stone-600 dark:text-stone-400">
-                            {stock.cashier ? (
-                              <span>{stock.cashier.firstName || ''} {stock.cashier.lastName || ''}</span>
-                            ) : (
-                              <span className="text-neutral-400 italic">Unassigned</span>
-                            )}
-                          </td>
-                          <td className="px-6 py-4 text-sm text-stone-600 dark:text-stone-400">{formatDate(stock.transactionDate)}</td>
-                          <td className="px-6 py-4 text-sm">
-                            <div className="flex items-center justify-center gap-2">
-                              <button
-                                onClick={() => handleUpdate(stock.id)}
-                                className="p-2 rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 transition-colors"
-                                title="Edit"
-                              >
-                                <FontAwesomeIcon icon={faEdit} className="h-4 w-4" />
-                              </button>
-                              <button
-                                onClick={() => handleDelete(stock.id)}
-                                className="p-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 transition-colors"
-                                title="Delete"
-                              >
-                                <FontAwesomeIcon icon={faTrash} className="h-4 w-4" />
-                              </button>
+                    </thead>
+                    <tbody className="divide-y divide-stone-200 dark:divide-stone-700 bg-white dark:bg-stone-800">
+                      {isLoading ? (
+                        <tr>
+                          <td colSpan={10} className="px-6 py-16 text-center">
+                            <div className="flex flex-col items-center justify-center">
+                              <div className="h-16 w-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                              <p className="text-lg font-semibold text-stone-900 dark:text-white">Loading inventory...</p>
+                              <p className="text-sm text-stone-500 dark:text-stone-400 mt-1">Please wait</p>
                             </div>
                           </td>
                         </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
+                      ) : filteredStocks.length === 0 ? (
+                        <tr>
+                          <td colSpan={10} className="px-6 py-16 text-center">
+                            <div className="flex flex-col items-center justify-center">
+                              <div className="h-20 w-20 rounded-2xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center mb-4">
+                                <FontAwesomeIcon icon={faBoxes} className="text-4xl text-orange-600 dark:text-orange-400" />
+                              </div>
+                              <p className="text-lg font-semibold text-stone-900 dark:text-white">No inventory items found</p>
+                              <p className="text-sm text-stone-500 dark:text-stone-400 mt-1">Try adjusting your filters or search term</p>
+                            </div>
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredStocks.map((stock) => (
+                          <tr 
+                            key={stock.id} 
+                            className="hover:bg-orange-50 dark:hover:bg-orange-950/20 transition-colors group"
+                          >
+                            <td className="px-6 py-4">
+                              <div className="flex items-center gap-3">
+                                <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white font-bold shadow-md">
+                                  {stock.productName.charAt(0)}
+                                </div>
+                                <div>
+                                  <p className="text-sm font-bold text-stone-900 dark:text-white">{stock.productName}</p>
+                                  <p className="text-xs text-stone-500 dark:text-stone-400">ID: {stock.id}</p>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold ${getStockBadgeColor(stock.stocks)}`}>
+                                {stock.stocks < 100 && <FontAwesomeIcon icon={faExclamationTriangle} />}
+                                {stock.stocks}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className="text-sm font-semibold text-stone-600 dark:text-stone-400 uppercase">
+                                {stock.units}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className="text-sm font-semibold text-stone-900 dark:text-white">
+                                ₱{stock.costPrice.toFixed(2)}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className="text-sm font-bold text-green-600 dark:text-green-400">
+                                ₱{(stock.stocks * stock.costPrice).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className="text-sm text-stone-700 dark:text-stone-300">{stock.supplierName}</span>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="flex items-center gap-2">
+                                <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                                <span className="text-sm font-medium text-stone-700 dark:text-stone-300">{stock.branch.branchName}</span>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4">
+                              {stock.cashier ? (
+                                <span className="text-sm text-stone-700 dark:text-stone-300">
+                                  {stock.cashier.firstName || ''} {stock.cashier.lastName || ''}
+                                </span>
+                              ) : (
+                                <span className="text-xs text-stone-400 dark:text-stone-500 italic">Unassigned</span>
+                              )}
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className="text-sm text-stone-600 dark:text-stone-400">{formatDate(stock.transactionDate)}</span>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="flex items-center justify-center gap-2">
+                                <button
+                                  onClick={() => handleUpdate(stock.id)}
+                                  className="p-2 rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-600 dark:hover:text-white transition-all duration-200 group-hover:scale-110"
+                                  title="Edit"
+                                >
+                                  <FontAwesomeIcon icon={faEdit} className="h-4 w-4" />
+                                </button>
+                                <button
+                                  onClick={() => handleDelete(stock.id)}
+                                  className="p-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-600 hover:text-white dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-600 dark:hover:text-white transition-all duration-200 group-hover:scale-110"
+                                  title="Delete"
+                                >
+                                  <FontAwesomeIcon icon={faTrash} className="h-4 w-4" />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>

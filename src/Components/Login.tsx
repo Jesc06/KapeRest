@@ -81,11 +81,11 @@ const Login: React.FC = () => {
 
       console.log("Decoded Role:", role);
 
-      //NAVIGATION BASED ON DECODED ROLE
-      if (role === "admin") navigate("/admin");
-      else if (role === "staff") navigate("/staff");
-      else if (role === "cashier") navigate("/cashier");
-      else navigate("/");
+      //NAVIGATION BASED ON DECODED ROLE (with replace to prevent back navigation)
+      if (role === "admin") navigate("/admin", { replace: true });
+      else if (role === "staff") navigate("/staff", { replace: true });
+      else if (role === "cashier") navigate("/cashier", { replace: true });
+      else navigate("/", { replace: true });
 
     } catch (error) {
       console.error("Login error:", error);
@@ -98,7 +98,7 @@ const Login: React.FC = () => {
   const errorSummary = errors.api || (Object.keys(errors).length > 1 ? Object.values(errors).filter(e => e !== errors.api).join(". ") : null);
 
   return (
-    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-gradient-to-br from-stone-50 via-orange-50/30 to-amber-50/20 dark:bg-gradient-to-br dark:from-stone-950 dark:via-stone-900 dark:to-stone-950 font-sans transition-colors duration-300">
+    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-gradient-to-br from-stone-50 via-orange-50/30 to-amber-50/20 dark:bg-gradient-to-br dark:from-stone-950 dark:via-stone-900 Professional POS Managementdark:to-stone-950 font-sans transition-colors duration-300">
       <TintedBackdrop />
       {/* Animated Ambient Background Effects */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -114,7 +114,7 @@ const Login: React.FC = () => {
               <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-amber-600 to-orange-500 flex items-center gap-0.5 dark:from-orange-400 dark:via-amber-400 dark:to-orange-300">
                 KapeRest <img src={KapeRestLogo} alt="KapeRest Logo" className="w-16 h-16 object-contain" />
               </h1>
-              <p className="mt-3 text-base font-semibold text-stone-600 dark:text-stone-400">Professional POS Management</p>
+              <p className="mt-3 text-base font-semibold text-stone-600 dark:text-stone-400">Cafe POS Management</p>
             </div>
             {/* Form */}
               <form onSubmit={handleSubmit} noValidate className="space-y-4" aria-busy={isLoading}>

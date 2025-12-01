@@ -9,3 +9,5 @@ export { default as SupplierList } from './SupplierList';
 export { default as LogoutPanel } from './LogoutPanel';
 export { default as VoiceNavigator } from './VoiceNavigator';
 export { default as FloatingVoiceButton } from './FloatingVoiceButton';
+export { default as ProtectedRoute } from './ProtectedRoute';
+export { default as Unauthorized } from './Unauthorized';

@@ -5,7 +5,7 @@ import { faBars, faBuilding, faUsers, faMapMarkerAlt, faSearch, faPlus, faEdit, 
 import LogoutPanel from '../Shared/LogoutPanel';
 import AddBranch from './AddBranch';
 import EditBranch from './EditBranch';
-import { API_BASE_URL } from '../../config/api';
+import { apiGet, apiDelete, handleApiResponse } from '../../utils/apiHandler';
 
 interface BranchResponse {
   id: number;
@@ -45,24 +45,8 @@ const BranchPage: React.FC = () => {
         setLoading(true);
         setError('');
         
-        const token = localStorage.getItem('accessToken');
-        
-        if (!token) {
-          throw new Error('No authentication token found. Please login again.');
-        }
-        
-        const response = await fetch(`${API_BASE_URL}/Branch/GetAllBranch`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch branches');
-        }
-        
-        const data: BranchResponse[] = await response.json();
+        const response = await apiGet('/Branch/GetAllBranch');
+        const data: BranchResponse[] = await handleApiResponse(response);
         console.log('Fetched branches:', data);
         
         // Transform API data to Branch format
@@ -145,26 +129,11 @@ const BranchPage: React.FC = () => {
     }
 
     try {
-      const token = localStorage.getItem('accessToken');
-      
-      if (!token) {
-        throw new Error('No authentication token found.');
-      }
-
-      const response = await fetch(`${API_BASE_URL}/Branch/DeleteBranch?id=${branchId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
+      const response = await apiDelete(`/Branch/DeleteBranch?id=${branchId}`);
       const responseText = await response.text();
       console.log('Delete response:', responseText);
 
-      if (!response.ok) {
-        throw new Error('Failed to delete branch');
-      }
+      await handleApiResponse(response);
 
       // Remove branch from list
       setBranches(branches.filter(branch => branch.id !== branchId));

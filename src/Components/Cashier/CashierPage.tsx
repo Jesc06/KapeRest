@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faChartLine, faCashRegister, faMoneyBillWave, faReceipt } from '@fortawesome/free-solid-svg-icons';
 import Sidebar from './Sidebar.tsx';
 import LogoutPanel from '../Shared/LogoutPanel';
-import { API_BASE_URL } from '../../config/api';
+import { apiGet, handleApiResponse } from '../../utils/apiHandler';
 
 const CashierPage: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -36,18 +36,8 @@ const CashierPage: React.FC = () => {
           return;
         }
 
-        const response = await fetch(`${API_BASE_URL}/CashierSalesReport/CashierDailySales?cashierId=${cashierId}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
+        const response = await apiGet(`/CashierSalesReport/CashierDailySales?cashierId=${cashierId}`);
+        const data = await handleApiResponse(response);
 
         // Calculate totals
         const totalSales = data.reduce((sum: number, item: any) => sum + item.total, 0);
