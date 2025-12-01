@@ -122,7 +122,7 @@ const Register: React.FC = () => {
   }, [role]);
 
   const validFirst = firstName.trim().length > 0;
-  const validMiddle = middleName.trim().length > 0 || middleName.trim().length === 0; // optional
+  // validMiddle is always true since it's optional - kept for consistency
   const validLast = lastName.trim().length > 0;
   const validEmail = emailPattern.test(email);
   const validPassword = password.length >= 8;
@@ -216,41 +216,46 @@ const Register: React.FC = () => {
   }, [roleOpen, branchOpen, cashierOpen]);
 
   return (
-    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-amber-50/40 dark:bg-stone-900 font-sans transition-colors duration-300">
+    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:bg-gradient-to-br dark:from-stone-950 dark:via-neutral-950 dark:to-stone-900 font-sans transition-colors duration-300">
       <TintedBackdrop />
-      {/* Warm Café Theme Background with Coffee Tones */}
-      <div aria-hidden className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-br from-amber-50/60 via-orange-50/40 to-amber-100/30 dark:from-stone-900 dark:via-stone-950/80 dark:to-amber-950/60" />
-      <main className="relative z-10 flex flex-1 items-center justify-center px-4 py-6 sm:px-6 md:py-8">
-        <div className="relative w-full max-w-[580px]">
-          <div className="auth-card relative rounded-xl border-2 border-orange-500 bg-stone-100/90 p-7 sm:p-8 shadow-lg transition-all duration-300 ease-out dark:border-orange-600 dark:bg-stone-800/70">
-            <div className="absolute -top-3 left-6 inline-flex h-6 items-center rounded-full border border-orange-300/70 bg-orange-50 px-3 text-[11px] font-semibold tracking-wide text-orange-700 dark:border-orange-700/60 dark:bg-orange-950/40 dark:text-orange-300">REGISTER</div>
-            <div className="mb-6">
-              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-neutral-900 flex items-center gap-2 dark:text-neutral-50">
-                Create your account 
-                <span aria-hidden="true" className="coffee-emoji text-[24px]">☕</span>
+      {/* Decorative gradient overlays */}
+      <div aria-hidden className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-orange-300/20 rounded-full blur-3xl dark:bg-orange-600/10" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-amber-300/20 rounded-full blur-3xl dark:bg-amber-600/10" />
+      </div>
+      <main className="relative z-10 flex flex-1 items-center justify-center px-4 py-8 sm:px-6 md:py-12">
+        <div className="relative w-full max-w-[620px]">
+          <div className="auth-card relative rounded-2xl border-2 border-orange-400/80 bg-white/95 backdrop-blur-xl p-8 sm:p-10 shadow-2xl shadow-orange-500/15 transition-all duration-300 ease-out hover:shadow-3xl hover:shadow-orange-500/20 hover:border-orange-500 dark:border-orange-600/70 dark:bg-stone-900/95 dark:shadow-orange-950/30 dark:hover:border-orange-500">
+            <div className="absolute -top-3 left-8 inline-flex h-7 items-center rounded-full border border-orange-400/30 bg-gradient-to-r from-orange-600 to-amber-600 px-4 text-xs font-bold tracking-wider text-white shadow-lg dark:from-orange-700 dark:to-amber-700">REGISTER</div>
+            <div className="mb-8">
+              <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-orange-700 via-amber-700 to-orange-600 flex items-center gap-3 dark:from-orange-500 dark:via-amber-500 dark:to-orange-400">
+                Create Account
+                <span aria-hidden="true" className="text-3xl">☕</span>
               </h1>
-              <p className="mt-1.5 text-base text-stone-600 dark:text-stone-400">Professional POS Management</p>
+              <p className="mt-2 text-base font-medium text-stone-600 dark:text-stone-400">Join KapeRest POS Management</p>
             </div>
-                        <div className="h-px w-full bg-gradient-to-r from-neutral-300 via-neutral-400 to-neutral-300 mb-6 dark:from-neutral-800 dark:via-neutral-700 dark:to-neutral-800" aria-hidden />
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-orange-400/40 to-transparent mb-8 dark:via-orange-700" aria-hidden />
             <form onSubmit={handleSubmit} noValidate className="space-y-4" aria-busy={isLoading}>
               <div role="status" aria-live="polite" className="sr-only">
                 {errors.firstName || errors.lastName || errors.email || errors.password || errors.role || errors.branch || ''}
               </div>
               {errorSummary && (
-                <div className="rounded-lg border border-red-200 bg-red-50 text-red-700 text-[14px] px-4 py-3 dark:border-red-900/40 dark:bg-red-900/20 dark:text-red-200" role="alert">
-                  <div className="flex items-center gap-2">
-                    <span className="text-red-500">⚠️</span>
+                <div className="rounded-xl border border-red-300 bg-gradient-to-br from-red-50 to-red-100/50 text-red-800 text-sm px-4 py-3 shadow-sm dark:border-red-800/40 dark:bg-gradient-to-br dark:from-red-950/40 dark:to-red-900/20 dark:text-red-200" role="alert">
+                  <div className="flex items-start gap-2">
+                    <svg className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                    </svg>
                     <span className="font-medium">{errorSummary}</span>
                   </div>
                 </div>
               )}
-              <div className="space-y-5">
+              <div className="space-y-6">
                 {/* Name fields */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {/* First Name */}
                   <div className="relative">
-                    <label htmlFor="firstName" className="block text-[13px] font-medium text-stone-700 dark:text-stone-300 tracking-wide">First Name</label>
-                    <div className="mt-1 relative">
+                    <label htmlFor="firstName" className="block text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2">First Name</label>
+                    <div className="relative group">
                       <input
                         id="firstName"
                         type="text"
@@ -260,23 +265,23 @@ const Register: React.FC = () => {
                         onFocus={() => setFocusField('firstName')}
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
-                        className={`peer block w-full rounded-lg border bg-white pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-stone-400 dark:bg-neutral-900/60 dark:text-stone-50 dark:placeholder:text-neutral-500
-                          ${validFirst ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400' : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
-                          ${isLoading ? 'opacity-90' : ''}`}
+                        className={`peer block w-full rounded-xl border-2 bg-white pr-12 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 placeholder:text-stone-400 dark:bg-stone-950/50 dark:text-stone-50 dark:placeholder:text-stone-500
+                          ${validFirst ? 'border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400/20 dark:focus:border-emerald-400' : 'border-stone-300 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/20 dark:focus:border-orange-400'}
+                          ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
                         placeholder="Juan"
                         aria-invalid={errors.firstName ? 'true' : 'false'}
                         aria-describedby={errors.firstName ? 'firstName-error' : undefined}
                       />
-                      <div className={`pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500/10 transition-all duration-150 ease-out ${focusField==='firstName' && validFirst ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-orange-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                      <div className={`pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500 transition-all duration-200 ease-out ${focusField==='firstName' && validFirst ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}>
+                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-white" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
                       </div>
                     </div>
-                    {errors.firstName && <p id="firstName-error" className="mt-1 text-[11px] text-red-600 dark:text-red-200">{errors.firstName}</p>}
+                    {errors.firstName && <p id="firstName-error" className="mt-2 text-xs font-medium text-red-600 flex items-center gap-1 dark:text-red-400"><svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>{errors.firstName}</p>}
                   </div>
                   {/* Middle Name (optional) */}
                   <div className="relative">
-                    <label htmlFor="middleName" className="block text-[13px] font-medium text-stone-700 dark:text-stone-300 tracking-wide">Middle Name</label>
-                    <div className="mt-1 relative">
+                    <label htmlFor="middleName" className="block text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2">Middle <span className="text-xs text-stone-500">(Optional)</span></label>
+                    <div className="relative group">
                       <input
                         id="middleName"
                         type="text"
@@ -286,18 +291,16 @@ const Register: React.FC = () => {
                         onFocus={() => setFocusField('middleName')}
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
-                        className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-3.5 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-stone-400 dark:bg-neutral-900/60 dark:text-stone-50 dark:placeholder:text-neutral-500
-                          ${validMiddle ? 'border-neutral-300 focus:ring-1 focus:ring-amber-500 focus:border-amber-500 dark:border-stone-700 dark:focus:ring-amber-400 dark:focus:border-amber-400' : 'border-neutral-300 dark:border-stone-700'}
-                          ${isLoading ? 'opacity-90' : ''}`}
+                        className={`peer block w-full rounded-xl border-2 bg-white pr-4 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 placeholder:text-stone-400 dark:bg-stone-950/50 dark:text-stone-50 dark:placeholder:text-stone-500 border-stone-300 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/20 dark:focus:border-orange-400
+                          ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
                         placeholder="Cruz"
                       />
-                      {/* Optional field doesn't show green success icon */}
                     </div>
                   </div>
                   {/* Last Name */}
                   <div className="relative">
-                    <label htmlFor="lastName" className="block text-[13px] font-medium text-stone-700 dark:text-stone-300 tracking-wide">Last Name</label>
-                    <div className="mt-1 relative">
+                    <label htmlFor="lastName" className="block text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2">Last Name</label>
+                    <div className="relative group">
                       <input
                         id="lastName"
                         type="text"
@@ -307,26 +310,26 @@ const Register: React.FC = () => {
                         onFocus={() => setFocusField('lastName')}
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
-                        className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-stone-400 dark:bg-neutral-900/60 dark:text-stone-50 dark:placeholder:text-neutral-500
-                          ${validLast ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400' : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
-                          ${isLoading ? 'opacity-90' : ''}`}
+                        className={`peer block w-full rounded-xl border-2 bg-white pr-12 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 placeholder:text-stone-400 dark:bg-stone-950/50 dark:text-stone-50 dark:placeholder:text-stone-500
+                          ${validLast ? 'border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400/20 dark:focus:border-emerald-400' : 'border-stone-300 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/20 dark:focus:border-orange-400'}
+                          ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
                         placeholder="Dela Cruz"
                         aria-invalid={errors.lastName ? 'true' : 'false'}
                         aria-describedby={errors.lastName ? 'lastName-error' : undefined}
                       />
-                      <div className={`pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500/10 transition-all duration-150 ease-out ${focusField==='lastName' && validLast ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-orange-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                      <div className={`pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500 transition-all duration-200 ease-out ${focusField==='lastName' && validLast ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}>
+                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-white" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
                       </div>
                     </div>
-                    {errors.lastName && <p id="lastName-error" className="mt-1 text-[11px] text-red-600 dark:text-red-200">{errors.lastName}</p>}
+                    {errors.lastName && <p id="lastName-error" className="mt-2 text-xs font-medium text-red-600 flex items-center gap-1 dark:text-red-400"><svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>{errors.lastName}</p>}
                   </div>
                 </div>
                 {/* Email + Password (side-by-side on md+) */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Email */}
                   <div className="relative">
-                    <label htmlFor="email" className="block text-[13px] font-medium text-stone-700 dark:text-stone-300 tracking-wide">Email</label>
-                    <div className="mt-1 relative">
+                    <label htmlFor="email" className="block text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2">Email Address</label>
+                    <div className="relative group">
                       <input
                         id="email"
                         type="email"
@@ -336,26 +339,33 @@ const Register: React.FC = () => {
                         onFocus={() => setFocusField('email')}
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
-                        className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-stone-400 dark:bg-neutral-900/60 dark:text-stone-50 dark:placeholder:text-neutral-500
-                          ${validEmail ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400' : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
-                          ${isLoading ? 'opacity-90' : ''}`}
-                        placeholder="you@company.com"
+                        className={`peer block w-full rounded-xl border-2 bg-white pr-12 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 placeholder:text-stone-400 dark:bg-stone-950/50 dark:text-stone-50 dark:placeholder:text-stone-500
+                          ${validEmail ? 'border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400/20 dark:focus:border-emerald-400' : 'border-stone-300 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/20 dark:focus:border-orange-400'}
+                          ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
+                        placeholder="your.email@company.com"
                         aria-invalid={errors.email ? 'true' : 'false'}
                         aria-describedby={errors.email ? 'email-error' : undefined}
                       />
-                      <div className={`pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500/10 transition-all duration-150 ease-out ${focusField==='email' && validEmail ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-orange-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                      <div className={`pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500 transition-all duration-200 ease-out ${focusField==='email' && validEmail ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}>
+                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-white" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
                       </div>
                     </div>
-                    {errors.email && <p id="email-error" className="mt-1 text-[11px] text-red-600 dark:text-red-200">{errors.email}</p>}
+                    {errors.email && <p id="email-error" className="mt-2 text-xs font-medium text-red-600 flex items-center gap-1 dark:text-red-400"><svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>{errors.email}</p>}
                   </div>
                   {/* Password */}
                   <div className="relative">
-                    <label htmlFor="password" className="flex items-center justify-between text-[13px] font-medium text-stone-700 dark:text-stone-300 tracking-wide">
+                    <label htmlFor="password" className="flex items-center justify-between text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2">
                       <span>Password</span>
-                      {capsOn && <span className="text-[10px] font-medium text-amber-600 dark:text-amber-300">CAPS ON</span>}
+                      {capsOn && (
+                        <span className="text-xs font-bold text-amber-600 flex items-center gap-1 dark:text-amber-400">
+                          <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v2H2v-4l4.257-4.257A6 6 0 1118 8zm-6-4a1 1 0 100 2 2 2 0 012 2 1 1 0 102 0 4 4 0 00-4-4z" clipRule="evenodd" />
+                          </svg>
+                          CAPS
+                        </span>
+                      )}
                     </label>
-                    <div className="mt-1 relative">
+                    <div className="relative group">
                       <input
                         id="password"
                         type="password"
@@ -367,26 +377,26 @@ const Register: React.FC = () => {
                         onFocus={() => setFocusField('password')}
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
-                        className={`peer block w-full rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition placeholder:text-stone-400 dark:bg-neutral-900/60 dark:text-stone-50 dark:placeholder:text-neutral-500
-                          ${validPassword ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400' : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
-                          ${isLoading ? 'opacity-90' : ''}`}
-                        placeholder="••••••••"
+                        className={`peer block w-full rounded-xl border-2 bg-white pr-12 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 placeholder:text-stone-400 dark:bg-stone-950/50 dark:text-stone-50 dark:placeholder:text-stone-500
+                          ${validPassword ? 'border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400/20 dark:focus:border-emerald-400' : 'border-stone-300 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/20 dark:focus:border-orange-400'}
+                          ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
+                        placeholder="Min 8 characters"
                         aria-invalid={errors.password ? 'true' : 'false'}
                         aria-describedby={errors.password ? 'password-error' : undefined}
                       />
-                      <div className={`pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500/10 transition-all duration-150 ease-out ${focusField==='password' && validPassword ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-orange-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                      <div className={`pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500 transition-all duration-200 ease-out ${focusField==='password' && validPassword ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}>
+                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-white" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
                       </div>
                     </div>
-                    {errors.password && <p id="password-error" className="mt-1 text-[11px] text-red-600 dark:text-red-200">{errors.password}</p>}
+                    {errors.password && <p id="password-error" className="mt-2 text-xs font-medium text-red-600 flex items-center gap-1 dark:text-red-400"><svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>{errors.password}</p>}
                   </div>
                 </div>
                 {/* Role + Branch (side-by-side on md+) */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Role */}
                   <div className="relative">
-                    <label htmlFor="role" className="block text-[13px] font-medium text-stone-700 dark:text-stone-300 tracking-wide">Role</label>
-                    <div className="mt-1 relative">
+                    <label htmlFor="role" className="block text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2">Role</label>
+                    <div className="relative group">
                       <button
                         ref={roleButtonRef}
                         id="role"
@@ -440,9 +450,9 @@ const Register: React.FC = () => {
                             setFocusField(null);
                           }
                         }}
-                        className={`w-full text-left rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition dark:bg-neutral-900/60 dark:text-stone-50
-                          ${validRole ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400' : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
-                          ${isLoading ? 'opacity-90' : ''}`}
+                        className={`w-full text-left rounded-xl border-2 bg-white pr-12 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 dark:bg-stone-950/50 dark:text-stone-50
+                          ${validRole ? 'border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400/20 dark:focus:border-emerald-400' : 'border-stone-300 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/20 dark:focus:border-orange-400'}
+                          ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
                         aria-haspopup="listbox"
                         aria-expanded={roleOpen}
                         aria-controls="role-listbox"
@@ -454,14 +464,14 @@ const Register: React.FC = () => {
                         </span>
                         {/* Chevron */}
                         <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                          <svg className={`h-4 w-4 text-neutral-500 dark:text-stone-400 transition-transform ${roleOpen ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="none" aria-hidden>
-                            <path d="M6 8l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                          <svg className={`h-5 w-5 text-stone-500 dark:text-stone-400 transition-transform duration-200 ${roleOpen ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="none" aria-hidden>
+                            <path d="M6 8l4 4 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                           </svg>
                         </span>
                       </button>
                       {/* Success icon bubble when valid + focused */}
-                      <div className={`pointer-events-none absolute right-8 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500/10 transition-all duration-150 ease-out ${focusField==='role' && validRole ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-orange-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                      <div className={`pointer-events-none absolute right-10 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500 transition-all duration-200 ease-out ${focusField==='role' && validRole ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}>
+                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-white" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
                       </div>
                       {roleOpen && (
                         <ul
@@ -469,7 +479,7 @@ const Register: React.FC = () => {
                           id="role-listbox"
                           role="listbox"
                           aria-labelledby="role"
-                          className="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-xl border border-neutral-200 bg-white shadow-lg focus:outline-none dark:border-stone-700 dark:bg-neutral-900/90"
+                          className="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-xl border border-orange-200/50 bg-white/95 backdrop-blur-sm shadow-xl focus:outline-none dark:border-orange-900/30 dark:bg-stone-900/95"
                         >
                           {roles.map((r, i) => {
                             const active = i === roleHighlight;
@@ -480,7 +490,7 @@ const Register: React.FC = () => {
                                 id={`role-option-${i}`}
                                 role="option"
                                 aria-selected={selected}
-                                className={`flex cursor-pointer items-center justify-between px-3.5 py-2.5 text-[14px] ${active ? 'bg-neutral-100 dark:bg-neutral-800/60' : ''}`}
+                                className={`flex cursor-pointer items-center justify-between px-4 py-3 text-base transition-colors ${active ? 'bg-orange-50 dark:bg-orange-950/40' : ''} ${selected ? 'font-semibold text-orange-600 dark:text-orange-400' : 'text-stone-900 dark:text-stone-50'}`}
                                 onMouseEnter={() => setRoleHighlight(i)}
                                 onMouseDown={(e) => {
                                   e.preventDefault(); // prevent button blur
@@ -491,10 +501,10 @@ const Register: React.FC = () => {
                                   setFocusField(null);
                                 }}
                               >
-                                <span className="truncate text-stone-900 dark:text-stone-50">{r}</span>
+                                <span className="truncate">{r}</span>
                                 {selected && (
-                                  <svg viewBox="0 0 20 20" className="h-4 w-4 text-orange-600" fill="none" aria-hidden>
-                                    <path d="M6 10.5l2.25 2.25L14 7.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                                  <svg viewBox="0 0 20 20" className="h-5 w-5 text-emerald-500" fill="none" aria-hidden>
+                                    <path d="M6 10.5l2.25 2.25L14 7.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                                   </svg>
                                 )}
                               </li>
@@ -503,12 +513,12 @@ const Register: React.FC = () => {
                         </ul>
                       )}
                     </div>
-                    {errors.role && <p id="role-error" className="mt-1 text-[11px] text-red-600 dark:text-red-200">{errors.role}</p>}
+                    {errors.role && <p id="role-error" className="mt-2 text-xs font-medium text-red-600 flex items-center gap-1 dark:text-red-400"><svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>{errors.role}</p>}
                   </div>
                   {/* Branch combobox */}
                   <div className="relative">
-                    <label htmlFor="branch" className="block text-[13px] font-medium text-stone-700 dark:text-stone-300 tracking-wide">
-                      Branch {role === 'Staff' && <span className="text-[10px] text-orange-600 dark:text-orange-400">(Auto-filled)</span>}
+                    <label htmlFor="branch" className="block text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2">
+                      Branch {role === 'Staff' && <span className="text-xs text-amber-600 dark:text-amber-400">(Auto-filled)</span>}
                     </label>
                     <div className="mt-1 relative">
                       <button
@@ -770,29 +780,34 @@ const Register: React.FC = () => {
                   </div>
                 )}
               </div>
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 mt-2">
-                <span className="text-[11px] text-neutral-500 dark:text-stone-400 leading-none order-2 sm:order-1">All fields required except middle name</span>
-                <span className="text-[11px] text-neutral-500 dark:text-stone-400 leading-none order-1 sm:order-2">v1.0.0</span>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-2">
+                <span className="text-xs text-stone-600 dark:text-stone-400 leading-none font-medium order-2 sm:order-1">All fields required except middle name</span>
+                <span className="text-xs text-stone-500 dark:text-stone-500 leading-none font-medium order-1 sm:order-2">v1.0.0</span>
               </div>
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full inline-flex justify-center items-center gap-2 rounded-xl bg-orange-600 text-white text-sm md:text-[15px] font-medium py-3 tracking-wide shadow-sm hover:bg-orange-700 active:scale-[.99] focus:outline-none focus:ring-2 focus:ring-orange-600 focus:ring-offset-2 focus:ring-offset-white transition disabled:opacity-50 disabled:hover:bg-orange-600 disabled:cursor-not-allowed dark:bg-orange-400 dark:text-neutral-900 dark:hover:bg-orange-300 dark:focus:ring-orange-200 dark:focus:ring-offset-neutral-950 dark:disabled:hover:bg-orange-400"
+                className="w-full group inline-flex justify-center items-center gap-2.5 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 text-white text-base font-bold py-4 tracking-wide shadow-lg shadow-orange-500/20 hover:shadow-xl hover:shadow-orange-500/30 hover:scale-[1.02] active:scale-[.98] focus:outline-none focus:ring-4 focus:ring-orange-500/30 transition-all duration-200 disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed disabled:shadow-lg dark:from-orange-700 dark:to-amber-700 dark:shadow-orange-900/30 dark:hover:shadow-orange-900/40 dark:focus:ring-orange-400/30"
               >
                 {isLoading ? (
                   <>
-                    <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" aria-hidden="true">
+                    <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24" aria-hidden="true">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"></path>
                     </svg>
-                    <span>Creating…</span>
+                    <span>Creating Account…</span>
                   </>
                 ) : (
-                  <span>Sign up</span>
+                  <>
+                    <span>Create Account</span>
+                    <svg className="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </>
                 )}
               </button>
             </form>
-            <p className="mt-6 text-center text-[13px] text-stone-600 dark:text-stone-400">Already have an account? <Link to="/login" className="font-medium text-neutral-800 hover:underline focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 focus:ring-offset-white rounded dark:text-orange-300 dark:hover:text-orange-200 dark:focus:ring-orange-200 dark:focus:ring-offset-neutral-900">Sign in</Link></p>
+            <p className="mt-8 text-center text-sm text-stone-600 dark:text-stone-400">Already have an account? <Link to="/login" className="font-bold text-orange-600 hover:text-orange-700 hover:underline underline-offset-2 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 rounded-md transition-colors dark:text-orange-400 dark:hover:text-orange-300">Sign in now</Link></p>
           </div>
        
         </div>

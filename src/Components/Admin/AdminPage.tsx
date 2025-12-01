@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminSidebar from './AdminSidebar';
+import { getTotalUsers } from '../../services/accountService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faUsers, faBuilding, faChartLine, faShieldAlt, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import LogoutPanel from '../Shared/LogoutPanel';
@@ -22,11 +23,32 @@ const AdminPage: React.FC = () => {
     return 'Good Evening';
   };
 
+  const [totalUsers, setTotalUsers] = useState<number | null>(null);
+  const [isLoadingTotalUsers, setIsLoadingTotalUsers] = useState(false);
+
+  useEffect(() => {
+    const fetchTotal = async () => {
+      try {
+        setIsLoadingTotalUsers(true);
+        const token = localStorage.getItem('accessToken') ?? undefined;
+        const total = await getTotalUsers(token);
+        setTotalUsers(total);
+      } catch (err) {
+        console.error('Error fetching total users:', err);
+        setTotalUsers(null);
+      } finally {
+        setIsLoadingTotalUsers(false);
+      }
+    };
+
+    fetchTotal();
+  }, []);
+
   // Stats Cards
   const statsCards = [
     {
-      title: 'Total Users',
-      value: '2',
+    title: 'Total Users',
+    value: isLoadingTotalUsers ? '—' : (totalUsers !== null ? totalUsers.toString() : '—'),
       change: '+12.5%',
       isIncrease: true,
       icon: faUsers,
