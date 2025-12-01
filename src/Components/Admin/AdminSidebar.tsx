@@ -1,7 +1,8 @@
 import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faChartLine, faTimes, faUsers, faPercent, faBoxes, faBuilding, faHome, faClipboardList } from '@fortawesome/free-solid-svg-icons';
+import { faChartLine, faTimes, faUsers, faBoxes, faBuilding, faHome, faClipboardList } from '@fortawesome/free-solid-svg-icons';
+import KapeRestLogo from '../../assets/KapeRest.png';
 
 interface AdminSidebarProps {
   isOpen?: boolean;
@@ -15,7 +16,6 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
 
   const isDashboard = location.pathname === '/admin';
   const isAccounts = location.pathname === '/admin/accounts';
-  const isTaxDiscounts = location.pathname === '/admin/tax-discounts';
   const isInventory = location.pathname === '/admin/inventory';
   const isBranch = location.pathname === '/admin/branch';
   const isSales = location.pathname === '/admin/sales';
@@ -36,18 +36,18 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
         <div className="sticky top-0 flex items-center justify-center border-b border-stone-200 dark:border-stone-700 bg-stone-50/80 dark:bg-stone-900/80 backdrop-blur-sm px-4 py-5 transition-all duration-300">
           {isExpanded ? (
             <div className="flex items-center gap-3 w-full">
-              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg">
-                <FontAwesomeIcon icon={faCoffee} className="text-xl" />
-              </div>
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg p-2"> 
+                <img src={KapeRestLogo} alt="KapeRest" className="w-full h-full object-contain brightness-0 invert" />
+            </div>
               <div className="flex-1 min-w-0 flex flex-col justify-center">
                 <h2 className="text-3xl font-black text-stone-900 dark:text-white tracking-tight leading-tight">KapeRest</h2>
                 <p className="text-base font-semibold text-orange-600 dark:text-orange-400 uppercase tracking-wide leading-none">Admin Portal</p>
               </div>
             </div>
           ) : (
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg">
-              <FontAwesomeIcon icon={faCoffee} className="text-xl" />
-            </div>
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg p-2">
+            <img src={KapeRestLogo} alt="KapeRest" className="w-full h-full object-contain brightness-0 invert" />
+          </div>
           )}
         </div>
 

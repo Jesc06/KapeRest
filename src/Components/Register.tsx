@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import TintedBackdrop from './TintedBackdrop';
 import { API_BASE_URL } from '../config/api';
+import KapeRestLogo from '../assets/KapeRest.png';
 
 // Registration form styled to match LoginUI aesthetics.
 // Fields: first name, middle name (optional), last name, email, password, role, branch.
@@ -216,25 +217,24 @@ const Register: React.FC = () => {
   }, [roleOpen, branchOpen, cashierOpen]);
 
   return (
-    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:bg-gradient-to-br dark:from-stone-950 dark:via-neutral-950 dark:to-stone-900 font-sans transition-colors duration-300">
+    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-gradient-to-br from-stone-50 via-orange-50/40 to-amber-50/30 dark:bg-gradient-to-br dark:from-stone-950 dark:via-stone-900 dark:to-stone-950 font-sans transition-colors duration-300">
       <TintedBackdrop />
       {/* Decorative gradient overlays */}
       <div aria-hidden className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-orange-300/20 rounded-full blur-3xl dark:bg-orange-600/10" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-amber-300/20 rounded-full blur-3xl dark:bg-amber-600/10" />
+        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-orange-200/30 rounded-full blur-3xl dark:bg-orange-600/5" />
+        <div className="absolute -bottom-40 -right-40 w-[600px] h-[600px] bg-amber-200/30 rounded-full blur-3xl dark:bg-amber-600/5" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-rose-200/20 rounded-full blur-3xl dark:bg-rose-600/3" />
       </div>
       <main className="relative z-10 flex flex-1 items-center justify-center px-4 py-8 sm:px-6 md:py-12">
         <div className="relative w-full max-w-[620px]">
-          <div className="auth-card relative rounded-2xl border-2 border-orange-400/80 bg-white/95 backdrop-blur-xl p-8 sm:p-10 shadow-2xl shadow-orange-500/15 transition-all duration-300 ease-out hover:shadow-3xl hover:shadow-orange-500/20 hover:border-orange-500 dark:border-orange-600/70 dark:bg-stone-900/95 dark:shadow-orange-950/30 dark:hover:border-orange-500">
-            <div className="absolute -top-3 left-8 inline-flex h-7 items-center rounded-full border border-orange-400/30 bg-gradient-to-r from-orange-600 to-amber-600 px-4 text-xs font-bold tracking-wider text-white shadow-lg dark:from-orange-700 dark:to-amber-700">REGISTER</div>
+          <div className="auth-card relative rounded-3xl border-2 border-orange-400/60 bg-white/80 backdrop-blur-2xl p-8 sm:p-10 shadow-2xl shadow-stone-900/10 transition-all duration-300 ease-out dark:border-orange-700/50 dark:bg-stone-900/80 dark:shadow-stone-950/50">
             <div className="mb-8">
-              <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-orange-700 via-amber-700 to-orange-600 flex items-center gap-3 dark:from-orange-500 dark:via-amber-500 dark:to-orange-400">
+              <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-amber-600 to-orange-500 flex items-center gap-0.5 dark:from-orange-400 dark:via-amber-400 dark:to-orange-300">
                 Create Account
-                <span aria-hidden="true" className="text-3xl">☕</span>
+                <img src={KapeRestLogo} alt="KapeRest Logo" className="w-16 h-16 object-contain" />
               </h1>
-              <p className="mt-2 text-base font-medium text-stone-600 dark:text-stone-400">Join KapeRest POS Management</p>
+              <p className="mt-3 text-base font-semibold text-stone-600 dark:text-stone-400">Join KapeRest POS Management</p>
             </div>
-            <div className="h-px w-full bg-gradient-to-r from-transparent via-orange-400/40 to-transparent mb-8 dark:via-orange-700" aria-hidden />
             <form onSubmit={handleSubmit} noValidate className="space-y-4" aria-busy={isLoading}>
               <div role="status" aria-live="polite" className="sr-only">
                 {errors.firstName || errors.lastName || errors.email || errors.password || errors.role || errors.branch || ''}

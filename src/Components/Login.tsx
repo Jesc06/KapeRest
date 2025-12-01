@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import TintedBackdrop from "./TintedBackdrop";
 import { API_BASE_URL } from "../config/api";
 import { jwtDecode } from "jwt-decode";
+import KapeRestLogo from "../assets/KapeRest.png";
 
 
 
@@ -97,28 +98,24 @@ const Login: React.FC = () => {
   const errorSummary = errors.api || (Object.keys(errors).length > 1 ? Object.values(errors).filter(e => e !== errors.api).join(". ") : null);
 
   return (
-    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:bg-gradient-to-br dark:from-stone-950 dark:via-neutral-950 dark:to-stone-900 font-sans transition-colors duration-300">
+    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-gradient-to-br from-stone-50 via-orange-50/40 to-amber-50/30 dark:bg-gradient-to-br dark:from-stone-950 dark:via-stone-900 dark:to-stone-950 font-sans transition-colors duration-300">
       <TintedBackdrop />
       {/* Decorative gradient overlays */}
       <div aria-hidden className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-orange-300/20 rounded-full blur-3xl dark:bg-orange-600/10" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-amber-300/20 rounded-full blur-3xl dark:bg-amber-600/10" />
+        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-orange-200/30 rounded-full blur-3xl dark:bg-orange-600/5" />
+        <div className="absolute -bottom-40 -right-40 w-[600px] h-[600px] bg-amber-200/30 rounded-full blur-3xl dark:bg-amber-600/5" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-rose-200/20 rounded-full blur-3xl dark:bg-rose-600/3" />
       </div>
       <main className="relative z-10 flex flex-1 items-center justify-center px-4 py-8 sm:px-6 md:py-12">
         <div className="relative w-full max-w-[460px]">
-          <div className="auth-card relative rounded-2xl border-2 border-orange-400/80 bg-white/95 backdrop-blur-xl p-8 sm:p-10 shadow-2xl shadow-orange-500/15 transition-all duration-300 ease-out hover:shadow-3xl hover:shadow-orange-500/20 hover:border-orange-500 dark:border-orange-600/70 dark:bg-stone-900/95 dark:shadow-orange-950/30 dark:hover:border-orange-500">
-            {/* Decorative top badge */}
-            <div className="absolute -top-3 left-8 inline-flex h-7 items-center rounded-full border border-orange-400/30 bg-gradient-to-r from-orange-600 to-amber-600 px-4 text-xs font-bold tracking-wider text-white shadow-lg dark:from-orange-700 dark:to-amber-700">
-              LOGIN
-            </div>
+          <div className="auth-card relative rounded-3xl border-2 border-orange-400/60 bg-white/80 backdrop-blur-2xl p-8 sm:p-10 shadow-2xl shadow-stone-900/10 transition-all duration-300 ease-out dark:border-orange-700/50 dark:bg-stone-900/80 dark:shadow-stone-950/50">
             {/* Brand */}
             <div className="mb-8">
-              <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-orange-700 via-amber-700 to-orange-600 flex items-center gap-3 dark:from-orange-500 dark:via-amber-500 dark:to-orange-400">
-                KapeRest <span aria-hidden="true" className="text-3xl">☕</span>
+              <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-amber-600 to-orange-500 flex items-center gap-0.5 dark:from-orange-400 dark:via-amber-400 dark:to-orange-300">
+                KapeRest <img src={KapeRestLogo} alt="KapeRest Logo" className="w-16 h-16 object-contain" />
               </h1>
-              <p className="mt-2 text-base font-medium text-stone-600 dark:text-stone-400">Professional POS Management System</p>
+              <p className="mt-3 text-base font-semibold text-stone-600 dark:text-stone-400">Professional POS Management</p>
             </div>
-            <div className="h-px w-full bg-gradient-to-r from-transparent via-orange-400/40 to-transparent mb-8 dark:via-orange-700" aria-hidden />
             {/* Form */}
               <form onSubmit={handleSubmit} noValidate className="space-y-4" aria-busy={isLoading}>
               {/* Screen reader announcements for first error */}
@@ -152,8 +149,8 @@ const Login: React.FC = () => {
                       disabled={isLoading}
                       className={`peer block w-full rounded-xl border-2 bg-white pr-12 px-4 py-3.5 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 placeholder:text-stone-400 dark:bg-stone-950/50 dark:text-stone-50 dark:placeholder:text-stone-500
                         ${emailValid && email.trim().length > 0
-                          ? 'border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400/20 dark:focus:border-emerald-400'
-                          : 'border-stone-300 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/20 dark:focus:border-orange-400'}
+                          ? 'border-emerald-400 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400/30 dark:focus:border-emerald-400'
+                          : 'border-stone-300 focus:ring-2 focus:ring-orange-500/30 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/30 dark:focus:border-orange-400'}
                         ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
                       placeholder="your.email@company.com"
                       aria-invalid={errors.email ? 'true' : 'false'}
@@ -201,8 +198,8 @@ const Login: React.FC = () => {
                       disabled={isLoading}
                       className={`peer block w-full rounded-xl border-2 bg-white pr-12 px-4 py-3.5 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 placeholder:text-stone-400 dark:bg-stone-950/50 dark:text-stone-50 dark:placeholder:text-stone-500
                         ${passwordValid
-                          ? 'border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400/20 dark:focus:border-emerald-400'
-                          : 'border-stone-300 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/20 dark:focus:border-orange-400'}
+                          ? 'border-emerald-400 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400/30 dark:focus:border-emerald-400'
+                          : 'border-stone-300 focus:ring-2 focus:ring-orange-500/30 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/30 dark:focus:border-orange-400'}
                         ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
                       placeholder="Enter your password"
                       aria-invalid={errors.password ? 'true' : 'false'}
@@ -244,7 +241,7 @@ const Login: React.FC = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full group inline-flex justify-center items-center gap-2.5 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 text-white text-base font-bold py-4 tracking-wide shadow-lg shadow-orange-500/20 hover:shadow-xl hover:shadow-orange-500/30 hover:scale-[1.02] active:scale-[.98] focus:outline-none focus:ring-4 focus:ring-orange-500/30 transition-all duration-200 disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed disabled:shadow-lg dark:from-orange-700 dark:to-amber-700 dark:shadow-orange-900/30 dark:hover:shadow-orange-900/40 dark:focus:ring-orange-400/30"
+                className="w-full group inline-flex justify-center items-center gap-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-base font-bold py-4 tracking-wide shadow-lg shadow-orange-500/25 hover:shadow-xl hover:shadow-orange-500/35 hover:from-orange-600 hover:to-amber-600 active:scale-[.98] focus:outline-none focus:ring-2 focus:ring-orange-500/40 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed dark:from-orange-600 dark:to-amber-600 dark:hover:from-orange-500 dark:hover:to-amber-500 dark:shadow-orange-900/30 dark:hover:shadow-orange-900/40"
               >
                 {isLoading ? (
                   <>

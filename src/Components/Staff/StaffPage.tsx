@@ -113,37 +113,13 @@ const StaffPage: React.FC = () => {
   const statsCards = salesOverview ? [salesOverview] : [];
 
   return (
-    <div className="min-h-screen w-full relative overflow-hidden bg-stone-50 dark:bg-stone-900">
-      {/* Animated Background Effects */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Gradient Orbs */}
-        <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-orange-400/20 to-amber-400/20 dark:from-orange-600/10 dark:to-amber-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '4s' }}></div>
-        <div className="absolute top-1/4 right-0 w-[32rem] h-[32rem] bg-gradient-to-br from-rose-400/20 to-pink-400/20 dark:from-rose-600/10 dark:to-pink-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '6s', animationDelay: '1s' }}></div>
-        <div className="absolute bottom-0 left-1/3 w-[28rem] h-[28rem] bg-gradient-to-br from-amber-400/20 to-orange-400/20 dark:from-amber-600/10 dark:to-orange-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '5s', animationDelay: '2s' }}></div>
-        
-        {/* Floating Particles */}
-        <div className="absolute top-20 left-[10%] w-2 h-2 bg-orange-500/40 dark:bg-orange-400/20 rounded-full animate-bounce" style={{ animationDuration: '3s', animationDelay: '0s' }}></div>
-        <div className="absolute top-40 right-[15%] w-3 h-3 bg-amber-500/40 dark:bg-amber-400/20 rounded-full animate-bounce" style={{ animationDuration: '4s', animationDelay: '1s' }}></div>
-        <div className="absolute top-60 left-[70%] w-2 h-2 bg-rose-500/40 dark:bg-rose-400/20 rounded-full animate-bounce" style={{ animationDuration: '3.5s', animationDelay: '0.5s' }}></div>
-        <div className="absolute bottom-40 right-[25%] w-2 h-2 bg-orange-500/40 dark:bg-orange-400/20 rounded-full animate-bounce" style={{ animationDuration: '4.5s', animationDelay: '1.5s' }}></div>
-        <div className="absolute bottom-20 left-[40%] w-3 h-3 bg-amber-500/40 dark:bg-amber-400/20 rounded-full animate-bounce" style={{ animationDuration: '3.8s', animationDelay: '0.8s' }}></div>
-        
-        {/* Animated Lines */}
-        <svg className="absolute inset-0 w-full h-full opacity-10 dark:opacity-5" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#f97316" stopOpacity="0.5" />
-              <stop offset="50%" stopColor="#fb923c" stopOpacity="0.3" />
-              <stop offset="100%" stopColor="#fbbf24" stopOpacity="0.5" />
-            </linearGradient>
-          </defs>
-          <path d="M0,100 Q400,50 800,100 T1600,100" stroke="url(#lineGradient)" strokeWidth="2" fill="none" className="animate-pulse" />
-          <path d="M0,200 Q400,150 800,200 T1600,200" stroke="url(#lineGradient)" strokeWidth="2" fill="none" className="animate-pulse" style={{ animationDelay: '1s' }} />
-          <path d="M0,300 Q400,250 800,300 T1600,300" stroke="url(#lineGradient)" strokeWidth="2" fill="none" className="animate-pulse" style={{ animationDelay: '2s' }} />
-        </svg>
-        
-        {/* Grid Pattern Overlay */}
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y5NzMxNiIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30 dark:opacity-10"></div>
+    <div className="min-h-screen w-full relative overflow-hidden bg-gradient-to-br from-stone-50 via-orange-50/30 to-amber-50/20 dark:from-stone-950 dark:via-stone-900 dark:to-stone-950">
+      {/* Ambient Background Effects */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-orange-400/10 dark:bg-orange-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '8s' }}></div>
+        <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-amber-400/10 dark:bg-amber-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s', animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 right-1/3 w-72 h-72 bg-rose-400/10 dark:bg-rose-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '4s' }}></div>
+
       </div>
       
       <div className="relative z-10 flex h-screen overflow-hidden">
@@ -151,16 +127,16 @@ const StaffPage: React.FC = () => {
         <StaffSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
 
         {/* Main Content */}
-        <div className={`flex h-screen flex-1 flex-col bg-stone-50/90 dark:bg-stone-900/95 backdrop-blur-xl transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
-          {/* Top Bar - Minimal Header */}
-          <div className="sticky top-0 z-20 border-b border-orange-200/50 dark:border-stone-700/50 bg-stone-50/90 dark:bg-stone-800/90 px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 transition-all duration-300 backdrop-blur-xl shadow-sm shadow-orange-500/5">
+        <div className={`flex h-screen flex-1 flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
+          {/* Top Bar - Premium Glass Header */}
+          <div className="sticky top-0 z-20 border-b border-white/20 dark:border-white/10 bg-white/70 dark:bg-stone-900/70 px-4 sm:px-6 md:px-8 py-3.5 sm:py-4 transition-all duration-300 backdrop-blur-xl shadow-lg shadow-stone-900/5">
             <div className="flex items-center justify-between gap-3">
               {/* Left: Controls & Title */}
-              <div className="flex items-center gap-2 flex-1 min-w-0">
+              <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
                 {/* Hamburger - Mobile Only */}
                 <button
                   onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className="lg:hidden flex-shrink-0 h-9 w-9 flex items-center justify-center rounded-lg border border-orange-200 dark:border-stone-700 bg-gradient-to-br from-orange-50 to-amber-50 dark:bg-stone-700 hover:from-orange-100 hover:to-amber-100 dark:hover:bg-stone-600 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95 shadow-sm shadow-orange-500/10"
+                  className="lg:hidden flex-shrink-0 h-10 w-10 flex items-center justify-center rounded-xl border border-orange-200 dark:border-orange-800/50 bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950 dark:to-amber-950 hover:from-orange-100 hover:to-amber-100 dark:hover:from-orange-900 dark:hover:to-amber-900 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md"
                 >
                   <FontAwesomeIcon icon={faBars} className="h-4 w-4" />
                 </button>
@@ -168,13 +144,23 @@ const StaffPage: React.FC = () => {
                 {/* Sidebar Toggle - Desktop Only */}
                 <button
                   onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                  className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
+                  className="hidden lg:flex flex-shrink-0 h-12 w-12 items-center justify-center rounded-xl border border-orange-200 dark:border-orange-800/50 bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950 dark:to-amber-950 hover:from-orange-100 hover:to-amber-100 dark:hover:from-orange-900 dark:hover:to-amber-900 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md"
                 >
                   <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                 </button>
 
-                {/* Title */}
-                <h1 className="text-base sm:text-lg md:text-xl font-bold text-stone-900 dark:text-stone-100 truncate">Staff Portal</h1>
+                {/* Title with Icon */}
+                <div className="flex items-center gap-3">
+                  <div className="hidden sm:flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 shadow-lg shadow-orange-500/30">
+                    <FontAwesomeIcon icon={faWarehouse} className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <h1 className="text-lg sm:text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-amber-600 dark:from-orange-400 dark:to-amber-400 tracking-tight">
+                      Staff Portal
+                    </h1>
+                    <p className="hidden sm:block text-xs font-semibold text-stone-500 dark:text-stone-400">Inventory Management</p>
+                  </div>
+                </div>
               </div>
 
               {/* Right: Logout Panel */}
@@ -183,54 +169,55 @@ const StaffPage: React.FC = () => {
           </div>
 
           {/* Main Content Area */}
-          <div className="flex-1 overflow-y-auto bg-transparent">
-            <div className="w-full px-4 sm:px-6 md:px-8 lg:px-10 py-6 sm:py-8 md:py-10 relative">
-              {/* Floating Elements */}
-              <div className="absolute top-10 right-10 w-20 h-20 bg-gradient-to-br from-orange-400/10 to-amber-400/10 rounded-full blur-2xl animate-pulse" style={{ animationDuration: '3s' }}></div>
-              <div className="absolute bottom-20 left-10 w-32 h-32 bg-gradient-to-br from-rose-400/10 to-pink-400/10 rounded-full blur-2xl animate-pulse" style={{ animationDuration: '4s', animationDelay: '1s' }}></div>
-              
-              {/* Welcome Section */}
-              <div className="mb-16 sm:mb-20 relative">
-                <div className="relative bg-gradient-to-br from-amber-500 via-orange-600 to-rose-600 dark:from-amber-600 dark:via-orange-700 dark:to-rose-700 rounded-3xl p-12 sm:p-16 md:p-20 shadow-2xl overflow-hidden group border border-orange-400/30 min-h-[400px]">
-                  {/* Animated Premium Background */}
-                  <div className="absolute inset-0 opacity-20">
+          <div className="flex-1 overflow-y-auto">
+            <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-10 md:py-12 max-w-[1600px] mx-auto">
+              {/* Welcome Section - Ultra Premium Hero */}
+              <div className="mb-12 sm:mb-16 relative">
+                <div className="relative bg-gradient-to-br from-orange-500 via-amber-600 to-rose-600 dark:from-orange-600 dark:via-amber-700 dark:to-rose-700 rounded-[2rem] sm:rounded-[2.5rem] p-8 sm:p-12 md:p-16 shadow-2xl overflow-hidden group border-2 border-orange-300/30 dark:border-orange-400/20 min-h-[280px] sm:min-h-[320px]">
+                  {/* Mesh Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-purple-600/20 via-transparent to-pink-600/20 opacity-60"></div>
+                  
+                  {/* Animated Grid Pattern */}
+                  <div className="absolute inset-0 opacity-[0.15]">
                     <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] animate-pulse"></div>
                   </div>
                   
-                  {/* Enhanced Floating Particles Effect */}
+                  {/* Premium Floating Particles */}
                   <div className="absolute inset-0 overflow-hidden">
-                    <div className="absolute top-10 left-10 w-2 h-2 bg-stone-50/40 rounded-full animate-ping"></div>
-                    <div className="absolute top-20 right-20 w-3 h-3 bg-stone-50/30 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
-                    <div className="absolute bottom-10 left-1/3 w-2 h-2 bg-stone-50/40 rounded-full animate-ping" style={{ animationDelay: '2s' }}></div>
-                    <div className="absolute top-1/2 right-1/4 w-2 h-2 bg-yellow-300/50 rounded-full animate-bounce" style={{ animationDuration: '3s' }}></div>
-                    <div className="absolute bottom-1/3 left-1/4 w-3 h-3 bg-stone-50/30 rounded-full animate-bounce" style={{ animationDuration: '4s', animationDelay: '0.5s' }}></div>
-                    <div className="absolute top-1/3 left-2/3 w-2 h-2 bg-orange-200/40 rounded-full animate-pulse" style={{ animationDuration: '2s', animationDelay: '1s' }}></div>
+                    <div className="absolute top-[10%] left-[8%] w-2 h-2 bg-white/50 rounded-full animate-ping"></div>
+                    <div className="absolute top-[25%] right-[15%] w-3 h-3 bg-yellow-200/60 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
+                    <div className="absolute bottom-[15%] left-[30%] w-2.5 h-2.5 bg-white/40 rounded-full animate-ping" style={{ animationDelay: '2s' }}></div>
+                    <div className="absolute top-[50%] right-[20%] w-2 h-2 bg-orange-200/50 rounded-full animate-bounce" style={{ animationDuration: '3s' }}></div>
+                    <div className="absolute bottom-[30%] left-[20%] w-3 h-3 bg-white/30 rounded-full animate-bounce" style={{ animationDuration: '4s', animationDelay: '0.5s' }}></div>
                   </div>
                   
-                  <div className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-14 lg:gap-20">
+                  <div className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 sm:gap-12">
                     <div className="flex-1">
-                      <div className="flex items-start gap-8 mb-10">
-                        <div className="w-28 h-28 bg-stone-50/25 backdrop-blur-md rounded-3xl flex items-center justify-center border-2 border-white/50 shadow-2xl group-hover:scale-110 group-hover:rotate-2 transition-all duration-300 flex-shrink-0">
-                          <FontAwesomeIcon icon={faWarehouse} className="text-6xl text-white drop-shadow-lg" />
+                      <div className="flex items-start gap-5 sm:gap-6 mb-6 sm:mb-8">
+                        <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white/20 backdrop-blur-xl rounded-2xl sm:rounded-3xl flex items-center justify-center border-2 border-white/40 shadow-2xl group-hover:scale-105 group-hover:rotate-3 transition-all duration-500 flex-shrink-0">
+                          <FontAwesomeIcon icon={faWarehouse} className="text-4xl sm:text-5xl text-white drop-shadow-2xl" />
                         </div>
                         <div className="flex-1">
-                          <h2 className="text-6xl sm:text-7xl md:text-8xl font-black text-white mb-4 tracking-tighter drop-shadow-lg leading-tight">
+                          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white mb-2 sm:mb-3 tracking-tighter drop-shadow-2xl leading-tight">
                             {getGreeting()}!
                           </h2>
-                          <div className="text-orange-50 text-base sm:text-lg font-bold uppercase tracking-widest flex items-center gap-3">
-                            <div className="w-2.5 h-2.5 rounded-full bg-yellow-300 flex-shrink-0"></div>
-                            <span>Staff Portal</span>
+                          <div className="text-orange-50 text-sm sm:text-base font-bold uppercase tracking-widest flex items-center gap-2.5">
+                            <div className="w-2 h-2 rounded-full bg-emerald-300 animate-pulse flex-shrink-0"></div>
+                            <span>Staff Portal Active</span>
                           </div>
                         </div>
                       </div>
-                      <p className="text-white/95 text-lg sm:text-xl md:text-2xl leading-relaxed max-w-2xl font-medium">
-                        Welcome to your workspace. Ready to manage suppliers, items, and inventory efficiently.
+                      <p className="text-white/95 text-base sm:text-lg md:text-xl leading-relaxed max-w-2xl font-medium drop-shadow-lg">
+                        Your workspace is ready. Manage suppliers, items, and inventory with efficiency and precision.
                       </p>
                     </div>
-                    <div className="w-full lg:w-auto bg-stone-50/20 backdrop-blur-lg rounded-2xl px-10 py-8 border-2 border-white/40 shadow-2xl group-hover:scale-110 group-hover:shadow-3xl transition-all duration-300">
-                      <p className="text-white/90 text-sm font-black uppercase tracking-widest mb-5">📅 Today's Date</p>
-                      <p className="text-white text-5xl font-black drop-shadow-lg leading-none mb-3">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
-                      <p className="text-white/95 text-xl font-bold drop-shadow-lg">{new Date().toLocaleDateString('en-US', { year: 'numeric' })}</p>
+                    <div className="w-full lg:w-auto bg-white/15 backdrop-blur-2xl rounded-2xl px-8 py-6 border-2 border-white/30 shadow-2xl group-hover:scale-105 group-hover:shadow-3xl transition-all duration-500 hover:bg-white/20">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                        <p className="text-white/90 text-xs font-black uppercase tracking-widest">Today's Date</p>
+                      </div>
+                      <p className="text-white text-4xl sm:text-5xl font-black drop-shadow-xl leading-none mb-2">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                      <p className="text-white/95 text-lg font-bold drop-shadow-lg">{new Date().toLocaleDateString('en-US', { year: 'numeric' })}</p>
                     </div>
                   </div>
                 </div>
@@ -811,21 +798,33 @@ const StaffPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Helpful Tips */}
-              <div className="mt-7 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-5">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              {/* Helpful Tips - Premium Info Card */}
+              <div className="relative overflow-hidden bg-white/80 dark:bg-stone-800/80 backdrop-blur-xl border-2 border-orange-200 dark:border-orange-800/50 rounded-[1.75rem] p-8 sm:p-10 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-1">
+                {/* Gradient Orbs */}
+                <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-br from-orange-400/20 to-amber-400/20 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-0 left-0 w-40 h-40 bg-gradient-to-tr from-rose-400/20 to-pink-400/20 rounded-full blur-3xl"></div>
+                
+                <div className="relative flex flex-col sm:flex-row items-start gap-6 sm:gap-8">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-orange-500 via-amber-500 to-rose-500 flex items-center justify-center flex-shrink-0 shadow-xl shadow-orange-500/30 hover:scale-110 hover:rotate-6 transition-all duration-500 border-2 border-white/50">
+                    <svg className="w-9 h-9 sm:w-10 sm:h-10 text-white drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
                   <div className="flex-1">
-                    <h4 className="text-sm font-bold text-blue-900 dark:text-blue-300 mb-1.5 flex items-center gap-2">
-                      <span>💡 Quick Tip</span>
+                    <h4 className="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-amber-600 dark:from-orange-400 dark:to-amber-400 mb-3 sm:mb-4 flex items-center gap-2.5 tracking-tight">
+                      <span>💡</span>
+                      <span>Quick Tips & Navigation</span>
                     </h4>
-                    <p className="text-sm text-blue-800 dark:text-blue-400 leading-relaxed">
-                      Use the sidebar to navigate between different sections for faster access to commonly used features.
-                    </p>
+                    <div className="space-y-3">
+                      <p className="text-base sm:text-lg text-stone-700 dark:text-stone-300 leading-relaxed font-semibold">
+                        Use the sidebar to navigate between different sections. Access <span className="px-2 py-0.5 bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300 rounded-lg font-black">"Suppliers"</span> and <span className="px-2 py-0.5 bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300 rounded-lg font-black">"Items"</span> to manage inventory efficiently.
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="px-3 py-1.5 bg-gradient-to-r from-orange-100 to-amber-100 dark:from-orange-900/50 dark:to-amber-900/50 text-orange-700 dark:text-orange-300 rounded-lg text-sm font-bold border border-orange-200 dark:border-orange-800">📦 Manage Inventory</span>
+                        <span className="px-3 py-1.5 bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/50 dark:to-indigo-900/50 text-blue-700 dark:text-blue-300 rounded-lg text-sm font-bold border border-blue-200 dark:border-blue-800">🏪 Track Suppliers</span>
+                        <span className="px-3 py-1.5 bg-gradient-to-r from-green-100 to-emerald-100 dark:from-green-900/50 dark:to-emerald-900/50 text-green-700 dark:text-green-300 rounded-lg text-sm font-bold border border-green-200 dark:border-green-800">📊 View Reports</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
