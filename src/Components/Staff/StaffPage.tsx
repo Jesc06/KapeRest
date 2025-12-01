@@ -286,7 +286,7 @@ const StaffPage: React.FC = () => {
 
                             <div className="space-y-4 mb-6">
                               <div>
-                                <label className="text-xs font-black uppercase tracking-widest text-stone-600 dark:text-stone-400 block mb-3 flex items-center gap-2">
+                                <label className="text-xs font-black uppercase tracking-widest text-stone-600 dark:text-stone-400 flex items-center gap-2 mb-3">
                                   <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
                                   From Date
                                 </label>
@@ -298,7 +298,7 @@ const StaffPage: React.FC = () => {
                                 />
                               </div>
                               <div>
-                                <label className="text-xs font-black uppercase tracking-widest text-stone-600 dark:text-stone-400 block mb-3 flex items-center gap-2">
+                                <label className="text-xs font-black uppercase tracking-widest text-stone-600 dark:text-stone-400 flex items-center gap-2 mb-3">
                                   <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
                                   To Date
                                 </label>

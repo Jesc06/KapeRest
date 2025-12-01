@@ -32,7 +32,6 @@ import { FloatingVoiceButton } from "../Components/Shared";
 const App: React.FC = () => {
   const AnimatedRoutes: React.FC = () => {
     const location = useLocation();
-    const hideNavbar = location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/cashier" || location.pathname === "/cashier/buy-item" || location.pathname === "/cashier/sales" || location.pathname === "/cashier/change-password" || location.pathname === "/cashier/hold-items" || location.pathname === "/cashier/purchases" || location.pathname === "/staff" || location.pathname === "/staff/add-supplier" || location.pathname === "/staff/suppliers" || location.pathname === "/staff/add-item" || location.pathname === "/staff/items" || location.pathname === "/staff/add-stocks" || location.pathname === "/staff/stocks" || location.pathname === "/staff/sales" || location.pathname === "/staff/purchases" || location.pathname === "/staff/void-requests" || location.pathname === "/staff/change-password" || location.pathname === "/staff/audit-trail" || location.pathname === "/admin" || location.pathname === "/admin/accounts" || location.pathname === "/admin/tax-discounts" || location.pathname === "/admin/inventory" || location.pathname === "/admin/branch" || location.pathname === "/admin/sales" || location.pathname === "/admin/audit-trail";
 
     return (
       <>
