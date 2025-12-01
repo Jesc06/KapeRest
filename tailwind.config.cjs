@@ -10,6 +10,11 @@ module.exports = {
         sans: ['Inter', 'sans-serif'],
       },
       keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(0px) translateX(0px)' },
+          '33%': { transform: 'translateY(-20px) translateX(10px)' },
+          '66%': { transform: 'translateY(10px) translateX(-15px)' },
+        },
         subtlePulse: {
           '0%': { transform: 'scale(0.98)', opacity: '0.85' },
           '50%': { transform: 'scale(1.05)', opacity: '1' },

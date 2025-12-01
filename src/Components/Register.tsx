@@ -217,17 +217,17 @@ const Register: React.FC = () => {
   }, [roleOpen, branchOpen, cashierOpen]);
 
   return (
-    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-gradient-to-br from-stone-50 via-orange-50/40 to-amber-50/30 dark:bg-gradient-to-br dark:from-stone-950 dark:via-stone-900 dark:to-stone-950 font-sans transition-colors duration-300">
+    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-gradient-to-br from-stone-50 via-orange-50/30 to-amber-50/20 dark:bg-gradient-to-br dark:from-stone-950 dark:via-stone-900 dark:to-stone-950 font-sans transition-colors duration-300">
       <TintedBackdrop />
-      {/* Decorative gradient overlays */}
-      <div aria-hidden className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-orange-200/30 rounded-full blur-3xl dark:bg-orange-600/5" />
-        <div className="absolute -bottom-40 -right-40 w-[600px] h-[600px] bg-amber-200/30 rounded-full blur-3xl dark:bg-amber-600/5" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-rose-200/20 rounded-full blur-3xl dark:bg-rose-600/3" />
+      {/* Animated Ambient Background Effects */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-orange-400/20 dark:bg-orange-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '8s' }}></div>
+        <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-amber-400/20 dark:bg-amber-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s', animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 right-1/3 w-72 h-72 bg-rose-400/20 dark:bg-rose-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '4s' }}></div>
       </div>
       <main className="relative z-10 flex flex-1 items-center justify-center px-4 py-8 sm:px-6 md:py-12">
         <div className="relative w-full max-w-[620px]">
-          <div className="auth-card relative rounded-3xl border-2 border-orange-400/60 bg-white/80 backdrop-blur-2xl p-8 sm:p-10 shadow-2xl shadow-stone-900/10 transition-all duration-300 ease-out dark:border-orange-700/50 dark:bg-stone-900/80 dark:shadow-stone-950/50">
+          <div className="auth-card relative rounded-lg border-2 border-orange-400/60 bg-stone-50/95 backdrop-blur-2xl p-8 sm:p-10 shadow-2xl shadow-stone-900/10 transition-all duration-300 ease-out dark:border-orange-700/50 dark:bg-stone-900/80 dark:shadow-stone-950/50">
             <div className="mb-8">
               <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-amber-600 to-orange-500 flex items-center gap-0.5 dark:from-orange-400 dark:via-amber-400 dark:to-orange-300">
                 Create Account
@@ -240,7 +240,7 @@ const Register: React.FC = () => {
                 {errors.firstName || errors.lastName || errors.email || errors.password || errors.role || errors.branch || ''}
               </div>
               {errorSummary && (
-                <div className="rounded-xl border border-red-300 bg-gradient-to-br from-red-50 to-red-100/50 text-red-800 text-sm px-4 py-3 shadow-sm dark:border-red-800/40 dark:bg-gradient-to-br dark:from-red-950/40 dark:to-red-900/20 dark:text-red-200" role="alert">
+                <div className="rounded-lg border border-red-300 bg-gradient-to-br from-red-50 to-red-100/50 text-red-800 text-sm px-4 py-3 shadow-sm dark:border-red-800/40 dark:bg-gradient-to-br dark:from-red-950/40 dark:to-red-900/20 dark:text-red-200" role="alert">
                   <div className="flex items-start gap-2">
                     <svg className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
@@ -265,7 +265,7 @@ const Register: React.FC = () => {
                         onFocus={() => setFocusField('firstName')}
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
-                        className={`peer block w-full rounded-xl border-2 bg-white pr-12 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 placeholder:text-stone-400 dark:bg-stone-950/50 dark:text-stone-50 dark:placeholder:text-stone-500
+                        className={`peer block w-full rounded-lg border-2 bg-stone-50 pr-12 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 placeholder:text-stone-400 dark:bg-stone-950/50 dark:text-stone-50 dark:placeholder:text-stone-500
                           ${validFirst ? 'border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400/20 dark:focus:border-emerald-400' : 'border-stone-300 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/20 dark:focus:border-orange-400'}
                           ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
                         placeholder="Juan"
@@ -291,7 +291,7 @@ const Register: React.FC = () => {
                         onFocus={() => setFocusField('middleName')}
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
-                        className={`peer block w-full rounded-xl border-2 bg-white pr-4 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 placeholder:text-stone-400 dark:bg-stone-950/50 dark:text-stone-50 dark:placeholder:text-stone-500 border-stone-300 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/20 dark:focus:border-orange-400
+                        className={`peer block w-full rounded-lg border-2 bg-stone-50 pr-4 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 placeholder:text-stone-400 dark:bg-stone-950/50 dark:text-stone-50 dark:placeholder:text-stone-500 border-stone-300 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/20 dark:focus:border-orange-400
                           ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
                         placeholder="Cruz"
                       />
@@ -310,7 +310,7 @@ const Register: React.FC = () => {
                         onFocus={() => setFocusField('lastName')}
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
-                        className={`peer block w-full rounded-xl border-2 bg-white pr-12 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 placeholder:text-stone-400 dark:bg-stone-950/50 dark:text-stone-50 dark:placeholder:text-stone-500
+                        className={`peer block w-full rounded-lg border-2 bg-stone-50 pr-12 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 placeholder:text-stone-400 dark:bg-stone-950/50 dark:text-stone-50 dark:placeholder:text-stone-500
                           ${validLast ? 'border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400/20 dark:focus:border-emerald-400' : 'border-stone-300 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/20 dark:focus:border-orange-400'}
                           ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
                         placeholder="Dela Cruz"
@@ -339,7 +339,7 @@ const Register: React.FC = () => {
                         onFocus={() => setFocusField('email')}
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
-                        className={`peer block w-full rounded-xl border-2 bg-white pr-12 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 placeholder:text-stone-400 dark:bg-stone-950/50 dark:text-stone-50 dark:placeholder:text-stone-500
+                        className={`peer block w-full rounded-lg border-2 bg-stone-50 pr-12 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 placeholder:text-stone-400 dark:bg-stone-950/50 dark:text-stone-50 dark:placeholder:text-stone-500
                           ${validEmail ? 'border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400/20 dark:focus:border-emerald-400' : 'border-stone-300 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/20 dark:focus:border-orange-400'}
                           ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
                         placeholder="your.email@company.com"
@@ -377,7 +377,7 @@ const Register: React.FC = () => {
                         onFocus={() => setFocusField('password')}
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
-                        className={`peer block w-full rounded-xl border-2 bg-white pr-12 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 placeholder:text-stone-400 dark:bg-stone-950/50 dark:text-stone-50 dark:placeholder:text-stone-500
+                        className={`peer block w-full rounded-lg border-2 bg-stone-50 pr-12 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 placeholder:text-stone-400 dark:bg-stone-950/50 dark:text-stone-50 dark:placeholder:text-stone-500
                           ${validPassword ? 'border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400/20 dark:focus:border-emerald-400' : 'border-stone-300 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/20 dark:focus:border-orange-400'}
                           ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
                         placeholder="Min 8 characters"
@@ -450,7 +450,7 @@ const Register: React.FC = () => {
                             setFocusField(null);
                           }
                         }}
-                        className={`w-full text-left rounded-xl border-2 bg-white pr-12 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 dark:bg-stone-950/50 dark:text-stone-50
+                        className={`w-full text-left rounded-lg border-2 bg-stone-50 pr-12 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 dark:bg-stone-950/50 dark:text-stone-50
                           ${validRole ? 'border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400/20 dark:focus:border-emerald-400' : 'border-stone-300 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/20 dark:focus:border-orange-400'}
                           ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
                         aria-haspopup="listbox"
@@ -479,7 +479,7 @@ const Register: React.FC = () => {
                           id="role-listbox"
                           role="listbox"
                           aria-labelledby="role"
-                          className="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-xl border border-orange-200/50 bg-white/95 backdrop-blur-sm shadow-xl focus:outline-none dark:border-orange-900/30 dark:bg-stone-900/95"
+                          className="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-lg border border-orange-200/50 bg-stone-50/95 backdrop-blur-sm shadow-xl focus:outline-none dark:border-orange-900/30 dark:bg-stone-900/95"
                         >
                           {roles.map((r, i) => {
                             const active = i === roleHighlight;
@@ -575,7 +575,7 @@ const Register: React.FC = () => {
                             setFocusField(null);
                           }
                         }}
-                        className={`w-full text-left rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition dark:bg-neutral-900/60 dark:text-stone-50
+                        className={`w-full text-left rounded-lg border bg-stone-50/95 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition dark:bg-neutral-900/60 dark:text-stone-50
                           ${validBranch ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400' : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
                           ${isLoading || role === 'Staff' ? 'opacity-60 cursor-not-allowed' : ''}`}
                         aria-haspopup="listbox"
@@ -603,7 +603,7 @@ const Register: React.FC = () => {
                           id="branch-listbox"
                           role="listbox"
                           aria-labelledby="branch"
-                          className="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-xl border border-neutral-200 bg-white shadow-lg focus:outline-none dark:border-stone-700 dark:bg-neutral-900/90"
+                          className="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-lg border border-neutral-200 bg-stone-50/95 shadow-lg focus:outline-none dark:border-stone-700 dark:bg-neutral-900/90"
                         >
                           {branches.length === 0 ? (
                             <li className="px-3.5 py-2.5 text-[14px] text-neutral-500 dark:text-stone-400 text-center">
@@ -707,7 +707,7 @@ const Register: React.FC = () => {
                             setFocusField(null);
                           }
                         }}
-                        className={`w-full text-left rounded-xl border bg-neutral-50/80 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition dark:bg-neutral-900/60 dark:text-stone-50
+                        className={`w-full text-left rounded-lg border bg-stone-50/95 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition dark:bg-neutral-900/60 dark:text-stone-50
                           ${validCashier ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400' : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
                           ${isLoading ? 'opacity-90' : ''}`}
                         aria-haspopup="listbox"
@@ -735,7 +735,7 @@ const Register: React.FC = () => {
                           id="cashier-listbox"
                           role="listbox"
                           aria-labelledby="assignedCashier"
-                          className="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-xl border border-neutral-200 bg-white shadow-lg focus:outline-none dark:border-stone-700 dark:bg-neutral-900/90"
+                          className="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-lg border border-neutral-200 bg-stone-50/95 shadow-lg focus:outline-none dark:border-stone-700 dark:bg-neutral-900/90"
                         >
                           {cashiers.length === 0 ? (
                             <li className="px-3.5 py-2.5 text-[14px] text-neutral-500 dark:text-stone-400 text-center">
@@ -787,8 +787,9 @@ const Register: React.FC = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full group inline-flex justify-center items-center gap-2.5 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 text-white text-base font-bold py-4 tracking-wide shadow-lg shadow-orange-500/20 hover:shadow-xl hover:shadow-orange-500/30 hover:scale-[1.02] active:scale-[.98] focus:outline-none focus:ring-4 focus:ring-orange-500/30 transition-all duration-200 disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed disabled:shadow-lg dark:from-orange-700 dark:to-amber-700 dark:shadow-orange-900/30 dark:hover:shadow-orange-900/40 dark:focus:ring-orange-400/30"
+                className="w-full group relative inline-flex justify-center items-center gap-2.5 rounded-lg bg-gradient-to-r from-orange-600 to-amber-600 text-white text-base font-bold py-4 tracking-wide shadow-lg shadow-orange-500/20 hover:shadow-xl hover:shadow-orange-500/30 hover:scale-[1.02] active:scale-[.98] focus:outline-none focus:ring-4 focus:ring-orange-500/30 transition-all duration-200 disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed disabled:shadow-lg overflow-hidden dark:from-orange-700 dark:to-amber-700 dark:shadow-orange-900/30 dark:hover:shadow-orange-900/40 dark:focus:ring-orange-400/30"
               >
+                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700 ease-out" aria-hidden="true"></div>
                 {isLoading ? (
                   <>
                     <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24" aria-hidden="true">
@@ -807,7 +808,7 @@ const Register: React.FC = () => {
                 )}
               </button>
             </form>
-            <p className="mt-8 text-center text-sm text-stone-600 dark:text-stone-400">Already have an account? <Link to="/login" className="font-bold text-orange-600 hover:text-orange-700 hover:underline underline-offset-2 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 rounded-md transition-colors dark:text-orange-400 dark:hover:text-orange-300">Sign in now</Link></p>
+            <p className="mt-8 text-center text-sm text-stone-600 dark:text-stone-400">Already have an account? <Link to="/login" className="font-bold text-orange-600 hover:text-orange-700 hover:underline underline-offset-2 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 rounded-md transition-all duration-200 dark:text-orange-400 dark:hover:text-orange-300">Sign in now</Link></p>
           </div>
        
         </div>
