@@ -22,6 +22,8 @@ const AuditTrailPage: React.FC = () => {
   const [filterRole, setFilterRole] = useState<string>('all');
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isActionFilterOpen, setIsActionFilterOpen] = useState(false);
+  const [isRoleFilterOpen, setIsRoleFilterOpen] = useState(false);
 
   // Fetch audit logs from API
   useEffect(() => {
@@ -108,6 +110,14 @@ const AuditTrailPage: React.FC = () => {
     }
   };
 
+  const getActionLabel = (action: string) => {
+    return action === 'all' ? 'All Actions' : action;
+  };
+
+  const getRoleLabel = (role: string) => {
+    return role === 'all' ? 'All Roles' : role;
+  };
+
   return (
     <div className="min-h-screen w-full bg-stone-50 dark:bg-stone-900">
       <div className="flex h-screen overflow-hidden">
@@ -173,98 +183,184 @@ const AuditTrailPage: React.FC = () => {
           <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
             <div className="flex-1 flex flex-col gap-6 px-4 sm:px-6 md:px-8 py-6 overflow-auto">
 
-              {/* Filter Buttons */}
-              <div className="flex flex-wrap items-center gap-3">
-                {/* Action Filters */}
-                <div className="flex items-center gap-2">
+              {/* Filter Dropdowns - Clean & Professional */}
+              <div className="flex flex-wrap items-center gap-4">
+                {/* Action Filter Dropdown */}
+                <div className="relative">
                   <button
-                    onClick={() => setFilterAction('all')}
-                    className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
-                      filterAction === 'all'
-                        ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30'
-                        : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-orange-500 dark:hover:border-orange-500'
-                    }`}
+                    onClick={() => setIsActionFilterOpen(!isActionFilterOpen)}
+                    className="group flex items-center gap-3 px-5 py-3.5 bg-white dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl hover:border-orange-500 dark:hover:border-orange-500 transition-all duration-300 shadow-md hover:shadow-lg min-w-[220px]"
                   >
-                    All Actions
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-sm">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                      </svg>
+                    </div>
+                    <div className="flex-1 text-left">
+                      <div className="text-xs font-semibold text-stone-500 dark:text-stone-400">Filter by Action</div>
+                      <div className="text-sm font-bold text-stone-900 dark:text-white">
+                        {getActionLabel(filterAction)}
+                      </div>
+                    </div>
+                    <svg
+                      className={`w-5 h-5 text-stone-400 transition-transform duration-300 ${isActionFilterOpen ? 'rotate-180' : ''}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
                   </button>
-                  <button
-                    onClick={() => setFilterAction('Add')}
-                    className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
-                      filterAction === 'Add'
-                        ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/30'
-                        : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-emerald-500 dark:hover:border-emerald-500'
-                    }`}
-                  >
-                    Add
-                  </button>
-                  <button
-                    onClick={() => setFilterAction('Delete')}
-                    className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
-                      filterAction === 'Delete'
-                        ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/30'
-                        : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-red-500 dark:hover:border-red-500'
-                    }`}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    onClick={() => setFilterAction('Deliver')}
-                    className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
-                      filterAction === 'Deliver'
-                        ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30'
-                        : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-orange-500 dark:hover:border-orange-500'
-                    }`}
-                  >
-                    Deliver
-                  </button>
-                  <button
-                    onClick={() => setFilterAction('Login')}
-                    className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
-                      filterAction === 'Login'
-                        ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/30'
-                        : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-blue-500 dark:hover:border-blue-500'
-                    }`}
-                  >
-                    Login
-                  </button>
-                  <button
-                    onClick={() => setFilterAction('Logout')}
-                    className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
-                      filterAction === 'Logout'
-                        ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg shadow-purple-500/30'
-                        : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-purple-500 dark:hover:border-purple-500'
-                    }`}
-                  >
-                    Logout
-                  </button>
+
+                  {/* Action Dropdown Menu */}
+                  {isActionFilterOpen && (
+                    <>
+                      <div className="fixed inset-0 z-10" onClick={() => setIsActionFilterOpen(false)} />
+                      <div className="absolute top-full left-0 mt-2 w-full min-w-[280px] bg-white dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl shadow-2xl z-20 overflow-hidden">
+                        <div className="p-2 space-y-1">
+                          <button
+                            onClick={() => { setFilterAction('all'); setIsActionFilterOpen(false); }}
+                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+                              filterAction === 'all' ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md' : 'hover:bg-stone-100 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300'
+                            }`}
+                          >
+                            <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${filterAction === 'all' ? 'bg-white/20' : 'bg-stone-200 dark:bg-stone-700'}`}>
+                              <svg className={`w-4 h-4 ${filterAction === 'all' ? 'text-white' : 'text-stone-600 dark:text-stone-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                              </svg>
+                            </div>
+                            <div className="flex-1">
+                              <div className="font-bold text-sm">All Actions</div>
+                              <div className={`text-xs ${filterAction === 'all' ? 'text-white/80' : 'text-stone-500 dark:text-stone-400'}`}>Show all activities</div>
+                            </div>
+                            {filterAction === 'all' && (
+                              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                            )}
+                          </button>
+                          <div className="my-2 border-t border-stone-200 dark:border-stone-700"></div>
+                          {['Add', 'Delete', 'Deliver', 'Login', 'Logout'].map((action) => {
+                            const colors = {
+                              Add: { bg: 'emerald', icon: 'M12 4v16m8-8H4' },
+                              Delete: { bg: 'red', icon: 'M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' },
+                              Deliver: { bg: 'amber', icon: 'M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4' },
+                              Login: { bg: 'blue', icon: 'M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1' },
+                              Logout: { bg: 'purple', icon: 'M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1' }
+                            }[action];
+                            return (
+                              <button
+                                key={action}
+                                onClick={() => { setFilterAction(action); setIsActionFilterOpen(false); }}
+                                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+                                  filterAction === action ? `bg-gradient-to-r from-${colors.bg}-500 to-${colors.bg}-600 text-white shadow-md` : `hover:bg-${colors.bg}-50 dark:hover:bg-${colors.bg}-950/30 text-stone-700 dark:text-stone-300`
+                                }`}
+                              >
+                                <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${filterAction === action ? 'bg-white/20' : `bg-${colors.bg}-100 dark:bg-${colors.bg}-900/30`}`}>
+                                  <svg className={`w-4 h-4 ${filterAction === action ? 'text-white' : `text-${colors.bg}-600 dark:text-${colors.bg}-400`}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={colors.icon} />
+                                  </svg>
+                                </div>
+                                <div className="flex-1">
+                                  <div className="font-bold text-sm">{action}</div>
+                                  <div className={`text-xs ${filterAction === action ? 'text-white/80' : 'text-stone-500 dark:text-stone-400'}`}>{action} actions</div>
+                                </div>
+                                {filterAction === action && (
+                                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                  </svg>
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
 
-                {/* Role Filters */}
-                <div className="flex items-center gap-2">
+                {/* Role Filter Dropdown */}
+                <div className="relative">
                   <button
-                    onClick={() => setFilterRole('all')}
-                    className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
-                      filterRole === 'all'
-                        ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg shadow-indigo-500/30'
-                        : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-indigo-500 dark:hover:border-indigo-500'
-                    }`}
+                    onClick={() => setIsRoleFilterOpen(!isRoleFilterOpen)}
+                    className="group flex items-center gap-3 px-5 py-3.5 bg-white dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl hover:border-indigo-500 dark:hover:border-indigo-500 transition-all duration-300 shadow-md hover:shadow-lg min-w-[200px]"
                   >
-                    All Roles
-                  </button>
-                  {roles.filter(role => role !== 'all').map(role => (
-                    <button
-                      key={role}
-                      onClick={() => setFilterRole(role)}
-                      className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
-                        filterRole === role
-                          ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg shadow-indigo-500/30'
-                          : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-indigo-500 dark:hover:border-indigo-500'
-                      }`}
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-600 text-white shadow-sm">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                    </div>
+                    <div className="flex-1 text-left">
+                      <div className="text-xs font-semibold text-stone-500 dark:text-stone-400">Filter by Role</div>
+                      <div className="text-sm font-bold text-stone-900 dark:text-white">
+                        {getRoleLabel(filterRole)}
+                      </div>
+                    </div>
+                    <svg
+                      className={`w-5 h-5 text-stone-400 transition-transform duration-300 ${isRoleFilterOpen ? 'rotate-180' : ''}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
-                      {role}
-                    </button>
-                  ))}
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {/* Role Dropdown Menu */}
+                  {isRoleFilterOpen && (
+                    <>
+                      <div className="fixed inset-0 z-10" onClick={() => setIsRoleFilterOpen(false)} />
+                      <div className="absolute top-full left-0 mt-2 w-full min-w-[240px] bg-white dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl shadow-2xl z-20 overflow-hidden">
+                        <div className="p-2 space-y-1">
+                          {roles.map((role) => (
+                            <button
+                              key={role}
+                              onClick={() => { setFilterRole(role); setIsRoleFilterOpen(false); }}
+                              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+                                filterRole === role ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-md' : 'hover:bg-indigo-50 dark:hover:bg-indigo-950/30 text-stone-700 dark:text-stone-300'
+                              }`}
+                            >
+                              <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${filterRole === role ? 'bg-white/20' : 'bg-indigo-100 dark:bg-indigo-900/30'}`}>
+                                <svg className={`w-4 h-4 ${filterRole === role ? 'text-white' : 'text-indigo-600 dark:text-indigo-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={role === 'all' ? 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' : 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'} />
+                                </svg>
+                              </div>
+                              <div className="flex-1">
+                                <div className="font-bold text-sm capitalize">{role === 'all' ? 'All Roles' : role}</div>
+                                <div className={`text-xs ${filterRole === role ? 'text-white/80' : 'text-stone-500 dark:text-stone-400'}`}>
+                                  {role === 'all' ? 'Show all users' : `${role} users only`}
+                                </div>
+                              </div>
+                              {filterRole === role && (
+                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                </svg>
+                              )}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
+
+                {/* Results Counter */}
+                {(filterAction !== 'all' || filterRole !== 'all') && (
+                  <div className="flex items-center gap-3 px-4 py-2.5 bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-orange-500 animate-pulse"></div>
+                      <span className="text-sm font-semibold text-orange-700 dark:text-orange-300">
+                        {filteredLogs.length} {filteredLogs.length === 1 ? 'record' : 'records'}
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => { setFilterAction('all'); setFilterRole('all'); }}
+                      className="text-xs font-bold text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 underline underline-offset-2"
+                    >
+                      Clear filters
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* Table Section */}
