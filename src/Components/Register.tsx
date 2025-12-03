@@ -232,40 +232,40 @@ const Register: React.FC = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-r from-orange-300/12 via-amber-300/8 to-orange-300/12 dark:from-orange-500/4 dark:via-amber-500/3 dark:to-orange-500/4 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '14s', animationDelay: '6s' }}></div>
       </div>
       
-      <main className="relative z-10 flex flex-1 items-center justify-center px-4 py-6 sm:px-6 md:py-8">
+      <main className="relative z-10 flex flex-1 items-center justify-center px-4 py-3 sm:px-6 md:py-4">
         <div className="relative w-full max-w-[620px]">
           {/* Clean Card Design */}
-          <div className="relative overflow-hidden rounded-2xl border border-white/60 bg-white/80 backdrop-blur-xl p-7 sm:p-8 shadow-2xl shadow-orange-500/10 dark:border-orange-500/20 dark:bg-stone-900/85 dark:shadow-orange-900/20">
+          <div className="relative overflow-hidden rounded-2xl border border-white/60 bg-white/80 backdrop-blur-xl p-4 sm:p-5 shadow-2xl shadow-orange-500/10 dark:border-orange-500/20 dark:bg-stone-900/85 dark:shadow-orange-900/20">
             
             {/* Top accent line */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 via-amber-400 to-orange-600"></div>
 
             {/* Brand Header */}
-            <div className="relative mb-6 text-center">
+            <div className="relative mb-3 text-center">
               {/* Logo */}
-              <div className="inline-flex items-center justify-center mb-4">
-                <div className="p-2.5 bg-gradient-to-br from-orange-100 to-amber-100 dark:from-stone-800 dark:to-stone-700 rounded-2xl shadow-lg shadow-orange-500/20 dark:shadow-orange-900/30">
-                  <img src={KapeRestLogo} alt="KapeRest Logo" className="w-14 h-14 object-contain" />
+              <div className="inline-flex items-center justify-center mb-2">
+                <div className="p-2 bg-gradient-to-br from-orange-100 to-amber-100 dark:from-stone-800 dark:to-stone-700 rounded-xl shadow-lg shadow-orange-500/20 dark:shadow-orange-900/30">
+                  <img src={KapeRestLogo} alt="KapeRest Logo" className="w-10 h-10 object-contain" />
                 </div>
               </div>
               
               {/* Brand name */}
-              <h1 className="text-4xl font-extrabold tracking-tight mb-1">
+              <h1 className="text-4xl font-extrabold tracking-tight mb-0.5">
                 <span className="bg-gradient-to-r from-orange-600 via-amber-500 to-orange-600 bg-clip-text text-transparent dark:from-orange-400 dark:via-amber-400 dark:to-orange-400">
                   Create Account
                 </span>
               </h1>
-              <p className="text-sm font-medium text-stone-500 dark:text-stone-400">Join KapeRest POS</p>
+              <p className="text-xs font-medium text-stone-500 dark:text-stone-400">Join KapeRest POS</p>
             </div>
-            <form onSubmit={handleSubmit} noValidate className="space-y-4" aria-busy={isLoading}>
+            <form onSubmit={handleSubmit} noValidate className="space-y-2.5" aria-busy={isLoading}>
               <div role="status" aria-live="polite" className="sr-only">
                 {errors.firstName || errors.lastName || errors.email || errors.password || errors.role || errors.branch || ''}
               </div>
               {errorSummary && (
-                <div className="animate-in slide-in-from-top-2 duration-300 rounded-2xl border border-red-200/80 bg-gradient-to-r from-red-50 via-rose-50 to-red-50 px-4 py-4 shadow-lg shadow-red-500/10 dark:border-red-800/40 dark:from-red-950/60 dark:via-rose-950/40 dark:to-red-950/60" role="alert">
-                  <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-red-100 to-rose-100 dark:from-red-900/60 dark:to-rose-900/40 flex items-center justify-center shadow-inner">
-                      <svg className="h-5 w-5 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="animate-in slide-in-from-top-2 duration-300 rounded-2xl border border-red-200/80 bg-gradient-to-r from-red-50 via-rose-50 to-red-50 px-3 py-2.5 shadow-lg shadow-red-500/10 dark:border-red-800/40 dark:from-red-950/60 dark:via-rose-950/40 dark:to-red-950/60" role="alert">
+                  <div className="flex items-start gap-2.5">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-br from-red-100 to-rose-100 dark:from-red-900/60 dark:to-rose-900/40 flex items-center justify-center shadow-inner">
+                      <svg className="h-4 w-4 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                       </svg>
                     </div>
@@ -276,7 +276,7 @@ const Register: React.FC = () => {
                   </div>
                 </div>
               )}
-              <div className="space-y-6">
+              <div className="space-y-2.5">
                 {/* Name fields */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {/* First Name */}
