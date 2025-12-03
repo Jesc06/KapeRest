@@ -232,29 +232,30 @@ const Register: React.FC = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-r from-orange-300/12 via-amber-300/8 to-orange-300/12 dark:from-orange-500/4 dark:via-amber-500/3 dark:to-orange-500/4 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '14s', animationDelay: '6s' }}></div>
       </div>
       
-      <main className="relative z-10 flex flex-1 items-center justify-center px-4 py-8 sm:px-6 md:py-12">
+      <main className="relative z-10 flex flex-1 items-center justify-center px-4 py-6 sm:px-6 md:py-8">
         <div className="relative w-full max-w-[620px]">
           {/* Clean Card Design */}
-          <div className="relative overflow-hidden rounded-2xl border border-white/60 bg-white/80 backdrop-blur-xl p-8 sm:p-9 shadow-2xl shadow-orange-500/10 dark:border-orange-500/20 dark:bg-stone-900/85 dark:shadow-orange-900/20">
+          <div className="relative overflow-hidden rounded-2xl border border-white/60 bg-white/80 backdrop-blur-xl p-7 sm:p-8 shadow-2xl shadow-orange-500/10 dark:border-orange-500/20 dark:bg-stone-900/85 dark:shadow-orange-900/20">
             
             {/* Top accent line */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 via-amber-400 to-orange-600"></div>
 
             {/* Brand Header */}
-            <div className="relative mb-7 text-center">
+            <div className="relative mb-6 text-center">
               {/* Logo */}
-              <div className="inline-flex items-center justify-center mb-3">
-                <div className="p-2 bg-gradient-to-br from-orange-50 to-amber-50 dark:from-stone-800 dark:to-stone-700 rounded-xl shadow-md">
-                  <img src={KapeRestLogo} alt="KapeRest Logo" className="w-11 h-11 object-contain" />
+              <div className="inline-flex items-center justify-center mb-4">
+                <div className="p-2.5 bg-gradient-to-br from-orange-100 to-amber-100 dark:from-stone-800 dark:to-stone-700 rounded-2xl shadow-lg shadow-orange-500/20 dark:shadow-orange-900/30">
+                  <img src={KapeRestLogo} alt="KapeRest Logo" className="w-14 h-14 object-contain" />
                 </div>
               </div>
               
               {/* Brand name */}
-              <h1 className="text-3xl font-bold tracking-tight">
+              <h1 className="text-4xl font-extrabold tracking-tight mb-1">
                 <span className="bg-gradient-to-r from-orange-600 via-amber-500 to-orange-600 bg-clip-text text-transparent dark:from-orange-400 dark:via-amber-400 dark:to-orange-400">
                   Create Account
                 </span>
               </h1>
+              <p className="text-sm font-medium text-stone-500 dark:text-stone-400">Join KapeRest POS</p>
             </div>
             <form onSubmit={handleSubmit} noValidate className="space-y-4" aria-busy={isLoading}>
               <div role="status" aria-live="polite" className="sr-only">
