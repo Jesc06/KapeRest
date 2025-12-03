@@ -5,11 +5,6 @@ import TintedBackdrop from './TintedBackdrop';
 import { API_BASE_URL } from '../config/api';
 import KapeRestLogo from '../assets/KapeRest.png';
 
-// Registration form styled to match LoginUI aesthetics.
-// Fields: first name, middle name (optional), last name, email, password, role, branch.
-// Validation: required (except middle name), email pattern, password >= 8, role selected, branch non-empty.
-// Shows green border + check icon when valid (persist after blur). Neutral when invalid.
-
 const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const roles = ['Staff', 'Cashier'];
 
@@ -19,7 +14,7 @@ interface CashierAccount {
   branchId: number;
   branchName: string;
   location: string;
-  role?: string; // Added to filter by role
+  role?: string;
 }
 
 interface Branch {
@@ -35,6 +30,7 @@ const Register: React.FC = () => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState('');
   const [branch, setBranch] = useState('');
   const [branchId, setBranchId] = useState<number>(0);
@@ -61,29 +57,21 @@ const Register: React.FC = () => {
   const cashierButtonRef = useRef<HTMLButtonElement | null>(null);
   const cashierListRef = useRef<HTMLUListElement | null>(null);
 
-  // Focus tracking for animated check icons (show only when focused + valid)
   const [focusField, setFocusField] = useState<string | null>(null);
 
   // Fetch cashiers when role is Staff
   useEffect(() => {
     if (role === 'Staff') {
       setLoadingCashiers(true);
-      console.log('Fetching cashiers from:', `${API_BASE_URL}/RegisterPendingAccount/ExistingCashierAccount`);
-      
       fetch(`${API_BASE_URL}/RegisterPendingAccount/ExistingCashierAccount`)
         .then(res => {
-          console.log('Cashier API Response status:', res.status);
           if (!res.ok) throw new Error(`Failed to fetch cashiers: ${res.status}`);
           return res.json();
         })
         .then((data: CashierAccount[]) => {
-          console.log('Cashiers data received:', data);
-          console.log('Number of cashiers:', data?.length || 0);
-          // Filter to only include Cashier role
           const cashierRoleOnly = (data || []).filter(account => 
             !account.role || account.role.toLowerCase() === 'cashier'
           );
-          console.log('Filtered cashiers (Cashier role only):', cashierRoleOnly.length);
           setCashiers(cashierRoleOnly);
         })
         .catch(err => {
@@ -100,7 +88,7 @@ const Register: React.FC = () => {
     }
   }, [role]);
 
-  // Fetch branches on mount or when role is not Staff
+  // Fetch branches when role is not Staff
   useEffect(() => {
     if (role !== 'Staff' && role !== '') {
       setLoadingBranches(true);
@@ -123,13 +111,29 @@ const Register: React.FC = () => {
   }, [role]);
 
   const validFirst = firstName.trim().length > 0;
-  // validMiddle is always true since it's optional - kept for consistency
   const validLast = lastName.trim().length > 0;
   const validEmail = emailPattern.test(email);
   const validPassword = password.length >= 8;
   const validRole = role.trim().length > 0;
   const validBranch = branch.trim().length > 0;
   const validCashier = role === 'Staff' ? assignedCashier.trim().length > 0 : true;
+
+  // Password strength calculation
+  const getPasswordStrength = () => {
+    if (password.length === 0) return { level: 0, text: '', color: '' };
+    if (password.length < 6) return { level: 1, text: 'Weak', color: 'bg-red-500' };
+    if (password.length < 8) return { level: 2, text: 'Fair', color: 'bg-amber-500' };
+    const hasUpper = /[A-Z]/.test(password);
+    const hasLower = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecial = /[^A-Za-z0-9]/.test(password);
+    const strength = [hasUpper, hasLower, hasNumber, hasSpecial].filter(Boolean).length;
+    if (strength >= 3 && password.length >= 10) return { level: 4, text: 'Strong', color: 'bg-emerald-500' };
+    if (strength >= 2) return { level: 3, text: 'Good', color: 'bg-green-500' };
+    return { level: 2, text: 'Fair', color: 'bg-amber-500' };
+  };
+
+  const passwordStrength = getPasswordStrength();
 
   const validate = () => {
     const next: {[k:string]: string} = {};
@@ -148,7 +152,7 @@ const Register: React.FC = () => {
     e.preventDefault();
     if (!validate()) return;
     setIsLoading(true);
-    setErrorSummary(''); // Clear any previous error summary
+    setErrorSummary('');
 
     try {
       const payload = {
@@ -164,9 +168,7 @@ const Register: React.FC = () => {
 
       const response = await fetch(`${API_BASE_URL}/RegisterPendingAccount/RegisterPendingAccount`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
 
@@ -175,20 +177,6 @@ const Register: React.FC = () => {
         throw new Error(errorData.message || 'Registration failed');
       }
 
-      // Handle both JSON and text responses
-      const contentType = response.headers.get('content-type');
-      let data;
-      
-      if (contentType && contentType.includes('application/json')) {
-        data = await response.json();
-      } else {
-        // Handle text response (like "Successful")
-        data = await response.text();
-      }
-      
-      console.log('Registration successful:', data);
-      
-      // Redirect directly to login page on success
       navigate('/login');
       
     } catch (error: any) {
@@ -198,6 +186,23 @@ const Register: React.FC = () => {
       setIsLoading(false);
     }
   };
+
+  // Close dropdowns on outside click
+  useEffect(() => {
+    const onDown = (e: MouseEvent) => {
+      if (!roleOpen && !branchOpen && !cashierOpen) return;
+      const target = e.target as Node;
+      if (roleButtonRef.current?.contains(target) || roleListRef.current?.contains(target)) return;
+      if (branchButtonRef.current?.contains(target) || branchListRef.current?.contains(target)) return;
+      if (cashierButtonRef.current?.contains(target) || cashierListRef.current?.contains(target)) return;
+      setRoleOpen(false);
+      setBranchOpen(false);
+      setCashierOpen(false);
+      setFocusField(null);
+    };
+    document.addEventListener('mousedown', onDown);
+    return () => document.removeEventListener('mousedown', onDown);
+  }, [roleOpen, branchOpen, cashierOpen]);
 
   // Close role/branch/cashier dropdowns on outside click
   useEffect(() => {
@@ -217,35 +222,56 @@ const Register: React.FC = () => {
   }, [roleOpen, branchOpen, cashierOpen]);
 
   return (
-    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-gradient-to-br from-stone-50 via-orange-50/30 to-amber-50/20 dark:bg-gradient-to-br dark:from-stone-950 dark:via-stone-900 dark:to-stone-950 font-sans transition-colors duration-300">
+    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-gradient-to-br from-amber-50 via-orange-50/60 to-stone-100 dark:from-stone-950 dark:via-stone-900 dark:to-stone-950 font-sans">
       <TintedBackdrop />
-      {/* Animated Ambient Background Effects */}
+      
+      {/* Clean Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-orange-400/20 dark:bg-orange-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '8s' }}></div>
-        <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-amber-400/20 dark:bg-amber-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s', animationDelay: '2s' }}></div>
-        <div className="absolute top-1/2 right-1/3 w-72 h-72 bg-rose-400/20 dark:bg-rose-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '4s' }}></div>
+        <div className="absolute -top-32 -right-32 w-[600px] h-[600px] bg-gradient-to-br from-orange-400/20 via-amber-400/15 to-yellow-400/10 dark:from-orange-500/8 dark:via-amber-500/6 dark:to-yellow-500/4 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s' }}></div>
+        <div className="absolute -bottom-48 -left-48 w-[500px] h-[500px] bg-gradient-to-tr from-amber-400/20 via-orange-300/15 to-rose-300/10 dark:from-amber-500/8 dark:via-orange-500/6 dark:to-rose-500/4 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '3s' }}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-r from-orange-300/12 via-amber-300/8 to-orange-300/12 dark:from-orange-500/4 dark:via-amber-500/3 dark:to-orange-500/4 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '14s', animationDelay: '6s' }}></div>
       </div>
+      
       <main className="relative z-10 flex flex-1 items-center justify-center px-4 py-8 sm:px-6 md:py-12">
         <div className="relative w-full max-w-[620px]">
-          <div className="auth-card relative rounded-lg border-2 border-orange-400/60 bg-stone-50/95 backdrop-blur-2xl p-8 sm:p-10 shadow-2xl shadow-stone-900/10 transition-all duration-300 ease-out dark:border-orange-700/50 dark:bg-stone-900/80 dark:shadow-stone-950/50">
-            <div className="mb-8">
-              <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-amber-600 to-orange-500 flex items-center gap-0.5 dark:from-orange-400 dark:via-amber-400 dark:to-orange-300">
-                Create Account
-                <img src={KapeRestLogo} alt="KapeRest Logo" className="w-16 h-16 object-contain" />
+          {/* Clean Card Design */}
+          <div className="relative overflow-hidden rounded-2xl border border-white/60 bg-white/80 backdrop-blur-xl p-8 sm:p-9 shadow-2xl shadow-orange-500/10 dark:border-orange-500/20 dark:bg-stone-900/85 dark:shadow-orange-900/20">
+            
+            {/* Top accent line */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 via-amber-400 to-orange-600"></div>
+
+            {/* Brand Header */}
+            <div className="relative mb-7 text-center">
+              {/* Logo */}
+              <div className="inline-flex items-center justify-center mb-3">
+                <div className="p-2 bg-gradient-to-br from-orange-50 to-amber-50 dark:from-stone-800 dark:to-stone-700 rounded-xl shadow-md">
+                  <img src={KapeRestLogo} alt="KapeRest Logo" className="w-11 h-11 object-contain" />
+                </div>
+              </div>
+              
+              {/* Brand name */}
+              <h1 className="text-3xl font-bold tracking-tight">
+                <span className="bg-gradient-to-r from-orange-600 via-amber-500 to-orange-600 bg-clip-text text-transparent dark:from-orange-400 dark:via-amber-400 dark:to-orange-400">
+                  Create Account
+                </span>
               </h1>
-              <p className="mt-3 text-base font-semibold text-stone-600 dark:text-stone-400">Join KapeRest POS Management</p>
             </div>
             <form onSubmit={handleSubmit} noValidate className="space-y-4" aria-busy={isLoading}>
               <div role="status" aria-live="polite" className="sr-only">
                 {errors.firstName || errors.lastName || errors.email || errors.password || errors.role || errors.branch || ''}
               </div>
               {errorSummary && (
-                <div className="rounded-lg border border-red-300 bg-gradient-to-br from-red-50 to-red-100/50 text-red-800 text-sm px-4 py-3 shadow-sm dark:border-red-800/40 dark:bg-gradient-to-br dark:from-red-950/40 dark:to-red-900/20 dark:text-red-200" role="alert">
-                  <div className="flex items-start gap-2">
-                    <svg className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                    </svg>
-                    <span className="font-medium">{errorSummary}</span>
+                <div className="animate-in slide-in-from-top-2 duration-300 rounded-2xl border border-red-200/80 bg-gradient-to-r from-red-50 via-rose-50 to-red-50 px-4 py-4 shadow-lg shadow-red-500/10 dark:border-red-800/40 dark:from-red-950/60 dark:via-rose-950/40 dark:to-red-950/60" role="alert">
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-red-100 to-rose-100 dark:from-red-900/60 dark:to-rose-900/40 flex items-center justify-center shadow-inner">
+                      <svg className="h-5 w-5 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-red-800 dark:text-red-200">{errorSummary}</p>
+                      <p className="text-xs text-red-600/70 dark:text-red-300/60 mt-0.5">Please check your information</p>
+                    </div>
                   </div>
                 </div>
               )}
@@ -808,9 +834,37 @@ const Register: React.FC = () => {
                 )}
               </button>
             </form>
-            <p className="mt-8 text-center text-sm text-stone-600 dark:text-stone-400">Already have an account? <Link to="/login" className="font-bold text-orange-600 hover:text-orange-700 hover:underline underline-offset-2 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 rounded-md transition-all duration-200 dark:text-orange-400 dark:hover:text-orange-300">Sign in now</Link></p>
+            
+            {/* Divider */}
+            <div className="relative my-8">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-stone-200/80 dark:border-stone-700/80"></div>
+              </div>
+              <div className="relative flex justify-center">
+                <span className="bg-white/70 dark:bg-stone-900/80 px-4 text-sm font-medium text-stone-400 dark:text-stone-500">
+                  Already have an account?
+                </span>
+              </div>
+            </div>
+            
+            {/* Sign in Link */}
+            <div className="text-center">
+              <Link 
+                to="/login" 
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-orange-200 bg-orange-50 text-orange-600 font-medium text-sm hover:bg-orange-100 hover:border-orange-300 transition-all duration-200 dark:border-orange-700/50 dark:bg-orange-900/20 dark:text-orange-400 dark:hover:bg-orange-900/40"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                </svg>
+                Sign in now
+              </Link>
+            </div>
           </div>
-       
+          
+          {/* Footer */}
+          <p className="mt-6 text-center text-xs text-stone-400 dark:text-stone-500">
+            © 2024 KapeRest POS. All rights reserved.
+          </p>
         </div>
       </main>
     </div>
