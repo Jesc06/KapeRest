@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartLine, faTimes, faChevronRight, faPlus, faList, faBuilding, faUtensils, faHome, faWarehouse, faClipboardList, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { faChartLine, faTimes, faBuilding, faUtensils, faHome, faWarehouse, faClipboardList, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import KapeRestLogo from '../../assets/KapeRest.png';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface StaffSidebarProps {
   isOpen?: boolean;
@@ -11,6 +12,7 @@ interface StaffSidebarProps {
 }
 
 const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isExpanded = false }) => {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -73,7 +75,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
           >
             <FontAwesomeIcon icon={faHome} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left font-medium truncate">Dashboard</span>
+              <span className="flex-1 text-left font-medium truncate break-words line-clamp-1">{t('sidebar.dashboard')}</span>
             )}
           </button>
 
@@ -96,7 +98,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
           >
             <FontAwesomeIcon icon={faBuilding} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left font-medium truncate">Suppliers</span>
+              <span className="flex-1 text-left font-medium truncate break-words line-clamp-1">{t('staff.suppliers')}</span>
             )}
           </button>
 
@@ -111,7 +113,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
           >
             <FontAwesomeIcon icon={faUtensils} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left font-medium truncate">Menu Items</span>
+              <span className="flex-1 text-left font-medium truncate break-words line-clamp-1">{t('staff.items')}</span>
             )}
           </button>
 
@@ -126,7 +128,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
           >
             <FontAwesomeIcon icon={faWarehouse} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left font-medium truncate">Inventory</span>
+              <span className="flex-1 text-left font-medium truncate break-words line-clamp-1">{t('sidebar.inventory')}</span>
             )}
           </button>
 
@@ -149,7 +151,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
           >
             <FontAwesomeIcon icon={faChartLine} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left font-medium truncate">Sales Report</span>
+              <span className="flex-1 text-left font-medium truncate break-words line-clamp-1">{t('sidebar.sales')}</span>
             )}
           </button>
 
@@ -164,7 +166,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
           >
             <FontAwesomeIcon icon={faShoppingCart} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left font-medium truncate">Purchase History</span>
+              <span className="flex-1 text-left font-medium truncate break-words line-clamp-1">{t('staff.purchases')}</span>
             )}
           </button>
 
@@ -187,7 +189,7 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ isOpen = true, onClose, isE
           >
             <FontAwesomeIcon icon={faClipboardList} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left font-medium truncate">Audit Trail</span>
+              <span className="flex-1 text-left font-medium truncate break-words line-clamp-1">{t('admin.auditTrail')}</span>
             )}
           </button>
         </nav>

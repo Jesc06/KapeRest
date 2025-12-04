@@ -248,7 +248,7 @@ const SalesPage: React.FC = () => {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarExpanded(!sidebarExpanded)}
-              className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white dark:from-neutral-800 dark:to-neutral-700 hover:bg-orange-50 dark:hover:bg-orange-950/30 text-stone-700 dark:text-stone-300 hover:text-orange-600 dark:hover:text-orange-400 border-2 border-orange-200/50 dark:border-orange-900/50 hover:border-orange-400 dark:hover:border-orange-600 shadow-lg hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-300 active:scale-95 hover:scale-105"
+              className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white dark:bg-neutral-700 hover:bg-orange-50 dark:hover:bg-neutral-600 text-stone-700 dark:text-orange-400 hover:text-orange-600 dark:hover:text-orange-300 border-2 border-orange-200/50 dark:border-neutral-600 hover:border-orange-400 dark:hover:border-orange-500 shadow-lg hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-300 active:scale-95 hover:scale-105"
               title={sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
             >
               <FontAwesomeIcon icon={faBars} className="h-5 w-5" />

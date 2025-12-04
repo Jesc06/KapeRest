@@ -4,6 +4,7 @@ import { faBars, faSearch, faBan, faReceipt, faCalendar } from '@fortawesome/fre
 import StaffSidebar from './StaffSidebar';
 import LogoutPanel from '../Shared/LogoutPanel';
 import { API_BASE_URL } from '../../config/api';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface VoidRequest {
   id: number;
@@ -23,6 +24,7 @@ interface VoidRequest {
 }
 
 const VoidRequestsPage: React.FC = () => {
+  const { t } = useLanguage();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -88,13 +90,13 @@ const VoidRequestsPage: React.FC = () => {
   );
 
   const handleApprove = async (saleId: number) => {
-    if (!window.confirm('Are you sure you want to approve this void request? This will restore the stock and void the transaction.')) return;
+    if (!window.confirm(t('voidRequests.confirmApprove'))) return;
 
     setProcessing(saleId);
     try {
       const token = localStorage.getItem('accessToken');
       if (!token) {
-        alert('Authentication error. Please log in again.');
+        alert(t('purchases.authError'));
         return;
       }
 
@@ -123,13 +125,13 @@ const VoidRequestsPage: React.FC = () => {
   };
 
   const handleReject = async (saleId: number) => {
-    if (!window.confirm('Are you sure you want to reject this void request?')) return;
+    if (!window.confirm(t('voidRequests.confirmReject'))) return;
 
     setProcessing(saleId);
     try {
       const token = localStorage.getItem('accessToken');
       if (!token) {
-        alert('Authentication error. Please log in again.');
+        alert(t('purchases.authError'));
         return;
       }
 
@@ -197,7 +199,7 @@ const VoidRequestsPage: React.FC = () => {
                   <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                 </button>
 
-                <h1 className="text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-400 dark:to-orange-300 bg-clip-text text-transparent truncate">Void Requests</h1>
+                <h1 className="text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-400 dark:to-orange-300 bg-clip-text text-transparent truncate">{t('voidRequests.title')}</h1>
               </div>
 
               <LogoutPanel />
@@ -214,8 +216,8 @@ const VoidRequestsPage: React.FC = () => {
                     <FontAwesomeIcon icon={faBan} className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300 bg-clip-text text-transparent">Pending Void Requests</h2>
-                    <p className="text-sm text-stone-600 dark:text-stone-400 mt-1">Review and approve/reject void requests from cashiers</p>
+                    <h2 className="text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300 bg-clip-text text-transparent">{t('voidRequests.title')}</h2>
+                    <p className="text-sm text-stone-600 dark:text-stone-400 mt-1">{t('voidRequests.subtitle')}</p>
                   </div>
                 </div>
               </div>
@@ -226,7 +228,7 @@ const VoidRequestsPage: React.FC = () => {
                   <FontAwesomeIcon icon={faSearch} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 dark:text-stone-500 text-sm" />
                   <input
                     type="text"
-                    placeholder="Search by receipt number, item name..."
+                    placeholder={t('voidRequests.searchPlaceholder')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full pl-10 pr-4 py-2.5 bg-stone-50 dark:bg-stone-900 border border-neutral-200 dark:border-stone-700 rounded-lg text-sm text-stone-900 dark:text-white placeholder-stone-400 focus:outline-none focus:border-orange-500 transition-colors duration-200"
@@ -239,13 +241,13 @@ const VoidRequestsPage: React.FC = () => {
                 {isLoading ? (
                   <div className="bg-stone-50 dark:bg-stone-900 rounded-lg p-12 text-center border border-neutral-200 dark:border-stone-700">
                     <div className="inline-block h-12 w-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                    <p className="text-stone-600 dark:text-stone-400">Loading void requests...</p>
+                    <p className="text-stone-600 dark:text-stone-400">{t('voidRequests.loading')}</p>
                   </div>
                 ) : filteredRequests.length === 0 ? (
                   <div className="bg-stone-50 dark:bg-stone-900 rounded-lg p-12 text-center border border-neutral-200 dark:border-stone-700">
                     <FontAwesomeIcon icon={faBan} className="h-16 w-16 text-neutral-300 dark:text-neutral-700 mb-4" />
-                    <p className="text-stone-600 dark:text-stone-400 text-lg font-medium">No pending void requests</p>
-                    <p className="text-neutral-500 dark:text-stone-500 text-sm mt-2">All void requests have been processed</p>
+                    <p className="text-stone-600 dark:text-stone-400 text-lg font-medium">{t('voidRequests.noRequests')}</p>
+                    <p className="text-neutral-500 dark:text-stone-500 text-sm mt-2">{t('voidRequests.allClear')}</p>
                   </div>
                 ) : (
                   filteredRequests.map((request) => (

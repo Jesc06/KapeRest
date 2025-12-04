@@ -3,6 +3,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { jwtDecode } from "jwt-decode";
+import { LanguageProvider } from "../context/LanguageContext";
 import LoginUI from "../Components/Login";
 import Register from "../Components/Register";
 import { CashierPage, BuyItem } from "../Components/Cashier";
@@ -124,11 +125,13 @@ const App: React.FC = () => {
   };
 
   return (
-    <Router>
-      <AnimatedRoutes />
-      {/* Floating Voice Navigation Button - Available on all pages */}
-      <FloatingVoiceButton />
-    </Router>
+    <LanguageProvider>
+      <Router>
+        <AnimatedRoutes />
+        {/* Floating Voice Navigation Button - Available on all pages */}
+        <FloatingVoiceButton />
+      </Router>
+    </LanguageProvider>
   );
 };
 

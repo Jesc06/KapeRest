@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartLine, faTimes, faUsers, faBoxes, faBuilding, faHome, faClipboardList } from '@fortawesome/free-solid-svg-icons';
 import KapeRestLogo from '../../assets/KapeRest.png';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface AdminSidebarProps {
   isOpen?: boolean;
@@ -11,6 +12,7 @@ interface AdminSidebarProps {
 }
 
 const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isExpanded = false }) => {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -64,7 +66,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
           >
             <FontAwesomeIcon icon={faHome} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left font-medium truncate">Dashboard</span>
+              <span className="flex-1 text-left font-medium truncate">{t('sidebar.dashboard')}</span>
             )}
           </button>
 
@@ -86,7 +88,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
           >
             <FontAwesomeIcon icon={faBuilding} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left font-medium truncate">Branch</span>
+              <span className="flex-1 text-left font-medium truncate">{t('admin.branches')}</span>
             )}
           </button>
 
@@ -101,7 +103,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
           >
             <FontAwesomeIcon icon={faUsers} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left font-medium truncate">Accounts</span>
+              <span className="flex-1 text-left font-medium truncate">{t('admin.accounts')}</span>
             )}
           </button>
 
@@ -123,7 +125,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
           >
             <FontAwesomeIcon icon={faBoxes} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left font-medium truncate">Inventory</span>
+              <span className="flex-1 text-left font-medium truncate">{t('admin.inventory')}</span>
             )}
           </button>
 
@@ -145,7 +147,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
           >
             <FontAwesomeIcon icon={faChartLine} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left font-medium truncate">Sales</span>
+              <span className="flex-1 text-left font-medium truncate">{t('admin.sales')}</span>
             )}
           </button>
 
@@ -169,7 +171,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = true, onClose, isE
           >
             <FontAwesomeIcon icon={faClipboardList} className="text-lg flex-shrink-0 w-5 h-5" />
             {isExpanded && (
-              <span className="flex-1 text-left font-medium truncate">Audit Trail</span>
+              <span className="flex-1 text-left font-medium truncate">{t('admin.auditTrail')}</span>
             )}
           </button>
         </nav>

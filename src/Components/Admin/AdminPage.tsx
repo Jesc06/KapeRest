@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import AdminSidebar from './AdminSidebar';
-import { getTotalUsers } from '../../services/accountService';
+import { getTotalUsers, getTotalBranches, getTotalRevenue } from '../../services/accountService';
+import { useLanguage } from '../../context/LanguageContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faUsers, faBuilding, faChartLine, faShieldAlt, faArrowUp, faArrowDown, faCalendarDays, faX } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faUsers, faBuilding, faChartLine, faArrowUp, faArrowDown, faCalendarDays, faX } from '@fortawesome/free-solid-svg-icons';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import LogoutPanel from '../Shared/LogoutPanel';
 import { API_BASE_URL } from '../../config/api';
@@ -14,6 +15,7 @@ interface AdminSalesData {
 }
 
 const AdminPage: React.FC = () => {
+  const { t } = useLanguage();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [dateRange, setDateRange] = useState<'1d' | '7d' | '30d' | 'custom'>('7d');
@@ -25,6 +27,10 @@ const AdminPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [totalUsers, setTotalUsers] = useState<number | null>(null);
   const [isLoadingTotalUsers, setIsLoadingTotalUsers] = useState(false);
+  const [totalBranches, setTotalBranches] = useState<number | null>(null);
+  const [isLoadingTotalBranches, setIsLoadingTotalBranches] = useState(false);
+  const [totalRevenue, setTotalRevenue] = useState<number | null>(null);
+  const [isLoadingTotalRevenue, setIsLoadingTotalRevenue] = useState(false);
 
   // Fetch sales data based on dateRange
   const fetchSalesData = async (range: '1d' | '7d' | '30d' | 'custom', startDate?: string, endDate?: string) => {
@@ -94,12 +100,48 @@ const AdminPage: React.FC = () => {
     fetchTotal();
   }, []);
 
+  useEffect(() => {
+    const fetchBranches = async () => {
+      try {
+        setIsLoadingTotalBranches(true);
+        const token = localStorage.getItem('accessToken') ?? undefined;
+        const total = await getTotalBranches(token);
+        setTotalBranches(total);
+      } catch (err) {
+        console.error('Error fetching total branches:', err);
+        setTotalBranches(null);
+      } finally {
+        setIsLoadingTotalBranches(false);
+      }
+    };
+
+    fetchBranches();
+  }, []);
+
+  useEffect(() => {
+    const fetchRevenue = async () => {
+      try {
+        setIsLoadingTotalRevenue(true);
+        const token = localStorage.getItem('accessToken') ?? undefined;
+        const total = await getTotalRevenue(token);
+        setTotalRevenue(total);
+      } catch (err) {
+        console.error('Error fetching total revenue:', err);
+        setTotalRevenue(null);
+      } finally {
+        setIsLoadingTotalRevenue(false);
+      }
+    };
+
+    fetchRevenue();
+  }, []);
+
   // Get current time for greeting
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return 'Good Morning';
-    if (hour < 18) return 'Good Afternoon';
-    return 'Good Evening';
+    if (hour < 12) return t('admin.goodMorning');
+    if (hour < 18) return t('admin.goodAfternoon');
+    return t('admin.goodEvening');
   };
 
   // Process sales data for chart and stats
@@ -135,7 +177,7 @@ const AdminPage: React.FC = () => {
   const statsCards = salesOverview ? [salesOverview] : [];
 
   return (
-    <div className="min-h-screen w-full relative overflow-hidden bg-white dark:from-stone-950 dark:via-stone-900 dark:to-stone-950">
+    <div className="min-h-screen w-full relative overflow-hidden bg-white dark:bg-neutral-900">
       {/* Subtle Background Pattern */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-[0.02]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgb(0_0_0)_1px,transparent_0)] bg-[size:40px_40px]"></div>
@@ -155,7 +197,7 @@ const AdminPage: React.FC = () => {
                 {/* Hamburger - Mobile Only */}
                 <button
                   onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className="lg:hidden flex-shrink-0 h-11 w-11 flex items-center justify-center rounded-xl border-2 border-orange-300 dark:border-orange-800/50 bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950 dark:to-amber-950 hover:from-orange-100 hover:to-amber-100 dark:hover:from-orange-900 dark:hover:to-amber-900 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95 shadow-md hover:shadow-lg"
+                  className="lg:hidden flex-shrink-0 h-11 w-11 flex items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 hover:from-orange-600 hover:via-orange-700 hover:to-orange-800 text-white shadow-xl shadow-orange-500/40 hover:shadow-2xl hover:shadow-orange-500/50 transition-all duration-300 active:scale-95"
                 >
                   <FontAwesomeIcon icon={faBars} className="h-4 w-4" />
                 </button>
@@ -163,7 +205,7 @@ const AdminPage: React.FC = () => {
                 {/* Sidebar Toggle - Desktop Only */}
                 <button
                   onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                  className="hidden lg:flex flex-shrink-0 h-[52px] w-[52px] items-center justify-center rounded-xl border-2 border-orange-300 dark:border-orange-800/50 bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950 dark:to-amber-950 hover:from-orange-100 hover:to-amber-100 dark:hover:from-orange-900 dark:hover:to-amber-900 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95 shadow-md hover:shadow-lg"
+                  className="hidden lg:flex flex-shrink-0 h-[52px] w-[52px] items-center justify-center rounded-xl bg-white dark:bg-neutral-700 hover:bg-orange-50 dark:hover:bg-neutral-600 text-stone-700 dark:text-orange-400 hover:text-orange-600 dark:hover:text-orange-300 border-2 border-orange-200/50 dark:border-neutral-600 hover:border-orange-400 dark:hover:border-orange-500 shadow-lg hover:shadow-xl transition-all duration-300 active:scale-95"
                 >
                   <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                 </button>
@@ -171,9 +213,9 @@ const AdminPage: React.FC = () => {
                 {/* Title */}
                 <div>
                   <h1 className="text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-400 dark:to-orange-500 tracking-tight leading-tight">
-                    Admin Dashboard
+                    {t('admin.dashboard')}
                   </h1>
-                  <p className="hidden sm:block text-sm font-bold text-stone-500 dark:text-stone-400 tracking-wide">Full System Control</p>
+                  <p className="hidden sm:block text-sm font-bold text-stone-500 dark:text-stone-400 tracking-wide">{t('admin.fullSystemControl')}</p>
                 </div>
               </div>
 
@@ -197,10 +239,10 @@ const AdminPage: React.FC = () => {
                           <h2 className="text-4xl sm:text-5xl font-extrabold text-white mb-2 tracking-tight drop-shadow-md">
                             {getGreeting()}!
                           </h2>
-                          <p className="text-orange-50 text-base font-semibold tracking-wide">Admin Dashboard</p>
+                          <p className="text-orange-50 text-base font-semibold tracking-wide">{t('admin.dashboard')}</p>
                         </div>
                         <div className="text-right">
-                          <p className="text-white/90 text-xs font-bold uppercase tracking-widest mb-2">Today</p>
+                          <p className="text-white/90 text-xs font-bold uppercase tracking-widest mb-2">{t('admin.today')}</p>
                           <p className="text-white text-2xl sm:text-3xl font-extrabold drop-shadow">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
                         </div>
                       </div>
@@ -210,8 +252,8 @@ const AdminPage: React.FC = () => {
                   {/* Daily Summary Stats */}
                   <div className="p-6 sm:p-8">
                     <h3 className="text-2xl sm:text-3xl font-extrabold text-stone-900 dark:text-white mb-6 flex items-center gap-3">
-                      <div className="w-1.5 h-8 bg-orange-500 rounded-full shadow-sm"></div>
-                      System Overview
+                      <div className="w-1.5 h-8 bg-orange-500 rounded-full shadow-sm flex-shrink-0"></div>
+                      <span className="break-words line-clamp-2 leading-tight">{t('admin.systemOverview')}</span>
                     </h3>
                     
                     {/* System Stats */}
@@ -219,8 +261,8 @@ const AdminPage: React.FC = () => {
                       {/* Total Users */}
                       <div className="bg-gradient-to-br from-violet-50 to-purple-100/50 dark:from-violet-950 dark:to-purple-900 rounded-2xl p-5 border-2 border-violet-200 dark:border-violet-800 shadow-sm hover:shadow-md transition-all">
                         <div className="flex items-center justify-between mb-3">
-                          <p className="text-xs font-bold text-violet-700 dark:text-violet-300 uppercase tracking-widest">Total Users</p>
-                          <FontAwesomeIcon icon={faUsers} className="text-lg text-violet-500 dark:text-violet-400" />
+                          <p className="text-xs font-bold text-violet-700 dark:text-violet-300 uppercase tracking-widest break-words line-clamp-1 leading-tight flex-1 min-w-0 pr-2">{t('admin.totalUsers')}</p>
+                          <FontAwesomeIcon icon={faUsers} className="text-lg text-violet-500 dark:text-violet-400 flex-shrink-0" />
                         </div>
                         <p className="text-3xl sm:text-4xl font-extrabold text-violet-900 dark:text-violet-100 mb-2">
                           {isLoadingTotalUsers ? '—' : (totalUsers !== null ? totalUsers.toString() : '—')}
@@ -234,24 +276,25 @@ const AdminPage: React.FC = () => {
                       {/* Active Branches */}
                       <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950 dark:to-blue-900 rounded-2xl p-5 border-2 border-blue-200 dark:border-blue-800 shadow-sm hover:shadow-md transition-all">
                         <div className="flex items-center justify-between mb-3">
-                          <p className="text-xs font-bold text-blue-700 dark:text-blue-300 uppercase tracking-widest">Active Branches</p>
-                          <FontAwesomeIcon icon={faBuilding} className="text-lg text-blue-500 dark:text-blue-400" />
+                          <p className="text-xs font-bold text-blue-700 dark:text-blue-300 uppercase tracking-widest break-words line-clamp-1 leading-tight flex-1 min-w-0 pr-2">{t('admin.activeBranches')}</p>
+                          <FontAwesomeIcon icon={faBuilding} className="text-lg text-blue-500 dark:text-blue-400 flex-shrink-0" />
                         </div>
-                        <p className="text-3xl sm:text-4xl font-extrabold text-blue-900 dark:text-blue-100 mb-2">2</p>
-                        <p className="text-sm font-semibold text-blue-600 dark:text-blue-400">Operating locations</p>
+                        <p className="text-3xl sm:text-4xl font-extrabold text-blue-900 dark:text-blue-100 mb-2">
+                          {isLoadingTotalBranches ? '—' : (totalBranches !== null ? totalBranches.toString() : '—')}
+                        </p>
+                        <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 break-words line-clamp-1 leading-tight">{t('admin.operatingLocations')}</p>
                       </div>
 
                       {/* Total Revenue */}
                       <div className="bg-gradient-to-br from-green-50 to-green-100/50 dark:from-green-950 dark:to-green-900 rounded-2xl p-5 border-2 border-green-200 dark:border-green-800 shadow-sm hover:shadow-md transition-all">
                         <div className="flex items-center justify-between mb-3">
-                          <p className="text-xs font-bold text-green-700 dark:text-green-300 uppercase tracking-widest">Total Revenue</p>
-                          <FontAwesomeIcon icon={faChartLine} className="text-lg text-green-500 dark:text-green-400" />
+                          <p className="text-xs font-bold text-green-700 dark:text-green-300 uppercase tracking-widest break-words line-clamp-1 leading-tight flex-1 min-w-0 pr-2">{t('admin.totalRevenue')}</p>
+                          <FontAwesomeIcon icon={faChartLine} className="text-lg text-green-500 dark:text-green-400 flex-shrink-0" />
                         </div>
-                        <p className="text-3xl sm:text-4xl font-extrabold text-green-900 dark:text-green-100 mb-2">₱127,850</p>
-                        <div className="flex items-center gap-2 text-sm font-bold text-green-600 dark:text-green-400">
-                          <FontAwesomeIcon icon={faArrowUp} className="text-xs" />
-                          <span>+18.7%</span>
-                        </div>
+                        <p className="text-3xl sm:text-4xl font-extrabold text-green-900 dark:text-green-100 mb-2">
+                          {isLoadingTotalRevenue ? '—' : (totalRevenue !== null ? `₱${totalRevenue.toLocaleString()}` : '—')}
+                        </p>
+                        <p className="text-sm font-semibold text-green-600 dark:text-green-400 break-words line-clamp-1 leading-tight">{t('admin.allTimeSales')}</p>
                       </div>
                     </div>
                   </div>
@@ -267,14 +310,14 @@ const AdminPage: React.FC = () => {
                   <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
                     <div>
                       <h3 className="text-2xl sm:text-3xl font-extrabold text-stone-900 dark:text-white tracking-tight mb-2 flex items-center gap-3">
-                        <div className="w-1.5 h-8 bg-orange-500 rounded-full shadow-sm"></div>
-                        Sales Trend Analysis
+                        <div className="w-1.5 h-8 bg-orange-500 rounded-full shadow-sm flex-shrink-0"></div>
+                        <span className="break-words line-clamp-2 leading-tight">{t('admin.salesTrendAnalysis')}</span>
                       </h3>
                       <p className="text-base text-stone-600 dark:text-stone-400 ml-5 font-medium">
-                        Track performance over time
+                        {t('admin.trackPerformance')}
                       </p>
                     </div>
-                    <div className="flex items-center gap-2 bg-stone-50 dark:from-stone-800 dark:via-stone-700 dark:to-stone-800 rounded-xl p-1.5 border border-stone-200 dark:border-stone-600/60">
+                    <div className="flex items-center gap-2 bg-stone-50 dark:bg-neutral-800 rounded-xl p-1.5 border border-stone-200 dark:border-neutral-700">
                       {(['1d', '7d', '30d'] as const).map((range) => (
                         <button
                           key={range}
@@ -282,11 +325,11 @@ const AdminPage: React.FC = () => {
                           className={`relative px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
                             dateRange === range
                               ? 'bg-orange-500 text-white shadow-md'
-                              : 'text-stone-600 dark:text-stone-300 hover:bg-white dark:hover:bg-stone-600'
+                              : 'text-stone-600 dark:text-stone-300 hover:bg-white dark:hover:bg-neutral-700'
                           }`}
                         >
                           {dateRange === range && <div className="absolute inset-0 bg-gradient-to-t from-orange-500/20 to-transparent rounded-xl"></div>}
-                          <span className="relative">{range === '1d' ? '1 Day' : range === '7d' ? '7 Days' : '30 Days'}</span>
+                          <span className="relative">{range === '1d' ? t('admin.oneDay') : range === '7d' ? t('admin.sevenDays') : t('admin.thirtyDays')}</span>
                         </button>
                       ))}
                       <div className="w-0.5 h-8 bg-gradient-to-b from-transparent via-neutral-300 dark:via-neutral-600 to-transparent mx-2"></div>
@@ -296,12 +339,12 @@ const AdminPage: React.FC = () => {
                           className={`relative px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${
                             dateRange === 'custom'
                               ? 'bg-orange-500 text-white shadow-md'
-                              : 'text-stone-600 dark:text-stone-300 hover:bg-white dark:hover:bg-stone-600'
+                              : 'text-stone-600 dark:text-stone-300 hover:bg-white dark:hover:bg-neutral-700'
                           }`}
                         >
                           {dateRange === 'custom' && <div className="absolute inset-0 bg-gradient-to-t from-orange-500/20 to-transparent rounded-xl"></div>}
                           <FontAwesomeIcon icon={faCalendarDays} className="relative h-4 w-4" />
-                          <span className="relative">Custom</span>
+                          <span className="relative">{t('admin.custom')}</span>
                         </button>
 
                         {/* Calendar Picker Dropdown */}
@@ -312,7 +355,7 @@ const AdminPage: React.FC = () => {
                                 <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-600 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/30">
                                   <FontAwesomeIcon icon={faCalendarDays} className="h-5 w-5 text-white" />
                                 </div>
-                                <h4 className="font-black text-stone-900 dark:text-white text-lg">Select Date Range</h4>
+                                <h4 className="font-black text-stone-900 dark:text-white text-lg">{t('admin.selectDateRange')}</h4>
                               </div>
                               <button
                                 onClick={() => setShowCalendar(false)}
@@ -326,7 +369,7 @@ const AdminPage: React.FC = () => {
                               <div>
                                 <label className="text-xs font-black uppercase tracking-widest text-stone-600 dark:text-stone-400 flex items-center gap-2 mb-3">
                                   <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                                  From Date
+                                  {t('admin.fromDate')}
                                 </label>
                                 <input
                                   type="date"
@@ -338,7 +381,7 @@ const AdminPage: React.FC = () => {
                               <div>
                                 <label className="text-xs font-black uppercase tracking-widest text-stone-600 dark:text-stone-400 flex items-center gap-2 mb-3">
                                   <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
-                                  To Date
+                                  {t('admin.toDate')}
                                 </label>
                                 <input
                                   type="date"
@@ -358,13 +401,13 @@ const AdminPage: React.FC = () => {
                                 className="relative flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-amber-600 text-white font-black text-sm shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 overflow-hidden"
                               >
                                 <div className="absolute inset-0 bg-gradient-to-t from-orange-500/20 to-transparent"></div>
-                                <span className="relative">Apply Range</span>
+                                <span className="relative">{t('admin.applyRange')}</span>
                               </button>
                               <button
                                 onClick={() => setShowCalendar(false)}
                                 className="flex-1 px-4 py-3 rounded-xl border-2 border-neutral-300 dark:border-stone-600 text-stone-700 dark:text-stone-300 font-black text-sm hover:bg-stone-100 dark:hover:bg-stone-700 hover:scale-105 active:scale-95 transition-all duration-300"
                               >
-                                Cancel
+                                {t('admin.cancel')}
                               </button>
                             </div>
                           </div>
@@ -376,11 +419,11 @@ const AdminPage: React.FC = () => {
                 <div className="grid grid-cols-1 gap-6">
                   {loading ? (
                     <div className="bg-stone-50 dark:bg-stone-800 rounded-2xl p-6 border border-neutral-200 dark:border-stone-700">
-                      <p className="text-center text-stone-600 dark:text-stone-400">Loading sales data...</p>
+                      <p className="text-center text-stone-600 dark:text-stone-400">{t('admin.loadingSalesData')}</p>
                     </div>
                   ) : error ? (
                     <div className="bg-red-50 dark:bg-red-900/20 rounded-2xl p-6 border border-red-200 dark:border-red-800">
-                      <p className="text-center text-red-600 dark:text-red-400">Error: {error}</p>
+                      <p className="text-center text-red-600 dark:text-red-400">{t('admin.error')}: {error}</p>
                     </div>
                   ) : statsCards.length > 0 ? (
                     statsCards.map((stat, index) => {
@@ -409,7 +452,7 @@ const AdminPage: React.FC = () => {
                         <p className="text-4xl sm:text-5xl font-extrabold text-stone-900 dark:from-white dark:via-stone-100 dark:to-stone-200 leading-none mb-4">{stat.value}</p>
                         <div className="inline-flex items-center gap-2 bg-orange-50 dark:from-orange-900/25 dark:to-amber-900/25 px-4 py-2 rounded-lg border-2 border-orange-100 dark:border-orange-800/40">
                           <div className="h-2 w-2 rounded-full bg-orange-500"></div>
-                          <p className="text-sm font-bold text-orange-700 dark:text-orange-300">{stat.totalTransactions} orders</p>
+                          <p className="text-sm font-bold text-orange-700 dark:text-orange-300">{stat.totalTransactions} {t('admin.orders')}</p>
                         </div>
                       </div>
 
@@ -417,18 +460,18 @@ const AdminPage: React.FC = () => {
                       <div className="mb-6">
                         <div className="flex items-center justify-between gap-4 mb-6">
                           <div>
-                            <p className="text-xl font-bold text-stone-900 dark:from-orange-400 dark:to-amber-400 mb-1">Revenue Trend</p>
-                            <p className="text-sm font-medium text-stone-600 dark:text-stone-400">Sales performance</p>
+                            <p className="text-xl font-bold text-stone-900 dark:from-orange-400 dark:to-amber-400 mb-1">{t('admin.revenueTrend')}</p>
+                            <p className="text-sm font-medium text-stone-600 dark:text-stone-400">{t('admin.salesPerformance')}</p>
                           </div>
-                          <div className="flex items-center gap-4 bg-gradient-to-r from-stone-50 via-stone-100 to-stone-50 dark:from-stone-800 dark:via-stone-700 dark:to-stone-800 px-6 py-3 rounded-2xl border-2 border-stone-200/60 dark:border-stone-600/60 shadow-xl backdrop-blur-sm">
-                            <div className="flex items-center gap-2.5">
-                              <div className="relative">
-                                <div className="absolute inset-0 bg-orange-500 rounded-full blur-sm opacity-50"></div>
-                                <div className="relative w-3 h-3 rounded-full bg-gradient-to-br from-orange-400 to-amber-600 shadow-lg"></div>
+                            <div className="flex items-center gap-4 bg-gradient-to-r from-stone-50 via-stone-100 to-stone-50 dark:from-stone-800 dark:via-stone-700 dark:to-stone-800 px-6 py-3 rounded-2xl border-2 border-stone-200/60 dark:border-stone-600/60 shadow-xl backdrop-blur-sm">
+                              <div className="flex items-center gap-2.5">
+                                <div className="relative">
+                                  <div className="absolute inset-0 bg-orange-500 rounded-full blur-sm opacity-50"></div>
+                                  <div className="relative w-3 h-3 rounded-full bg-gradient-to-br from-orange-400 to-amber-600 shadow-lg"></div>
+                                </div>
+                                <span className="text-xs font-black text-orange-700 dark:text-orange-300 uppercase tracking-wider">{t('admin.revenue')}</span>
                               </div>
-                              <span className="text-xs font-black text-orange-700 dark:text-orange-300 uppercase tracking-wider">Revenue</span>
                             </div>
-                          </div>
                         </div>
                         
                         {/* Recharts Area Chart */}
@@ -535,17 +578,17 @@ const AdminPage: React.FC = () => {
                         <div className="mt-5 pt-5 border-t border-stone-200 dark:border-stone-700/60">
                           <div className="grid grid-cols-3 gap-3">
                             <div className="text-center bg-orange-50 dark:from-orange-900/20 dark:to-amber-900/20 rounded-lg p-3 border border-orange-100 dark:border-orange-700/40">
-                              <p className="text-xs font-medium uppercase tracking-wide text-orange-600 dark:text-orange-300 mb-1">Min</p>
+                              <p className="text-xs font-medium uppercase tracking-wide text-orange-600 dark:text-orange-300 mb-1">{t('admin.min')}</p>
                               <p className="text-xl font-bold text-orange-700 dark:from-orange-200 dark:to-amber-200">₱{Math.min(...stat.chartData).toLocaleString()}</p>
                             </div>
                             <div className="text-center bg-amber-50 dark:from-amber-900/20 dark:to-yellow-900/20 rounded-lg p-3 border border-amber-100 dark:border-amber-700/40">
-                              <p className="text-xs font-medium uppercase tracking-wide text-amber-600 dark:text-amber-300 mb-1">Avg</p>
+                              <p className="text-xs font-medium uppercase tracking-wide text-amber-600 dark:text-amber-300 mb-1">{t('admin.avg')}</p>
                               <p className="text-xl font-bold text-amber-700 dark:from-amber-200 dark:to-yellow-200">
                                 ₱{Math.round(stat.chartData.reduce((a, b) => a + b, 0) / stat.chartData.length).toLocaleString()}
                               </p>
                             </div>
                             <div className="text-center bg-green-50 dark:from-rose-900/20 dark:to-orange-900/20 rounded-lg p-3 border border-green-100 dark:border-rose-700/40">
-                              <p className="text-xs font-medium uppercase tracking-wide text-green-600 dark:text-rose-300 mb-1">Max</p>
+                              <p className="text-xs font-medium uppercase tracking-wide text-green-600 dark:text-rose-300 mb-1">{t('admin.max')}</p>
                               <p className="text-xl font-bold text-green-700 dark:from-rose-200 dark:to-orange-200">₱{Math.max(...stat.chartData).toLocaleString()}</p>
                             </div>
                           </div>
@@ -553,21 +596,21 @@ const AdminPage: React.FC = () => {
                       </div>
 
                       <p className="text-xs text-neutral-500 dark:text-stone-400">
-                        {dateRange === '7d' ? 'Last 7 days' : dateRange === '1d' ? 'Last 24 hours' : dateRange === '30d' ? 'Last 30 days' : 'Custom period'} • {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                        {dateRange === '7d' ? t('admin.last7Days') : dateRange === '1d' ? t('admin.last24Hours') : dateRange === '30d' ? t('admin.last30Days') : t('admin.customPeriod')} • {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                       </p>
                       </div>
                     );
                   })
                   ) : (
                     <div className="bg-stone-50 dark:bg-stone-800 rounded-2xl p-6 border border-neutral-200 dark:border-stone-700">
-                      <p className="text-center text-stone-600 dark:text-stone-400">No sales data available for the selected period.</p>
+                      <p className="text-center text-stone-600 dark:text-stone-400">{t('admin.noSalesData')}</p>
                     </div>
                   )}
                 </div>
               </div>
 
               {/* Quick Tips Card */}
-              <div className="relative overflow-hidden bg-white dark:bg-stone-800/80 border border-stone-200 dark:border-orange-800/50 rounded-xl p-6 sm:p-8 shadow-sm">
+              <div className="relative overflow-hidden bg-white dark:bg-neutral-800 border border-stone-200 dark:border-neutral-700 rounded-xl p-6 sm:p-8 shadow-sm">
                 <div className="flex flex-col sm:flex-row items-start gap-5">
                   <div className="w-12 h-12 rounded-lg bg-orange-500 flex items-center justify-center flex-shrink-0">
                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -577,16 +620,16 @@ const AdminPage: React.FC = () => {
                   <div className="flex-1">
                     <h4 className="text-lg font-semibold text-stone-900 dark:text-white mb-2 flex items-center gap-2">
                       <span>💡</span>
-                      <span>Quick Tips</span>
+                      <span>{t('admin.quickTips')}</span>
                     </h4>
                     <div className="space-y-3">
                       <p className="text-sm text-stone-600 dark:text-stone-300 leading-relaxed">
-                        Use the sidebar to manage the system. Access <span className="px-2 py-0.5 bg-orange-50 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 rounded font-medium">Accounts</span>, <span className="px-2 py-0.5 bg-orange-50 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 rounded font-medium">Branches</span>, and <span className="px-2 py-0.5 bg-orange-50 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 rounded font-medium">Reports</span>.
+                        {t('admin.tipsDescription')} <span className="px-2 py-0.5 bg-orange-50 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 rounded font-medium">{t('admin.accounts')}</span>, <span className="px-2 py-0.5 bg-orange-50 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 rounded font-medium">{t('admin.branches')}</span>, and <span className="px-2 py-0.5 bg-orange-50 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 rounded font-medium">{t('sidebar.reports')}</span>.
                       </p>
                       <div className="flex flex-wrap gap-2">
-                        <span className="px-3 py-1.5 bg-orange-50 dark:from-orange-900/30 dark:to-amber-900/30 text-orange-600 dark:text-orange-300 rounded-md text-xs font-medium border border-orange-100 dark:border-orange-800/40">👥 User Management</span>
-                        <span className="px-3 py-1.5 bg-blue-50 dark:from-blue-900/30 dark:to-indigo-900/30 text-blue-600 dark:text-blue-300 rounded-md text-xs font-medium border border-blue-100 dark:border-blue-800/40">🏢 Branch Control</span>
-                        <span className="px-3 py-1.5 bg-green-50 dark:from-green-900/30 dark:to-emerald-900/30 text-green-600 dark:text-green-300 rounded-md text-xs font-medium border border-green-100 dark:border-green-800/40">📊 Analytics</span>
+                        <span className="px-3 py-1.5 bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-300 rounded-md text-xs font-medium border border-orange-100 dark:border-orange-800/40">{t('admin.userManagement')}</span>
+                        <span className="px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 rounded-md text-xs font-medium border border-blue-100 dark:border-blue-800/40">{t('admin.branchControl')}</span>
+                        <span className="px-3 py-1.5 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-300 rounded-md text-xs font-medium border border-green-100 dark:border-green-800/40">{t('admin.analytics')}</span>
                       </div>
                     </div>
                   </div>

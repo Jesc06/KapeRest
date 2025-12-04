@@ -5,9 +5,12 @@ import TintedBackdrop from "./TintedBackdrop";
 import { API_BASE_URL } from "../config/api";
 import { jwtDecode } from "jwt-decode";
 import KapeRestLogo from "../assets/KapeRest.png";
+import { useLanguage } from "../context/LanguageContext";
+import LanguageSwitcher from "./Shared/LanguageSwitcher";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -47,13 +50,23 @@ const Login: React.FC = () => {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        setErrors({ api: data.message || "Login failed. Please check your credentials." });
+        // Try to parse as JSON first, fallback to text
+        let errorMessage = "Login failed. Please check your credentials.";
+        try {
+          const data = await response.json();
+          errorMessage = data.message || errorMessage;
+        } catch {
+          // If JSON parsing fails, try to get text
+          const text = await response.text();
+          errorMessage = text || errorMessage;
+        }
+        setErrors({ api: errorMessage });
         setIsLoading(false);
         return;
       }
+
+      const data = await response.json();
 
       if (data.token) {
         localStorage.setItem("accessToken", data.token);
@@ -82,14 +95,14 @@ const Login: React.FC = () => {
   const errorSummary = errors.api || (Object.keys(errors).length > 1 ? Object.values(errors).filter(e => e !== errors.api).join(". ") : null);
 
   return (
-    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-gradient-to-br from-amber-50 via-orange-50/60 to-stone-100 dark:from-stone-950 dark:via-stone-900 dark:to-stone-950 font-sans">
+    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-gradient-to-br from-amber-50 via-orange-50/60 to-stone-100 dark:bg-neutral-900 font-sans">
       <TintedBackdrop />
       
       {/* Clean Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-32 -right-32 w-[600px] h-[600px] bg-gradient-to-br from-orange-400/20 via-amber-400/15 to-yellow-400/10 dark:from-orange-500/8 dark:via-amber-500/6 dark:to-yellow-500/4 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s' }}></div>
-        <div className="absolute -bottom-48 -left-48 w-[500px] h-[500px] bg-gradient-to-tr from-amber-400/20 via-orange-300/15 to-rose-300/10 dark:from-amber-500/8 dark:via-orange-500/6 dark:to-rose-500/4 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '3s' }}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-r from-orange-300/12 via-amber-300/8 to-orange-300/12 dark:from-orange-500/4 dark:via-amber-500/3 dark:to-orange-500/4 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '14s', animationDelay: '6s' }}></div>
+        <div className="absolute -top-32 -right-32 w-[600px] h-[600px] bg-gradient-to-br from-orange-400/20 via-amber-400/15 to-yellow-400/10 dark:from-transparent dark:via-transparent dark:to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s' }}></div>
+        <div className="absolute -bottom-48 -left-48 w-[500px] h-[500px] bg-gradient-to-tr from-amber-400/20 via-orange-300/15 to-rose-300/10 dark:from-transparent dark:via-transparent dark:to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '3s' }}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-r from-orange-300/12 via-amber-300/8 to-orange-300/12 dark:from-transparent dark:via-transparent dark:to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '14s', animationDelay: '6s' }}></div>
       </div>
 
       <main className="relative z-10 flex flex-1 items-center justify-center px-4 py-3 sm:px-6 md:py-4">
@@ -115,7 +128,7 @@ const Login: React.FC = () => {
                   KapeRest
                 </span>
               </h1>
-              <p className="text-sm font-medium text-stone-500 dark:text-stone-400">Point of Sale System</p>
+              <p className="text-sm font-medium text-stone-500 dark:text-stone-400">{t('common.posSystem')}</p>
             </div>
 
             {/* Form */}
@@ -139,8 +152,8 @@ const Login: React.FC = () => {
               <div className="space-y-4">
                 {/* Email Field */}
                 <div className="group">
-                  <label htmlFor="email" className="block text-sm font-semibold text-stone-700 mb-2 dark:text-stone-300">
-                    Email Address
+                  <label htmlFor="email" className="block text-sm font-semibold text-stone-700 mb-2 dark:text-stone-300 break-words leading-tight">
+                    {t('login.email')}
                   </label>
                   <div className="relative">
                     <input
@@ -183,11 +196,11 @@ const Login: React.FC = () => {
 
                 {/* Password Field */}
                 <div className="group">
-                  <label htmlFor="password" className="flex items-center justify-between text-sm font-semibold text-stone-700 mb-2 dark:text-stone-300">
-                    <span>Password</span>
+                  <label htmlFor="password" className="flex items-center justify-between text-sm font-semibold text-stone-700 mb-2 dark:text-stone-300 gap-2">
+                    <span className="break-words leading-tight">{t('login.password')}</span>
                     {capsOn && (
                       <span className="text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded dark:text-amber-400 dark:bg-amber-900/30">
-                        CAPS LOCK
+                        {t('login.capsLock')}
                       </span>
                     )}
                   </label>
@@ -275,15 +288,15 @@ const Login: React.FC = () => {
               >
                 {isLoading ? (
                   <span className="flex items-center justify-center gap-3">
-                    <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24">
+                    <svg className="h-5 w-5 animate-spin flex-shrink-0" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"></path>
                     </svg>
-                    Signing in...
+                    <span className="break-words leading-tight">{t('login.signingIn')}</span>
                   </span>
                 ) : (
                   <span className="flex items-center justify-center gap-2">
-                    Sign In
+                    <span className="break-words leading-tight">{t('login.signin')}</span>
                     <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>
@@ -299,7 +312,7 @@ const Login: React.FC = () => {
               </div>
               <div className="relative flex justify-center">
                 <span className="bg-white px-3 text-sm text-stone-500 dark:bg-stone-900 dark:text-stone-400">
-                  New to KapeRest?
+                  {t('login.noAccount')}
                 </span>
               </div>
             </div>
@@ -310,16 +323,21 @@ const Login: React.FC = () => {
                 to="/register" 
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-orange-200 bg-orange-50 text-orange-600 font-medium text-sm hover:bg-orange-100 hover:border-orange-300 transition-all duration-200 dark:border-orange-700/50 dark:bg-orange-900/20 dark:text-orange-400 dark:hover:bg-orange-900/40"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                 </svg>
-                Create an account
+                <span className="break-words leading-tight">{t('login.signUp')}</span>
               </Link>
             </div>
           </div>
 
+          {/* Language Switcher */}
+          <div className="mt-6">
+            <LanguageSwitcher />
+          </div>
+
           {/* Footer */}
-          <p className="mt-6 text-center text-xs text-stone-400 dark:text-stone-500">
+          <p className="mt-4 text-center text-xs text-stone-400 dark:text-stone-500">
             © 2024 KapeRest POS. All rights reserved.
           </p>
         </div>

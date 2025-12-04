@@ -41,12 +41,15 @@ const SupplierList: React.FC = () => {
       if (!token) return null;
       
       const payload: any = jwtDecode(token);
-      // Extract userId from cashierId claim
+      console.log('SupplierList - Decoded JWT:', payload);
+      
+      // Extract userId from various possible claims
       const userId = payload?.cashierId || 
                      payload?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"] || 
                      payload?.uid || 
                      payload?.sub;
       
+      console.log('SupplierList - Extracted userId:', userId);
       return userId;
     } catch (error) {
       console.error('Error decoding token:', error);
@@ -63,22 +66,39 @@ const SupplierList: React.FC = () => {
       const token = localStorage.getItem('accessToken');
       const userId = getUserId();
 
+      console.log('SupplierList - userId for fetch:', userId);
+
       if (!userId) {
+        console.error('SupplierList - No userId found');
         throw new Error('User ID not found. Please login again.');
       }
 
-      const response = await fetch(`${API_BASE_URL}/Supplier/GetAllSuppliers?userId=${userId}`, {
+      const url = `${API_BASE_URL}/Supplier/GetAllSuppliers?userId=${userId}`;
+      console.log('SupplierList - Fetching from:', url);
+
+      const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       });
 
+      console.log('SupplierList - Response status:', response.status);
+      console.log('SupplierList - Response ok:', response.ok);
+
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error('SupplierList - API Error:', errorText);
         throw new Error(`Failed to fetch suppliers: ${response.status}`);
       }
 
-      const data: Supplier[] = await response.json();
+      const responseText = await response.text();
+      console.log('SupplierList - Raw response:', responseText);
+
+      const data: Supplier[] = responseText ? JSON.parse(responseText) : [];
+      console.log('SupplierList - Parsed suppliers:', data);
+      console.log('SupplierList - Number of suppliers:', data.length);
+      
       setSuppliers(data);
     } catch (err) {
       console.error('Error fetching suppliers:', err);

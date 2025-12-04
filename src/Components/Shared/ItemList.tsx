@@ -49,29 +49,48 @@ const ItemList: React.FC = () => {
         
         const decoded = JSON.parse(jsonPayload);
         const cashierId = decoded.cashierId;
+        const userRole = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
 
-        if (!cashierId) {
-          console.error('Cashier ID not found in token');
-          setIsLoading(false);
-          return;
+        console.log('ItemList - Decoded JWT:', decoded);
+        console.log('ItemList - Role:', userRole);
+        console.log('ItemList - CashierId:', cashierId);
+
+        // For Staff users without cashierId, fetch all items
+        let url = `${API_BASE_URL}/MenuItem/GetAllMenuItem`;
+        if (cashierId) {
+          url += `?cashierId=${cashierId}`;
         }
 
-        const response = await fetch(`${API_BASE_URL}/MenuItem/GetAllMenuItem?cashierId=${cashierId}`, {
+        console.log('ItemList - Fetching from:', url);
+
+        const response = await fetch(url, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         });
 
+        console.log('ItemList - Response status:', response.status);
+        console.log('ItemList - Response ok:', response.ok);
+
         if (!response.ok) {
+          const errorText = await response.text();
+          console.error('ItemList - API Error:', errorText);
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const data: Item[] = await response.json();
+        const responseText = await response.text();
+        console.log('ItemList - Raw response:', responseText);
+
+        const data: Item[] = responseText ? JSON.parse(responseText) : [];
+        console.log('ItemList - Parsed items:', data);
+        console.log('ItemList - Number of items:', data.length);
+        
         setItems(data);
         setIsLoading(false);
       } catch (err) {
         console.error('Error fetching menu items:', err);
+        console.error('ItemList - Error details:', err instanceof Error ? err.message : err);
         setIsLoading(false);
       }
     };
@@ -118,13 +137,13 @@ const ItemList: React.FC = () => {
         const decoded = JSON.parse(jsonPayload);
         const cashierId = decoded.cashierId;
 
-        if (!cashierId) {
-          console.error('Cashier ID not found in token');
-          setIsLoading(false);
-          return;
+        // For Staff users without cashierId, fetch all items
+        let url = `${API_BASE_URL}/MenuItem/GetAllMenuItem`;
+        if (cashierId) {
+          url += `?cashierId=${cashierId}`;
         }
 
-        const response = await fetch(`${API_BASE_URL}/MenuItem/GetAllMenuItem?cashierId=${cashierId}`, {
+        const response = await fetch(url, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -197,6 +216,14 @@ const ItemList: React.FC = () => {
       alert('Failed to delete item. Please try again.');
     }
   };
+
+  console.log('ItemList - Render state:', { 
+    isLoading, 
+    itemsCount: items.length, 
+    filteredCount: filteredItems.length,
+    selectedAvailability,
+    searchTerm 
+  });
 
   return (
     <div className="min-h-screen w-full bg-stone-50 dark:bg-stone-900">
@@ -445,7 +472,7 @@ const ItemList: React.FC = () => {
                                 <div className="relative group/img">
                                   <div className="absolute inset-0 bg-orange-500/20 rounded-xl blur-md opacity-0 group-hover/img:opacity-100 transition-opacity duration-300"></div>
                                   <img
-                                    src={item.image.startsWith('data:') ? item.image : `data:image/jpeg;base64,${item.image}`}
+                                    src={item.image && item.image.startsWith('data:') ? item.image : item.image ? `data:image/jpeg;base64,${item.image}` : '/images/placeholder.jpg'}
                                     alt={item.itemName}
                                     className="relative w-12 h-12 object-cover rounded-xl border-2 border-orange-200 dark:border-stone-700 shadow-lg"
                                     onError={(e) => {

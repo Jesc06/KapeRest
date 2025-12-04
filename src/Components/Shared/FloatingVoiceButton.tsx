@@ -72,11 +72,22 @@ const FloatingVoiceButton: React.FC = () => {
 
   return (
     <>
-      {/* Floating Button with System Theme */}
+      {/* Backdrop Blur when modal is open */}
+      {showNavigator && (
+        <div 
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 transition-all duration-300"
+          onClick={() => {
+            setShowNavigator(false);
+            setAutoListen(false);
+          }}
+        />
+      )}
+
+      {/* Floating Button with Orange Theme */}
       <button
         onMouseDown={handleMouseDown}
         onClick={handleClick}
-        className="fixed z-40 w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700 shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center cursor-move group border-2 border-white dark:border-gray-700"
+        className="fixed z-40 w-16 h-16 rounded-full bg-gradient-to-br from-orange-500 to-amber-600 dark:from-orange-600 dark:to-amber-700 shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center cursor-move group border-3 border-white dark:border-stone-800"
         style={{
           left: `${position.x}px`,
           top: `${position.y}px`,
@@ -89,7 +100,7 @@ const FloatingVoiceButton: React.FC = () => {
         />
         
         {/* Pulsing ring effect */}
-        <span className="absolute inset-0 rounded-full bg-blue-400 dark:bg-blue-500 animate-ping opacity-30"></span>
+        <span className="absolute inset-0 rounded-full bg-orange-400 dark:bg-orange-500 animate-ping opacity-30"></span>
       </button>
 
       {/* Voice Navigator Panel */}

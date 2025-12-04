@@ -75,7 +75,7 @@ const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose, autoListen = f
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [manualInput, setManualInput] = useState('');
-  const [status, setStatus] = useState('Ready! Click mic or type command 🎤⌨️');
+  const [status, setStatus] = useState('Ready! Click mic or type command');
   const [position, setPosition] = useState({ 
     x: (window.innerWidth - 380) / 2, 
     y: (window.innerHeight - 400) / 2 
@@ -88,12 +88,61 @@ const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose, autoListen = f
   const recognitionRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Text-to-Speech function
+  const speak = (text: string) => {
+    // Cancel any ongoing speech
+    window.speechSynthesis.cancel();
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.rate = 1.1; // Slightly faster
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+    
+    window.speechSynthesis.speak(utterance);
+  };
+
+  // Get friendly name for route
+  const getRouteName = (route: string): string => {
+    const routeNames: { [key: string]: string } = {
+      '/': 'Home',
+      '/login': 'Login',
+      '/register': 'Register',
+      '/cashier': 'Cashier',
+      '/cashier/buy-item': 'Buy Item',
+      '/cashier/sales': 'Cashier Sales',
+      '/cashier/change-password': 'Change Password',
+      '/cashier/hold-items': 'Hold Items',
+      '/cashier/purchases': 'Purchases',
+      '/staff': 'Staff',
+      '/staff/add-supplier': 'Add Supplier',
+      '/staff/suppliers': 'Suppliers',
+      '/staff/add-item': 'Add Item',
+      '/staff/items': 'Items',
+      '/staff/add-stocks': 'Add Stocks',
+      '/staff/stocks': 'Stocks',
+      '/staff/sales': 'Staff Sales',
+      '/staff/purchases': 'Staff Purchases',
+      '/staff/void-requests': 'Void Requests',
+      '/staff/change-password': 'Staff Change Password',
+      '/staff/audit-trail': 'Staff Audit Trail',
+      '/admin': 'Admin',
+      '/admin/accounts': 'Accounts',
+      '/admin/tax-discounts': 'Tax Discounts',
+      '/admin/inventory': 'Inventory',
+      '/admin/branch': 'Branch',
+      '/admin/sales': 'Admin Sales',
+      '/admin/audit-trail': 'Audit Trail',
+    };
+    return routeNames[route] || route;
+  };
+
   useEffect(() => {
     // Check if browser supports speech recognition
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     
     if (!SpeechRecognition) {
-      setStatus('Voice not supported - Use Type mode ⌨️');
+      setStatus('Voice not supported - Use Type mode');
       setShowManualInput(true);
       return;
     }
@@ -130,15 +179,20 @@ const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose, autoListen = f
       if (finalTranscript) {
         const matchedRoute = findMatchingRoute(fullTranscript);
         if (matchedRoute) {
-          setStatus(`Pupunta sa ${matchedRoute}...`);
+          const routeName = getRouteName(matchedRoute);
+          const message = `Going to ${routeName}`;
+          setStatus(message);
+          speak(message);
           setTimeout(() => {
             navigate(matchedRoute);
             recognition.stop();
             setTranscript('');
-            setStatus('Tapos na!');
-          }, 500);
+            setStatus('Done!');
+          }, 1000);
         } else {
-          setStatus('Hindi ko maintindihan. Ulitin mo.');
+          const errorMessage = 'Command not recognized. Please try again.';
+          setStatus(errorMessage);
+          speak(errorMessage);
         }
       }
     };
@@ -146,20 +200,24 @@ const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose, autoListen = f
     recognition.onerror = (event: any) => {
       console.error('Speech recognition error:', event.error);
       
-      let errorMsg = 'May error: ';
+      let errorMsg = 'Error occurred';
       if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
-        errorMsg = 'Mic blocked! Enable mic permission or use Type mode 👇';
+        errorMsg = 'Microphone blocked! Enable permission or use Type mode';
         setShowManualInput(true);
+        speak('Microphone access denied. Please use type mode.');
       } else if (event.error === 'no-speech') {
-        errorMsg = 'Walang narinig. Subukan ulit o type command 👇';
+        errorMsg = 'No speech detected. Try again or type command';
+        speak('No speech detected.');
       } else if (event.error === 'network') {
-        errorMsg = 'Network issue. Try Type mode instead ⌨️';
+        errorMsg = 'Network issue. Try Type mode instead';
         setShowManualInput(true);
+        speak('Network error. Please use type mode.');
       } else if (event.error === 'aborted') {
-        errorMsg = 'Cancelled. Click mic again or type 👇';
+        errorMsg = 'Cancelled. Click mic again or type';
       } else {
-        errorMsg = 'Voice error. Use Type mode! ⌨️';
+        errorMsg = 'Voice error. Use Type mode!';
         setShowManualInput(true);
+        speak('Voice recognition error. Please use type mode.');
       }
       
       setStatus(errorMsg);
@@ -169,7 +227,7 @@ const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose, autoListen = f
     recognition.onend = () => {
       setIsListening(false);
       if (status.includes('Nakikinig')) {
-        setStatus('Click mic to speak or type command ⌨️');
+        setStatus('Click mic to speak or type command');
       }
     };
 
@@ -186,7 +244,7 @@ const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose, autoListen = f
     };
     } catch (error) {
       console.error('Failed to initialize speech recognition:', error);
-      setStatus('Voice setup failed. Use Type mode! ⌨️');
+      setStatus('Voice setup failed. Use Type mode!');
       setShowManualInput(true);
     }
   }, [navigate, status]);
@@ -240,7 +298,7 @@ const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose, autoListen = f
     if (!recognitionRef.current) {
       // If voice not supported, switch to manual input
       setShowManualInput(true);
-      setStatus('Voice not available. Use Type mode! ⌨️');
+      setStatus('Voice not available. Use Type mode!');
       return;
     }
 
@@ -261,7 +319,7 @@ const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose, autoListen = f
       const hasPermission = await requestMicrophonePermission();
       
       if (!hasPermission) {
-        setStatus('Mic permission denied. Use Type mode! ⌨️');
+        setStatus('Mic permission denied. Use Type mode!');
         setShowManualInput(true);
         return;
       }
@@ -274,7 +332,7 @@ const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose, autoListen = f
         if (error.message && error.message.includes('already')) {
           setStatus('Already listening...');
         } else {
-          setStatus('Cannot start voice. Use Type mode! ⌨️');
+          setStatus('Cannot start voice. Use Type mode!');
           setShowManualInput(true);
         }
       }
@@ -287,14 +345,19 @@ const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose, autoListen = f
 
     const matchedRoute = findMatchingRoute(manualInput);
     if (matchedRoute) {
-      setStatus(`Pupunta sa ${matchedRoute}...`);
+      const routeName = getRouteName(matchedRoute);
+      const message = `Going to ${routeName}`;
+      setStatus(message);
+      speak(message);
       setTimeout(() => {
         navigate(matchedRoute);
         setManualInput('');
-        setStatus('Tapos na!');
-      }, 300);
+        setStatus('Done!');
+      }, 1000);
     } else {
-      setStatus('Hindi ko maintindihan. Subukan ulit.');
+      const errorMessage = 'Command not recognized. Please try again.';
+      setStatus(errorMessage);
+      speak(errorMessage);
     }
   };
 
@@ -340,27 +403,32 @@ const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose, autoListen = f
   return (
     <div
       ref={containerRef}
-      className="fixed z-50 bg-stone-50 dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 cursor-move select-none backdrop-blur-xl"
+      className="fixed z-50 bg-white dark:bg-stone-900 rounded-2xl shadow-2xl border-2 border-orange-200 dark:border-orange-800/50 cursor-move select-none backdrop-blur-xl"
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
-        width: '380px',
+        width: '400px',
         minHeight: '240px',
       }}
       onMouseDown={handleMouseDown}
     >
       {/* Header with drag handle */}
-      <div className="bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700 rounded-t-2xl p-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="text-2xl">🎤</span>
-          <h3 className="text-white font-bold text-lg">Voice Navigator</h3>
+      <div className="bg-gradient-to-br from-orange-500 to-amber-600 dark:from-orange-600 dark:to-amber-700 rounded-t-2xl p-4 flex items-center justify-between shadow-md">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+            <FontAwesomeIcon icon={faMicrophone} className="text-white text-xl" />
+          </div>
+          <div>
+            <h3 className="text-white font-extrabold text-lg tracking-tight">Voice Navigator</h3>
+            <p className="text-orange-100 text-xs font-medium">Quick navigation</p>
+          </div>
         </div>
         {onClose && (
           <button
             onClick={onClose}
-            className="w-7 h-7 flex items-center justify-center bg-stone-50 bg-opacity-20 hover:bg-opacity-30 rounded-full transition-all duration-200 cursor-pointer"
+            className="w-8 h-8 flex items-center justify-center bg-white/20 hover:bg-white/30 rounded-lg transition-all duration-200 cursor-pointer group"
           >
-            <FontAwesomeIcon icon={faTimes} className="text-white text-sm" />
+            <FontAwesomeIcon icon={faTimes} className="text-white text-sm group-hover:scale-110 transition-transform" />
           </button>
         )}
       </div>
@@ -371,31 +439,30 @@ const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose, autoListen = f
         <div className="flex gap-3 w-full justify-center">
           <button
             onClick={toggleListening}
-            className={`flex-1 max-w-[120px] h-14 rounded-xl flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer shadow-lg ${
+            className={`flex-1 max-w-[140px] h-16 rounded-xl flex items-center justify-center gap-3 transition-all duration-300 cursor-pointer shadow-lg font-bold ${
               isListening
-                ? 'bg-red-500 hover:bg-red-600 animate-pulse text-white'
-                : 'bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white'
+                ? 'bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 animate-pulse text-white border-2 border-red-400'
+                : 'bg-gradient-to-br from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white border-2 border-orange-400 dark:border-orange-600'
             }`}
             title="Voice navigation"
           >
             <FontAwesomeIcon
               icon={isListening ? faStop : faMicrophone}
-              className="text-xl"
+              className="text-2xl"
             />
-            <span className="text-sm font-medium">{isListening ? 'Stop' : 'Voice'}</span>
+            <span className="text-sm font-extrabold">{isListening ? 'Stop' : 'Voice'}</span>
           </button>
 
           <button
             onClick={() => setShowManualInput(!showManualInput)}
-            className={`flex-1 max-w-[120px] h-14 rounded-xl flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer shadow-lg ${
+            className={`flex-1 max-w-[140px] h-16 rounded-xl flex items-center justify-center gap-3 transition-all duration-300 cursor-pointer shadow-lg font-bold border-2 ${
               showManualInput
-                ? 'bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white'
-                : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200'
+                ? 'bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white border-amber-400 dark:border-amber-600'
+                : 'bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 border-stone-300 dark:border-stone-600'
             }`}
             title="Type command"
           >
-            <span className="text-xl">⌨️</span>
-            <span className="text-sm font-medium">Type</span>
+            <span className="text-sm font-extrabold">TYPE</span>
           </button>
         </div>
 
@@ -407,47 +474,47 @@ const VoiceNavigator: React.FC<VoiceNavigatorProps> = ({ onClose, autoListen = f
               value={manualInput}
               onChange={(e) => setManualInput(e.target.value)}
               placeholder="Type: cashier, admin, sales..."
-              className="w-full px-4 py-3 rounded-xl text-sm bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all"
+              className="w-full px-5 py-4 rounded-xl text-sm font-semibold bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-100 placeholder-stone-500 dark:placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 border-2 border-stone-200 dark:border-stone-700 transition-all"
               autoFocus
             />
           </form>
         )}
 
         {/* Status */}
-        <div className="w-full bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-700 dark:to-gray-700 rounded-xl p-3 min-h-[48px] flex items-center justify-center">
-          <p className="text-gray-700 dark:text-gray-200 text-sm font-medium text-center">{status}</p>
+        <div className="w-full bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950/50 dark:to-amber-950/50 rounded-xl p-4 min-h-[56px] flex items-center justify-center border-2 border-orange-200 dark:border-orange-800/50">
+          <p className="text-stone-700 dark:text-stone-200 text-sm font-bold text-center">{status}</p>
         </div>
 
         {/* Transcript */}
         {transcript && (
-          <div className="w-full bg-blue-100 dark:bg-blue-900 rounded-xl p-3 border border-blue-200 dark:border-blue-700">
-            <p className="text-blue-800 dark:text-blue-200 text-sm italic text-center">"{transcript}"</p>
+          <div className="w-full bg-gradient-to-br from-orange-100 to-amber-100 dark:from-orange-900 dark:to-amber-900 rounded-xl p-4 border-2 border-orange-300 dark:border-orange-700 shadow-inner">
+            <p className="text-orange-900 dark:text-orange-100 text-sm font-bold italic text-center">"{transcript}"</p>
           </div>
         )}
 
         {/* Instructions */}
-        <div className="w-full border-t border-gray-200 dark:border-gray-700 pt-3">
-          <p className="text-gray-600 dark:text-gray-400 text-xs text-center leading-relaxed">
+        <div className="w-full border-t-2 border-orange-200 dark:border-orange-800/50 pt-4">
+          <p className="text-stone-600 dark:text-stone-400 text-xs text-center font-semibold leading-relaxed">
             {showManualInput 
-              ? '⚡ Type keyword at press Enter (Fastest!)' 
-              : '💡 Keywords: cashier, admin, sales, inventory'}
+              ? 'Type keyword and press Enter (Fastest!)' 
+              : 'Keywords: cashier, admin, sales, inventory'}
           </p>
           
           {/* Brave voice enable instructions */}
-          <details className="mt-2">
-            <summary className="text-blue-600 dark:text-blue-400 text-[11px] text-center cursor-pointer font-medium">
-              🛡️ How to enable voice in Brave? (Click)
+          <details className="mt-3">
+            <summary className="text-orange-600 dark:text-orange-400 text-[11px] text-center cursor-pointer font-bold hover:text-orange-700 dark:hover:text-orange-300 transition-colors">
+              How to enable voice in Brave? (Click)
             </summary>
-            <div className="mt-2 p-2 bg-blue-50 dark:bg-blue-900/30 rounded-lg text-[10px] text-gray-700 dark:text-gray-300">
-              <ol className="list-decimal list-inside space-y-1 text-left">
+            <div className="mt-3 p-3 bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/30 rounded-lg text-[10px] text-stone-700 dark:text-stone-300 border-2 border-orange-200 dark:border-orange-800/50">
+              <ol className="list-decimal list-inside space-y-1.5 text-left font-medium">
                 <li>Click sa Shield icon sa URL bar</li>
                 <li>Click "Advanced View"</li>
                 <li>Toggle OFF "Block fingerprinting"</li>
                 <li>O kaya i-allow ang microphone permission</li>
                 <li>Refresh page at subukan ulit</li>
               </ol>
-              <p className="mt-2 text-center text-blue-600 dark:text-blue-400 font-medium">
-                💡 O gamitin na lang Type mode - mas mabilis pa!
+              <p className="mt-3 text-center text-orange-600 dark:text-orange-400 font-bold text-[11px]">
+                Tip: O gamitin na lang Type mode - mas mabilis pa!
               </p>
             </div>
           </details>

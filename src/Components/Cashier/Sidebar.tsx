@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartLine, faShoppingCart, faTimes, faHome, faPause, faReceipt } from '@fortawesome/free-solid-svg-icons';
 import KapeRestLogo from '../../assets/KapeRest.png';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface SidebarProps {
   isOpen?: boolean;
@@ -11,6 +12,7 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = true }) => {
+  const { t } = useLanguage();
   const location = useLocation();
   const isSalesPage = location.pathname === '/cashier/sales';
   const isBuyItemPage = location.pathname === '/cashier/buy-item';
@@ -62,7 +64,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
         >
           <FontAwesomeIcon icon={faHome} className="text-lg flex-shrink-0 w-5 h-5" />
           {isExpanded && (
-            <span className="flex-1 text-left font-medium truncate">Home</span>
+            <span className="flex-1 text-left font-medium truncate break-words line-clamp-1">{t('sidebar.home')}</span>
           )}
         </Link>
 
@@ -84,7 +86,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
         >
           <FontAwesomeIcon icon={faShoppingCart} className="text-lg flex-shrink-0 w-5 h-5" />
           {isExpanded && (
-            <span className="flex-1 text-left font-medium truncate">Buy Item</span>
+            <span className="flex-1 text-left font-medium truncate break-words line-clamp-1">{t('cashier.buyItem')}</span>
           )}
         </Link>
 
@@ -99,7 +101,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
         >
           <FontAwesomeIcon icon={faChartLine} className="text-lg flex-shrink-0 w-5 h-5" />
           {isExpanded && (
-            <span className="flex-1 text-left font-medium truncate">Sales</span>
+            <span className="flex-1 text-left font-medium truncate break-words line-clamp-1">{t('cashier.sales')}</span>
           )}
         </Link>
 
@@ -114,7 +116,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
         >
           <FontAwesomeIcon icon={faPause} className="text-lg flex-shrink-0 w-5 h-5" />
           {isExpanded && (
-            <span className="flex-1 text-left font-medium truncate">Hold Items</span>
+            <span className="flex-1 text-left font-medium truncate break-words line-clamp-1">{t('cashier.holdItems')}</span>
           )}
         </Link>
 
@@ -129,7 +131,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
         >
           <FontAwesomeIcon icon={faReceipt} className="text-lg flex-shrink-0 w-5 h-5" />
           {isExpanded && (
-            <span className="flex-1 text-left font-medium truncate">Purchases</span>
+            <span className="flex-1 text-left font-medium truncate break-words line-clamp-1">{t('cashier.purchases')}</span>
           )}
         </Link>
       </nav>

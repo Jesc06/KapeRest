@@ -5,6 +5,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import StaffSidebar from './StaffSidebar';
 import LogoutPanel from '../Shared/LogoutPanel';
 import { API_BASE_URL } from '../../config/api';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface StaffSalesData {
   date: string;
@@ -13,6 +14,7 @@ interface StaffSalesData {
 }
 
 const StaffPage: React.FC = () => {
+  const { t } = useLanguage();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [dateRange, setDateRange] = useState<'1d' | '7d' | '30d' | 'custom'>('7d');
@@ -76,9 +78,9 @@ const StaffPage: React.FC = () => {
   // Get current time for greeting
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return 'Good Morning';
-    if (hour < 18) return 'Good Afternoon';
-    return 'Good Evening';
+    if (hour < 12) return t('admin.goodMorning');
+    if (hour < 18) return t('admin.goodAfternoon');
+    return t('admin.goodEvening');
   };
 
   // Process sales data for chart and stats
@@ -176,7 +178,7 @@ const StaffPage: React.FC = () => {
                           <h2 className="text-4xl sm:text-5xl font-extrabold text-white mb-2 tracking-tight drop-shadow-md">
                             {getGreeting()}!
                           </h2>
-                          <p className="text-orange-50 text-base font-semibold tracking-wide">Staff Portal Dashboard</p>
+                          <p className="text-orange-50 text-base font-semibold tracking-wide">{t('staff.dashboard')}</p>
                         </div>
                         <div className="text-right">
                           <p className="text-white/90 text-xs font-bold uppercase tracking-widest mb-2">Today</p>

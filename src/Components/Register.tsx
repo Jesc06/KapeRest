@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import TintedBackdrop from './TintedBackdrop';
 import { API_BASE_URL } from '../config/api';
 import KapeRestLogo from '../assets/KapeRest.png';
+import { useLanguage } from '../context/LanguageContext';
+import LanguageSwitcher from './Shared/LanguageSwitcher';
 
 const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const roles = ['Staff', 'Cashier'];
@@ -25,12 +27,12 @@ interface Branch {
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [firstName, setFirstName] = useState('');
   const [middleName, setMiddleName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState('');
   const [branch, setBranch] = useState('');
   const [branchId, setBranchId] = useState<number>(0);
@@ -117,23 +119,6 @@ const Register: React.FC = () => {
   const validRole = role.trim().length > 0;
   const validBranch = branch.trim().length > 0;
   const validCashier = role === 'Staff' ? assignedCashier.trim().length > 0 : true;
-
-  // Password strength calculation
-  const getPasswordStrength = () => {
-    if (password.length === 0) return { level: 0, text: '', color: '' };
-    if (password.length < 6) return { level: 1, text: 'Weak', color: 'bg-red-500' };
-    if (password.length < 8) return { level: 2, text: 'Fair', color: 'bg-amber-500' };
-    const hasUpper = /[A-Z]/.test(password);
-    const hasLower = /[a-z]/.test(password);
-    const hasNumber = /[0-9]/.test(password);
-    const hasSpecial = /[^A-Za-z0-9]/.test(password);
-    const strength = [hasUpper, hasLower, hasNumber, hasSpecial].filter(Boolean).length;
-    if (strength >= 3 && password.length >= 10) return { level: 4, text: 'Strong', color: 'bg-emerald-500' };
-    if (strength >= 2) return { level: 3, text: 'Good', color: 'bg-green-500' };
-    return { level: 2, text: 'Fair', color: 'bg-amber-500' };
-  };
-
-  const passwordStrength = getPasswordStrength();
 
   const validate = () => {
     const next: {[k:string]: string} = {};
@@ -222,14 +207,14 @@ const Register: React.FC = () => {
   }, [roleOpen, branchOpen, cashierOpen]);
 
   return (
-    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-gradient-to-br from-amber-50 via-orange-50/60 to-stone-100 dark:from-stone-950 dark:via-stone-900 dark:to-stone-950 font-sans">
+    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-gradient-to-br from-amber-50 via-orange-50/60 to-stone-100 dark:bg-neutral-900 font-sans">
       <TintedBackdrop />
       
       {/* Clean Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-32 -right-32 w-[600px] h-[600px] bg-gradient-to-br from-orange-400/20 via-amber-400/15 to-yellow-400/10 dark:from-orange-500/8 dark:via-amber-500/6 dark:to-yellow-500/4 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s' }}></div>
-        <div className="absolute -bottom-48 -left-48 w-[500px] h-[500px] bg-gradient-to-tr from-amber-400/20 via-orange-300/15 to-rose-300/10 dark:from-amber-500/8 dark:via-orange-500/6 dark:to-rose-500/4 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '3s' }}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-r from-orange-300/12 via-amber-300/8 to-orange-300/12 dark:from-orange-500/4 dark:via-amber-500/3 dark:to-orange-500/4 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '14s', animationDelay: '6s' }}></div>
+        <div className="absolute -top-32 -right-32 w-[600px] h-[600px] bg-gradient-to-br from-orange-400/20 via-amber-400/15 to-yellow-400/10 dark:from-transparent dark:via-transparent dark:to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s' }}></div>
+        <div className="absolute -bottom-48 -left-48 w-[500px] h-[500px] bg-gradient-to-tr from-amber-400/20 via-orange-300/15 to-rose-300/10 dark:from-transparent dark:via-transparent dark:to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '3s' }}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-r from-orange-300/12 via-amber-300/8 to-orange-300/12 dark:from-transparent dark:via-transparent dark:to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '14s', animationDelay: '6s' }}></div>
       </div>
       
       <main className="relative z-10 flex flex-1 items-center justify-center px-4 py-3 sm:px-6 md:py-4">
@@ -252,10 +237,10 @@ const Register: React.FC = () => {
               {/* Brand name */}
               <h1 className="text-4xl font-extrabold tracking-tight mb-0.5">
                 <span className="bg-gradient-to-r from-orange-600 via-amber-500 to-orange-600 bg-clip-text text-transparent dark:from-orange-400 dark:via-amber-400 dark:to-orange-400">
-                  Create Account
+                  {t('register.title')}
                 </span>
               </h1>
-              <p className="text-xs font-medium text-stone-500 dark:text-stone-400">Join KapeRest POS</p>
+              <p className="text-xs font-medium text-stone-500 dark:text-stone-400">KapeRest {t('common.posSystem')}</p>
             </div>
             <form onSubmit={handleSubmit} noValidate className="space-y-2.5" aria-busy={isLoading}>
               <div role="status" aria-live="polite" className="sr-only">
@@ -281,7 +266,7 @@ const Register: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {/* First Name */}
                   <div className="relative">
-                    <label htmlFor="firstName" className="block text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2">First Name</label>
+                    <label htmlFor="firstName" className="block text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2 break-words leading-tight">{t('register.firstName')}</label>
                     <div className="relative group">
                       <input
                         id="firstName"
@@ -307,7 +292,7 @@ const Register: React.FC = () => {
                   </div>
                   {/* Middle Name (optional) */}
                   <div className="relative">
-                    <label htmlFor="middleName" className="block text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2">Middle <span className="text-xs text-stone-500">(Optional)</span></label>
+                    <label htmlFor="middleName" className="block text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2 break-words leading-tight">{t('register.middleName')}</label>
                     <div className="relative group">
                       <input
                         id="middleName"
@@ -326,7 +311,7 @@ const Register: React.FC = () => {
                   </div>
                   {/* Last Name */}
                   <div className="relative">
-                    <label htmlFor="lastName" className="block text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2">Last Name</label>
+                    <label htmlFor="lastName" className="block text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2 break-words leading-tight">{t('register.lastName')}</label>
                     <div className="relative group">
                       <input
                         id="lastName"
@@ -355,7 +340,7 @@ const Register: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Email */}
                   <div className="relative">
-                    <label htmlFor="email" className="block text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2">Email Address</label>
+                    <label htmlFor="email" className="block text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2 break-words leading-tight">{t('register.email')}</label>
                     <div className="relative group">
                       <input
                         id="email"
@@ -381,8 +366,8 @@ const Register: React.FC = () => {
                   </div>
                   {/* Password */}
                   <div className="relative">
-                    <label htmlFor="password" className="flex items-center justify-between text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2">
-                      <span>Password</span>
+                    <label htmlFor="password" className="flex items-center justify-between text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2 gap-2">
+                      <span className="break-words leading-tight flex-1 min-w-0">{t('register.password')}</span>
                       {capsOn && (
                         <span className="text-xs font-bold text-amber-600 flex items-center gap-1 dark:text-amber-400">
                           <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
@@ -422,7 +407,7 @@ const Register: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Role */}
                   <div className="relative">
-                    <label htmlFor="role" className="block text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2">Role</label>
+                    <label htmlFor="role" className="block text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2">{t('register.role')}</label>
                     <div className="relative group">
                       <button
                         ref={roleButtonRef}
@@ -819,15 +804,15 @@ const Register: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700 ease-out" aria-hidden="true"></div>
                 {isLoading ? (
                   <>
-                    <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24" aria-hidden="true">
+                    <svg className="h-5 w-5 animate-spin flex-shrink-0" viewBox="0 0 24 24" aria-hidden="true">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"></path>
                     </svg>
-                    <span>Creating Account…</span>
+                    <span className="break-words leading-tight">{t('register.creating')}</span>
                   </>
                 ) : (
                   <>
-                    <span>Create Account</span>
+                    <span className="break-words leading-tight">{t('register.createAccount')}</span>
                     <svg className="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>
@@ -843,7 +828,7 @@ const Register: React.FC = () => {
               </div>
               <div className="relative flex justify-center">
                 <span className="bg-white/70 dark:bg-stone-900/80 px-4 text-sm font-medium text-stone-400 dark:text-stone-500">
-                  Already have an account?
+                  {t('register.haveAccount')}
                 </span>
               </div>
             </div>
@@ -854,16 +839,21 @@ const Register: React.FC = () => {
                 to="/login" 
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-orange-200 bg-orange-50 text-orange-600 font-medium text-sm hover:bg-orange-100 hover:border-orange-300 transition-all duration-200 dark:border-orange-700/50 dark:bg-orange-900/20 dark:text-orange-400 dark:hover:bg-orange-900/40"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                 </svg>
-                Sign in now
+                <span className="break-words leading-tight">{t('register.signIn')}</span>
               </Link>
             </div>
           </div>
           
+          {/* Language Switcher */}
+          <div className="mt-6">
+            <LanguageSwitcher />
+          </div>
+
           {/* Footer */}
-          <p className="mt-6 text-center text-xs text-stone-400 dark:text-stone-500">
+          <p className="mt-4 text-center text-xs text-stone-400 dark:text-stone-500">
             © 2024 KapeRest POS. All rights reserved.
           </p>
         </div>

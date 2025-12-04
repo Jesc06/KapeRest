@@ -107,23 +107,6 @@ const StaffAuditTrailPage: React.FC = () => {
     }
   };
 
-  const getActionColor = (action: string) => {
-    switch (action) {
-      case 'Add':
-        return 'from-emerald-500 to-emerald-600';
-      case 'Delete':
-        return 'from-red-500 to-red-600';
-      case 'Deliver':
-        return 'from-amber-500 to-amber-600';
-      case 'Login':
-        return 'from-blue-500 to-blue-600';
-      case 'Logout':
-        return 'from-purple-500 to-purple-600';
-      default:
-        return 'from-orange-500 to-orange-600';
-    }
-  };
-
   const getActionLabel = (action: string) => {
     return action === 'all' ? 'All Actions' : action;
   };

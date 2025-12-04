@@ -107,7 +107,7 @@ const Sales: React.FC<SalesProps> = ({
                 {/* Desktop Sidebar Toggle */}
                 <button
                   onClick={onToggleSidebarExpand}
-                  className="hidden lg:flex h-12 w-12 items-center justify-center rounded-2xl bg-white dark:from-neutral-800 dark:to-neutral-700 hover:bg-orange-50 dark:hover:bg-orange-950/30 text-stone-700 dark:text-stone-300 hover:text-orange-600 dark:hover:text-orange-400 border-2 border-orange-200/50 dark:border-orange-900/50 hover:border-orange-400 dark:hover:border-orange-600 shadow-lg hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-300 active:scale-95 hover:scale-105"
+                  className="hidden lg:flex h-12 w-12 items-center justify-center rounded-2xl bg-white dark:bg-neutral-700 hover:bg-orange-50 dark:hover:bg-neutral-600 text-stone-700 dark:text-orange-400 hover:text-orange-600 dark:hover:text-orange-300 border-2 border-orange-200/50 dark:border-neutral-600 hover:border-orange-400 dark:hover:border-orange-500 shadow-lg hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-300 active:scale-95 hover:scale-105"
                   title={sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
                 >
                   <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
@@ -310,8 +310,9 @@ const Sales: React.FC<SalesProps> = ({
           {/* Table Content */}
           <div className="flex-1 overflow-auto">
             {filteredSales.length > 0 ? (
-              <table className="w-full">
-                <thead className="sticky top-0 z-10">
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-max">
+                  <thead className="sticky top-0 z-10">
                   <tr className="bg-gradient-to-r from-stone-50 via-stone-100/80 to-stone-50 dark:from-neutral-800 dark:via-neutral-750 dark:to-neutral-800 border-b-2 border-stone-300 dark:border-stone-700 backdrop-blur-sm">
                     <th className="px-6 py-4 text-left">
                       <div className="flex items-center gap-2">
@@ -406,7 +407,8 @@ const Sales: React.FC<SalesProps> = ({
                     </tr>
                   ))}
                 </tbody>
-              </table>
+                </table>
+              </div>
             ) : (
               <div className="flex h-full items-center justify-center py-24">
                 <div className="text-center px-4 max-w-md">

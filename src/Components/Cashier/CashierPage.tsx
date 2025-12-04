@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faChartLine, faCashRegister, faMoneyBillWave, faReceipt, faArrowUp, faArrowDown, faCalendarDays, faX } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faChartLine, faMoneyBillWave, faReceipt, faArrowUp, faArrowDown, faCalendarDays, faX } from '@fortawesome/free-solid-svg-icons';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import Sidebar from './Sidebar.tsx';
 import LogoutPanel from '../Shared/LogoutPanel';
 import { API_BASE_URL } from '../../config/api';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface CashierSalesData {
   date: string;
@@ -13,6 +14,7 @@ interface CashierSalesData {
 }
 
 const CashierPage: React.FC = () => {
+  const { t } = useLanguage();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [dateRange, setDateRange] = useState<'1d' | '7d' | '30d' | 'custom'>('7d');
@@ -127,11 +129,45 @@ const CashierPage: React.FC = () => {
         });
 
         if (!response.ok) throw new Error('Failed to fetch today metrics');
-        const data: any[] = await response.json();
+        const data: any = await response.json();
 
-        // Calculate totals
-        const totalSales = data.reduce((sum: number, item: any) => sum + item.totalSales, 0);
-        const totalTransactions = data.reduce((sum: number, item: any) => sum + item.transactionCount, 0);
+        // Robust handling: API may return aggregated objects or raw transactions.
+        let totalSales = 0;
+        let totalTransactions = 0;
+
+        if (Array.isArray(data)) {
+          if (data.length > 0 && (data[0].hasOwnProperty('totalSales') || data[0].hasOwnProperty('transactionCount'))) {
+            // Aggregated daily/period objects
+            totalSales = data.reduce((sum: number, item: any) => sum + (Number(item.totalSales) || 0), 0);
+            totalTransactions = data.reduce((sum: number, item: any) => sum + (Number(item.transactionCount) || 0), 0);
+          } else if (data.length > 0 && (data[0].hasOwnProperty('total') || data[0].hasOwnProperty('dateTime') || data[0].hasOwnProperty('status'))) {
+            // Raw transactions array - sum only Completed transactions for today
+            const today = new Date();
+            const isSameDay = (iso?: string) => {
+              if (!iso) return false;
+              const d = new Date(iso);
+              return d.getFullYear() === today.getFullYear() && d.getMonth() === today.getMonth() && d.getDate() === today.getDate();
+            };
+
+            const completedToday = data.filter((tx: any) => {
+              const status = tx.status ? String(tx.status).toLowerCase() : '';
+              const isCompleted = status === 'completed' || status === 'complete' || status === 'done' || status === '';
+              const dateOk = tx.dateTime ? isSameDay(tx.dateTime) : true;
+              return isCompleted && dateOk;
+            });
+
+            totalSales = completedToday.reduce((sum: number, tx: any) => sum + (Number(tx.total ?? tx.subtotal ?? 0) || 0), 0);
+            totalTransactions = completedToday.length;
+          } else {
+            // Generic fallback: try to sum numeric fields
+            totalSales = data.reduce((sum: number, item: any) => sum + (Number(item.total ?? item.totalSales ?? 0) || 0), 0);
+            totalTransactions = data.length;
+          }
+        } else if (data && typeof data === 'object') {
+          // Single object response with totals
+          totalSales = Number(data.totalSales ?? data.total ?? data.Total ?? 0) || 0;
+          totalTransactions = Number(data.transactionCount ?? data.totalTransactions ?? 0) || 0;
+        }
 
         setTodaySales(totalSales);
         setTodayTransactions(totalTransactions);
@@ -148,9 +184,9 @@ const CashierPage: React.FC = () => {
   // Get current time for greeting
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return 'Good Morning';
-    if (hour < 18) return 'Good Afternoon';
-    return 'Good Evening';
+    if (hour < 12) return t('admin.goodMorning');
+    if (hour < 18) return t('admin.goodAfternoon');
+    return t('admin.goodEvening');
   };
 
   // Process sales data for chart and stats
@@ -186,7 +222,7 @@ const CashierPage: React.FC = () => {
   const statsCards = salesOverview ? [salesOverview] : [];
 
   return (
-    <div className="min-h-screen w-full relative overflow-hidden bg-white dark:from-stone-950 dark:via-stone-900 dark:to-stone-950">
+    <div className="min-h-screen w-full relative overflow-hidden bg-white dark:bg-gradient-to-br dark:from-stone-950 dark:via-stone-900 dark:to-stone-950">
       {/* Subtle Background Pattern */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-[0.02]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgb(0_0_0)_1px,transparent_0)] bg-[size:40px_40px]"></div>
@@ -206,7 +242,7 @@ const CashierPage: React.FC = () => {
                 {/* Hamburger - Mobile Only */}
                 <button
                   onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className="lg:hidden flex-shrink-0 h-11 w-11 flex items-center justify-center rounded-xl border-2 border-orange-300 dark:border-orange-800/50 bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950 dark:to-amber-950 hover:from-orange-100 hover:to-amber-100 dark:hover:from-orange-900 dark:hover:to-amber-900 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95 shadow-md hover:shadow-lg"
+                  className="lg:hidden flex-shrink-0 h-11 w-11 flex items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 hover:from-orange-600 hover:via-orange-700 hover:to-orange-800 text-white shadow-xl shadow-orange-500/40 hover:shadow-2xl hover:shadow-orange-500/50 transition-all duration-300 active:scale-95"
                 >
                   <FontAwesomeIcon icon={faBars} className="h-4 w-4" />
                 </button>
@@ -214,7 +250,7 @@ const CashierPage: React.FC = () => {
                 {/* Sidebar Toggle - Desktop Only */}
                 <button
                   onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                  className="hidden lg:flex flex-shrink-0 h-[52px] w-[52px] items-center justify-center rounded-xl border-2 border-orange-300 dark:border-orange-800/50 bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950 dark:to-amber-950 hover:from-orange-100 hover:to-amber-100 dark:hover:from-orange-900 dark:hover:to-amber-900 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95 shadow-md hover:shadow-lg"
+                  className="hidden lg:flex flex-shrink-0 h-[52px] w-[52px] items-center justify-center rounded-xl bg-white dark:bg-neutral-700 hover:bg-orange-50 dark:hover:bg-neutral-600 text-stone-700 dark:text-orange-400 hover:text-orange-600 dark:hover:text-orange-300 border-2 border-orange-200/50 dark:border-neutral-600 hover:border-orange-400 dark:hover:border-orange-500 shadow-lg hover:shadow-xl transition-all duration-300 active:scale-95"
                 >
                   <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                 </button>
@@ -222,7 +258,7 @@ const CashierPage: React.FC = () => {
                 {/* Title */}
                 <div>
                   <h1 className="text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-400 dark:to-orange-500 tracking-tight leading-tight">
-                    Cashier Dashboard
+                    {t('cashier.dashboard')}
                   </h1>
                   <p className="hidden sm:block text-sm font-bold text-stone-500 dark:text-stone-400 tracking-wide">Point of Sale System</p>
                 </div>
@@ -314,7 +350,7 @@ const CashierPage: React.FC = () => {
                         Track performance over time
                       </p>
                     </div>
-                    <div className="flex items-center gap-2 bg-stone-50 dark:from-stone-800 dark:via-stone-700 dark:to-stone-800 rounded-xl p-1.5 border border-stone-200 dark:border-stone-600/60">
+                    <div className="flex items-center gap-2 bg-stone-50 dark:bg-neutral-800 rounded-xl p-1.5 border border-stone-200 dark:border-neutral-700">
                       {(['1d', '7d', '30d'] as const).map((range) => (
                         <button
                           key={range}
@@ -322,7 +358,7 @@ const CashierPage: React.FC = () => {
                           className={`relative px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
                             dateRange === range
                               ? 'bg-orange-500 text-white shadow-md'
-                              : 'text-stone-600 dark:text-stone-300 hover:bg-white dark:hover:bg-stone-600'
+                              : 'text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-neutral-700'
                           }`}
                         >
                           {dateRange === range && <div className="absolute inset-0 bg-gradient-to-t from-orange-500/20 to-transparent rounded-xl"></div>}
@@ -336,7 +372,7 @@ const CashierPage: React.FC = () => {
                           className={`relative px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${
                             dateRange === 'custom'
                               ? 'bg-orange-500 text-white shadow-md'
-                              : 'text-stone-600 dark:text-stone-300 hover:bg-white dark:hover:bg-stone-600'
+                              : 'text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-neutral-700'
                           }`}
                         >
                           {dateRange === 'custom' && <div className="absolute inset-0 bg-gradient-to-t from-orange-500/20 to-transparent rounded-xl"></div>}
@@ -446,8 +482,8 @@ const CashierPage: React.FC = () => {
                         <p className="text-sm font-bold uppercase tracking-widest text-stone-500 dark:text-stone-400 mb-3">
                           {stat.title}
                         </p>
-                        <p className="text-4xl sm:text-5xl font-extrabold text-stone-900 dark:from-white dark:via-stone-100 dark:to-stone-200 leading-none mb-4">{stat.value}</p>
-                        <div className="inline-flex items-center gap-2 bg-orange-50 dark:from-orange-900/25 dark:to-amber-900/25 px-4 py-2 rounded-lg border-2 border-orange-100 dark:border-orange-800/40">
+                        <p className="text-4xl sm:text-5xl font-extrabold text-stone-900 dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-white dark:via-stone-100 dark:to-stone-200 leading-none mb-4">{stat.value}</p>
+                        <div className="inline-flex items-center gap-2 bg-orange-50 dark:bg-gradient-to-r dark:from-orange-900/25 dark:to-amber-900/25 px-4 py-2 rounded-lg border-2 border-orange-100 dark:border-orange-800/40">
                           <div className="h-2 w-2 rounded-full bg-orange-500"></div>
                           <p className="text-sm font-bold text-orange-700 dark:text-orange-300">{stat.totalTransactions} orders</p>
                         </div>
@@ -457,7 +493,7 @@ const CashierPage: React.FC = () => {
                       <div className="mb-6">
                         <div className="flex items-center justify-between gap-4 mb-6">
                           <div>
-                            <p className="text-xl font-bold text-stone-900 dark:from-orange-400 dark:to-amber-400 mb-1">Revenue Trend</p>
+                            <p className="text-xl font-bold text-stone-900 dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-orange-400 dark:to-amber-400 mb-1">Revenue Trend</p>
                             <p className="text-sm font-medium text-stone-600 dark:text-stone-400">Sales performance</p>
                           </div>
                           <div className="flex items-center gap-4 bg-gradient-to-r from-stone-50 via-stone-100 to-stone-50 dark:from-stone-800 dark:via-stone-700 dark:to-stone-800 px-6 py-3 rounded-2xl border-2 border-stone-200/60 dark:border-stone-600/60 shadow-xl backdrop-blur-sm">
@@ -574,19 +610,19 @@ const CashierPage: React.FC = () => {
                         {/* Chart Summary Cards */}
                         <div className="mt-5 pt-5 border-t border-stone-200 dark:border-stone-700/60">
                           <div className="grid grid-cols-3 gap-3">
-                            <div className="text-center bg-orange-50 dark:from-orange-900/20 dark:to-amber-900/20 rounded-lg p-3 border border-orange-100 dark:border-orange-700/40">
+                            <div className="text-center bg-orange-50 dark:bg-gradient-to-br dark:from-orange-900/20 dark:to-amber-900/20 rounded-lg p-3 border border-orange-100 dark:border-orange-700/40">
                               <p className="text-xs font-medium uppercase tracking-wide text-orange-600 dark:text-orange-300 mb-1">Min</p>
-                              <p className="text-xl font-bold text-orange-700 dark:from-orange-200 dark:to-amber-200">₱{Math.min(...stat.chartData).toLocaleString()}</p>
+                              <p className="text-xl font-bold text-orange-700 dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-orange-200 dark:to-amber-200">₱{Math.min(...stat.chartData).toLocaleString()}</p>
                             </div>
-                            <div className="text-center bg-amber-50 dark:from-amber-900/20 dark:to-yellow-900/20 rounded-lg p-3 border border-amber-100 dark:border-amber-700/40">
+                            <div className="text-center bg-amber-50 dark:bg-gradient-to-br dark:from-amber-900/20 dark:to-yellow-900/20 rounded-lg p-3 border border-amber-100 dark:border-amber-700/40">
                               <p className="text-xs font-medium uppercase tracking-wide text-amber-600 dark:text-amber-300 mb-1">Avg</p>
-                              <p className="text-xl font-bold text-amber-700 dark:from-amber-200 dark:to-yellow-200">
+                              <p className="text-xl font-bold text-amber-700 dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-amber-200 dark:to-yellow-200">
                                 ₱{Math.round(stat.chartData.reduce((a, b) => a + b, 0) / stat.chartData.length).toLocaleString()}
                               </p>
                             </div>
-                            <div className="text-center bg-green-50 dark:from-rose-900/20 dark:to-orange-900/20 rounded-lg p-3 border border-green-100 dark:border-rose-700/40">
+                            <div className="text-center bg-green-50 dark:bg-gradient-to-br dark:from-rose-900/20 dark:to-orange-900/20 rounded-lg p-3 border border-green-100 dark:border-rose-700/40">
                               <p className="text-xs font-medium uppercase tracking-wide text-green-600 dark:text-rose-300 mb-1">Max</p>
-                              <p className="text-xl font-bold text-green-700 dark:from-rose-200 dark:to-orange-200">₱{Math.max(...stat.chartData).toLocaleString()}</p>
+                              <p className="text-xl font-bold text-green-700 dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-rose-200 dark:to-orange-200">₱{Math.max(...stat.chartData).toLocaleString()}</p>
                             </div>
                           </div>
                         </div>
@@ -624,9 +660,9 @@ const CashierPage: React.FC = () => {
                         Use the sidebar to navigate. Click <span className="px-2 py-0.5 bg-orange-50 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 rounded font-medium">Buy Item</span> to process customer orders and manage transactions.
                       </p>
                       <div className="flex flex-wrap gap-2">
-                        <span className="px-3 py-1.5 bg-orange-50 dark:from-orange-900/30 dark:to-amber-900/30 text-orange-600 dark:text-orange-300 rounded-md text-xs font-medium border border-orange-100 dark:border-orange-800/40">🛒 Process Orders</span>
-                        <span className="px-3 py-1.5 bg-blue-50 dark:from-blue-900/30 dark:to-indigo-900/30 text-blue-600 dark:text-blue-300 rounded-md text-xs font-medium border border-blue-100 dark:border-blue-800/40">📊 Track Sales</span>
-                        <span className="px-3 py-1.5 bg-green-50 dark:from-green-900/30 dark:to-emerald-900/30 text-green-600 dark:text-green-300 rounded-md text-xs font-medium border border-green-100 dark:border-green-800/40">💰 Manage Transactions</span>
+                        <span className="px-3 py-1.5 bg-orange-50 dark:bg-gradient-to-r dark:from-orange-900/30 dark:to-amber-900/30 text-orange-600 dark:text-orange-300 rounded-md text-xs font-medium border border-orange-100 dark:border-orange-800/40">🛒 Process Orders</span>
+                        <span className="px-3 py-1.5 bg-blue-50 dark:bg-gradient-to-r dark:from-blue-900/30 dark:to-indigo-900/30 text-blue-600 dark:text-blue-300 rounded-md text-xs font-medium border border-blue-100 dark:border-blue-800/40">📊 Track Sales</span>
+                        <span className="px-3 py-1.5 bg-green-50 dark:bg-gradient-to-r dark:from-green-900/30 dark:to-emerald-900/30 text-green-600 dark:text-green-300 rounded-md text-xs font-medium border border-green-100 dark:border-green-800/40">💰 Manage Transactions</span>
                       </div>
                     </div>
                   </div>

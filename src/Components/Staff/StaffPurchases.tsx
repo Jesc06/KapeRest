@@ -5,6 +5,7 @@ import { faBars, faSearch, faShoppingCart, faBan, faCheckCircle, faTimesCircle, 
 import StaffSidebar from './StaffSidebar';
 import LogoutPanel from '../Shared/LogoutPanel';
 import { API_BASE_URL } from '../../config/api';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface SalesItem {
   id: number;
@@ -30,6 +31,7 @@ interface Purchase {
 }
 
 const StaffPurchases: React.FC = () => {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
@@ -106,6 +108,9 @@ const StaffPurchases: React.FC = () => {
       const decoded = JSON.parse(jsonPayload);
       const cashierId = decoded.cashierId;
 
+      console.log('Decoded JWT:', decoded);
+      console.log('Cashier ID:', cashierId);
+
       if (!cashierId) {
         console.error('Cashier ID not found in token');
         setIsLoading(false);
@@ -113,23 +118,39 @@ const StaffPurchases: React.FC = () => {
       }
 
       // Updated to match backend - now filters by cashierId on backend
-      const response = await fetch(`${API_BASE_URL}/Purchases/SalesPurchases?cashierId=${cashierId}`, {
+      const url = `${API_BASE_URL}/Purchases/SalesPurchases?cashierId=${cashierId}`;
+      console.log('Fetching from URL:', url);
+      
+      const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       });
+      
+      console.log('Response status:', response.status);
+      console.log('Response ok:', response.ok);
 
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error('API Error Response:', errorText);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data: Purchase[] = await response.json();
+      const responseText = await response.text();
+      console.log('Raw API Response:', responseText);
+      
+      const data: Purchase[] = responseText ? JSON.parse(responseText) : [];
+      console.log('Parsed Purchases:', data);
+      console.log('Number of purchases:', data.length);
+      console.log('Array check:', Array.isArray(data));
+      
       // Backend now handles filtering by cashierId, so we get only user's purchases
       setPurchases(data);
       setIsLoading(false);
     } catch (err) {
       console.error('Error fetching purchases:', err);
+      console.error('Error details:', err instanceof Error ? err.message : err);
       setIsLoading(false);
     }
   };
@@ -145,11 +166,24 @@ const StaffPurchases: React.FC = () => {
     const matchesPayment = selectedPaymentMethod === 'all' || purchase.paymentMethod === selectedPaymentMethod;
     const matchesStatus = selectedStatus === 'all' || purchase.status === selectedStatus;
     
+    console.log('Filtering purchase:', {
+      id: purchase.id,
+      status: purchase.status,
+      selectedStatus,
+      matchesStatus,
+      matchesPayment,
+      matchesSearch
+    });
+    
     return matchesSearch && matchesPayment && matchesStatus;
   });
 
+  console.log('Total purchases:', purchases.length);
+  console.log('Filtered purchases:', filteredPurchases.length);
+  console.log('Selected filters:', { selectedStatus, selectedPaymentMethod, searchTerm });
+
   const handleVoid = async (saleId: number) => {
-    if (!window.confirm('Are you sure you want to void this purchase? This action will restore the stock.')) return;
+    if (!window.confirm(t('purchases.confirmVoid'))) return;
 
     try {
       const token = localStorage.getItem('accessToken');
@@ -170,7 +204,7 @@ const StaffPurchases: React.FC = () => {
 
       if (!cashierId) {
         console.error('Cashier ID not found in token');
-        alert('Authorization error. Please log in again.');
+        alert(t('purchases.authError'));
         return;
       }
 
@@ -195,7 +229,7 @@ const StaffPurchases: React.FC = () => {
       fetchPurchases();
     } catch (err) {
       console.error('Error voiding purchase:', err);
-      alert(`Failed to void purchase. ${err instanceof Error ? err.message : 'Please try again.'}`);
+      alert(`${t('purchases.voidFailed')} ${err instanceof Error ? err.message : t('purchases.tryAgain')}`);
     }
   };
 
@@ -237,8 +271,8 @@ const StaffPurchases: React.FC = () => {
 
                   <div className="hidden sm:flex items-center gap-3">
                     <div>
-                      <h1 className="text-xl font-black text-stone-900 dark:text-white tracking-tight">Purchases</h1>
-                      <p className="text-xs font-medium text-stone-600 dark:text-stone-400">Transaction history</p>
+                      <h1 className="text-xl font-black text-stone-900 dark:text-white tracking-tight">{t('purchases.title')}</h1>
+                      <p className="text-xs font-medium text-stone-600 dark:text-stone-400">{t('purchases.subtitle')}</p>
                     </div>
                   </div>
                 </div>
@@ -250,14 +284,14 @@ const StaffPurchases: React.FC = () => {
                       <FontAwesomeIcon icon={faSearch} className="h-5 w-5 text-stone-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors" />
                       <input
                         type="text"
-                        placeholder="Search purchases..."
+                        placeholder={t('purchases.searchPlaceholder')}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="flex-1 bg-transparent text-sm font-medium text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-neutral-500 focus:outline-none"
                       />
                       {searchTerm && (
                         <span className="text-xs font-bold text-orange-600 dark:text-orange-400 px-2 py-1 rounded-md bg-orange-100 dark:bg-orange-900/30">
-                          {filteredPurchases.length} found
+                          {filteredPurchases.length} {t('purchases.found')}
                         </span>
                       )}
                     </div>
@@ -269,7 +303,7 @@ const StaffPurchases: React.FC = () => {
                   <button
                     onClick={() => navigate('/staff/void-requests')}
                     className="relative p-2.5 text-orange-500 hover:text-orange-600 dark:text-orange-400 dark:hover:text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-950/20 rounded-lg transition-all duration-200 hover:scale-110 active:scale-95"
-                    title="Void Requests"
+                    title={t('purchases.voidRequests')}
                   >
                     <FontAwesomeIcon icon={faBell} className="h-6 w-6" />
                     {voidRequestCount > 0 && (
@@ -301,7 +335,7 @@ const StaffPurchases: React.FC = () => {
                         : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-orange-500 dark:hover:border-orange-500'
                     }`}
                   >
-                    All Payments
+                    {t('purchases.allPayments')}
                   </button>
                   <button
                     onClick={() => setSelectedPaymentMethod('Cash')}
@@ -311,7 +345,7 @@ const StaffPurchases: React.FC = () => {
                         : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-orange-500 dark:hover:border-orange-500'
                     }`}
                   >
-                    Cash
+                    {t('purchases.cash')}
                   </button>
                   <button
                     onClick={() => setSelectedPaymentMethod('GCash')}
@@ -321,7 +355,7 @@ const StaffPurchases: React.FC = () => {
                         : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-orange-500 dark:hover:border-orange-500'
                     }`}
                   >
-                    GCash
+                    {t('purchases.gcash')}
                   </button>
                 </div>
 
@@ -335,7 +369,7 @@ const StaffPurchases: React.FC = () => {
                         : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-green-500 dark:hover:border-green-500'
                     }`}
                   >
-                    All Status
+                    {t('purchases.allStatus')}
                   </button>
                   <button
                     onClick={() => setSelectedStatus('Completed')}
@@ -345,7 +379,7 @@ const StaffPurchases: React.FC = () => {
                         : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-green-500 dark:hover:border-green-500'
                     }`}
                   >
-                    Completed
+                    {t('purchases.completed')}
                   </button>
                   <button
                     onClick={() => setSelectedStatus('Voided')}
@@ -355,7 +389,7 @@ const StaffPurchases: React.FC = () => {
                         : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-2 border-stone-200 dark:border-stone-700 hover:border-red-500 dark:hover:border-red-500'
                     }`}
                   >
-                    Voided
+                    {t('purchases.voided')}
                   </button>
                 </div>
               </div>
@@ -372,8 +406,8 @@ const StaffPurchases: React.FC = () => {
                           <FontAwesomeIcon icon={faShoppingCart} className="h-7 w-7 text-white" />
                         </div>
                         <div>
-                          <h3 className="text-2xl font-black text-stone-900 dark:text-white tracking-tight">Purchase History</h3>
-                          <p className="text-sm font-medium text-stone-600 dark:text-stone-400 mt-0.5">All transaction records</p>
+                          <h3 className="text-2xl font-black text-stone-900 dark:text-white tracking-tight">{t('purchases.purchaseHistory')}</h3>
+                          <p className="text-sm font-medium text-stone-600 dark:text-stone-400 mt-0.5">{t('purchases.allTransactionRecords')}</p>
                         </div>
                       </div>
                     </div>
@@ -385,32 +419,32 @@ const StaffPurchases: React.FC = () => {
                     <div className="flex items-center justify-center py-20">
                       <div className="text-center">
                         <div className="inline-block h-12 w-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                        <p className="text-stone-600 dark:text-stone-400">Loading purchases...</p>
+                        <p className="text-stone-600 dark:text-stone-400">{t('purchases.loading')}</p>
                       </div>
                     </div>
                   ) : filteredPurchases.length === 0 ? (
                     <div className="flex items-center justify-center py-20">
                       <div className="text-center">
                         <FontAwesomeIcon icon={faShoppingCart} className="h-16 w-16 text-neutral-300 dark:text-neutral-700 mb-4" />
-                        <p className="text-stone-600 dark:text-stone-400 text-lg font-medium">No purchases found</p>
-                        <p className="text-neutral-500 dark:text-stone-500 text-sm mt-2">Try adjusting your search</p>
+                        <p className="text-stone-600 dark:text-stone-400 text-lg font-medium">{t('purchases.noPurchases')}</p>
+                        <p className="text-neutral-500 dark:text-stone-500 text-sm mt-2">{t('purchases.tryAdjusting')}</p>
                       </div>
                     </div>
                   ) : (
                     <table className="w-full">
                       <thead>
                         <tr className="border-b border-orange-100 dark:border-stone-700 bg-orange-50/50 dark:bg-stone-800/50">
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Sale ID</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Receipt No.</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Item Name</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Date & Time</th>
-                          <th className="px-6 py-4 text-right text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Subtotal</th>
-                          <th className="px-6 py-4 text-right text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Tax</th>
-                          <th className="px-6 py-4 text-right text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Discount</th>
-                          <th className="px-6 py-4 text-right text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Total</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Payment</th>
-                          <th className="px-6 py-4 text-center text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Status</th>
-                          <th className="px-6 py-4 text-center text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Actions</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">{t('purchases.saleId')}</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">{t('purchases.receiptNo')}</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">{t('purchases.itemName')}</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">{t('purchases.dateTime')}</th>
+                          <th className="px-6 py-4 text-right text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">{t('purchases.subtotal')}</th>
+                          <th className="px-6 py-4 text-right text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">{t('purchases.tax')}</th>
+                          <th className="px-6 py-4 text-right text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">{t('purchases.discount')}</th>
+                          <th className="px-6 py-4 text-right text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">{t('purchases.total')}</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">{t('purchases.payment')}</th>
+                          <th className="px-6 py-4 text-center text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">{t('purchases.status')}</th>
+                          <th className="px-6 py-4 text-center text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">{t('purchases.actions')}</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-orange-100 dark:divide-neutral-800">
@@ -468,12 +502,12 @@ const StaffPurchases: React.FC = () => {
                               {purchase.status === "Completed" ? (
                                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
                                   <FontAwesomeIcon icon={faCheckCircle} className="h-3 w-3" />
-                                  Completed
+                                  {t('purchases.completed')}
                                 </span>
                               ) : purchase.status === "Voided" ? (
                                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400">
                                   <FontAwesomeIcon icon={faTimesCircle} className="h-3 w-3" />
-                                  Voided
+                                  {t('purchases.voided')}
                                 </span>
                               ) : (
                                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400">
@@ -490,10 +524,10 @@ const StaffPurchases: React.FC = () => {
                                     ? "bg-stone-100 dark:bg-stone-800 text-stone-400 dark:text-stone-600 cursor-not-allowed opacity-50"
                                     : "bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 active:scale-95 cursor-pointer"
                                 }`}
-                                title={purchase.status === "Voided" ? "Already voided" : "Void this purchase"}
+                                title={purchase.status === "Voided" ? t('purchases.alreadyVoided') : t('purchases.voidThisPurchase')}
                               >
                                 <FontAwesomeIcon icon={faBan} className="h-3.5 w-3.5" />
-                                Void
+                                {t('purchases.void')}
                               </button>
                             </td>
                           </tr>

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faSearch, faEdit, faTrash, faBoxes, faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faSearch, faEdit, faTrash, faBoxes, faDownload, faTimes, faSave } from '@fortawesome/free-solid-svg-icons';
 import AdminSidebar from './AdminSidebar';
 import LogoutPanel from '../Shared/LogoutPanel';
 import { API_BASE_URL } from '../../config/api';
+import { apiPut, handleApiResponse } from '../../utils/apiHandler';
 
 interface Branch {
   branchName: string;
@@ -28,6 +29,14 @@ interface Stock {
   cashier: Cashier | null;
 }
 
+interface UpdateProductRequest {
+  id: number;
+  productName: string;
+  prices: number;
+  stocks: number;
+  units: string;
+}
+
 const InventoryPage: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
@@ -37,6 +46,15 @@ const InventoryPage: React.FC = () => {
   const [filterUnit, setFilterUnit] = useState<string>('all');
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editForm, setEditForm] = useState<UpdateProductRequest>({
+    id: 0,
+    productName: '',
+    prices: 0,
+    stocks: 0,
+    units: ''
+  });
+  const [isUpdating, setIsUpdating] = useState(false);
 
   // Fetch inventory from API
   useEffect(() => {
@@ -110,8 +128,53 @@ const InventoryPage: React.FC = () => {
   const lowStockItems = stocks.filter(s => s.stocks < 100).length;
 
   const handleUpdate = (stockId: number) => {
-    // Navigate to update page
-    console.log('Update stock:', stockId);
+    const stock = stocks.find(s => s.id === stockId);
+    if (stock) {
+      setEditForm({
+        id: stock.id,
+        productName: stock.productName,
+        prices: stock.costPrice,
+        stocks: stock.stocks,
+        units: stock.units
+      });
+      setIsEditModalOpen(true);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsEditModalOpen(false);
+    setEditForm({
+      id: 0,
+      productName: '',
+      prices: 0,
+      stocks: 0,
+      units: ''
+    });
+  };
+
+  const handleSubmitUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsUpdating(true);
+
+    try {
+      const response = await apiPut('/Inventory/UpdateProductOfSuppliers', editForm);
+      const updatedProduct = await handleApiResponse(response);
+
+      // Update the local state with the updated product
+      setStocks(stocks.map(stock => 
+        stock.id === updatedProduct.id 
+          ? { ...stock, productName: updatedProduct.productName, stocks: updatedProduct.stocks, units: updatedProduct.units, costPrice: updatedProduct.prices }
+          : stock
+      ));
+
+      handleCloseModal();
+      alert('Product updated successfully!');
+    } catch (error) {
+      console.error('Error updating product:', error);
+      alert(`Failed to update product: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   const handleDelete = (stockId: number) => {
@@ -184,7 +247,7 @@ const InventoryPage: React.FC = () => {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white dark:from-neutral-800 dark:to-neutral-700 hover:bg-orange-50 dark:hover:bg-orange-950/30 text-stone-700 dark:text-stone-300 hover:text-orange-600 dark:hover:text-orange-400 border-2 border-orange-200/50 dark:border-orange-900/50 hover:border-orange-400 dark:hover:border-orange-600 shadow-lg hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-300 active:scale-95 hover:scale-105"
+                className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white dark:bg-neutral-700 hover:bg-orange-50 dark:hover:bg-neutral-600 text-stone-700 dark:text-orange-400 hover:text-orange-600 dark:hover:text-orange-300 border-2 border-orange-200/50 dark:border-neutral-600 hover:border-orange-400 dark:hover:border-orange-500 shadow-lg hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-300 active:scale-95 hover:scale-105"
                 title={sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
               >
                 <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
@@ -559,6 +622,129 @@ const InventoryPage: React.FC = () => {
 
         </div>
       </div>
+
+      {/* Edit Modal */}
+      {isEditModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="relative w-full max-w-2xl bg-white dark:bg-neutral-800 rounded-3xl shadow-2xl border-2 border-orange-200/30 dark:border-orange-900/30 overflow-hidden">
+            {/* Modal Header */}
+            <div className="relative overflow-hidden border-b-2 border-orange-500/30 bg-gradient-to-r from-orange-50/50 via-white to-orange-50/50 dark:from-orange-950/20 dark:via-neutral-800 dark:to-orange-950/20 px-8 py-6">
+              <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-orange-500 via-orange-600 to-orange-700"></div>
+              
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 shadow-xl shadow-orange-500/40">
+                    <FontAwesomeIcon icon={faEdit} className="h-7 w-7 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-black bg-gradient-to-r from-orange-600 to-orange-700 dark:from-orange-400 dark:to-orange-500 bg-clip-text text-transparent tracking-tight">
+                      Update Product
+                    </h3>
+                    <p className="text-sm font-semibold text-stone-600 dark:text-stone-400 mt-1">
+                      Modify product details
+                    </p>
+                  </div>
+                </div>
+                
+                <button
+                  onClick={handleCloseModal}
+                  className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-100 text-red-600 hover:bg-red-600 hover:text-white dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-600 transition-all duration-300 hover:scale-110 active:scale-95 shadow-md hover:shadow-lg"
+                >
+                  <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <form onSubmit={handleSubmitUpdate} className="px-8 py-6">
+              <div className="space-y-6">
+                {/* Product Name */}
+                <div>
+                  <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2">
+                    Product Name
+                  </label>
+                  <input
+                    type="text"
+                    value={editForm.productName}
+                    onChange={(e) => setEditForm({ ...editForm, productName: e.target.value })}
+                    className="w-full px-4 py-3 rounded-xl bg-stone-50 dark:bg-neutral-700 border-2 border-stone-200 dark:border-neutral-600 focus:border-orange-500 dark:focus:border-orange-500 text-stone-900 dark:text-white font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
+                    required
+                  />
+                </div>
+
+                {/* Price */}
+                <div>
+                  <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2">
+                    Price (₱)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={editForm.prices}
+                    onChange={(e) => setEditForm({ ...editForm, prices: parseFloat(e.target.value) || 0 })}
+                    className="w-full px-4 py-3 rounded-xl bg-stone-50 dark:bg-neutral-700 border-2 border-stone-200 dark:border-neutral-600 focus:border-orange-500 dark:focus:border-orange-500 text-stone-900 dark:text-white font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
+                    required
+                    min="0"
+                  />
+                </div>
+
+                {/* Stocks */}
+                <div>
+                  <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2">
+                    Stock Quantity
+                  </label>
+                  <input
+                    type="number"
+                    value={editForm.stocks}
+                    onChange={(e) => setEditForm({ ...editForm, stocks: parseInt(e.target.value) || 0 })}
+                    className="w-full px-4 py-3 rounded-xl bg-stone-50 dark:bg-neutral-700 border-2 border-stone-200 dark:border-neutral-600 focus:border-orange-500 dark:focus:border-orange-500 text-stone-900 dark:text-white font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
+                    required
+                    min="0"
+                  />
+                </div>
+
+                {/* Units */}
+                <div>
+                  <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2">
+                    Unit
+                  </label>
+                  <select
+                    value={editForm.units}
+                    onChange={(e) => setEditForm({ ...editForm, units: e.target.value })}
+                    className="w-full px-4 py-3 rounded-xl bg-stone-50 dark:bg-neutral-700 border-2 border-stone-200 dark:border-neutral-600 focus:border-orange-500 dark:focus:border-orange-500 text-stone-900 dark:text-white font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500/20 cursor-pointer"
+                    required
+                  >
+                    <option value="">Select unit</option>
+                    <option value="ml">ML</option>
+                    <option value="kg">KG</option>
+                    <option value="pcs">PCS</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="flex items-center justify-end gap-3 mt-8 pt-6 border-t-2 border-stone-200 dark:border-neutral-700">
+                <button
+                  type="button"
+                  onClick={handleCloseModal}
+                  className="px-6 py-3 rounded-xl bg-stone-100 text-stone-700 hover:bg-stone-200 dark:bg-neutral-700 dark:text-stone-300 dark:hover:bg-neutral-600 font-bold text-sm transition-all duration-300 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg"
+                  disabled={isUpdating}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 hover:from-orange-600 hover:via-orange-700 hover:to-orange-800 text-white font-bold text-sm transition-all duration-300 hover:scale-105 active:scale-95 shadow-xl shadow-orange-500/40 hover:shadow-2xl hover:shadow-orange-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={isUpdating}
+                >
+                  <FontAwesomeIcon icon={faSave} className="h-4 w-4" />
+                  {isUpdating ? 'Updating...' : 'Update Product'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -93,7 +93,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
       }
 
       const gcashPaymentInfo = JSON.parse(storedData);
-      const { cart: savedCart, discount, tax, total: expectedTotal } = gcashPaymentInfo;
+      const { cart: savedCart, discount, tax } = gcashPaymentInfo;
 
       console.log('Checking payment status for reference:', referenceId);
 
@@ -137,7 +137,6 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
   // Helper function to attempt direct purchase (fallback when status endpoint not available)
   const attemptDirectPurchase = async (savedCart: any[], discount: number, tax: number, referenceId: string, token: string) => {
-    let allSuccessful = true;
     const taxRate = tax || 12;
     const discountValue = discount || 0;
 
@@ -175,12 +174,11 @@ const MainPanel: React.FC<MainPanelProps> = ({
             console.log('Item might be already purchased or duplicate transaction');
             // This is actually okay - consider it successful
           } else {
-            allSuccessful = false;
+            console.log('Purchase failed:', errorText);
           }
         }
       } catch (error) {
         console.error('Error purchasing item:', error);
-        allSuccessful = false;
       }
     }
 
