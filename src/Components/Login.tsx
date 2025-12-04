@@ -95,20 +95,22 @@ const Login: React.FC = () => {
   const errorSummary = errors.api || (Object.keys(errors).length > 1 ? Object.values(errors).filter(e => e !== errors.api).join(". ") : null);
 
   return (
-    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-gradient-to-br from-amber-50 via-orange-50/60 to-stone-100 dark:bg-neutral-900 font-sans">
-      <TintedBackdrop />
+    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-[#1f1814] dark:!bg-[#1f1814] font-sans">
+      <div className="hidden">
+        <TintedBackdrop />
+      </div>
       
       {/* Clean Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-32 -right-32 w-[600px] h-[600px] bg-gradient-to-br from-orange-400/20 via-amber-400/15 to-yellow-400/10 dark:from-transparent dark:via-transparent dark:to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s' }}></div>
-        <div className="absolute -bottom-48 -left-48 w-[500px] h-[500px] bg-gradient-to-tr from-amber-400/20 via-orange-300/15 to-rose-300/10 dark:from-transparent dark:via-transparent dark:to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '3s' }}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-r from-orange-300/12 via-amber-300/8 to-orange-300/12 dark:from-transparent dark:via-transparent dark:to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '14s', animationDelay: '6s' }}></div>
+        <div className="absolute -top-32 -right-32 w-[600px] h-[600px] bg-gradient-to-br from-transparent via-transparent to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s' }}></div>
+        <div className="absolute -bottom-48 -left-48 w-[500px] h-[500px] bg-gradient-to-tr from-transparent via-transparent to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '3s' }}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-r from-transparent via-transparent to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '14s', animationDelay: '6s' }}></div>
       </div>
 
       <main className="relative z-10 flex flex-1 items-center justify-center px-4 py-3 sm:px-6 md:py-4">
         <div className={`w-full max-w-[440px] transition-all duration-700 ease-out ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           {/* Clean Card Design */}
-          <div className="relative overflow-hidden rounded-2xl border border-white/60 bg-white/80 backdrop-blur-xl p-4 sm:p-5 shadow-2xl shadow-orange-500/10 dark:border-orange-500/20 dark:bg-stone-900/85 dark:shadow-orange-900/20">
+          <div className="relative overflow-hidden rounded-2xl border border-stone-700/50 bg-neutral-800 p-4 sm:p-5 shadow-2xl shadow-black/50 dark:border-stone-700/50 dark:bg-neutral-800 dark:shadow-black/50">
             
             {/* Top accent line */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 via-amber-400 to-orange-600"></div>
@@ -117,7 +119,7 @@ const Login: React.FC = () => {
             <div className="relative mb-3 text-center">
               {/* Logo */}
               <div className="inline-flex items-center justify-center mb-2">
-                <div className="p-2.5 bg-gradient-to-br from-orange-100 to-amber-100 dark:from-stone-800 dark:to-stone-700 rounded-2xl shadow-lg shadow-orange-500/20 dark:shadow-orange-900/30">
+                <div className="p-2.5 bg-gradient-to-br from-orange-500/20 to-amber-500/20 dark:bg-gradient-to-br dark:from-orange-500/20 dark:to-amber-500/20 rounded-2xl shadow-lg shadow-orange-500/20 dark:shadow-orange-900/30">
                   <img src={KapeRestLogo} alt="KapeRest Logo" className="w-14 h-14 object-contain" />
                 </div>
               </div>
@@ -152,7 +154,7 @@ const Login: React.FC = () => {
               <div className="space-y-4">
                 {/* Email Field */}
                 <div className="group">
-                  <label htmlFor="email" className="block text-sm font-semibold text-stone-700 mb-2 dark:text-stone-300 break-words leading-tight">
+                  <label htmlFor="email" className="block text-sm font-semibold text-stone-300 mb-2 dark:text-stone-300 break-words leading-tight">
                     {t('login.email')}
                   </label>
                   <div className="relative">
@@ -164,12 +166,12 @@ const Login: React.FC = () => {
                       value={email}
                       onChange={e => setEmail(e.target.value)}
                       disabled={isLoading}
-                      className={`block w-full rounded-xl border-2 bg-white pl-4 pr-12 py-3 text-base text-stone-900 placeholder:text-stone-400 transition-all duration-200 focus:outline-none dark:bg-stone-800/50 dark:text-stone-50 dark:placeholder:text-stone-500
+                      className={`block w-full rounded-xl border-2 bg-[#1a1410] pl-4 pr-12 py-3 text-base text-stone-100 placeholder:text-stone-500 transition-all duration-200 focus:outline-none dark:bg-[#1a1410] dark:text-stone-50 dark:placeholder:text-stone-500
                         ${emailValid && email.trim().length > 0
-                          ? 'border-emerald-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 dark:border-emerald-500 dark:focus:border-emerald-400 dark:focus:ring-emerald-400/20'
+                          ? 'border-emerald-500/50 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 dark:border-emerald-500/50 dark:focus:border-emerald-500 dark:focus:ring-emerald-500/20'
                           : errors.email
-                            ? 'border-red-300 focus:border-red-500 focus:ring-4 focus:ring-red-500/20 dark:border-red-500 dark:focus:border-red-400'
-                            : 'border-stone-200 hover:border-orange-400 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:border-stone-700 dark:hover:border-orange-500 dark:focus:border-orange-400 dark:focus:ring-orange-400/20'}
+                            ? 'border-red-500/50 focus:border-red-500 focus:ring-4 focus:ring-red-500/20 dark:border-red-500/50 dark:focus:border-red-500'
+                            : 'border-stone-600/50 hover:border-orange-500/70 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:border-stone-600/50 dark:hover:border-orange-500/70 dark:focus:border-orange-500 dark:focus:ring-orange-500/20'}
                         ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
                       placeholder="you@example.com"
                       aria-invalid={errors.email ? 'true' : 'false'}
@@ -196,7 +198,7 @@ const Login: React.FC = () => {
 
                 {/* Password Field */}
                 <div className="group">
-                  <label htmlFor="password" className="flex items-center justify-between text-sm font-semibold text-stone-700 mb-2 dark:text-stone-300 gap-2">
+                  <label htmlFor="password" className="flex items-center justify-between text-sm font-semibold text-stone-300 mb-2 dark:text-stone-300 gap-2">
                     <span className="break-words leading-tight">{t('login.password')}</span>
                     {capsOn && (
                       <span className="text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded dark:text-amber-400 dark:bg-amber-900/30">
@@ -214,12 +216,12 @@ const Login: React.FC = () => {
                       onKeyUp={(e) => setCapsOn((e as any).getModifierState && (e as any).getModifierState('CapsLock'))}
                       onKeyDown={(e) => setCapsOn((e as any).getModifierState && (e as any).getModifierState('CapsLock'))}
                       disabled={isLoading}
-                      className={`block w-full rounded-xl border-2 bg-white pl-4 pr-12 py-3 text-base text-stone-900 placeholder:text-stone-400 transition-all duration-200 focus:outline-none dark:bg-stone-800/50 dark:text-stone-50 dark:placeholder:text-stone-500
+                      className={`block w-full rounded-xl border-2 bg-[#1a1410] pl-4 pr-12 py-3 text-base text-stone-100 placeholder:text-stone-500 transition-all duration-200 focus:outline-none dark:bg-[#1a1410] dark:text-stone-50 dark:placeholder:text-stone-500
                         ${passwordValid
-                          ? 'border-emerald-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 dark:border-emerald-500 dark:focus:border-emerald-400 dark:focus:ring-emerald-400/20'
+                          ? 'border-emerald-500/50 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 dark:border-emerald-500/50 dark:focus:border-emerald-500 dark:focus:ring-emerald-500/20'
                           : errors.password
-                            ? 'border-red-300 focus:border-red-500 focus:ring-4 focus:ring-red-500/20 dark:border-red-500 dark:focus:border-red-400'
-                            : 'border-stone-200 hover:border-orange-400 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:border-stone-700 dark:hover:border-orange-500 dark:focus:border-orange-400 dark:focus:ring-orange-400/20'}
+                            ? 'border-red-500/50 focus:border-red-500 focus:ring-4 focus:ring-red-500/20 dark:border-red-500/50 dark:focus:border-red-500'
+                            : 'border-stone-600/50 hover:border-orange-500/70 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:border-stone-600/50 dark:hover:border-orange-500/70 dark:focus:border-orange-500 dark:focus:ring-orange-500/20'}
                         ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
                       placeholder="Enter your password"
                       aria-invalid={errors.password ? 'true' : 'false'}
@@ -230,7 +232,7 @@ const Login: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-stone-400 hover:text-stone-600 hover:bg-stone-100 transition-colors dark:text-stone-500 dark:hover:text-stone-300 dark:hover:bg-stone-700"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-stone-400 hover:text-stone-200 hover:bg-stone-700/50 transition-colors dark:text-stone-400 dark:hover:text-stone-200 dark:hover:bg-stone-700/50"
                       aria-label={showPassword ? "Hide password" : "Show password"}
                     >
                       {showPassword ? (
@@ -269,11 +271,11 @@ const Login: React.FC = () => {
 
               {/* Remember Me */}
               <div className="flex items-center justify-between pt-1">
-                <label className="inline-flex items-center gap-2 text-sm font-medium text-stone-600 cursor-pointer dark:text-stone-400">
+                <label className="inline-flex items-center gap-2 text-sm font-medium text-stone-400 cursor-pointer dark:text-stone-400">
                   <input
                     type="checkbox"
                     disabled={isLoading}
-                    className="w-4 h-4 rounded border-stone-300 text-orange-500 focus:ring-orange-500 focus:ring-2 dark:border-stone-600 dark:bg-stone-800"
+                    className="w-4 h-4 rounded border-stone-600/50 text-orange-500 focus:ring-orange-500 focus:ring-2 dark:border-stone-600/50 dark:bg-stone-900/50"
                   />
                   <span>Remember me</span>
                 </label>
@@ -308,10 +310,10 @@ const Login: React.FC = () => {
             {/* Divider */}
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-stone-200 dark:border-stone-700"></div>
+                <div className="w-full border-t border-stone-700/50 dark:border-stone-700/50"></div>
               </div>
               <div className="relative flex justify-center">
-                <span className="bg-white px-3 text-sm text-stone-500 dark:bg-stone-900 dark:text-stone-400">
+                <span className="bg-neutral-800 px-3 text-sm text-stone-400 dark:bg-neutral-800 dark:text-stone-400">
                   {t('login.noAccount')}
                 </span>
               </div>
@@ -321,7 +323,7 @@ const Login: React.FC = () => {
             <div className="text-center">
               <Link 
                 to="/register" 
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-orange-200 bg-orange-50 text-orange-600 font-medium text-sm hover:bg-orange-100 hover:border-orange-300 transition-all duration-200 dark:border-orange-700/50 dark:bg-orange-900/20 dark:text-orange-400 dark:hover:bg-orange-900/40"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-orange-500/30 bg-orange-500/10 text-orange-400 font-medium text-sm hover:bg-orange-500/20 hover:border-orange-500/50 transition-all duration-200 dark:border-orange-500/30 dark:bg-orange-500/10 dark:text-orange-400 dark:hover:bg-orange-500/20"
               >
                 <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />

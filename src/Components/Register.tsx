@@ -207,20 +207,22 @@ const Register: React.FC = () => {
   }, [roleOpen, branchOpen, cashierOpen]);
 
   return (
-    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-gradient-to-br from-amber-50 via-orange-50/60 to-stone-100 dark:bg-neutral-900 font-sans">
-      <TintedBackdrop />
+    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-[#1f1814] dark:!bg-[#1f1814] font-sans">
+      <div className="hidden">
+        <TintedBackdrop />
+      </div>
       
       {/* Clean Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-32 -right-32 w-[600px] h-[600px] bg-gradient-to-br from-orange-400/20 via-amber-400/15 to-yellow-400/10 dark:from-transparent dark:via-transparent dark:to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s' }}></div>
-        <div className="absolute -bottom-48 -left-48 w-[500px] h-[500px] bg-gradient-to-tr from-amber-400/20 via-orange-300/15 to-rose-300/10 dark:from-transparent dark:via-transparent dark:to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '3s' }}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-r from-orange-300/12 via-amber-300/8 to-orange-300/12 dark:from-transparent dark:via-transparent dark:to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '14s', animationDelay: '6s' }}></div>
+        <div className="absolute -top-32 -right-32 w-[600px] h-[600px] bg-gradient-to-br from-transparent via-transparent to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s' }}></div>
+        <div className="absolute -bottom-48 -left-48 w-[500px] h-[500px] bg-gradient-to-tr from-transparent via-transparent to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '3s' }}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-r from-transparent via-transparent to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '14s', animationDelay: '6s' }}></div>
       </div>
       
       <main className="relative z-10 flex flex-1 items-center justify-center px-4 py-3 sm:px-6 md:py-4">
         <div className="relative w-full max-w-[620px]">
           {/* Clean Card Design */}
-          <div className="relative overflow-hidden rounded-2xl border border-white/60 bg-white/80 backdrop-blur-xl p-4 sm:p-5 shadow-2xl shadow-orange-500/10 dark:border-orange-500/20 dark:bg-stone-900/85 dark:shadow-orange-900/20">
+          <div className="relative overflow-hidden rounded-2xl border border-stone-700/50 bg-neutral-800 p-4 sm:p-5 shadow-2xl shadow-black/50 dark:border-stone-700/50 dark:bg-neutral-800 dark:shadow-black/50">
             
             {/* Top accent line */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 via-amber-400 to-orange-600"></div>
@@ -229,7 +231,7 @@ const Register: React.FC = () => {
             <div className="relative mb-3 text-center">
               {/* Logo */}
               <div className="inline-flex items-center justify-center mb-2">
-                <div className="p-2 bg-gradient-to-br from-orange-100 to-amber-100 dark:from-stone-800 dark:to-stone-700 rounded-xl shadow-lg shadow-orange-500/20 dark:shadow-orange-900/30">
+                <div className="p-2.5 bg-gradient-to-br from-orange-500/20 to-amber-500/20 dark:bg-gradient-to-br dark:from-orange-500/20 dark:to-amber-500/20 rounded-2xl shadow-lg shadow-orange-500/20 dark:shadow-orange-900/30">
                   <img src={KapeRestLogo} alt="KapeRest Logo" className="w-10 h-10 object-contain" />
                 </div>
               </div>
@@ -266,7 +268,7 @@ const Register: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {/* First Name */}
                   <div className="relative">
-                    <label htmlFor="firstName" className="block text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2 break-words leading-tight">{t('register.firstName')}</label>
+                    <label htmlFor="firstName" className="block text-sm font-semibold text-stone-300 dark:text-stone-300 tracking-wide mb-2 break-words leading-tight">{t('register.firstName')}</label>
                     <div className="relative group">
                       <input
                         id="firstName"
@@ -277,8 +279,8 @@ const Register: React.FC = () => {
                         onFocus={() => setFocusField('firstName')}
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
-                        className={`peer block w-full rounded-lg border-2 bg-stone-50 pr-12 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 placeholder:text-stone-400 dark:bg-stone-950/50 dark:text-stone-50 dark:placeholder:text-stone-500
-                          ${validFirst ? 'border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400/20 dark:focus:border-emerald-400' : 'border-stone-300 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/20 dark:focus:border-orange-400'}
+                        className={`peer block w-full rounded-lg border-2 bg-[#1a1410] pr-12 px-4 py-3 text-base leading-tight text-stone-100 focus:outline-none transition-all duration-200 placeholder:text-stone-500 dark:bg-[#1a1410] dark:text-stone-50 dark:placeholder:text-stone-500
+                          ${validFirst ? 'border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500/50 dark:focus:ring-emerald-500/20 dark:focus:border-emerald-500' : 'border-stone-600/50 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-600/50 dark:focus:ring-orange-500/20 dark:focus:border-orange-500'}
                           ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
                         placeholder="Juan"
                         aria-invalid={errors.firstName ? 'true' : 'false'}
@@ -292,7 +294,7 @@ const Register: React.FC = () => {
                   </div>
                   {/* Middle Name (optional) */}
                   <div className="relative">
-                    <label htmlFor="middleName" className="block text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2 break-words leading-tight">{t('register.middleName')}</label>
+                    <label htmlFor="middleName" className="block text-sm font-semibold text-stone-300 dark:text-stone-300 tracking-wide mb-2 break-words leading-tight">{t('register.middleName')}</label>
                     <div className="relative group">
                       <input
                         id="middleName"
@@ -303,7 +305,7 @@ const Register: React.FC = () => {
                         onFocus={() => setFocusField('middleName')}
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
-                        className={`peer block w-full rounded-lg border-2 bg-stone-50 pr-4 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 placeholder:text-stone-400 dark:bg-stone-950/50 dark:text-stone-50 dark:placeholder:text-stone-500 border-stone-300 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/20 dark:focus:border-orange-400
+                        className={`peer block w-full rounded-lg border-2 bg-[#1a1410] pr-4 px-4 py-3 text-base leading-tight text-stone-100 focus:outline-none transition-all duration-200 placeholder:text-stone-500 dark:bg-[#1a1410] dark:text-stone-50 dark:placeholder:text-stone-500 border-stone-600/50 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-600/50 dark:focus:ring-orange-500/20 dark:focus:border-orange-500
                           ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
                         placeholder="Cruz"
                       />
@@ -311,7 +313,7 @@ const Register: React.FC = () => {
                   </div>
                   {/* Last Name */}
                   <div className="relative">
-                    <label htmlFor="lastName" className="block text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2 break-words leading-tight">{t('register.lastName')}</label>
+                    <label htmlFor="lastName" className="block text-sm font-semibold text-stone-300 dark:text-stone-300 tracking-wide mb-2 break-words leading-tight">{t('register.lastName')}</label>
                     <div className="relative group">
                       <input
                         id="lastName"
@@ -322,8 +324,8 @@ const Register: React.FC = () => {
                         onFocus={() => setFocusField('lastName')}
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
-                        className={`peer block w-full rounded-lg border-2 bg-stone-50 pr-12 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 placeholder:text-stone-400 dark:bg-stone-950/50 dark:text-stone-50 dark:placeholder:text-stone-500
-                          ${validLast ? 'border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400/20 dark:focus:border-emerald-400' : 'border-stone-300 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/20 dark:focus:border-orange-400'}
+                        className={`peer block w-full rounded-lg border-2 bg-[#1a1410] pr-12 px-4 py-3 text-base leading-tight text-stone-100 focus:outline-none transition-all duration-200 placeholder:text-stone-500 dark:bg-[#1a1410] dark:text-stone-50 dark:placeholder:text-stone-500
+                          ${validLast ? 'border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500/50 dark:focus:ring-emerald-500/20 dark:focus:border-emerald-500' : 'border-stone-600/50 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-600/50 dark:focus:ring-orange-500/20 dark:focus:border-orange-500'}
                           ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
                         placeholder="Dela Cruz"
                         aria-invalid={errors.lastName ? 'true' : 'false'}
@@ -340,7 +342,7 @@ const Register: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Email */}
                   <div className="relative">
-                    <label htmlFor="email" className="block text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2 break-words leading-tight">{t('register.email')}</label>
+                    <label htmlFor="email" className="block text-sm font-semibold text-stone-300 dark:text-stone-300 tracking-wide mb-2 break-words leading-tight">{t('register.email')}</label>
                     <div className="relative group">
                       <input
                         id="email"
@@ -351,8 +353,8 @@ const Register: React.FC = () => {
                         onFocus={() => setFocusField('email')}
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
-                        className={`peer block w-full rounded-lg border-2 bg-stone-50 pr-12 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 placeholder:text-stone-400 dark:bg-stone-950/50 dark:text-stone-50 dark:placeholder:text-stone-500
-                          ${validEmail ? 'border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400/20 dark:focus:border-emerald-400' : 'border-stone-300 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/20 dark:focus:border-orange-400'}
+                        className={`peer block w-full rounded-lg border-2 bg-[#1a1410] pr-12 px-4 py-3 text-base leading-tight text-stone-100 focus:outline-none transition-all duration-200 placeholder:text-stone-500 dark:bg-[#1a1410] dark:text-stone-50 dark:placeholder:text-stone-500
+                          ${validEmail ? 'border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500/50 dark:focus:ring-emerald-500/20 dark:focus:border-emerald-500' : 'border-stone-600/50 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-600/50 dark:focus:ring-orange-500/20 dark:focus:border-orange-500'}
                           ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
                         placeholder="your.email@company.com"
                         aria-invalid={errors.email ? 'true' : 'false'}
@@ -366,7 +368,7 @@ const Register: React.FC = () => {
                   </div>
                   {/* Password */}
                   <div className="relative">
-                    <label htmlFor="password" className="flex items-center justify-between text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2 gap-2">
+                    <label htmlFor="password" className="flex items-center justify-between text-sm font-semibold text-stone-300 dark:text-stone-300 tracking-wide mb-2 gap-2">
                       <span className="break-words leading-tight flex-1 min-w-0">{t('register.password')}</span>
                       {capsOn && (
                         <span className="text-xs font-bold text-amber-600 flex items-center gap-1 dark:text-amber-400">
@@ -389,8 +391,8 @@ const Register: React.FC = () => {
                         onFocus={() => setFocusField('password')}
                         onBlur={() => setFocusField(null)}
                         disabled={isLoading}
-                        className={`peer block w-full rounded-lg border-2 bg-stone-50 pr-12 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 placeholder:text-stone-400 dark:bg-stone-950/50 dark:text-stone-50 dark:placeholder:text-stone-500
-                          ${validPassword ? 'border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400/20 dark:focus:border-emerald-400' : 'border-stone-300 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/20 dark:focus:border-orange-400'}
+                        className={`peer block w-full rounded-lg border-2 bg-[#1a1410] pr-12 px-4 py-3 text-base leading-tight text-stone-100 focus:outline-none transition-all duration-200 placeholder:text-stone-500 dark:bg-[#1a1410] dark:text-stone-50 dark:placeholder:text-stone-500
+                          ${validPassword ? 'border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500/50 dark:focus:ring-emerald-500/20 dark:focus:border-emerald-500' : 'border-stone-600/50 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-600/50 dark:focus:ring-orange-500/20 dark:focus:border-orange-500'}
                           ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
                         placeholder="Min 8 characters"
                         aria-invalid={errors.password ? 'true' : 'false'}
@@ -407,7 +409,7 @@ const Register: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Role */}
                   <div className="relative">
-                    <label htmlFor="role" className="block text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2">{t('register.role')}</label>
+                    <label htmlFor="role" className="block text-sm font-semibold text-stone-300 dark:text-stone-300 tracking-wide mb-2">{t('register.role')}</label>
                     <div className="relative group">
                       <button
                         ref={roleButtonRef}
@@ -462,8 +464,8 @@ const Register: React.FC = () => {
                             setFocusField(null);
                           }
                         }}
-                        className={`w-full text-left rounded-lg border-2 bg-stone-50 pr-12 px-4 py-3 text-base leading-tight text-neutral-900 focus:outline-none transition-all duration-200 dark:bg-stone-950/50 dark:text-stone-50
-                          ${validRole ? 'border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500 dark:focus:ring-emerald-400/20 dark:focus:border-emerald-400' : 'border-stone-300 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400/20 dark:focus:border-orange-400'}
+                        className={`w-full text-left rounded-lg border-2 bg-[#1a1410] pr-12 px-4 py-3 text-base leading-tight text-stone-100 focus:outline-none transition-all duration-200 dark:bg-[#1a1410] dark:text-stone-50
+                          ${validRole ? 'border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500/50 dark:focus:ring-emerald-500/20 dark:focus:border-emerald-500' : 'border-stone-600/50 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-600/50 dark:focus:ring-orange-500/20 dark:focus:border-orange-500'}
                           ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
                         aria-haspopup="listbox"
                         aria-expanded={roleOpen}
@@ -471,7 +473,7 @@ const Register: React.FC = () => {
                         aria-invalid={errors.role ? 'true' : 'false'}
                         aria-describedby={errors.role ? 'role-error' : undefined}
                       >
-                        <span className={`block truncate ${!role ? 'text-stone-400 dark:text-stone-500' : 'text-stone-900 dark:text-stone-50'}`}>
+                        <span className={`block truncate ${!role ? 'text-stone-500 dark:text-stone-500' : 'text-stone-100 dark:text-stone-50'}`}>
                           {role || 'Select role...'}
                         </span>
                         {/* Chevron */}
@@ -491,7 +493,7 @@ const Register: React.FC = () => {
                           id="role-listbox"
                           role="listbox"
                           aria-labelledby="role"
-                          className="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-lg border border-orange-200/50 bg-stone-50/95 backdrop-blur-sm shadow-xl focus:outline-none dark:border-orange-900/30 dark:bg-stone-900/95"
+                          className="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-lg border border-stone-600/50 bg-[#1a1410]/95 backdrop-blur-sm shadow-xl focus:outline-none dark:border-stone-600/50 dark:bg-[#1a1410]/95"
                         >
                           {roles.map((r, i) => {
                             const active = i === roleHighlight;
@@ -502,7 +504,7 @@ const Register: React.FC = () => {
                                 id={`role-option-${i}`}
                                 role="option"
                                 aria-selected={selected}
-                                className={`flex cursor-pointer items-center justify-between px-4 py-3 text-base transition-colors ${active ? 'bg-orange-50 dark:bg-orange-950/40' : ''} ${selected ? 'font-semibold text-orange-600 dark:text-orange-400' : 'text-stone-900 dark:text-stone-50'}`}
+                                className={`flex cursor-pointer items-center justify-between px-4 py-3 text-base transition-colors ${active ? 'bg-orange-500/20 dark:bg-orange-500/20' : ''} ${selected ? 'font-semibold text-orange-400 dark:text-orange-400' : 'text-stone-100 dark:text-stone-50'}`}
                                 onMouseEnter={() => setRoleHighlight(i)}
                                 onMouseDown={(e) => {
                                   e.preventDefault(); // prevent button blur
@@ -529,8 +531,8 @@ const Register: React.FC = () => {
                   </div>
                   {/* Branch combobox */}
                   <div className="relative">
-                    <label htmlFor="branch" className="block text-sm font-semibold text-stone-700 dark:text-stone-300 tracking-wide mb-2">
-                      Branch {role === 'Staff' && <span className="text-xs text-amber-600 dark:text-amber-400">(Auto-filled)</span>}
+                    <label htmlFor="branch" className="block text-sm font-semibold text-stone-300 dark:text-stone-300 tracking-wide mb-2">
+                      Branch {role === 'Staff' && <span className="text-xs text-orange-400 dark:text-orange-400">(Auto-filled)</span>}
                     </label>
                     <div className="mt-1 relative">
                       <button
@@ -587,8 +589,8 @@ const Register: React.FC = () => {
                             setFocusField(null);
                           }
                         }}
-                        className={`w-full text-left rounded-lg border bg-stone-50/95 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition dark:bg-neutral-900/60 dark:text-stone-50
-                          ${validBranch ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400' : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
+                        className={`w-full text-left rounded-lg border-2 bg-[#1a1410] pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-stone-100 focus:outline-none transition dark:bg-[#1a1410] dark:text-stone-50
+                          ${validBranch ? 'border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500/50 dark:focus:ring-emerald-500/20 dark:focus:border-emerald-500' : 'border-stone-600/50 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-600/50 dark:focus:ring-orange-500/20 dark:focus:border-orange-500'}
                           ${isLoading || role === 'Staff' ? 'opacity-60 cursor-not-allowed' : ''}`}
                         aria-haspopup="listbox"
                         aria-expanded={branchOpen}
@@ -596,18 +598,18 @@ const Register: React.FC = () => {
                         aria-invalid={errors.branch ? 'true' : 'false'}
                         aria-describedby={errors.branch ? 'branch-error' : undefined}
                       >
-                        <span className={`block truncate ${!branch ? 'text-stone-400 dark:text-stone-500' : 'text-stone-900 dark:text-stone-50'}`}>
+                        <span className={`block truncate ${!branch ? 'text-stone-500 dark:text-stone-500' : 'text-stone-100 dark:text-stone-50'}`}>
                           {role !== 'Staff' && loadingBranches ? 'Loading branches...' : (branch || 'Select branch...')}
                         </span>
                         <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                          <svg className={`h-4 w-4 text-neutral-500 dark:text-stone-400 transition-transform ${branchOpen ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="none" aria-hidden>
+                          <svg className={`h-4 w-4 text-stone-400 dark:text-stone-400 transition-transform ${branchOpen ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="none" aria-hidden>
                             <path d="M6 8l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                           </svg>
                         </span>
                       </button>
                       {/* Success icon bubble when valid + focused */}
-                      <div className={`pointer-events-none absolute right-8 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500/10 transition-all duration-150 ease-out ${focusField==='branch' && validBranch ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-orange-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                      <div className={`pointer-events-none absolute right-8 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/20 transition-all duration-150 ease-out ${focusField==='branch' && validBranch ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-emerald-500" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
                       </div>
                       {branchOpen && (
                         <ul
@@ -615,10 +617,10 @@ const Register: React.FC = () => {
                           id="branch-listbox"
                           role="listbox"
                           aria-labelledby="branch"
-                          className="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-lg border border-neutral-200 bg-stone-50/95 shadow-lg focus:outline-none dark:border-stone-700 dark:bg-neutral-900/90"
+                          className="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-lg border border-stone-600/50 bg-[#1a1410]/95 shadow-lg focus:outline-none dark:border-stone-600/50 dark:bg-[#1a1410]/95"
                         >
                           {branches.length === 0 ? (
-                            <li className="px-3.5 py-2.5 text-[14px] text-neutral-500 dark:text-stone-400 text-center">
+                            <li className="px-3.5 py-2.5 text-[14px] text-stone-400 dark:text-stone-400 text-center">
                               {loadingBranches ? 'Loading...' : 'No branches available'}
                             </li>
                           ) : (
@@ -631,7 +633,7 @@ const Register: React.FC = () => {
                                 id={`branch-option-${i}`}
                                 role="option"
                                 aria-selected={selected}
-                                className={`flex cursor-pointer items-center justify-between px-3.5 py-2.5 text-[14px] ${active ? 'bg-neutral-100 dark:bg-neutral-800/60' : ''}`}
+                                className={`flex cursor-pointer items-center justify-between px-3.5 py-2.5 text-[14px] ${active ? 'bg-orange-900/30 dark:bg-neutral-800/60' : ''}`}
                                 onMouseEnter={() => setBranchHighlight(i)}
                                 onMouseDown={(e) => { e.preventDefault(); }}
                                 onClick={() => {
@@ -641,9 +643,9 @@ const Register: React.FC = () => {
                                   setFocusField(null);
                                 }}
                               >
-                                <span className="truncate text-stone-900 dark:text-stone-50">{b.branchName} - {b.location}</span>
+                                <span className="truncate text-stone-100 dark:text-stone-50">{b.branchName} - {b.location}</span>
                                 {selected && (
-                                  <svg viewBox="0 0 20 20" className="h-4 w-4 text-orange-600" fill="none" aria-hidden>
+                                  <svg viewBox="0 0 20 20" className="h-4 w-4 text-emerald-500" fill="none" aria-hidden>
                                     <path d="M6 10.5l2.25 2.25L14 7.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                                   </svg>
                                 )}
@@ -654,14 +656,14 @@ const Register: React.FC = () => {
                         </ul>
                       )}
                     </div>
-                    {errors.branch && <p id="branch-error" className="mt-1 text-[11px] text-red-600 dark:text-red-200">{errors.branch}</p>}
+                    {errors.branch && <p id="branch-error" className="mt-1 text-[11px] text-red-400 dark:text-red-400">{errors.branch}</p>}
                   </div>
                 </div>
                 
                 {/* Assigned Cashier - only shown when role is Staff */}
                 {role === 'Staff' && (
                   <div className="relative">
-                    <label htmlFor="assignedCashier" className="block text-[13px] font-medium text-stone-700 dark:text-stone-300 tracking-wide">Assigned Cashier</label>
+                    <label htmlFor="assignedCashier" className="block text-[13px] font-medium text-stone-300 dark:text-stone-300 tracking-wide">Assigned Cashier</label>
                     <div className="mt-1 relative">
                       <button
                         ref={cashierButtonRef}
@@ -719,8 +721,8 @@ const Register: React.FC = () => {
                             setFocusField(null);
                           }
                         }}
-                        className={`w-full text-left rounded-lg border bg-stone-50/95 pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-neutral-900 focus:outline-none transition dark:bg-neutral-900/60 dark:text-stone-50
-                          ${validCashier ? 'border-orange-500 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-orange-500 dark:focus:ring-orange-400 dark:focus:border-orange-400' : 'border-neutral-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 dark:border-stone-700 dark:focus:ring-orange-400 dark:focus:border-orange-400'}
+                        className={`w-full text-left rounded-lg border-2 bg-[#1a1410] pr-12 px-3.5 py-3 text-[15px] leading-tight tracking-tight text-stone-100 focus:outline-none transition dark:bg-[#1a1410] dark:text-stone-50
+                          ${validBranch ? 'border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 dark:border-emerald-500/50 dark:focus:ring-emerald-500/20 dark:focus:border-emerald-500' : 'border-stone-600/50 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 dark:border-stone-600/50 dark:focus:ring-orange-500/20 dark:focus:border-orange-500'}
                           ${isLoading ? 'opacity-90' : ''}`}
                         aria-haspopup="listbox"
                         aria-expanded={cashierOpen}
@@ -728,7 +730,7 @@ const Register: React.FC = () => {
                         aria-invalid={errors.assignedCashier ? 'true' : 'false'}
                         aria-describedby={errors.assignedCashier ? 'cashier-error' : undefined}
                       >
-                        <span className={`block truncate ${!assignedCashier ? 'text-stone-400 dark:text-stone-500' : 'text-stone-900 dark:text-stone-50'}`}>
+                        <span className={`block truncate ${!assignedCashier ? 'text-stone-500 dark:text-stone-500' : 'text-stone-100 dark:text-stone-50'}`}>
                           {loadingCashiers ? 'Loading cashiers...' : (assignedCashier || 'Select cashier...')}
                         </span>
                         <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
@@ -738,8 +740,8 @@ const Register: React.FC = () => {
                         </span>
                       </button>
                       {/* Success icon bubble when valid + focused */}
-                      <div className={`pointer-events-none absolute right-8 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500/10 transition-all duration-150 ease-out ${focusField==='assignedCashier' && validCashier ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-orange-600" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                      <div className={`pointer-events-none absolute right-8 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/20 transition-all duration-150 ease-out ${focusField==='assignedCashier' && validCashier ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+                        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-emerald-500" aria-hidden><path d="M7.75 10.75l2 2.5 3.75-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
                       </div>
                       {cashierOpen && (
                         <ul
@@ -747,10 +749,10 @@ const Register: React.FC = () => {
                           id="cashier-listbox"
                           role="listbox"
                           aria-labelledby="assignedCashier"
-                          className="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-lg border border-neutral-200 bg-stone-50/95 shadow-lg focus:outline-none dark:border-stone-700 dark:bg-neutral-900/90"
+                          className="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-lg border border-stone-600/50 bg-[#1a1410]/95 shadow-lg focus:outline-none dark:border-stone-600/50 dark:bg-[#1a1410]/90"
                         >
                           {cashiers.length === 0 ? (
-                            <li className="px-3.5 py-2.5 text-[14px] text-neutral-500 dark:text-stone-400 text-center">
+                            <li className="px-3.5 py-2.5 text-[14px] text-stone-400 dark:text-stone-400 text-center">
                               {loadingCashiers ? 'Loading...' : 'No cashiers available'}
                             </li>
                           ) : (
@@ -763,7 +765,7 @@ const Register: React.FC = () => {
                                 id={`cashier-option-${i}`}
                                 role="option"
                                 aria-selected={selected}
-                                className={`flex cursor-pointer items-center justify-between px-3.5 py-2.5 text-[14px] ${active ? 'bg-neutral-100 dark:bg-neutral-800/60' : ''}`}
+                                className={`flex cursor-pointer items-center justify-between px-3.5 py-2.5 text-[14px] ${active ? 'bg-orange-500/20 dark:bg-orange-500/20' : ''}`}
                                 onMouseEnter={() => setCashierHighlight(i)}
                                 onMouseDown={(e) => { e.preventDefault(); }}
                                 onClick={() => {
@@ -775,9 +777,9 @@ const Register: React.FC = () => {
                                   setFocusField(null);
                                 }}
                               >
-                                <span className="truncate text-stone-900 dark:text-stone-50">{c.userName}</span>
+                                <span className="truncate text-stone-100 dark:text-stone-50">{c.userName}</span>
                                 {selected && (
-                                  <svg viewBox="0 0 20 20" className="h-4 w-4 text-orange-600" fill="none" aria-hidden>
+                                  <svg viewBox="0 0 20 20" className="h-4 w-4 text-emerald-500" fill="none" aria-hidden>
                                     <path d="M6 10.5l2.25 2.25L14 7.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                                   </svg>
                                 )}
@@ -788,12 +790,12 @@ const Register: React.FC = () => {
                         </ul>
                       )}
                     </div>
-                    {errors.assignedCashier && <p id="cashier-error" className="mt-1 text-[11px] text-red-600 dark:text-red-200">{errors.assignedCashier}</p>}
+                    {errors.assignedCashier && <p id="cashier-error" className="mt-1 text-[11px] text-red-400 dark:text-red-400">{errors.assignedCashier}</p>}
                   </div>
                 )}
               </div>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-2">
-                <span className="text-xs text-stone-600 dark:text-stone-400 leading-none font-medium order-2 sm:order-1">All fields required except middle name</span>
+                <span className="text-xs text-stone-400 dark:text-stone-400 leading-none font-medium order-2 sm:order-1">All fields required except middle name</span>
                 <span className="text-xs text-stone-500 dark:text-stone-500 leading-none font-medium order-1 sm:order-2">v1.0.0</span>
               </div>
               <button
@@ -824,10 +826,10 @@ const Register: React.FC = () => {
             {/* Divider */}
             <div className="relative my-8">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-stone-200/80 dark:border-stone-700/80"></div>
+                <div className="w-full border-t border-stone-700/50 dark:border-stone-700/50"></div>
               </div>
               <div className="relative flex justify-center">
-                <span className="bg-white/70 dark:bg-stone-900/80 px-4 text-sm font-medium text-stone-400 dark:text-stone-500">
+                <span className="bg-neutral-800 px-4 text-sm font-medium text-stone-400 dark:text-stone-400">
                   {t('register.haveAccount')}
                 </span>
               </div>
@@ -837,7 +839,7 @@ const Register: React.FC = () => {
             <div className="text-center">
               <Link 
                 to="/login" 
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-orange-200 bg-orange-50 text-orange-600 font-medium text-sm hover:bg-orange-100 hover:border-orange-300 transition-all duration-200 dark:border-orange-700/50 dark:bg-orange-900/20 dark:text-orange-400 dark:hover:bg-orange-900/40"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-orange-500/30 bg-orange-500/10 text-orange-400 font-medium text-sm hover:bg-orange-500/20 hover:border-orange-500/50 transition-all duration-200 dark:border-orange-500/30 dark:bg-orange-500/10 dark:text-orange-400 dark:hover:bg-orange-500/20"
               >
                 <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
