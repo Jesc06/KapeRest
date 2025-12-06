@@ -1,4 +1,4 @@
-# **KapeRest: Point of Sale (POS) System (Frontend)**
+# **KapeRest: Point of Sale (POS)**
 
 
 
