@@ -1,115 +1,77 @@
-# React + TypeScript + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
+# **KapeRest: Point of Sale (POS) System (Frontend)**
 
 
-## React Compiler
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+**KapeRest** is a modern, full-stack Point of Sale (POS) system solution built specifically for the café and restaurant industry. **This repository contains the Frontend UI code.**
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🔗 Backend API Repository
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Ang *core business logic* at *API endpoints* ay nasa dedikadong **Backend API** repository.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+| Repository | Purpose | Technology | Link |
+| :--- | :--- | :--- | :--- |
+| **Backend API** | ASP.NET Core Web API logic and data handling. | `ASP.NET Core` | [KapeRest.Api](https://github.com/Jesc06/KapeRest.Api.git) |
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## ✨ Key Features
 
-## Setup — download and run locally
+Ang proyektong ito ay nagbibigay ng komprehensibong *back-end API* kasabay ng isang *responsive user interface* para sa maayos na operasyon ng negosyo.
 
-Below are the minimum steps and recommended environment to run this project locally. Commands assume Windows PowerShell (the repo author tested on Windows).
+* **Order Management:** Walang-patid na paggawa, pagbabago, at pag-subaybay ng mga order ng customer.
+* **Menu Configuration:** Dinamikong pamamahala ng mga *product items*, presyo, at *categories*.
+* **User Authentication & Authorization:** Ligtas, *role-based access control* para sa iba't ibang *staff roles* (e.g., **Cashier**, **Manager**).
+* **Transaction History:** Matatag na pag-log at pag-retrieve ng mga nakaraang benta para sa *reporting* at *auditing*.
+* **RESTful API Design:** Malinis, *scalable*, at maayos na *documented endpoints* para sa *integration* sa frontend UI.
 
-Requirements
-- Node.js 18+ (LTS recommended)
-- npm (comes with Node.js) or a compatible package manager
+---
 
-Quick start (PowerShell)
+## 💻 Technology Stack
 
-```powershell
-# clone the repo
-git clone https://github.com/Jesc06/DotnetDailyCode.git
-cd DotnetDailyCode
+Ang KapeRest project ay ginawa gamit ang moderno at *scalable* na mga teknolohiya.
 
-# install dependencies
-npm install
+| Category | Technology | Description |
+| :--- | :--- | :--- |
+| **Backend API** | **`ASP.NET Core Web API`** (C#) | Nagbibigay ng matatag, *high-performance* na pundasyon para sa lahat ng *business logic* at *data operations*. |
+| **Frontend UI** | **`TypeScript`** | Tinitiyak ang *type-safe*, *maintainable*, at *scalable* na *client-side application development*. |
+| **Database** | (To be defined: SQL Server / PostgreSQL) | Ang *persistence layer* para sa pag-iimbak ng lahat ng *application data* (orders, users, menu items). |
 
-# start dev server (Vite)
-npm run dev
+---
 
-# build for production
-npm run build
+## 🤝 Contributing
 
-# preview production build locally
-npm run preview
-```
+Ang inyong mga kontribusyon ay lubos na pinahahalagahan! Sundin ang mga simpleng hakbang sa ibaba:
 
-Notes
-- Default dev server URL: http://localhost:5173
-- If you see type errors related to `vite/client` or CSS imports, run `npm install` (this project includes the required dev dependencies in `package.json`).
-- Tailwind CSS is used for styling; no additional global setup is required beyond `npm install`.
-- Recommended Node version manager: nvm-windows if you need to switch Node versions.
+1.  **Fork** ang Project
+2.  **Create** ang inyong Feature Branch (`git checkout -b feature/AmazingFeature`)
+3.  **Commit** ang inyong Changes (`git commit -m 'Add some AmazingFeature'`)
+4.  **Push** sa Branch (`git push origin feature/AmazingFeature`)
+5.  **Open** ng **Pull Request**
 
-Environment/config files
-- This project does not require any special .env files by default. If you add environment variables, create a `.env` file at the repo root and restart the dev server.
+---
 
-Troubleshooting
-- If `npm run dev` exits with errors, run `npm install` again and check that `node_modules` was created.
-- If the TypeScript server complains about missing types, ensure `@types/node` and `vite` are installed from devDependencies (they are listed in `package.json`).
-- For any CSS import issues, there is a declaration file at `src/vite-env.d.ts` which declares `*.css` modules for TypeScript.
+## 🧑‍💻 Contributors
 
-If you want, I can add a short script to the repo that checks Node version and prints quick diagnostics—tell me if you'd like that.
-```
+Nagpapasalamat kami sa mga sumusunod na indibidwal para sa kanilang mahahalagang kontribusyon sa KapeRest project.
+
+| Avatar | Developer | Role | GitHub Profile |
+| :---: | :--- | :--- | :---: |
+| <img src="https://avatars.githubusercontent.com/u/218352403?v=4" alt="Cj Royo Mendoza" width="50" style="border-radius: 50%;"> | **Cj Royo Mendoza** | Second lead developer | [Cmendoza11](https://github.com/Cmendoza11) |
+| <img src="https://avatars.githubusercontent.com/u/238653991?v=4" alt="Lhey Anne Inao Pedernal" width="50" style="border-radius: 50%;"> | **Lhey Anne Inao Pedernal** | Documentation and front-end developer | [Lhey-Pretty](https://github.com/Lhey-Pretty) |
+| <img src="https://avatars.githubusercontent.com/u/238605866?v=4" alt="Jaira Cunanan" width="50" style="border-radius: 50%;"> | **Jaira Cunanan** | UI Designer and narrative contributor | [cunananjaira6-spec](https://github.com/cunananjaira6-spec) |
+
+---
+
+## 📜 License
+
+Distributed under the **MIT License**. See **`LICENSE.md`** for more information.
+
+---
+
+## 📧 Contact
+
+Kung mayroon kang mga tanong o nangangailangan ng suporta, mangyaring **mag-open ng issue** sa repository na ito.
