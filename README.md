@@ -14,7 +14,7 @@ Ang *core business logic* at *API endpoints* ay nasa dedikadong **Backend API** 
 
 | Repository | Purpose | Technology | Link |
 | :--- | :--- | :--- | :--- |
-| **Backend API** | ASP.NET Core Web API logic and data handling. | `ASP.NET Core` | [KapeRest.Api](https://github.com/Jesc06/KapeRest.Api.git) |
+| **Backend API** | ASP.NET Core Web API logic and data handling. | `ASP.NET Core REST API` | [KapeRest.Api](https://github.com/Jesc06/KapeRest.Api.git) |
 
 ---
 
