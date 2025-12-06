@@ -12,7 +12,7 @@ The *core business logic* and *API endpoints* reside in the dedicated **Backend 
 
 ---
 
-## ✨ Key Features
+## Key Features
 
 * **Order Management:** Seamless creation, modification, and tracking of customer orders.
 * **Menu Configuration:** Dynamic management of *product items*, pricing, and *categories*.
@@ -22,7 +22,7 @@ The *core business logic* and *API endpoints* reside in the dedicated **Backend 
 
 ---
 
-## 💻 Technology Stack
+## Technology Stack
 
 The KapeRest project is built using modern and *scalable* technologies.
 
@@ -34,7 +34,7 @@ The KapeRest project is built using modern and *scalable* technologies.
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Your contributions are greatly appreciated! Please follow these simple steps:
 
@@ -46,7 +46,7 @@ Your contributions are greatly appreciated! Please follow these simple steps:
 
 ---
 
-## 🧑‍💻 Contributors
+## Contributors
 
 We thank the following individuals for their valuable contributions to the KapeRest project.
 
@@ -58,12 +58,12 @@ We thank the following individuals for their valuable contributions to the KapeR
 
 ---
 
-## 📜 License
+## License
 
 Distributed under the **MIT License**. See **`LICENSE.md`** for more information.
 
 ---
 
-## 📧 Contact
+## Contact
 
 If you have questions or need support, please **open an issue** in this repository.
