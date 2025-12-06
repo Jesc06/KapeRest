@@ -1,16 +1,10 @@
-# **KapeRest: Point of Sale (POS)**
-
-
-
-
-
-**KapeRest** is a modern, full-stack Point of Sale (POS) system solution built specifically for the café and restaurant industry. **This repository contains the Frontend UI code.**
+# **KapeRest: Point of Sale (POS) System**
 
 ---
 
 ## 🔗 Backend API Repository
 
-Ang *core business logic* at *API endpoints* ay nasa dedikadong **Backend API** repository.
+The *core business logic* and *API endpoints* reside in the dedicated **Backend API** repository.
 
 | Repository | Purpose | Technology | Link |
 | :--- | :--- | :--- | :--- |
@@ -20,43 +14,41 @@ Ang *core business logic* at *API endpoints* ay nasa dedikadong **Backend API** 
 
 ## ✨ Key Features
 
-Ang proyektong ito ay nagbibigay ng komprehensibong *back-end API* kasabay ng isang *responsive user interface* para sa maayos na operasyon ng negosyo.
-
-* **Order Management:** Walang-patid na paggawa, pagbabago, at pag-subaybay ng mga order ng customer.
-* **Menu Configuration:** Dinamikong pamamahala ng mga *product items*, presyo, at *categories*.
-* **User Authentication & Authorization:** Ligtas, *role-based access control* para sa iba't ibang *staff roles* (e.g., **Cashier**, **Manager**).
-* **Transaction History:** Matatag na pag-log at pag-retrieve ng mga nakaraang benta para sa *reporting* at *auditing*.
-* **RESTful API Design:** Malinis, *scalable*, at maayos na *documented endpoints* para sa *integration* sa frontend UI.
+* **Order Management:** Seamless creation, modification, and tracking of customer orders.
+* **Menu Configuration:** Dynamic management of *product items*, pricing, and *categories*.
+* **User Authentication & Authorization:** Secure, *role-based access control* for different *staff roles* (e.g., **Cashier**, **Manager**).
+* **Transaction History:** Robust logging and retrieval of past sales for *reporting* and *auditing*.
+* **RESTful API Design:** Clean, *scalable*, and well-*documented endpoints* for *integration* with the frontend UI.
 
 ---
 
 ## 💻 Technology Stack
 
-Ang KapeRest project ay ginawa gamit ang moderno at *scalable* na mga teknolohiya.
+The KapeRest project is built using modern and *scalable* technologies.
 
 | Category | Technology | Description |
 | :--- | :--- | :--- |
-| **Backend API** | **`ASP.NET Core Web API`** (C#) | Nagbibigay ng matatag, *high-performance* na pundasyon para sa lahat ng *business logic* at *data operations*. |
-| **Frontend UI** | **`TypeScript`** | Tinitiyak ang *type-safe*, *maintainable*, at *scalable* na *client-side application development*. |
-| **Database** | (To be defined: SQL Server / PostgreSQL) | Ang *persistence layer* para sa pag-iimbak ng lahat ng *application data* (orders, users, menu items). |
+| **Backend API** | **`ASP.NET Core Web API`** (C#) | Provides a robust, *high-performance* foundation for all *business logic* and *data operations*. |
+| **Frontend UI** | **`TypeScript`** | Ensures *type-safe*, *maintainable*, and *scalable* *client-side application development*. |
+| **Database** | (To be defined: SQL Server / PostgreSQL) | The *persistence layer* for storing all *application data* (orders, users, menu items). |
 
 ---
 
 ## 🤝 Contributing
 
-Ang inyong mga kontribusyon ay lubos na pinahahalagahan! Sundin ang mga simpleng hakbang sa ibaba:
+Your contributions are greatly appreciated! Please follow these simple steps:
 
-1.  **Fork** ang Project
-2.  **Create** ang inyong Feature Branch (`git checkout -b feature/AmazingFeature`)
-3.  **Commit** ang inyong Changes (`git commit -m 'Add some AmazingFeature'`)
-4.  **Push** sa Branch (`git push origin feature/AmazingFeature`)
-5.  **Open** ng **Pull Request**
+1.  **Fork** the Project
+2.  **Create** your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3.  **Commit** your Changes (`git commit -m 'Add some AmazingFeature'`)
+4.  **Push** to the Branch (`git push origin feature/AmazingFeature`)
+5.  **Open** a **Pull Request**
 
 ---
 
 ## 🧑‍💻 Contributors
 
-Nagpapasalamat kami sa mga sumusunod na indibidwal para sa kanilang mahahalagang kontribusyon sa KapeRest project.
+We thank the following individuals for their valuable contributions to the KapeRest project.
 
 | Avatar | Developer | Role | GitHub Profile |
 | :---: | :--- | :--- | :---: |
@@ -74,4 +66,4 @@ Distributed under the **MIT License**. See **`LICENSE.md`** for more information
 
 ## 📧 Contact
 
-Kung mayroon kang mga tanong o nangangailangan ng suporta, mangyaring **mag-open ng issue** sa repository na ito.
+If you have questions or need support, please **open an issue** in this repository.
