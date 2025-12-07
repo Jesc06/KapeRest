@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faSearch, faPlus, faMinus, faTrash, faCheck, faPause, faCreditCard, faBars, faShoppingCart, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faSearch, faPlus, faMinus, faTrash, faCheck, faPause, faCreditCard, faBars, faShoppingCart, faChevronDown, faMoneyBill, faBolt, faCheckCircle, faExclamationTriangle, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import LogoutPanel from '../Shared/LogoutPanel';
 import { API_BASE_URL } from '../../config/api';
+
+interface MenuItemSize {
+  id: number;
+  size: string;
+  price: number;
+  isAvailable: boolean;
+}
 
 interface MenuItem {
   id: number;
@@ -14,6 +21,7 @@ interface MenuItem {
   image: string;
   cashierId?: string;
   branchId?: number | null;
+  menuItemSizes?: MenuItemSize[];
 }
 
 interface Product {
@@ -24,10 +32,15 @@ interface Product {
   description: string;
   image: string;
   isAvailable?: string;
+  sizes?: MenuItemSize[];
 }
 
 interface CartItem extends Product {
   quantity: number;
+  selectedSize?: string;
+  selectedSizeId?: number;
+  selectedPrice?: number;
+  sugarLevel?: string;
 }
 
 interface MainPanelProps {
@@ -78,170 +91,78 @@ const MainPanel: React.FC<MainPanelProps> = ({
   const [gcashReference, setGcashReference] = useState<string>('');
   const [processingGCash, setProcessingGCash] = useState(false);
   const [showPaymentSuccessModal, setShowPaymentSuccessModal] = useState(false);
+  const [showSizeModal, setShowSizeModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedSizeForAdd, setSelectedSizeForAdd] = useState<string>('');
+  const [selectedSizeIdForAdd, setSelectedSizeIdForAdd] = useState<number | null>(null);
+  const [selectedPriceForAdd, setSelectedPriceForAdd] = useState<number>(0);
+  const [showSugarLevelModal, setShowSugarLevelModal] = useState(false);
+  const [selectedSugarLevel, setSelectedSugarLevel] = useState<string>('100%');
+  const [showCashPaymentModal, setShowCashPaymentModal] = useState(false);
+  const [amountPaid, setAmountPaid] = useState<string>('');
+  const [changeAmount, setChangeAmount] = useState<number>(0);
+  const [gcashPaymentStatus, setGcashPaymentStatus] = useState<string>('pending');
+  const [verifyingPayment, setVerifyingPayment] = useState(false);
 
-  // Check payment status via polling
-  const checkPaymentStatus = async (referenceId: string) => {
-    try {
-      const token = localStorage.getItem('accessToken');
-      if (!token) return;
-
-      // Get stored payment info
-      const storedData = localStorage.getItem(`gcash_payment_${referenceId}`);
-      if (!storedData) {
-        console.log('No stored payment data found');
-        return;
-      }
-
-      const gcashPaymentInfo = JSON.parse(storedData);
-      const { cart: savedCart, discount, tax } = gcashPaymentInfo;
-
-      console.log('Checking payment status for reference:', referenceId);
-
-      // First, check if payment is successful by calling backend status endpoint
-      // Backend creates transactions with "Completed" status by default when payment succeeds
-      const statusResponse = await fetch(`${API_BASE_URL}/PayGcash/CheckPaymentStatus?referenceId=${referenceId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (!statusResponse.ok) {
-        if (statusResponse.status === 404) {
-          console.log('CheckPaymentStatus endpoint not implemented yet, falling back to direct purchase attempt');
-          // Fallback: Try to complete purchase directly (old behavior)
-          await attemptDirectPurchase(savedCart, discount, tax, referenceId, token);
-          return;
-        }
-        console.log('Payment status check failed, payment might still be pending');
-        return;
-      }
-
-      const statusData = await statusResponse.json();
-      console.log('Payment status:', statusData);
-
-      // Check if payment status is completed/successful
-      // Transactions are created with "Completed" status by default when webhook fires
-      const statusLower = (statusData.status || '').toLowerCase();
-      if (statusLower === 'completed' || statusLower === 'paid' || statusLower === 'success' || statusLower === 'succeeded' || statusLower === 'authorized') {
-        console.log('🎉 Payment confirmed as successful!');
-
-        // Now complete the purchase transactions
-        await attemptDirectPurchase(savedCart, discount, tax, referenceId, token);
-      } else {
-        console.log('Payment status is still pending:', statusData.status);
-      }
-    } catch (error) {
-      console.error('Error checking payment status:', error);
-    }
-  };
-
-  // Helper function to attempt direct purchase (fallback when status endpoint not available)
-  const attemptDirectPurchase = async (savedCart: any[], discount: number, tax: number, referenceId: string, token: string) => {
-    const taxRate = tax || 12;
-    const discountValue = discount || 0;
-
-    for (const item of savedCart) {
-      try {
-        const purchaseData = {
-          menuItemId: Number(item.id),
-          quantity: Number(item.quantity),
-          discountPercent: Number(discountValue),
-          tax: Number(taxRate),
-          paymentMethod: 'GCash',
-          paymentReference: referenceId // Add payment reference to avoid duplicates
-        };
-
-        console.log('Completing purchase for item:', purchaseData);
-
-        const response = await fetch(`${API_BASE_URL}/Buy/Buy`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(purchaseData)
-        });
-
-        if (response.ok) {
-          console.log('✅ Item purchased successfully:', item.name);
-        } else {
-          const errorText = await response.text();
-          console.log('⚠️ Purchase response:', errorText);
-
-          // Check if error is about insufficient stock (might mean already purchased)
-          if (errorText.includes('Insufficient stock') || errorText.includes('Out of Stock') ||
-              errorText.includes('already exists') || errorText.includes('duplicate')) {
-            console.log('Item might be already purchased or duplicate transaction');
-            // This is actually okay - consider it successful
-          } else {
-            console.log('Purchase failed:', errorText);
-          }
-        }
-      } catch (error) {
-        console.error('Error purchasing item:', error);
-      }
-    }
-
-    // Payment was successful, show success regardless of purchase completion
-    // (purchases might have been completed by webhook already)
-    console.log('🎉 Payment confirmed and purchase completed!');
-
-    // Close GCash modal
-    setShowGCashModal(false);
-    if (gcashQrCode) {
-      URL.revokeObjectURL(gcashQrCode);
-    }
-
-    // Show success modal
-    setShowPaymentSuccessModal(true);
-
-    // Clear cart and cleanup
-    setTimeout(() => {
-      if (onBuy) {
-        onBuy(); // This clears the cart
-      }
-      setShowPaymentSuccessModal(false);
-      setSelectedDiscount('');
-
-      // Clear stored payment data
-      localStorage.removeItem(`gcash_payment_${referenceId}`);
-    }, 3000);
-  };
-
-  // Check if returning from GCash redirect with payment reference
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const paymentStatus = urlParams.get('status');
-    const paymentRef = urlParams.get('payment_ref');
-
-    if (paymentStatus === 'success' && paymentRef) {
-      console.log('🎉 Returned from GCash test page - Payment authorized!');
-      // Automatically check and complete payment
-      checkPaymentStatus(paymentRef);
-      // Clean up URL
-      window.history.replaceState({}, document.title, window.location.pathname);
-    } else if (paymentStatus === 'failed') {
-      console.log('❌ Payment failed or cancelled');
-      setPurchaseError('Payment was cancelled or failed. Please try again.');
-      // Clean up URL
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }
-  }, []);
-
-  // Automatic polling for payment status when GCash modal is open
+  // Automatic webhook-based payment completion
+  // After user authorizes GCash payment, PayMongo webhook automatically completes purchase
+  // Frontend polls CheckTransactionStatus endpoint to detect completion
+  
   useEffect(() => {
     if (!showGCashModal || !gcashReference) return;
 
-    console.log('Starting automatic payment status polling...');
-    const interval = setInterval(() => {
-      checkPaymentStatus(gcashReference);
-    }, 3000); // Check every 3 seconds
+    console.log('Starting automatic polling for GCash payment completion...');
+    
+    const pollInterval = setInterval(async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        if (!token) return;
+
+        console.log(`Polling transaction status for ${gcashReference}...`);
+        
+        const response = await fetch(`${API_BASE_URL}/PayGcash/CheckTransactionStatus?referenceId=${gcashReference}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          console.log('Transaction status check result:', result);
+          
+          if (result.completed) {
+            console.log('✅ Transaction completed by webhook! Closing modal and showing success...');
+            clearInterval(pollInterval);
+            
+            // Close GCash modal
+            setShowGCashModal(false);
+            if (gcashQrCode) {
+              URL.revokeObjectURL(gcashQrCode);
+            }
+            
+            // Clear localStorage
+            localStorage.removeItem(`gcash_payment_${gcashReference}`);
+            
+            // Show success modal
+            setShowPaymentSuccessModal(true);
+            setPurchaseSuccess(true);
+            
+            // Reload page after 2 seconds
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          }
+        }
+      } catch (err) {
+        console.error('Error polling transaction status:', err);
+      }
+    }, 3000); // Poll every 3 seconds
 
     return () => {
-      console.log('Stopping payment status polling');
-      clearInterval(interval);
+      console.log('Stopping transaction status polling');
+      clearInterval(pollInterval);
     };
-  }, [showGCashModal, gcashReference]);
+  }, [showGCashModal, gcashReference, gcashQrCode]);
 
   // Fetch menu items from API
   useEffect(() => {
@@ -305,6 +226,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
             description: item.description,
             image: imageUrl || '',
             isAvailable: item.isAvailable,
+            sizes: item.menuItemSizes || [],
           };
         });
         
@@ -334,7 +256,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
     return matchesSearch && matchesCategory;
   });
 
-  // Add product to cart
+  // Add product to cart - with size selection
   const handleAddToCart = (product: Product) => {
     // Check if product is out of stock
     if (product.isAvailable && product.isAvailable.toLowerCase() === 'out of stock') {
@@ -342,11 +264,62 @@ const MainPanel: React.FC<MainPanelProps> = ({
       return;
     }
     
+    // If product has sizes, show size selection modal
+    if (product.sizes && product.sizes.length > 0) {
+      setSelectedProduct(product);
+      // Set default to first available size
+      const firstAvailableSize = product.sizes.find(s => s.isAvailable);
+      if (firstAvailableSize) {
+        setSelectedSizeForAdd(firstAvailableSize.size);
+        setSelectedSizeIdForAdd(firstAvailableSize.id);
+        setSelectedPriceForAdd(firstAvailableSize.price);
+      }
+      setShowSizeModal(true);
+      return;
+    }
+    
+    // If no sizes, add directly
     if (onAddToCart) {
       onAddToCart(product);
     } else {
       console.log('Adding to cart:', product);
     }
+  };
+
+  // Add to cart with selected size
+  const handleAddToCartWithSize = () => {
+    if (!selectedProduct) return;
+    
+    // Close size modal and show sugar level modal
+    setShowSizeModal(false);
+    setShowSugarLevelModal(true);
+  };
+
+  // Add to cart with selected size and sugar level
+  const handleAddToCartWithSizeAndSugar = () => {
+    if (!selectedProduct) return;
+    
+    const productWithOptions: CartItem = {
+      ...selectedProduct,
+      quantity: 1,
+      selectedSize: selectedSizeForAdd,
+      selectedSizeId: selectedSizeIdForAdd || undefined,
+      selectedPrice: selectedPriceForAdd,
+      price: selectedPriceForAdd, // Update the price to selected size price
+      sugarLevel: selectedSugarLevel,
+    };
+    
+    if (onAddToCart) {
+      onAddToCart(productWithOptions);
+    }
+    
+    // Close modal and reset
+    setShowSugarLevelModal(false);
+    setSelectedProduct(null);
+    setSelectedSizeForAdd('');
+    setSelectedSizeIdForAdd(null);
+    setSelectedPriceForAdd(0);
+    setSelectedSugarLevel('100%'); // Reset to default
   };
 
   // Handle hold transaction
@@ -375,6 +348,8 @@ const MainPanel: React.FC<MainPanelProps> = ({
       const holdPromises = cart.map(async (item) => {
         const holdData = {
           menuItemId: item.id,
+          menuItemSizeId: item.selectedSizeId || null,
+          size: item.selectedSize || null,
           quantity: item.quantity,
           discountPercent: discountValue,
           tax: taxRate,
@@ -535,7 +510,11 @@ const MainPanel: React.FC<MainPanelProps> = ({
           const pendingDto = {
             PaymentReference: referenceId,
             BranchId: branchId,
-            CartItems: cart.map((i: any) => ({ MenuItemId: Number(i.id), Quantity: Number(i.quantity), Price: Number(i.price) })),
+            CartItems: cart.map((i: any) => ({ 
+              MenuItemId: Number(i.id), 
+              Quantity: Number(i.quantity), 
+              Price: Number(i.selectedPrice || i.price) 
+            })),
             DiscountPercent: Number(discountValue) || 0,
             TaxPercent: Number(taxRate) || 12,
             TotalAmount: finalTotal,
@@ -679,6 +658,9 @@ const MainPanel: React.FC<MainPanelProps> = ({
           // Ensure proper data types
           const purchaseData = {
             menuItemId: Number(item.id), // Ensure it's a number
+            menuItemSizeId: item.selectedSizeId ? Number(item.selectedSizeId) : null,
+            size: item.selectedSize || null,
+            sugarLevel: item.sugarLevel || '100%', // Include sugar level, default to 100%
             quantity: Number(item.quantity), // Ensure it's a number
             discountPercent: Number(discountValue), // Ensure it's a number
             tax: Number(taxRate), // Ensure it's a number
@@ -1035,19 +1017,26 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
                         {/* Footer */}
                         <div className="flex items-center justify-between gap-3 pt-4 border-t border-stone-200 dark:border-stone-700">
-                          <div className="flex flex-col">
+                          <div className="flex flex-col flex-1">
                             <span className={`text-[10px] font-medium uppercase tracking-wider mb-0.5 ${
                               isOutOfStock 
                                 ? 'text-stone-400 dark:text-stone-600' 
                                 : 'text-stone-500 dark:text-stone-400'
-                            }`}>Price</span>
+                            }`}>
+                              {product.sizes && product.sizes.length > 0 ? 'From' : 'Price'}
+                            </span>
                             <span className={`text-xl font-black ${
                               isOutOfStock 
                                 ? 'text-stone-400 dark:text-stone-600' 
                                 : 'bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-400 dark:to-orange-300 bg-clip-text text-transparent'
                             }`}>
-                              ₱{product.price}
+                              ₱{product.sizes && product.sizes.length > 0 ? Math.min(...product.sizes.map(s => s.price)) : product.price}
                             </span>
+                            {product.sizes && product.sizes.length > 0 && !isOutOfStock && (
+                              <span className="text-[10px] text-stone-500 dark:text-stone-400 mt-1">
+                                {product.sizes.length} sizes available
+                              </span>
+                            )}
                           </div>
                           <button
                             onClick={(e) => {
@@ -1147,6 +1136,16 @@ const MainPanel: React.FC<MainPanelProps> = ({
                       <p className="font-bold text-sm text-stone-900 dark:text-white leading-tight mb-1.5 line-clamp-2">
                         {item.name}
                       </p>
+                      {item.selectedSize && (
+                        <p className="text-xs text-stone-500 dark:text-stone-400 mb-1">
+                          Size: <span className="font-semibold text-orange-600 dark:text-orange-400">{item.selectedSize}</span>
+                        </p>
+                      )}
+                      {item.sugarLevel && (
+                        <p className="text-xs text-stone-500 dark:text-stone-400 mb-1">
+                          Sugar: <span className="font-semibold text-orange-600 dark:text-orange-400">{item.sugarLevel}</span>
+                        </p>
+                      )}
                       <div className="flex items-center gap-1.5 text-xs text-orange-600 dark:text-orange-400 font-semibold flex-wrap">
                         <span>₱{item.price.toFixed(2)}</span>
                         <span className="text-stone-400 dark:text-stone-500">×</span>
@@ -1329,7 +1328,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
             {/* Primary Action - Buy */}
             <button
-              onClick={() => handleCompletePurchase('Cash')}
+              onClick={() => setShowCashPaymentModal(true)}
               disabled={processingPurchase || isLoading || cart.length === 0}
               className="group w-full flex items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-orange-600 via-orange-500 to-amber-600 hover:from-orange-700 hover:via-orange-600 hover:to-amber-700 dark:from-orange-500 dark:via-orange-400 dark:to-amber-500 dark:hover:from-orange-600 dark:hover:via-orange-500 dark:hover:to-amber-600 px-6 py-5 text-lg font-black text-white transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-orange-600 disabled:hover:via-orange-500 disabled:hover:to-amber-600 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:shadow-orange-500/40 hover:scale-105 disabled:hover:scale-100 relative overflow-hidden"
             >
@@ -1487,15 +1486,47 @@ const MainPanel: React.FC<MainPanelProps> = ({
                   <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></div>
                   <span>Reference: {gcashReference}</span>
                 </div>
-                <div className="mt-3 p-3 rounded-lg bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800/50">
-                  <p className="text-xs text-orange-700 dark:text-orange-400 font-semibold">
-                    📱 Click "Authorize Test Payment" in GCash
-                  </p>
-                  <p className="text-xs text-orange-600 dark:text-orange-500 mt-1">
-                    Payment will be confirmed automatically
-                  </p>
+                <div className="mt-3 p-4 rounded-lg bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 border-2 border-blue-200 dark:border-blue-800/50">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-center gap-2">
+                      <FontAwesomeIcon icon={faInfoCircle} className="text-blue-600 dark:text-blue-400" />
+                      <p className="text-xs text-blue-900 dark:text-blue-300 font-bold">
+                        How to complete payment:
+                      </p>
+                    </div>
+                    <ol className="text-xs text-blue-800 dark:text-blue-400 space-y-1 text-left list-decimal list-inside">
+                      <li>Click <span className="font-semibold">"Open GCash Payment Page"</span> button below</li>
+                      <li>On PayMongo page, click <span className="font-semibold">"Authorize Test Payment"</span></li>
+                      <li className="font-semibold text-green-700 dark:text-green-400">Purchase completes automatically via webhook! ✨</li>
+                    </ol>
+                  </div>
                 </div>
               </div>
+
+              {/* Payment Status */}
+              {gcashPaymentStatus !== 'pending' && (
+                <div className={`p-4 rounded-xl border-2 ${
+                  gcashPaymentStatus === 'authorized' || gcashPaymentStatus === 'chargeable'
+                    ? 'bg-green-50 dark:bg-green-950/30 border-green-300 dark:border-green-800/50'
+                    : gcashPaymentStatus === 'cancelled' || gcashPaymentStatus === 'expired' || gcashPaymentStatus === 'failed'
+                    ? 'bg-red-50 dark:bg-red-950/30 border-red-300 dark:border-red-800/50'
+                    : 'bg-blue-50 dark:bg-blue-950/30 border-blue-300 dark:border-blue-800/50'
+                }`}>
+                  <p className={`text-sm font-bold ${
+                    gcashPaymentStatus === 'authorized' || gcashPaymentStatus === 'chargeable'
+                      ? 'text-green-700 dark:text-green-400'
+                      : gcashPaymentStatus === 'cancelled' || gcashPaymentStatus === 'expired' || gcashPaymentStatus === 'failed'
+                      ? 'text-red-700 dark:text-red-400'
+                      : 'text-blue-700 dark:text-blue-400'
+                  }`}>
+                    {gcashPaymentStatus === 'authorized' || gcashPaymentStatus === 'chargeable' ? '✅ Payment Authorized!' :
+                     gcashPaymentStatus === 'cancelled' ? '❌ Payment Cancelled' :
+                     gcashPaymentStatus === 'expired' ? '⏱️ Payment Expired' :
+                     gcashPaymentStatus === 'failed' ? '❌ Payment Failed' :
+                     `Status: ${gcashPaymentStatus}`}
+                  </p>
+                </div>
+              )}
 
               {/* Action Buttons */}
               <div className="space-y-3">
@@ -1505,12 +1536,32 @@ const MainPanel: React.FC<MainPanelProps> = ({
                   rel="noopener noreferrer"
                   className="block w-full text-center px-6 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-black transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg shadow-blue-500/30"
                 >
-                  Open in Browser
+                  <div className="flex items-center justify-center gap-2">
+                    <FontAwesomeIcon icon={faBolt} className="text-xl" />
+                    <span>Open GCash Payment Page</span>
+                  </div>
                 </a>
+                
+                {/* Waiting indicator */}
+                <div className="p-4 rounded-xl bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 border-2 border-blue-200 dark:border-blue-800/50">
+                  <div className="flex items-center justify-center gap-3 mb-2">
+                    <div className="relative flex h-3 w-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+                    </div>
+                    <p className="text-sm font-bold text-blue-900 dark:text-blue-300">
+                      Waiting for payment authorization...
+                    </p>
+                  </div>
+                  <p className="text-xs text-center text-blue-700 dark:text-blue-400">
+                    After authorizing in GCash, your purchase will automatically complete
+                  </p>
+                </div>
                 
                 <button
                   onClick={() => {
                     setShowGCashModal(false);
+                    setGcashPaymentStatus('pending');
                     if (gcashQrCode) {
                       URL.revokeObjectURL(gcashQrCode);
                     }
@@ -1520,6 +1571,383 @@ const MainPanel: React.FC<MainPanelProps> = ({
                   className="w-full px-6 py-4 rounded-xl border-2 border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-900 dark:text-white font-black transition-all duration-300 hover:scale-105 active:scale-95"
                 >
                   Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Size Selection Modal */}
+      {showSizeModal && selectedProduct && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="relative w-full max-w-md mx-4 bg-stone-50 dark:bg-stone-900 rounded-2xl shadow-2xl border-2 border-orange-500 dark:border-orange-600 overflow-hidden animate-in zoom-in duration-300">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-orange-600 to-orange-500 px-6 py-5 relative overflow-hidden">
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-3xl -mr-16 -mt-16"></div>
+              </div>
+              <div className="relative">
+                <h3 className="text-2xl font-black text-white">Select Size</h3>
+                <p className="text-sm text-orange-100 mt-1">{selectedProduct.name}</p>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="px-6 py-6 space-y-4">
+              {/* Product Image */}
+              {selectedProduct.image && (
+                <div className="w-full aspect-video rounded-xl overflow-hidden bg-gradient-to-br from-orange-50 to-amber-50 dark:from-stone-700 dark:to-stone-800">
+                  <img
+                    src={selectedProduct.image}
+                    alt={selectedProduct.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+
+              {/* Size Options */}
+              <div className="space-y-3">
+                <p className="text-sm font-bold text-stone-900 dark:text-white">Choose your size:</p>
+                <div className="space-y-2">
+                  {selectedProduct.sizes?.map((size) => (
+                    <button
+                      key={size.id}
+                      onClick={() => {
+                        setSelectedSizeForAdd(size.size);
+                        setSelectedSizeIdForAdd(size.id);
+                        setSelectedPriceForAdd(size.price);
+                      }}
+                      disabled={!size.isAvailable}
+                      className={`w-full p-4 rounded-xl border-2 transition-all duration-200 ${
+                        selectedSizeForAdd === size.size
+                          ? 'border-orange-500 bg-orange-50 dark:bg-orange-950/30 shadow-lg shadow-orange-500/20'
+                          : 'border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 hover:border-orange-300 dark:hover:border-orange-600'
+                      } ${
+                        !size.isAvailable ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="text-left">
+                          <p className={`font-bold ${
+                            selectedSizeForAdd === size.size
+                              ? 'text-orange-600 dark:text-orange-400'
+                              : 'text-stone-900 dark:text-white'
+                          }`}>
+                            {size.size}
+                          </p>
+                          {!size.isAvailable && (
+                            <p className="text-xs text-red-500">Unavailable</p>
+                          )}
+                        </div>
+                        <p className={`text-xl font-black ${
+                          selectedSizeForAdd === size.size
+                            ? 'text-orange-600 dark:text-orange-400'
+                            : 'text-stone-700 dark:text-stone-300'
+                        }`}>
+                          ₱{size.price}
+                        </p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-4">
+                <button
+                  onClick={() => {
+                    setShowSizeModal(false);
+                    setSelectedProduct(null);
+                    setSelectedSizeForAdd('');
+                    setSelectedSizeIdForAdd(null);
+                    setSelectedPriceForAdd(0);
+                  }}
+                  className="flex-1 px-6 py-3 rounded-xl border-2 border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-900 dark:text-white font-bold transition-all duration-200"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleAddToCartWithSize}
+                  disabled={!selectedSizeForAdd}
+                  className="flex-1 px-6 py-3 rounded-xl bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 disabled:from-stone-400 disabled:to-stone-400 text-white font-bold transition-all duration-200 disabled:cursor-not-allowed shadow-lg hover:shadow-xl hover:shadow-orange-500/30"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Sugar Level Modal */}
+      {showSugarLevelModal && selectedProduct && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-neutral-800 rounded-3xl shadow-2xl w-full max-w-md border-2 border-orange-200 dark:border-orange-900 overflow-hidden animate-in zoom-in-95 duration-300">
+            {/* Header */}
+            <div className="px-6 py-5 bg-gradient-to-r from-orange-600 via-orange-500 to-orange-600 relative overflow-hidden">
+              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1IiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
+              <div className="relative">
+                <h3 className="text-2xl font-black text-white">Select Sugar Level</h3>
+                <p className="text-sm text-orange-100 mt-1">{selectedProduct.name} - {selectedSizeForAdd}</p>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="px-6 py-6 space-y-4">
+              {/* Sugar Level Options */}
+              <div className="space-y-3">
+                <p className="text-sm font-bold text-stone-900 dark:text-white">Choose your sugar level:</p>
+                <div className="space-y-2">
+                  {['100%', '75%', '50%', '25%', '0%'].map((level) => (
+                    <button
+                      key={level}
+                      onClick={() => setSelectedSugarLevel(level)}
+                      className={`w-full p-4 rounded-xl border-2 transition-all duration-200 ${
+                        selectedSugarLevel === level
+                          ? 'border-orange-500 bg-orange-50 dark:bg-orange-950/30 shadow-lg shadow-orange-500/20'
+                          : 'border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 hover:border-orange-300 dark:hover:border-orange-600'
+                      } cursor-pointer`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="text-left">
+                          <p className={`font-bold ${
+                            selectedSugarLevel === level
+                              ? 'text-orange-600 dark:text-orange-400'
+                              : 'text-stone-900 dark:text-white'
+                          }`}>
+                            {level === '100%' ? 'Regular (100%)' : 
+                             level === '75%' ? 'Less Sweet (75%)' :
+                             level === '50%' ? 'Half Sweet (50%)' :
+                             level === '25%' ? 'Light Sweet (25%)' :
+                             'No Sugar (0%)'}
+                          </p>
+                          <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">
+                            {level === '100%' ? 'Full sweetness' : 
+                             level === '0%' ? 'No added sugar' :
+                             `${level} of regular sweetness`}
+                          </p>
+                        </div>
+                        <div className={`flex items-center justify-center w-12 h-12 rounded-xl ${
+                          selectedSugarLevel === level
+                            ? 'bg-orange-500 text-white'
+                            : 'bg-stone-100 dark:bg-stone-700 text-stone-400'
+                        } transition-all duration-200`}>
+                          <span className="text-xl font-black">{level}</span>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-4">
+                <button
+                  onClick={() => {
+                    setShowSugarLevelModal(false);
+                    setShowSizeModal(true); // Go back to size selection
+                  }}
+                  className="flex-1 px-6 py-3 rounded-xl border-2 border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-900 dark:text-white font-bold transition-all duration-200"
+                >
+                  Back
+                </button>
+                <button
+                  onClick={handleAddToCartWithSizeAndSugar}
+                  className="flex-1 px-6 py-3 rounded-xl bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 text-white font-bold transition-all duration-200 shadow-lg hover:shadow-xl hover:shadow-orange-500/30"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Cash Payment Modal */}
+      {showCashPaymentModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="relative w-full max-w-lg mx-4 bg-white dark:bg-stone-900 rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in duration-200">
+            {/* Header */}
+            <div className="bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 px-8 py-6 relative overflow-hidden">
+              <div className="absolute inset-0 opacity-20">
+                <div className="absolute top-0 right-0 w-40 h-40 bg-white rounded-full blur-3xl -mr-20 -mt-20"></div>
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-orange-300 rounded-full blur-2xl -ml-16 -mb-16"></div>
+              </div>
+              <div className="relative flex items-center gap-4">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm border-2 border-white/30">
+                  <FontAwesomeIcon icon={faMoneyBill} className="h-7 w-7 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-black text-white tracking-tight">Cash Payment</h3>
+                  <p className="text-sm text-orange-100 mt-0.5">Enter amount received</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="px-8 py-6 space-y-5">
+              {/* Total Amount Card */}
+              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-50 via-amber-50 to-orange-100 dark:from-orange-950/20 dark:via-amber-950/20 dark:to-orange-900/20 p-5 border border-orange-200 dark:border-orange-800/30">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-orange-300/20 rounded-full blur-2xl -mr-12 -mt-12"></div>
+                <div className="relative">
+                  <p className="text-xs font-bold text-orange-700 dark:text-orange-400 uppercase tracking-wider mb-2">Total Amount Due</p>
+                  <p className="text-4xl font-black text-orange-600 dark:text-orange-400 tracking-tight">
+                    ₱{(() => {
+                      const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
+                      const discountAmount = (total * discountValue) / 100;
+                      const taxRate = 12;
+                      const taxAmount = (total * taxRate) / 100;
+                      return (total + taxAmount - discountAmount).toFixed(2);
+                    })()}
+                  </p>
+                </div>
+              </div>
+
+              {/* Amount Paid Input */}
+              <div className="space-y-2.5">
+                <label className="text-sm font-bold text-stone-700 dark:text-stone-300 flex items-center gap-2">
+                  <FontAwesomeIcon icon={faMoneyBill} className="h-4 w-4 text-orange-500" />
+                  Amount Paid
+                </label>
+                <div className="relative group">
+                  <span className="absolute left-5 top-1/2 -translate-y-1/2 text-3xl font-black text-stone-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors">₱</span>
+                  <input
+                    type="number"
+                    value={amountPaid}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setAmountPaid(value);
+                      const paid = parseFloat(value) || 0;
+                      const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
+                      const discountAmount = (total * discountValue) / 100;
+                      const taxRate = 12;
+                      const taxAmount = (total * taxRate) / 100;
+                      const finalTotal = total + taxAmount - discountAmount;
+                      const change = paid - finalTotal;
+                      setChangeAmount(change > 0 ? change : 0);
+                    }}
+                    placeholder="0.00"
+                    className="w-full pl-16 pr-5 py-5 text-3xl font-black rounded-2xl border-2 border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white placeholder:text-stone-300 dark:placeholder:text-stone-600 focus:border-orange-500 dark:focus:border-orange-400 focus:outline-none focus:ring-4 focus:ring-orange-500/10 transition-all"
+                    autoFocus
+                  />
+                </div>
+              </div>
+
+              {/* Quick Amount Buttons */}
+              <div className="space-y-2.5">
+                <p className="text-xs font-bold text-stone-600 dark:text-stone-400 uppercase tracking-wider flex items-center gap-2">
+                  <FontAwesomeIcon icon={faBolt} className="h-3 w-3 text-orange-500" />
+                  Quick Select
+                </p>
+                <div className="grid grid-cols-4 gap-2.5">
+                  {[100, 200, 500, 1000].map((amount) => (
+                    <button
+                      key={amount}
+                      onClick={() => {
+                        setAmountPaid(amount.toString());
+                        const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
+                        const discountAmount = (total * discountValue) / 100;
+                        const taxRate = 12;
+                        const taxAmount = (total * taxRate) / 100;
+                        const finalTotal = total + taxAmount - discountAmount;
+                        const change = amount - finalTotal;
+                        setChangeAmount(change > 0 ? change : 0);
+                      }}
+                      className="group relative overflow-hidden px-4 py-3.5 rounded-xl border-2 border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 hover:border-orange-400 dark:hover:border-orange-500 hover:bg-orange-50 dark:hover:bg-orange-950/30 text-base font-bold text-stone-700 dark:text-stone-300 hover:text-orange-600 dark:hover:text-orange-400 transition-all hover:scale-105 active:scale-95"
+                    >
+                      <span className="relative z-10">₱{amount}</span>
+                      <div className="absolute inset-0 bg-gradient-to-br from-orange-400/0 to-orange-600/0 group-hover:from-orange-400/5 group-hover:to-orange-600/5 transition-all"></div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Change Amount */}
+              {amountPaid && parseFloat(amountPaid) > 0 && (
+                <div className={`relative overflow-hidden rounded-2xl p-5 border-2 transition-all animate-in slide-in-from-top-2 duration-200 ${
+                  changeAmount >= 0 
+                    ? 'bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-emerald-950/20 dark:via-green-950/20 dark:to-teal-950/20 border-emerald-300 dark:border-emerald-800/30' 
+                    : 'bg-gradient-to-br from-rose-50 via-red-50 to-pink-50 dark:from-rose-950/20 dark:via-red-950/20 dark:to-pink-950/20 border-rose-300 dark:border-rose-800/30'
+                }`}>
+                  <div className={`absolute top-0 right-0 w-24 h-24 rounded-full blur-2xl -mr-12 -mt-12 ${
+                    changeAmount >= 0 ? 'bg-emerald-300/30' : 'bg-rose-300/30'
+                  }`}></div>
+                  <div className="relative">
+                    <div className="flex items-center gap-2 mb-2">
+                      <FontAwesomeIcon 
+                        icon={changeAmount >= 0 ? faCheckCircle : faExclamationTriangle} 
+                        className={`h-4 w-4 ${
+                          changeAmount >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'
+                        }`}
+                      />
+                      <p className={`text-xs font-bold uppercase tracking-wider ${
+                        changeAmount >= 0 
+                          ? 'text-emerald-700 dark:text-emerald-400' 
+                          : 'text-rose-700 dark:text-rose-400'
+                      }`}>
+                        {changeAmount >= 0 ? 'Customer Change (Sukli)' : 'Insufficient Payment'}
+                      </p>
+                    </div>
+                    <p className={`text-4xl font-black tracking-tight ${
+                      changeAmount >= 0 
+                        ? 'text-emerald-600 dark:text-emerald-400' 
+                        : 'text-rose-600 dark:text-rose-400'
+                    }`}>
+                      ₱{Math.abs(changeAmount).toFixed(2)}
+                    </p>
+                    {changeAmount >= 0 && changeAmount > 0 && (
+                      <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-1 font-semibold">
+                        Return to customer
+                      </p>
+                    )}
+                    {changeAmount < 0 && (
+                      <p className="text-xs text-rose-600 dark:text-rose-400 mt-1 font-semibold">
+                        Need ₱{Math.abs(changeAmount).toFixed(2)} more
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-3">
+                <button
+                  onClick={() => {
+                    setShowCashPaymentModal(false);
+                    setAmountPaid('');
+                    setChangeAmount(0);
+                  }}
+                  className="flex-1 px-6 py-4 rounded-xl border-2 border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 font-bold transition-all duration-200 hover:border-stone-300 dark:hover:border-stone-600"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
+                    const discountAmount = (total * discountValue) / 100;
+                    const taxRate = 12;
+                    const taxAmount = (total * taxRate) / 100;
+                    const finalTotal = total + taxAmount - discountAmount;
+                    const paid = parseFloat(amountPaid) || 0;
+                    
+                    if (paid >= finalTotal) {
+                      setShowCashPaymentModal(false);
+                      handleCompletePurchase('Cash');
+                      setAmountPaid('');
+                      setChangeAmount(0);
+                    }
+                  }}
+                  disabled={!amountPaid || parseFloat(amountPaid) < (() => {
+                    const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
+                    const discountAmount = (total * discountValue) / 100;
+                    const taxRate = 12;
+                    const taxAmount = (total * taxRate) / 100;
+                    return total + taxAmount - discountAmount;
+                  })()}
+                  className="flex-1 px-6 py-4 rounded-xl bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 disabled:from-stone-300 disabled:to-stone-400 dark:disabled:from-stone-700 dark:disabled:to-stone-600 text-white font-bold transition-all duration-200 disabled:cursor-not-allowed shadow-lg hover:shadow-xl hover:shadow-orange-500/30 disabled:shadow-none hover:scale-[1.02] active:scale-[0.98] disabled:hover:scale-100"
+                >
+                  Complete Purchase
                 </button>
               </div>
             </div>

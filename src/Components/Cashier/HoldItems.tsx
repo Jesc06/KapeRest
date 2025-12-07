@@ -12,6 +12,8 @@ interface CartItem {
   quantity: number;
   category: string;
   image: string;
+  selectedSize?: string;
+  sugarLevel?: string;
 }
 
 interface SalesItem {

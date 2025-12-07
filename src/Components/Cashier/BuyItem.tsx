@@ -11,6 +11,10 @@ interface CartItem {
   category: string;
   description: string;
   image: string;
+  selectedSize?: string;
+  selectedSizeId?: number;
+  selectedPrice?: number;
+  sugarLevel?: string;
 }
 
 const BuyItem: React.FC = () => {
@@ -50,13 +54,21 @@ const BuyItem: React.FC = () => {
     }
   }, []);
 
-  // Add item to cart
-  const handleAddToCart = (product: { id: number; name: string; price: number; category: string; description: string; image: string }) => {
+  // Add item to cart - handle size variations
+  const handleAddToCart = (product: { id: number; name: string; price: number; category: string; description: string; image: string; selectedSize?: string; selectedSizeId?: number; selectedPrice?: number }) => {
     setCart(prevCart => {
-      const existingItem = prevCart.find(item => item.id === product.id);
+      // Find existing item with same ID and size (if sizes are used)
+      const existingItem = prevCart.find(item => 
+        item.id === product.id && 
+        (product.selectedSize ? item.selectedSize === product.selectedSize : !item.selectedSize)
+      );
+      
       if (existingItem) {
         return prevCart.map(item =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+          (item.id === product.id && 
+           (product.selectedSize ? item.selectedSize === product.selectedSize : !item.selectedSize))
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
         );
       }
       return [...prevCart, { ...product, quantity: 1 }];

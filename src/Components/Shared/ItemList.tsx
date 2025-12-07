@@ -7,6 +7,13 @@ import LogoutPanel from './LogoutPanel';
 import UpdateItem from './UpdateItem';
 import { API_BASE_URL } from '../../config/api';
 
+interface MenuItemSize {
+  id: number;
+  size: string;
+  price: number;
+  isAvailable: boolean;
+}
+
 interface Item {
   id: number;
   itemName: string;
@@ -15,6 +22,7 @@ interface Item {
   description: string;
   isAvailable: string;
   image: string;
+  menuItemSizes?: MenuItemSize[];
 }
 
 const ItemList: React.FC = () => {
@@ -487,8 +495,16 @@ const ItemList: React.FC = () => {
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="text-sm font-black bg-gradient-to-r from-orange-600 to-amber-600 dark:from-orange-400 dark:to-amber-400 bg-clip-text text-transparent">
-                                ₱{item.price.toFixed(2)}
+                                {item.menuItemSizes && item.menuItemSizes.length > 0 
+                                  ? `₱${Math.min(...item.menuItemSizes.map(s => s.price)).toFixed(2)} - ₱${Math.max(...item.menuItemSizes.map(s => s.price)).toFixed(2)}`
+                                  : `₱${item.price.toFixed(2)}`
+                                }
                               </div>
+                              {item.menuItemSizes && item.menuItemSizes.length > 0 && (
+                                <div className="text-xs text-stone-500 dark:text-stone-400 mt-1">
+                                  {item.menuItemSizes.map(s => s.size).join(', ')}
+                                </div>
+                              )}
                             </td>
                             <td className="px-6 py-4">
                               <div className="text-sm text-stone-600 dark:text-stone-400 max-w-xs truncate">
