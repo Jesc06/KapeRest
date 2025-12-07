@@ -1,115 +1,69 @@
-# React + TypeScript + Vite
+# **KapeRest: Point of Sale (POS) System**
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
 
-Currently, two official plugins are available:
+## 🔗 Backend API Repository
 
+The *core business logic* and *API endpoints* reside in the dedicated **Backend API** repository.
 
-## React Compiler
+| Repository | Purpose | Technology | Link |
+| :--- | :--- | :--- | :--- |
+| **Backend API** | ASP.NET Core Web API logic and data handling. | `ASP.NET Core REST API` | [KapeRest.Api](https://github.com/Jesc06/KapeRest.Api.git) |
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Key Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+* **Order Management:** Seamless creation, modification, and tracking of customer orders.
+* **Menu Configuration:** Dynamic management of *product items*, pricing, and *categories*.
+* **User Authentication & Authorization:** Secure, *role-based access control* for different *staff roles* (e.g., **Cashier**, **Manager**).
+* **Transaction History:** Robust logging and retrieval of past sales for *reporting* and *auditing*.
+* **RESTful API Design:** Clean, *scalable*, and well-*documented endpoints* for *integration* with the frontend UI.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Technology Stack
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+The KapeRest project is built using modern and *scalable* technologies.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+| Category | Technology | Description |
+| :--- | :--- | :--- |
+| **Backend API** | **`ASP.NET Core Web API`** (C#) | Provides a robust, *high-performance* foundation for all *business logic* and *data operations*. |
+| **Frontend UI** | **`TypeScript`** | Ensures *type-safe*, *maintainable*, and *scalable* *client-side application development*. |
+| **Database** | (To be defined: SQL Server / PostgreSQL) | The *persistence layer* for storing all *application data* (orders, users, menu items). |
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Contributing
 
-## Setup — download and run locally
+Your contributions are greatly appreciated! Please follow these simple steps:
 
-Below are the minimum steps and recommended environment to run this project locally. Commands assume Windows PowerShell (the repo author tested on Windows).
+1.  **Fork** the Project
+2.  **Create** your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3.  **Commit** your Changes (`git commit -m 'Add some AmazingFeature'`)
+4.  **Push** to the Branch (`git push origin feature/AmazingFeature`)
+5.  **Open** a **Pull Request**
 
-Requirements
-- Node.js 18+ (LTS recommended)
-- npm (comes with Node.js) or a compatible package manager
+---
 
-Quick start (PowerShell)
+## Contributors
 
-```powershell
-# clone the repo
-git clone https://github.com/Jesc06/DotnetDailyCode.git
-cd DotnetDailyCode
+We thank the following individuals for their valuable contributions to the KapeRest project.
 
-# install dependencies
-npm install
+| Avatar | Developer | Role | GitHub Profile |
+| :---: | :--- | :--- | :---: |
+| <img src="https://avatars.githubusercontent.com/u/218352403?v=4" alt="Cj Royo Mendoza" width="50" style="border-radius: 50%;"> | **Cj Royo Mendoza** | Second lead developer | [Cmendoza11](https://github.com/Cmendoza11) |
+| <img src="https://avatars.githubusercontent.com/u/238653991?v=4" alt="Lhey Anne Inao Pedernal" width="50" style="border-radius: 50%;"> | **Lhey Anne Inao Pedernal** | Documentation and front-end developer | [Lhey-Pretty](https://github.com/Lhey-Pretty) |
+| <img src="https://avatars.githubusercontent.com/u/238605866?v=4" alt="Jaira Cunanan" width="50" style="border-radius: 50%;"> | **Jaira Cunanan** | UI Designer and narrative contributor | [cunananjaira6-spec](https://github.com/cunananjaira6-spec) |
 
-# start dev server (Vite)
-npm run dev
+---
 
-# build for production
-npm run build
+## License
 
-# preview production build locally
-npm run preview
-```
+Distributed under the **MIT License**. See **`LICENSE.md`** for more information.
 
-Notes
-- Default dev server URL: http://localhost:5173
-- If you see type errors related to `vite/client` or CSS imports, run `npm install` (this project includes the required dev dependencies in `package.json`).
-- Tailwind CSS is used for styling; no additional global setup is required beyond `npm install`.
-- Recommended Node version manager: nvm-windows if you need to switch Node versions.
+---
 
-Environment/config files
-- This project does not require any special .env files by default. If you add environment variables, create a `.env` file at the repo root and restart the dev server.
+## Contact
 
-Troubleshooting
-- If `npm run dev` exits with errors, run `npm install` again and check that `node_modules` was created.
-- If the TypeScript server complains about missing types, ensure `@types/node` and `vite` are installed from devDependencies (they are listed in `package.json`).
-- For any CSS import issues, there is a declaration file at `src/vite-env.d.ts` which declares `*.css` modules for TypeScript.
-
-If you want, I can add a short script to the repo that checks Node version and prints quick diagnostics—tell me if you'd like that.
-```
+If you have questions or need support, please **open an issue** in this repository.
