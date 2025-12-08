@@ -147,10 +147,52 @@ const MainPanel: React.FC<MainPanelProps> = ({
             setShowPaymentSuccessModal(true);
             setPurchaseSuccess(true);
             
-            // Reload page after 2 seconds
-            setTimeout(() => {
-              window.location.reload();
-            }, 2000);
+            // Clear cart and trigger data refresh
+            if (onBuy) {
+              onBuy();
+            }
+          } else if (result.status === 'chargeable' || result.status === 'authorized') {
+            // Payment authorized but transaction not yet completed
+            // Trigger manual completion via TestCompletion endpoint
+            console.log('💳 Payment authorized, triggering completion...');
+            
+            try {
+              const completeResponse = await fetch(`${API_BASE_URL}/PayGcash/TestCompletion?referenceId=${gcashReference}`, {
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                },
+              });
+              
+              if (completeResponse.ok) {
+                const completeResult = await completeResponse.json();
+                console.log('Completion result:', completeResult);
+                
+                if (completeResult.success) {
+                  console.log('✅ Purchase completed successfully!');
+                  clearInterval(pollInterval);
+                  
+                  // Close GCash modal
+                  setShowGCashModal(false);
+                  if (gcashQrCode) {
+                    URL.revokeObjectURL(gcashQrCode);
+                  }
+                  
+                  // Clear localStorage
+                  localStorage.removeItem(`gcash_payment_${gcashReference}`);
+                  
+                  // Show success modal
+                  setShowPaymentSuccessModal(true);
+                  setPurchaseSuccess(true);
+                  
+                  // Clear cart and trigger data refresh
+                  if (onBuy) {
+                    onBuy();
+                  }
+                }
+              }
+            } catch (err) {
+              console.error('Error triggering completion:', err);
+            }
           }
         }
       } catch (err) {
@@ -162,7 +204,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
       console.log('Stopping transaction status polling');
       clearInterval(pollInterval);
     };
-  }, [showGCashModal, gcashReference, gcashQrCode]);
+  }, [showGCashModal, gcashReference, gcashQrCode, onBuy]);
 
   // Fetch menu items from API
   useEffect(() => {
@@ -492,8 +534,9 @@ const MainPanel: React.FC<MainPanelProps> = ({
       try {
         const token = localStorage.getItem('accessToken');
         if (token) {
-          // Extract branchId from token (if available)
+          // Extract branchId and cashierId from token (if available)
           let branchId: number | null = null;
+          let cashierId: string | null = null;
           try {
             const base64Url = token.split('.')[1];
             const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -502,18 +545,26 @@ const MainPanel: React.FC<MainPanelProps> = ({
             }).join(''));
             const decodedToken = JSON.parse(jsonPayload);
             if (decodedToken.branchId) branchId = Number(decodedToken.branchId);
+            // Use cashierId claim (same as what Purchases.tsx uses)
+            if (decodedToken.cashierId) cashierId = decodedToken.cashierId;
+            else if (decodedToken.uid) cashierId = decodedToken.uid;
+            console.log('Extracted cashierId for GCash payment:', cashierId);
           } catch (ex) {
-            console.warn('Failed to parse token for branchId:', ex);
-            // branchId remains null
+            console.warn('Failed to parse token for branchId/cashierId:', ex);
+            // branchId and cashierId remain null
           }
 
           const pendingDto = {
             PaymentReference: referenceId,
+            CashierId: cashierId,
             BranchId: branchId,
             CartItems: cart.map((i: any) => ({ 
               MenuItemId: Number(i.id), 
+              MenuItemSizeId: i.selectedSizeId || null,
+              Size: i.selectedSize || 'Regular',
               Quantity: Number(i.quantity), 
-              Price: Number(i.selectedPrice || i.price) 
+              Price: Number(i.selectedPrice || i.price),
+              SugarLevel: i.sugarLevel || 'N/A'
             })),
             DiscountPercent: Number(discountValue) || 0,
             TaxPercent: Number(taxRate) || 12,
@@ -2005,6 +2056,16 @@ const MainPanel: React.FC<MainPanelProps> = ({
                     ₱{finalTotal.toFixed(2)}
                   </p>
                 </div>
+
+                {/* Close Button */}
+                <button
+                  onClick={() => {
+                    setShowPaymentSuccessModal(false);
+                  }}
+                  className="w-full px-6 py-4 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95"
+                >
+                  OK
+                </button>
               </div>
             </div>
           </div>

@@ -50,7 +50,7 @@ const SalesPage: React.FC = () => {
 
 
 
-        // Decode JWT to get cashierId
+        // Decode JWT to get cashierId (same logic as Purchases.tsx)
         const base64Url = token.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
         const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
@@ -58,7 +58,9 @@ const SalesPage: React.FC = () => {
         }).join(''));
         
         const decoded = JSON.parse(jsonPayload);
-        const cashierId = decoded.cashierId;
+        const cashierId = decoded.cashierId || decoded.uid;
+        
+        console.log('SalesPage - Using cashierId:', cashierId);
 
         if (!cashierId) {
           console.error('Cashier ID not found in token');
