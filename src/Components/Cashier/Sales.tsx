@@ -21,6 +21,10 @@ interface SalesProps {
   onToggleSidebarExpand?: () => void;
   selectedPeriod?: PeriodFilter;
   onPeriodChange?: (period: PeriodFilter) => void;
+  startDate?: string;
+  endDate?: string;
+  onStartDateChange?: (date: string) => void;
+  onEndDateChange?: (date: string) => void;
 }
 
 type PeriodFilter = 'daily' | 'monthly' | 'yearly';
@@ -32,6 +36,10 @@ const Sales: React.FC<SalesProps> = ({
   onToggleSidebarExpand,
   selectedPeriod: propSelectedPeriod,
   onPeriodChange,
+  startDate = '',
+  endDate = '',
+  onStartDateChange,
+  onEndDateChange,
 }) => {
   const [searchText, setSearchText] = useState('');
   const [selectedPeriod, setSelectedPeriod] = useState<PeriodFilter>(propSelectedPeriod || 'daily');
@@ -51,9 +59,25 @@ const Sales: React.FC<SalesProps> = ({
         record.menuItemName.toLowerCase().includes(searchText.toLowerCase()) ||
         record.status.toLowerCase().includes(searchText.toLowerCase());
 
-      return matchesSearch;
+      // Date range filtering
+      let matchesDateRange = true;
+      if (startDate || endDate) {
+        const recordDate = new Date(record.dateTime);
+        if (startDate) {
+          const start = new Date(startDate);
+          start.setHours(0, 0, 0, 0);
+          matchesDateRange = matchesDateRange && recordDate >= start;
+        }
+        if (endDate) {
+          const end = new Date(endDate);
+          end.setHours(23, 59, 59, 999);
+          matchesDateRange = matchesDateRange && recordDate <= end;
+        }
+      }
+
+      return matchesSearch && matchesDateRange;
     });
-  }, [sales, searchText]);
+  }, [sales, searchText, startDate, endDate]);
 
   // Calculate totals
   const totals = useMemo(() => {
@@ -182,6 +206,48 @@ const Sales: React.FC<SalesProps> = ({
                     <span className="relative z-10">{filter.label}</span>
                   </button>
                 ))}
+              </div>
+
+              {/* Date Range Picker */}
+              <div className="flex items-center gap-2.5 ml-auto">
+                <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500/10 via-orange-400/10 to-orange-500/10 border-2 border-orange-300/50 dark:border-orange-700/50 shadow-md">
+                  <div className="h-2.5 w-2.5 rounded-full bg-orange-600 dark:bg-orange-500 animate-pulse shadow-lg shadow-orange-500/50"></div>
+                  <span className="text-xs font-black uppercase tracking-widest text-orange-700 dark:text-orange-400">Date Range</span>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <div className="relative">
+                    <input
+                      type="date"
+                      value={startDate}
+                      onChange={(e) => onStartDateChange?.(e.target.value)}
+                      className="px-4 py-3 rounded-2xl border-2 border-orange-200/50 dark:border-orange-900/50 bg-white dark:bg-neutral-800 text-stone-700 dark:text-stone-300 text-sm font-semibold focus:border-orange-500 dark:focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 hover:border-orange-400 dark:hover:border-orange-600 shadow-md hover:shadow-lg transition-all duration-300"
+                    />
+                  </div>
+                  
+                  <span className="text-stone-400 dark:text-stone-500 font-bold">to</span>
+                  
+                  <div className="relative">
+                    <input
+                      type="date"
+                      value={endDate}
+                      onChange={(e) => onEndDateChange?.(e.target.value)}
+                      className="px-4 py-3 rounded-2xl border-2 border-orange-200/50 dark:border-orange-900/50 bg-white dark:bg-neutral-800 text-stone-700 dark:text-stone-300 text-sm font-semibold focus:border-orange-500 dark:focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 hover:border-orange-400 dark:hover:border-orange-600 shadow-md hover:shadow-lg transition-all duration-300"
+                    />
+                  </div>
+
+                  {(startDate || endDate) && (
+                    <button
+                      onClick={() => {
+                        onStartDateChange?.('');
+                        onEndDateChange?.('');
+                      }}
+                      className="px-4 py-3 rounded-2xl bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 text-sm font-bold hover:bg-orange-200 dark:hover:bg-orange-900/50 border-2 border-orange-300/50 dark:border-orange-700/50 shadow-md hover:shadow-lg transition-all duration-300 active:scale-95"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>

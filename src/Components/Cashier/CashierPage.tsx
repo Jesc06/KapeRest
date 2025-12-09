@@ -13,6 +13,22 @@ interface CashierSalesData {
   transactionCount: number;
 }
 
+interface ApiSalesRecord {
+  id: number;
+  username: string;
+  fullName: string;
+  email: string;
+  branchName: string;
+  branchLocation: string;
+  menuItemName: string;
+  dateTime: string;
+  subtotal: number;
+  tax: number;
+  discount: number;
+  total: number;
+  status: string;
+}
+
 const CashierPage: React.FC = () => {
   const { t } = useLanguage();
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -61,14 +77,15 @@ const CashierPage: React.FC = () => {
           endpoint = 'CashierDailySales';
           break;
         case '7d':
-          endpoint = 'CashierWeeklySales';
+          // Use daily sales for weekly view (backend will return daily data)
+          endpoint = 'CashierDailySales';
           break;
         case '30d':
           endpoint = 'CashierMonthlySales';
           break;
         case 'custom':
-          endpoint = 'CashierCustomSales';
-          params += `&startDate=${startDate}&endDate=${endDate}`;
+          // Use daily sales for custom date range
+          endpoint = 'CashierDailySales';
           break;
       }
 
@@ -79,7 +96,48 @@ const CashierPage: React.FC = () => {
       });
 
       if (!response.ok) throw new Error('Failed to fetch sales data');
-      const data: CashierSalesData[] = await response.json();
+      const rawData: ApiSalesRecord[] = await response.json();
+
+      // Aggregate raw transaction data by date
+      const aggregatedData = new Map<string, { totalSales: number; transactionCount: number }>();
+      
+      rawData.forEach(record => {
+        const recordDate = new Date(record.dateTime);
+        const dateKey = recordDate.toISOString().split('T')[0]; // YYYY-MM-DD format
+        
+        // Apply date filters
+        let includeRecord = true;
+        if (range === '7d') {
+          const sevenDaysAgo = new Date();
+          sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+          sevenDaysAgo.setHours(0, 0, 0, 0);
+          includeRecord = recordDate >= sevenDaysAgo;
+        } else if (range === 'custom' && startDate && endDate) {
+          const start = new Date(startDate);
+          start.setHours(0, 0, 0, 0);
+          const end = new Date(endDate);
+          end.setHours(23, 59, 59, 999);
+          includeRecord = recordDate >= start && recordDate <= end;
+        }
+
+        if (includeRecord && record.status.toLowerCase() === 'completed') {
+          const existing = aggregatedData.get(dateKey) || { totalSales: 0, transactionCount: 0 };
+          aggregatedData.set(dateKey, {
+            totalSales: existing.totalSales + record.total,
+            transactionCount: existing.transactionCount + 1,
+          });
+        }
+      });
+
+      // Convert to array and sort by date
+      const data: CashierSalesData[] = Array.from(aggregatedData.entries())
+        .map(([date, stats]) => ({
+          date,
+          totalSales: stats.totalSales,
+          transactionCount: stats.transactionCount,
+        }))
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
       setSalesData(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
@@ -129,45 +187,23 @@ const CashierPage: React.FC = () => {
         });
 
         if (!response.ok) throw new Error('Failed to fetch today metrics');
-        const data: any = await response.json();
+        const data: ApiSalesRecord[] = await response.json();
 
-        // Robust handling: API may return aggregated objects or raw transactions.
-        let totalSales = 0;
-        let totalTransactions = 0;
+        // Calculate today's metrics from raw transactions
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
 
-        if (Array.isArray(data)) {
-          if (data.length > 0 && (data[0].hasOwnProperty('totalSales') || data[0].hasOwnProperty('transactionCount'))) {
-            // Aggregated daily/period objects
-            totalSales = data.reduce((sum: number, item: any) => sum + (Number(item.totalSales) || 0), 0);
-            totalTransactions = data.reduce((sum: number, item: any) => sum + (Number(item.transactionCount) || 0), 0);
-          } else if (data.length > 0 && (data[0].hasOwnProperty('total') || data[0].hasOwnProperty('dateTime') || data[0].hasOwnProperty('status'))) {
-            // Raw transactions array - sum only Completed transactions for today
-            const today = new Date();
-            const isSameDay = (iso?: string) => {
-              if (!iso) return false;
-              const d = new Date(iso);
-              return d.getFullYear() === today.getFullYear() && d.getMonth() === today.getMonth() && d.getDate() === today.getDate();
-            };
+        const todayTransactions = data.filter(tx => {
+          const txDate = new Date(tx.dateTime);
+          return txDate >= today && 
+                 txDate < tomorrow && 
+                 tx.status.toLowerCase() === 'completed';
+        });
 
-            const completedToday = data.filter((tx: any) => {
-              const status = tx.status ? String(tx.status).toLowerCase() : '';
-              const isCompleted = status === 'completed' || status === 'complete' || status === 'done' || status === '';
-              const dateOk = tx.dateTime ? isSameDay(tx.dateTime) : true;
-              return isCompleted && dateOk;
-            });
-
-            totalSales = completedToday.reduce((sum: number, tx: any) => sum + (Number(tx.total ?? tx.subtotal ?? 0) || 0), 0);
-            totalTransactions = completedToday.length;
-          } else {
-            // Generic fallback: try to sum numeric fields
-            totalSales = data.reduce((sum: number, item: any) => sum + (Number(item.total ?? item.totalSales ?? 0) || 0), 0);
-            totalTransactions = data.length;
-          }
-        } else if (data && typeof data === 'object') {
-          // Single object response with totals
-          totalSales = Number(data.totalSales ?? data.total ?? data.Total ?? 0) || 0;
-          totalTransactions = Number(data.transactionCount ?? data.totalTransactions ?? 0) || 0;
-        }
+        const totalSales = todayTransactions.reduce((sum, tx) => sum + tx.total, 0);
+        const totalTransactions = todayTransactions.length;
 
         setTodaySales(totalSales);
         setTodayTransactions(totalTransactions);

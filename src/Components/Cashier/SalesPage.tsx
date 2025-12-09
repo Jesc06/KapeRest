@@ -38,6 +38,8 @@ const SalesPage: React.FC = () => {
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [sales, setSales] = useState<SalesRecord[]>([]);
   const [selectedPeriod, setSelectedPeriod] = useState<PeriodFilter>('daily');
+  const [startDate, setStartDate] = useState<string>('');
+  const [endDate, setEndDate] = useState<string>('');
 
   useEffect(() => {
     const fetchSalesData = async (period: PeriodFilter) => {
@@ -132,6 +134,10 @@ const SalesPage: React.FC = () => {
           onToggleSidebarExpand={() => setSidebarExpanded(!sidebarExpanded)}
           selectedPeriod={selectedPeriod}
           onPeriodChange={setSelectedPeriod}
+          startDate={startDate}
+          endDate={endDate}
+          onStartDateChange={setStartDate}
+          onEndDateChange={setEndDate}
         />
       </div>
     </div>
