@@ -102,7 +102,6 @@ const MainPanel: React.FC<MainPanelProps> = ({
   const [amountPaid, setAmountPaid] = useState<string>('');
   const [changeAmount, setChangeAmount] = useState<number>(0);
   const [gcashPaymentStatus, setGcashPaymentStatus] = useState<string>('pending');
-  const [verifyingPayment, setVerifyingPayment] = useState(false);
 
   // Automatic webhook-based payment completion
   // After user authorizes GCash payment, PayMongo webhook automatically completes purchase

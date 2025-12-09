@@ -24,6 +24,8 @@ const AuditTrailPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isActionFilterOpen, setIsActionFilterOpen] = useState(false);
   const [isRoleFilterOpen, setIsRoleFilterOpen] = useState(false);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   // Fetch audit logs from API
   useEffect(() => {
@@ -73,7 +75,23 @@ const AuditTrailPage: React.FC = () => {
     const matchesAction = filterAction === 'all' || log.action === filterAction;
     const matchesRole = filterRole === 'all' || log.role === filterRole;
     
-    return matchesSearch && matchesAction && matchesRole;
+    // Date range filtering
+    let matchesDate = true;
+    if (startDate || endDate) {
+      const recordDate = new Date(log.date);
+      if (startDate) {
+        const start = new Date(startDate);
+        start.setHours(0, 0, 0, 0);
+        if (recordDate < start) matchesDate = false;
+      }
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+        if (recordDate > end) matchesDate = false;
+      }
+    }
+    
+    return matchesSearch && matchesAction && matchesRole && matchesDate;
   });
 
   const formatDate = (dateString: string) => {
@@ -361,6 +379,39 @@ const AuditTrailPage: React.FC = () => {
                       Clear filters
                     </button>
                   </div>
+                )}
+              </div>
+
+              {/* Date Range Filters */}
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-2 bg-stone-50 dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl px-3 py-2">
+                  <label className="text-xs font-semibold text-stone-700 dark:text-stone-300 whitespace-nowrap">From:</label>
+                  <input
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="bg-transparent text-sm text-stone-900 dark:text-white focus:outline-none"
+                  />
+                </div>
+                <div className="flex items-center gap-2 bg-stone-50 dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl px-3 py-2">
+                  <label className="text-xs font-semibold text-stone-700 dark:text-stone-300 whitespace-nowrap">To:</label>
+                  <input
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    className="bg-transparent text-sm text-stone-900 dark:text-white focus:outline-none"
+                  />
+                </div>
+                {(startDate || endDate) && (
+                  <button
+                    onClick={() => {
+                      setStartDate('');
+                      setEndDate('');
+                    }}
+                    className="px-3 py-2 text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-xl transition-colors"
+                  >
+                    Clear
+                  </button>
                 )}
               </div>
 

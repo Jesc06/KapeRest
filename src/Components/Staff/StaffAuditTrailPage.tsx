@@ -33,6 +33,8 @@ const StaffAuditTrailPage: React.FC = () => {
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   // Fetch audit logs from API
   useEffect(() => {
@@ -77,9 +79,37 @@ const StaffAuditTrailPage: React.FC = () => {
       log.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (log.description && log.description.toLowerCase().includes(searchTerm.toLowerCase()));
     
-    const matchesAction = selectedAction === 'all' || log.action === selectedAction;
+    // Enhanced action filtering with keyword matching
+    let matchesAction = true;
+    if (selectedAction !== 'all') {
+      if (selectedAction === 'Purchase') {
+        matchesAction = log.action.toLowerCase().includes('purchase') || 
+                       (log.description && log.description.toLowerCase().includes('purchase'));
+      } else if (selectedAction === 'GCash') {
+        matchesAction = log.action.toLowerCase().includes('gcash') || 
+                       (log.description && log.description.toLowerCase().includes('gcash'));
+      } else {
+        matchesAction = log.action === selectedAction;
+      }
+    }
 
-    return matchesSearch && matchesAction;
+    // Date range filtering
+    let matchesDate = true;
+    if (startDate || endDate) {
+      const recordDate = new Date(log.date);
+      if (startDate) {
+        const start = new Date(startDate);
+        start.setHours(0, 0, 0, 0);
+        if (recordDate < start) matchesDate = false;
+      }
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+        if (recordDate > end) matchesDate = false;
+      }
+    }
+
+    return matchesSearch && matchesAction && matchesDate;
   });
 
   const formatDateTime = (dateString: string) => {
@@ -102,6 +132,10 @@ const StaffAuditTrailPage: React.FC = () => {
         return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
       case 'Logout':
         return 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400';
+      case 'Purchase':
+        return 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400';
+      case 'GCash':
+        return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
       default:
         return 'bg-stone-100 text-stone-700 dark:bg-stone-800 dark:text-stone-400';
     }
@@ -183,7 +217,7 @@ const StaffAuditTrailPage: React.FC = () => {
             <div className="flex-1 flex flex-col gap-6 px-4 sm:px-6 md:px-8 py-6 overflow-auto">
 
               {/* Filter Dropdown - Clean & Professional */}
-              <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center gap-3">
                 <div className="relative">
                   <button
                     onClick={() => setIsFilterOpen(!isFilterOpen)}
@@ -421,11 +455,108 @@ const StaffAuditTrailPage: React.FC = () => {
                               </svg>
                             )}
                           </button>
+
+                          <button
+                            onClick={() => {
+                              setSelectedAction('Purchase');
+                              setIsFilterOpen(false);
+                            }}
+                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+                              selectedAction === 'Purchase'
+                                ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-md'
+                                : 'hover:bg-teal-50 dark:hover:bg-teal-950/30 text-stone-700 dark:text-stone-300'
+                            }`}
+                          >
+                            <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${
+                              selectedAction === 'Purchase' 
+                                ? 'bg-white/20' 
+                                : 'bg-teal-100 dark:bg-teal-900/30'
+                            }`}>
+                              <svg className={`w-4 h-4 ${selectedAction === 'Purchase' ? 'text-white' : 'text-teal-600 dark:text-teal-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                              </svg>
+                            </div>
+                            <div className="flex-1">
+                              <div className="font-bold text-sm">Purchase</div>
+                              <div className={`text-xs ${selectedAction === 'Purchase' ? 'text-white/80' : 'text-stone-500 dark:text-stone-400'}`}>
+                                Purchase activities
+                              </div>
+                            </div>
+                            {selectedAction === 'Purchase' && (
+                              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                            )}
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              setSelectedAction('GCash');
+                              setIsFilterOpen(false);
+                            }}
+                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+                              selectedAction === 'GCash'
+                                ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-md'
+                                : 'hover:bg-green-50 dark:hover:bg-green-950/30 text-stone-700 dark:text-stone-300'
+                            }`}
+                          >
+                            <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${
+                              selectedAction === 'GCash' 
+                                ? 'bg-white/20' 
+                                : 'bg-green-100 dark:bg-green-900/30'
+                            }`}>
+                              <svg className={`w-4 h-4 ${selectedAction === 'GCash' ? 'text-white' : 'text-green-600 dark:text-green-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                            </div>
+                            <div className="flex-1">
+                              <div className="font-bold text-sm">GCash Payment</div>
+                              <div className={`text-xs ${selectedAction === 'GCash' ? 'text-white/80' : 'text-stone-500 dark:text-stone-400'}`}>
+                                GCash payment activities
+                              </div>
+                            </div>
+                            {selectedAction === 'GCash' && (
+                              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                            )}
+                          </button>
                         </div>
                       </div>
                     </>
                   )}
                 </div>
+
+                {/* Date Range Filters */}
+                <div className="flex items-center gap-2 bg-stone-50 dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl px-3 py-2">
+                  <label className="text-xs font-semibold text-stone-700 dark:text-stone-300 whitespace-nowrap">From:</label>
+                  <input
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="bg-transparent text-sm text-stone-900 dark:text-white focus:outline-none"
+                  />
+                </div>
+                <div className="flex items-center gap-2 bg-stone-50 dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl px-3 py-2">
+                  <label className="text-xs font-semibold text-stone-700 dark:text-stone-300 whitespace-nowrap">To:</label>
+                  <input
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    className="bg-transparent text-sm text-stone-900 dark:text-white focus:outline-none"
+                  />
+                </div>
+                {(startDate || endDate) && (
+                  <button
+                    onClick={() => {
+                      setStartDate('');
+                      setEndDate('');
+                    }}
+                    className="px-3 py-2 text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-xl transition-colors"
+                  >
+                    Clear
+                  </button>
+                )}
 
                 {/* Results Counter */}
                 {selectedAction !== 'all' && (

@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
-  faBars, 
   faBuilding,
   faCheckCircle,
   faExclamationCircle,
-  faArrowLeft
+  faTimes
 } from '@fortawesome/free-solid-svg-icons';
-import StaffSidebar from '../Staff/StaffSidebar';
-import LogoutPanel from './LogoutPanel';
 import { API_BASE_URL } from '../../config/api';
 import MessageBox from './MessageBox';
 import { jwtDecode } from 'jwt-decode';
+
+interface AddSupplierProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSuccess: () => void;
+}
 
 interface SupplierFormData {
   supplierName: string;
@@ -30,10 +32,7 @@ interface FieldErrors {
   address?: string;
 }
 
-const AddSupplier: React.FC = () => {
-  const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [sidebarExpanded, setSidebarExpanded] = useState(true);
+const AddSupplier: React.FC<AddSupplierProps> = ({ isOpen, onClose, onSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -239,8 +238,8 @@ const AddSupplier: React.FC = () => {
       });
 
       setTimeout(() => {
-        navigate('/staff/suppliers');
-      }, 2000);
+        onSuccess(); // Call success callback to refresh list and close modal
+      }, 1500);
     } catch (err) {
       setMessageType('error');
       setMessageText(err instanceof Error ? err.message : 'Failed to add supplier. Please try again.');
@@ -252,58 +251,44 @@ const AddSupplier: React.FC = () => {
 
   const hasErrors = Object.keys(fieldErrors).length > 0;
 
+  if (!isOpen) return null;
+
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-orange-50 via-white to-amber-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950">
-      {/* Animated Background Elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 -right-40 w-96 h-96 bg-orange-200/20 dark:bg-orange-500/5 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-amber-200/20 dark:bg-amber-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-      </div>
+    <div className="fixed inset-0 z-50 overflow-y-auto">
+      {/* Backdrop */}
+      <div 
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+        onClick={onClose}
+      ></div>
 
-      <div className="relative z-10 flex h-screen overflow-hidden">
-        <StaffSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
-
-        <div className={`flex h-screen flex-1 flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
-          {/* Header */}
-          <div className="sticky top-0 z-20 border-b border-orange-100/50 dark:border-stone-700/50 bg-stone-50/80 dark:bg-stone-900/80 px-4 sm:px-6 md:px-8 py-3.5 sm:py-4 shadow-sm backdrop-blur-xl">
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-                <button
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className="lg:hidden flex-shrink-0 h-10 w-10 flex items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white transition-all duration-200 active:scale-95 shadow-lg shadow-orange-500/25"
-                >
-                  <FontAwesomeIcon icon={faBars} className="h-4 w-4" />
-                </button>
-
-                <button
-                  onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                  className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
-                >
-                  <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
-                </button>
-
-                <h1 className="text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-400 dark:to-orange-300 bg-clip-text text-transparent truncate">Add New Supplier</h1>
+      {/* Modal Container */}
+      <div className="flex min-h-full items-center justify-center p-4">
+        {/* Modal Content */}
+        <div 
+          className="relative w-full max-w-3xl bg-stone-50 dark:bg-stone-900 rounded-2xl shadow-2xl transform transition-all"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Modal Header */}
+          <div className="sticky top-0 z-10 flex items-center justify-between border-b border-stone-200 dark:border-stone-700 bg-stone-50/95 dark:bg-stone-900/95 px-6 py-4 backdrop-blur-xl rounded-t-2xl">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/25">
+                <FontAwesomeIcon icon={faBuilding} className="h-5 w-5 text-white" />
               </div>
-
-              <LogoutPanel />
+              <div>
+                <h2 className="text-xl font-bold text-stone-900 dark:text-white">Add Supplier</h2>
+                <p className="text-xs text-stone-600 dark:text-stone-400">Create a new supplier entry</p>
+              </div>
             </div>
+            <button
+              onClick={onClose}
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-stone-500 hover:bg-stone-200 dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-white transition-colors"
+            >
+              <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
+            </button>
           </div>
 
-          {/* Main Content */}
-          <div className="flex-1 overflow-auto px-6 sm:px-8 md:px-12 py-10 sm:py-12">
-            <div className="w-full max-w-5xl mx-auto">
-              {/* Page Header */}
-              <div className="mb-8">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/25">
-                    <FontAwesomeIcon icon={faBuilding} className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300 bg-clip-text text-transparent">Add Supplier</h2>
-                    <p className="text-sm text-stone-600 dark:text-stone-400 mt-1">Create a new supplier profile with all essential contact information</p>
-                  </div>
-                </div>
-              </div>
+          {/* Modal Body - Scrollable */}
+          <div className="max-h-[calc(100vh-200px)] overflow-y-auto px-6 py-5">
 
               {/* Alert Messages */}
               {error && (
@@ -474,7 +459,7 @@ const AddSupplier: React.FC = () => {
                   <button
                     type="submit"
                     disabled={isLoading || hasErrors}
-                    className="flex-1 px-4 py-2.5 bg-orange-600 hover:bg-orange-700 disabled:bg-neutral-400 text-white font-medium rounded-lg disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="w-full px-4 py-2.5 bg-orange-600 hover:bg-orange-700 disabled:bg-neutral-400 text-white font-medium rounded-lg disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {isLoading ? (
                       <>
@@ -488,16 +473,6 @@ const AddSupplier: React.FC = () => {
                       </>
                     )}
                   </button>
-
-                  <button
-                    type="button"
-                    onClick={() => navigate('/staff')}
-                    disabled={isLoading}
-                    className="flex-1 px-4 py-2.5 bg-neutral-200 dark:bg-stone-800 hover:bg-neutral-300 dark:hover:bg-stone-700 text-stone-900 dark:text-white font-medium rounded-lg disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                  >
-                    <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4" />
-                    <span>Cancel</span>
-                  </button>
                 </div>
 
                 {/* Helper Text */}
@@ -505,7 +480,6 @@ const AddSupplier: React.FC = () => {
                   <span className="text-red-500">*</span> Required fields
                 </p>
               </form>
-            </div>
           </div>
         </div>
       </div>

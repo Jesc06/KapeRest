@@ -12,9 +12,6 @@ import ChangePassword from "../Components/Cashier/ChangePassword";
 import HoldItems from "../Components/Cashier/HoldItems";
 import Purchases from "../Components/Cashier/Purchases";
 import StaffPage from "../Components/Staff/StaffPage";
-import AddSupplier from "../Components/Shared/AddSupplier";
-import AddItem from "../Components/Shared/AddItem";
-import AddStocks from "../Components/Shared/AddStocks";
 import StocksList from "../Components/Shared/StocksList";
 import SupplierList from "../Components/Shared/SupplierList";
 import ItemList from "../Components/Shared/ItemList";
@@ -95,11 +92,8 @@ const App: React.FC = () => {
             
             {/* Staff routes */}
             <Route path="/staff" element={<ProtectedRoute allowedRoles={['staff']}><StaffPage /></ProtectedRoute>} />
-            <Route path="/staff/add-supplier" element={<ProtectedRoute allowedRoles={['staff']}><AddSupplier /></ProtectedRoute>} />
             <Route path="/staff/suppliers" element={<ProtectedRoute allowedRoles={['staff']}><SupplierList /></ProtectedRoute>} />
-            <Route path="/staff/add-item" element={<ProtectedRoute allowedRoles={['staff']}><AddItem /></ProtectedRoute>} />
             <Route path="/staff/items" element={<ProtectedRoute allowedRoles={['staff']}><ItemList /></ProtectedRoute>} />
-            <Route path="/staff/add-stocks" element={<ProtectedRoute allowedRoles={['staff']}><AddStocks /></ProtectedRoute>} />
             <Route path="/staff/stocks" element={<ProtectedRoute allowedRoles={['staff']}><StocksList /></ProtectedRoute>} />
             <Route path="/staff/sales" element={<ProtectedRoute allowedRoles={['staff']}><StaffSales /></ProtectedRoute>} />
             <Route path="/staff/purchases" element={<ProtectedRoute allowedRoles={['staff']}><StaffPurchases /></ProtectedRoute>} />

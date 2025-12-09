@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faSearch, faTruck, faEdit, faTrash, faPlus, faTimes, faSave } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from '../Staff/StaffSidebar';
 import LogoutPanel from './LogoutPanel';
+import AddSupplier from './AddSupplier';
 import { API_BASE_URL } from '../../config/api';
 import MessageBox from './MessageBox';
 import { jwtDecode } from 'jwt-decode';
@@ -19,7 +19,6 @@ interface Supplier {
 }
 
 const SupplierList: React.FC = () => {
-  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -33,6 +32,9 @@ const SupplierList: React.FC = () => {
   const [messageText, setMessageText] = useState('');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   // Get userId from JWT token (cashierId)
   const getUserId = () => {
@@ -112,14 +114,32 @@ const SupplierList: React.FC = () => {
     fetchSuppliers();
   }, []);
 
-  // Filter suppliers based on search term
-  const filteredSuppliers = suppliers.filter(supplier =>
-    supplier.supplierName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    supplier.contactPerson.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    supplier.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    supplier.phoneNumber.includes(searchTerm) ||
-    supplier.address.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Filter suppliers based on search term and date range
+  const filteredSuppliers = suppliers.filter(supplier => {
+    const matchesSearch = supplier.supplierName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      supplier.contactPerson.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      supplier.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      supplier.phoneNumber.includes(searchTerm) ||
+      supplier.address.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    // Date range filtering
+    let matchesDateRange = true;
+    if (startDate || endDate) {
+      const supplierDate = new Date(supplier.transactionDate);
+      if (startDate) {
+        const start = new Date(startDate);
+        start.setHours(0, 0, 0, 0);
+        matchesDateRange = matchesDateRange && supplierDate >= start;
+      }
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+        matchesDateRange = matchesDateRange && supplierDate <= end;
+      }
+    }
+    
+    return matchesSearch && matchesDateRange;
+  });
 
   const handleEdit = (supplier: Supplier) => {
     setEditingSupplier({ ...supplier });
@@ -315,6 +335,39 @@ const SupplierList: React.FC = () => {
           <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
             <div className="flex-1 flex flex-col gap-6 px-4 sm:px-6 md:px-8 py-6 overflow-auto">
 
+              {/* Date Range Filters */}
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-2 bg-stone-50 dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl px-3 py-2">
+                  <label className="text-xs font-semibold text-stone-700 dark:text-stone-300 whitespace-nowrap">From:</label>
+                  <input
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="bg-transparent text-sm text-stone-900 dark:text-white focus:outline-none"
+                  />
+                </div>
+                <div className="flex items-center gap-2 bg-stone-50 dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl px-3 py-2">
+                  <label className="text-xs font-semibold text-stone-700 dark:text-stone-300 whitespace-nowrap">To:</label>
+                  <input
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    className="bg-transparent text-sm text-stone-900 dark:text-white focus:outline-none"
+                  />
+                </div>
+                {(startDate || endDate) && (
+                  <button
+                    onClick={() => {
+                      setStartDate('');
+                      setEndDate('');
+                    }}
+                    className="px-3 py-2 text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-xl transition-colors"
+                  >
+                    Clear Dates
+                  </button>
+                )}
+              </div>
+
               {/* Table Section */}
               <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-stone-50 dark:bg-stone-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-stone-700">
                 <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-stone-50 via-orange-50/30 to-stone-50 dark:from-stone-800 dark:via-orange-950/20 dark:to-stone-800">
@@ -333,7 +386,7 @@ const SupplierList: React.FC = () => {
                       </div>
                       
                       <button
-                        onClick={() => navigate('/staff/add-supplier')}
+                        onClick={() => setIsAddModalOpen(true)}
                         className="relative flex items-center gap-2.5 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl transition-all duration-300 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:scale-105 active:scale-95 overflow-hidden group"
                       >
                         <div className="absolute inset-0 bg-gradient-to-t from-orange-500/20 to-transparent"></div>
@@ -610,6 +663,18 @@ const SupplierList: React.FC = () => {
           title={messageType === 'success' ? 'Success' : 'Error'}
           message={messageText}
           onClose={() => setShowMessageBox(false)}
+        />
+      )}
+
+      {/* Add Supplier Modal */}
+      {isAddModalOpen && (
+        <AddSupplier
+          isOpen={isAddModalOpen}
+          onClose={() => setIsAddModalOpen(false)}
+          onSuccess={() => {
+            fetchSuppliers(); // Refresh the list
+            setIsAddModalOpen(false);
+          }}
         />
       )}
     </div>

@@ -41,6 +41,8 @@ const StaffPurchases: React.FC = () => {
   const [voidRequestCount, setVoidRequestCount] = useState(0);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   // Fetch purchases from API
   useEffect(() => {
@@ -155,7 +157,7 @@ const StaffPurchases: React.FC = () => {
     }
   };
 
-  // Filter purchases based on search term, payment method, and status
+  // Filter purchases based on search term, payment method, status, and date range
   const filteredPurchases = purchases.filter(purchase => {
     const matchesSearch = purchase.menuItemName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       purchase.paymentMethod.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -166,16 +168,23 @@ const StaffPurchases: React.FC = () => {
     const matchesPayment = selectedPaymentMethod === 'all' || purchase.paymentMethod === selectedPaymentMethod;
     const matchesStatus = selectedStatus === 'all' || purchase.status === selectedStatus;
     
-    console.log('Filtering purchase:', {
-      id: purchase.id,
-      status: purchase.status,
-      selectedStatus,
-      matchesStatus,
-      matchesPayment,
-      matchesSearch
-    });
+    // Date range filtering
+    let matchesDateRange = true;
+    if (startDate || endDate) {
+      const purchaseDate = new Date(purchase.dateTime);
+      if (startDate) {
+        const start = new Date(startDate);
+        start.setHours(0, 0, 0, 0);
+        matchesDateRange = matchesDateRange && purchaseDate >= start;
+      }
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+        matchesDateRange = matchesDateRange && purchaseDate <= end;
+      }
+    }
     
-    return matchesSearch && matchesPayment && matchesStatus;
+    return matchesSearch && matchesPayment && matchesStatus && matchesDateRange;
   });
 
   console.log('Total purchases:', purchases.length);
@@ -245,19 +254,19 @@ const StaffPurchases: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-stone-50 dark:bg-stone-900">
+    <div className="min-h-screen w-full bg-stone-50 dark:bg-stone-900 overflow-hidden">
       <div className="flex h-screen overflow-hidden">
         <StaffSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
 
-        <div className={`flex h-screen flex-1 flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
+        <div className={`flex h-screen flex-1 flex-col transition-all duration-300 overflow-hidden ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
           {/* Premium Header */}
           <div className="sticky top-0 z-20 backdrop-blur-xl bg-stone-50/90 dark:bg-stone-900/95 border-b border-stone-200/50 dark:border-stone-700/50 shadow-lg shadow-black/5">
             <div className="px-4 sm:px-6 md:px-8 py-4">
               <div className="flex items-center justify-between gap-3 sm:gap-4">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 min-w-0 flex-shrink">
                   <button
                     onClick={() => setSidebarOpen(!sidebarOpen)}
-                    className="lg:hidden flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40 transition-all duration-300 active:scale-95 hover:scale-105"
+                    className="lg:hidden flex-shrink-0 h-11 w-11 flex items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40 transition-all duration-300 active:scale-95 hover:scale-105"
                   >
                     <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                   </button>
@@ -269,28 +278,28 @@ const StaffPurchases: React.FC = () => {
                     <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
                   </button>
 
-                  <div className="hidden sm:flex items-center gap-3">
-                    <div>
-                      <h1 className="text-xl font-black text-stone-900 dark:text-white tracking-tight">{t('purchases.title')}</h1>
-                      <p className="text-xs font-medium text-stone-600 dark:text-stone-400">{t('purchases.subtitle')}</p>
+                  <div className="hidden sm:flex items-center gap-3 min-w-0">
+                    <div className="min-w-0">
+                      <h1 className="text-xl font-black text-stone-900 dark:text-white tracking-tight truncate">{t('purchases.title')}</h1>
+                      <p className="text-xs font-medium text-stone-600 dark:text-stone-400 truncate">{t('purchases.subtitle')}</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex-1 max-w-xl">
+                <div className="flex-1 max-w-xl min-w-0">
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-amber-500/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div className="relative flex items-center gap-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-2 border-stone-200 dark:border-stone-700 focus-within:border-orange-500 dark:focus-within:border-orange-500 px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
-                      <FontAwesomeIcon icon={faSearch} className="h-5 w-5 text-stone-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors" />
+                      <FontAwesomeIcon icon={faSearch} className="h-5 w-5 flex-shrink-0 text-stone-400 dark:text-stone-500 group-focus-within:text-orange-500 transition-colors" />
                       <input
                         type="text"
                         placeholder={t('purchases.searchPlaceholder')}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="flex-1 bg-transparent text-sm font-medium text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-neutral-500 focus:outline-none"
+                        className="flex-1 min-w-0 bg-transparent text-sm font-medium text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-neutral-500 focus:outline-none"
                       />
                       {searchTerm && (
-                        <span className="text-xs font-bold text-orange-600 dark:text-orange-400 px-2 py-1 rounded-md bg-orange-100 dark:bg-orange-900/30">
+                        <span className="flex-shrink-0 text-xs font-bold text-orange-600 dark:text-orange-400 px-2 py-1 rounded-md bg-orange-100 dark:bg-orange-900/30 whitespace-nowrap">
                           {filteredPurchases.length} {t('purchases.found')}
                         </span>
                       )}
@@ -298,11 +307,11 @@ const StaffPurchases: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 flex-shrink-0">
                   {/* Void Requests Bell */}
                   <button
                     onClick={() => navigate('/staff/void-requests')}
-                    className="relative p-2.5 text-orange-500 hover:text-orange-600 dark:text-orange-400 dark:hover:text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-950/20 rounded-lg transition-all duration-200 hover:scale-110 active:scale-95"
+                    className="relative flex-shrink-0 p-2.5 text-orange-500 hover:text-orange-600 dark:text-orange-400 dark:hover:text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-950/20 rounded-lg transition-all duration-200 hover:scale-110 active:scale-95"
                     title={t('purchases.voidRequests')}
                   >
                     <FontAwesomeIcon icon={faBell} className="h-6 w-6" />
@@ -325,6 +334,39 @@ const StaffPurchases: React.FC = () => {
 
               {/* Filter Buttons */}
               <div className="flex flex-wrap items-center gap-3">
+                {/* Date Range Filters */}
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 bg-stone-50 dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl px-3 py-2">
+                    <label className="text-xs font-semibold text-stone-700 dark:text-stone-300 whitespace-nowrap">From:</label>
+                    <input
+                      type="date"
+                      value={startDate}
+                      onChange={(e) => setStartDate(e.target.value)}
+                      className="bg-transparent text-sm text-stone-900 dark:text-white focus:outline-none"
+                    />
+                  </div>
+                  <div className="flex items-center gap-2 bg-stone-50 dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl px-3 py-2">
+                    <label className="text-xs font-semibold text-stone-700 dark:text-stone-300 whitespace-nowrap">To:</label>
+                    <input
+                      type="date"
+                      value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)}
+                      className="bg-transparent text-sm text-stone-900 dark:text-white focus:outline-none"
+                    />
+                  </div>
+                  {(startDate || endDate) && (
+                    <button
+                      onClick={() => {
+                        setStartDate('');
+                        setEndDate('');
+                      }}
+                      className="px-3 py-2 text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-xl transition-colors"
+                    >
+                      Clear Dates
+                    </button>
+                  )}
+                </div>
+
                 {/* Payment Method Filters */}
                 <div className="flex items-center gap-2">
                   <button
@@ -395,8 +437,8 @@ const StaffPurchases: React.FC = () => {
               </div>
 
               {/* Table Section */}
-              <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-stone-50 dark:bg-stone-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-stone-700">
-                <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-stone-50 via-orange-50/30 to-stone-50 dark:from-stone-800 dark:via-orange-950/20 dark:to-stone-800">
+              <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-stone-50 dark:bg-stone-800 shadow-2xl shadow-black/10 border border-stone-200 dark:border-stone-700 overflow-hidden">
+                <div className="flex-shrink-0 relative border-b-2 border-orange-500/20 bg-gradient-to-r from-stone-50 via-orange-50/30 to-stone-50 dark:from-stone-800 dark:via-orange-950/20 dark:to-stone-800">
                   <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-orange-500 to-orange-600"></div>
                   
                   <div className="px-6 sm:px-8 py-6">
@@ -414,7 +456,7 @@ const StaffPurchases: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="overflow-x-auto flex-1">
+                <div className="flex-1 overflow-x-auto overflow-y-auto">
                   {isLoading ? (
                     <div className="flex items-center justify-center py-20">
                       <div className="text-center">
@@ -431,20 +473,20 @@ const StaffPurchases: React.FC = () => {
                       </div>
                     </div>
                   ) : (
-                    <table className="w-full">
-                      <thead>
+                    <table className="w-full border-collapse">
+                      <thead className="sticky top-0 z-10">
                         <tr className="border-b border-orange-100 dark:border-stone-700 bg-orange-50/50 dark:bg-stone-800/50">
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">{t('purchases.saleId')}</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">{t('purchases.receiptNo')}</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">{t('purchases.itemName')}</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">{t('purchases.dateTime')}</th>
-                          <th className="px-6 py-4 text-right text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">{t('purchases.subtotal')}</th>
-                          <th className="px-6 py-4 text-right text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">{t('purchases.tax')}</th>
-                          <th className="px-6 py-4 text-right text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">{t('purchases.discount')}</th>
-                          <th className="px-6 py-4 text-right text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">{t('purchases.total')}</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">{t('purchases.payment')}</th>
-                          <th className="px-6 py-4 text-center text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">{t('purchases.status')}</th>
-                          <th className="px-6 py-4 text-center text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider">{t('purchases.actions')}</th>
+                          <th className="px-4 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider whitespace-nowrap">{t('purchases.saleId')}</th>
+                          <th className="px-4 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider whitespace-nowrap">{t('purchases.receiptNo')}</th>
+                          <th className="px-4 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider whitespace-nowrap">{t('purchases.itemName')}</th>
+                          <th className="px-4 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider whitespace-nowrap">{t('purchases.dateTime')}</th>
+                          <th className="px-4 py-4 text-right text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider whitespace-nowrap">{t('purchases.subtotal')}</th>
+                          <th className="px-4 py-4 text-right text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider whitespace-nowrap">{t('purchases.tax')}</th>
+                          <th className="px-4 py-4 text-right text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider whitespace-nowrap">{t('purchases.discount')}</th>
+                          <th className="px-4 py-4 text-right text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider whitespace-nowrap">{t('purchases.total')}</th>
+                          <th className="px-4 py-4 text-left text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider whitespace-nowrap">{t('purchases.payment')}</th>
+                          <th className="px-4 py-4 text-center text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider whitespace-nowrap">{t('purchases.status')}</th>
+                          <th className="px-4 py-4 text-center text-xs font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-wider whitespace-nowrap">{t('purchases.actions')}</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-orange-100 dark:divide-neutral-800">

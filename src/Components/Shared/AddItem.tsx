@@ -1,19 +1,27 @@
   import React, { useState, useEffect } from 'react';
-  import { useNavigate } from 'react-router-dom';
   import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
   import { 
-    faBars, 
     faBox, 
     faImage,
     faCheckCircle,
     faExclamationCircle,
-    faArrowLeft,
+    faTimes,
     faPlus,
     faTrash
   } from '@fortawesome/free-solid-svg-icons';
-  import StaffSidebar from '../Staff/StaffSidebar';
-  import LogoutPanel from './LogoutPanel';
   import { API_BASE_URL } from '../../config/api';
+
+  interface AddItemProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onSuccess: () => void;
+  }
+
+  interface MenuItemSize {
+    id?: number;
+    size: string;
+    price: number;
+  }
 
   interface ItemFormData {
     itemName: string;
@@ -22,6 +30,7 @@
     description: string;
     image: File | null;
     imagePreview: string | null;
+    sizes: MenuItemSize[];
   }
 
   interface ProductItem {
@@ -38,10 +47,7 @@
     supplierId: number;
   }
 
-  const AddItem: React.FC = () => {
-    const navigate = useNavigate();
-    const [sidebarOpen, setSidebarOpen] = useState(true);
-    const [sidebarExpanded, setSidebarExpanded] = useState(true);
+  const AddItem: React.FC<AddItemProps> = ({ isOpen, onClose, onSuccess }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -53,12 +59,17 @@
       description: '',
       image: null,
       imagePreview: null,
+      sizes: [],
     });
 
     const [products, setProducts] = useState<Product[]>([]);
     const [selectedProducts, setSelectedProducts] = useState<ProductItem[]>([]);
     const [currentProduct, setCurrentProduct] = useState<string>('');
     const [currentQuantity, setCurrentQuantity] = useState<string>('');
+    
+    // Size management state
+    const [currentSize, setCurrentSize] = useState<string>('');
+    const [currentSizePrice, setCurrentSizePrice] = useState<string>('');
 
     // Fetch products from API - filtered by userId from backend
     useEffect(() => {
@@ -167,6 +178,47 @@
       setSelectedProducts(selectedProducts.filter(p => p.productOfSupplierId !== productId));
     };
 
+    const handleAddSize = () => {
+      if (!currentSize || !currentSizePrice) {
+        setError('Please enter size name and price');
+        return;
+      }
+
+      const price = parseFloat(currentSizePrice);
+      if (price <= 0) {
+        setError('Size price must be greater than 0');
+        return;
+      }
+
+      // Check if size already exists
+      const existingSize = formData.sizes.find(s => s.size.toLowerCase() === currentSize.toLowerCase());
+      if (existingSize) {
+        setError('Size already added. Remove it first to change price.');
+        return;
+      }
+
+      const newSize: MenuItemSize = {
+        size: currentSize,
+        price: price
+      };
+
+      setFormData(prev => ({
+        ...prev,
+        sizes: [...prev.sizes, newSize]
+      }));
+
+      setCurrentSize('');
+      setCurrentSizePrice('');
+      setError('');
+    };
+
+    const handleRemoveSize = (sizeName: string) => {
+      setFormData(prev => ({
+        ...prev,
+        sizes: prev.sizes.filter(s => s.size !== sizeName)
+      }));
+    };
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
       const { name, value } = e.target;
       setFormData((prev) => ({
@@ -266,9 +318,19 @@
           
           apiFormData.append('ProductsJson', productsJsonString);
           
+          // Add MenuItemSizes if any
+          if (formData.sizes.length > 0) {
+            const sizesPayload = formData.sizes.map(s => ({
+              Size: s.size,
+              Price: s.price
+            }));
+            apiFormData.append('MenuItemSizesJson', JSON.stringify(sizesPayload));
+          }
+          
           if (attempt === 1) {
             console.log('ProductsJson being sent:', productsJsonString);
             console.log('Number of products being sent:', productsPayload.length);
+            console.log('Sizes being sent:', formData.sizes);
           }
 
           console.log(`🔄 Attempt ${attempt} of ${maxRetries}...`);
@@ -305,14 +367,18 @@
             description: '',
             image: null,
             imagePreview: null,
+            sizes: [],
           });
           setSelectedProducts([]);
           setCurrentProduct('');
           setCurrentQuantity('');
+          setCurrentSize('');
+          setCurrentSizePrice('');
 
           setTimeout(() => {
-            navigate('/staff/items');
-          }, 2000);
+            onSuccess(); // Call the success callback to refresh list
+            onClose(); // Close the modal
+          }, 1500);
           
           // Success - break out of retry loop
           return;
@@ -343,55 +409,44 @@
       setIsLoading(false);
     };
 
+    if (!isOpen) return null;
+
     return (
-      <div className="min-h-screen w-full bg-gradient-to-br from-orange-50 via-white to-amber-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950">
-        {/* Animated Background Elements */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 -right-40 w-96 h-96 bg-orange-200/20 dark:bg-orange-500/5 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-amber-200/20 dark:bg-amber-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        </div>
+      <div className="fixed inset-0 z-50 overflow-y-auto">
+        {/* Backdrop */}
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+          onClick={onClose}
+        ></div>
 
-        <div className="relative z-10 flex h-screen overflow-hidden">
-          <StaffSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} isExpanded={sidebarExpanded} />
-
-          <div className={`flex h-screen flex-1 flex-col transition-all duration-300 ${sidebarExpanded ? 'lg:ml-80' : 'lg:ml-28'}`}>
-            <div className="sticky top-0 z-20 border-b border-orange-100/50 dark:border-stone-700/50 bg-stone-50/80 dark:bg-stone-900/80 px-4 sm:px-6 md:px-8 py-3.5 sm:py-4 shadow-sm backdrop-blur-xl">
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-                  <button
-                    onClick={() => setSidebarOpen(!sidebarOpen)}
-                    className="lg:hidden flex-shrink-0 h-10 w-10 flex items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white transition-all duration-200 active:scale-95 shadow-lg shadow-orange-500/25"
-                  >
-                    <FontAwesomeIcon icon={faBars} className="h-4 w-4" />
-                  </button>
-
-                  <button
-                    onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                    className="hidden lg:flex flex-shrink-0 h-11 w-11 items-center justify-center rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-orange-600 dark:text-orange-400 transition-all duration-200 active:scale-95"
-                  >
-                    <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
-                  </button>
-
-                  <h1 className="text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-400 dark:to-orange-300 bg-clip-text text-transparent truncate">Add Menu Item</h1>
+        {/* Modal Container */}
+        <div className="flex min-h-full items-center justify-center p-4">
+          {/* Modal Content */}
+          <div 
+            className="relative w-full max-w-4xl bg-stone-50 dark:bg-stone-900 rounded-2xl shadow-2xl transform transition-all"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-stone-200 dark:border-stone-700 bg-stone-50/95 dark:bg-stone-900/95 px-6 py-4 backdrop-blur-xl rounded-t-2xl">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/25">
+                  <FontAwesomeIcon icon={faBox} className="h-5 w-5 text-white" />
                 </div>
-
-                <LogoutPanel />
+                <div>
+                  <h2 className="text-xl font-bold text-stone-900 dark:text-white">Add Menu Item</h2>
+                  <p className="text-xs text-stone-600 dark:text-stone-400">Create a new item for your menu</p>
+                </div>
               </div>
+              <button
+                onClick={onClose}
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-stone-500 hover:bg-stone-200 dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-white transition-colors"
+              >
+                <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
+              </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-              <div className="w-full max-w-5xl mx-auto">
-                <div className="mb-6 sm:mb-8">
-                  <div className="flex items-center gap-3 sm:gap-4">
-                    <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/25">
-                      <FontAwesomeIcon icon={faBox} className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300 bg-clip-text text-transparent truncate">Add Menu Item</h2>
-                      <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 mt-1">Create a new menu item for your store</p>
-                    </div>
-                  </div>
-                </div>
+            {/* Modal Body - Scrollable */}
+            <div className="max-h-[calc(100vh-200px)] overflow-y-auto px-6 py-5">
 
                 {error && (
                   <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50/80 dark:bg-red-950/30 border border-red-200 dark:border-red-800/50 rounded-xl sm:rounded-2xl flex items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-300 backdrop-blur-sm shadow-lg">
@@ -491,6 +546,87 @@
                       placeholder="Brief description of the menu item"
                       disabled={isLoading}
                     />
+                  </div>
+
+                  {/* Size Selection */}
+                  <div>
+                    <label className="block text-xs sm:text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">
+                      Sizes (Optional)
+                    </label>
+                    
+                    {/* Add Size Form */}
+                    <div className="space-y-4 p-3 sm:p-4 lg:p-5 bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-800/50 dark:to-neutral-800/30 rounded-xl border border-neutral-200 dark:border-stone-700">
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <input
+                          type="text"
+                          value={currentSize}
+                          onChange={(e) => setCurrentSize(e.target.value)}
+                          className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:text-stone-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all text-sm sm:text-base"
+                          placeholder="Size name (e.g., Small, Medium, Large)"
+                          disabled={isLoading}
+                        />
+                        <div className="flex gap-2 sm:gap-3">
+                          <div className="relative flex-1 sm:w-32">
+                            <span className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-neutral-500 dark:text-stone-400 text-sm sm:text-base font-medium">₱</span>
+                            <input
+                              type="number"
+                              value={currentSizePrice}
+                              onChange={(e) => setCurrentSizePrice(e.target.value)}
+                              className="w-full pl-8 sm:pl-9 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-lg border border-neutral-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:text-stone-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 transition-all text-sm sm:text-base"
+                              placeholder="Price"
+                              min="0"
+                              step="0.01"
+                              disabled={isLoading}
+                            />
+                          </div>
+                          <button
+                            type="button"
+                            onClick={handleAddSize}
+                            className="flex-shrink-0 px-4 sm:px-5 py-2.5 sm:py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg font-semibold transition-all duration-200 active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+                            disabled={isLoading}
+                          >
+                            <FontAwesomeIcon icon={faPlus} className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                            <span className="text-sm sm:text-base">Add</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Selected Sizes List */}
+                      {formData.sizes.length > 0 && (
+                        <div className="space-y-3">
+                          <p className="text-xs sm:text-sm font-semibold text-stone-700 dark:text-stone-300 flex items-center gap-2">
+                            <span className="w-2 h-2 bg-orange-500 rounded-full flex-shrink-0"></span>
+                            <span>Available Sizes ({formData.sizes.length})</span>
+                          </p>
+                          <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                            {formData.sizes.map((sizeItem) => (
+                              <div
+                                key={sizeItem.size}
+                                className="flex items-center justify-between gap-3 p-3 sm:p-4 bg-stone-50 dark:bg-stone-900 rounded-lg sm:rounded-xl border border-neutral-200 dark:border-stone-700 shadow-sm hover:shadow-md transition-all"
+                              >
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-xs sm:text-sm font-medium text-stone-900 dark:text-white truncate">
+                                    {sizeItem.size}
+                                  </p>
+                                  <p className="text-xs text-neutral-500 dark:text-stone-400">
+                                    ₱{sizeItem.price.toFixed(2)}
+                                  </p>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveSize(sizeItem.size)}
+                                  className="flex-shrink-0 p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors"
+                                  disabled={isLoading}
+                                  aria-label="Remove size"
+                                >
+                                  <FontAwesomeIcon icon={faTrash} className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   {/* Product Items - Multiple Selection */}
@@ -636,7 +772,7 @@
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="flex-1 px-4 sm:px-6 py-3 sm:py-3.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-neutral-400 disabled:to-neutral-400 text-white font-semibold rounded-xl disabled:cursor-not-allowed flex items-center justify-center gap-2.5 shadow-lg shadow-orange-500/25 hover:shadow-xl hover:shadow-orange-500/30 transition-all duration-200 active:scale-[0.98] text-sm sm:text-base"
+                      className="w-full px-4 sm:px-6 py-3 sm:py-3.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-neutral-400 disabled:to-neutral-400 text-white font-semibold rounded-xl disabled:cursor-not-allowed flex items-center justify-center gap-2.5 shadow-lg shadow-orange-500/25 hover:shadow-xl hover:shadow-orange-500/30 transition-all duration-200 active:scale-[0.98] text-sm sm:text-base"
                     >
                       {isLoading ? (
                         <>
@@ -650,16 +786,6 @@
                         </>
                       )}
                     </button>
-
-                    <button
-                      type="button"
-                      onClick={() => navigate('/staff')}
-                      disabled={isLoading}
-                      className="flex-1 px-4 sm:px-6 py-3 sm:py-3.5 bg-neutral-200 dark:bg-stone-800 hover:bg-neutral-300 dark:hover:bg-stone-700 text-stone-900 dark:text-white font-semibold rounded-xl disabled:cursor-not-allowed disabled:opacity-50 flex items-center justify-center gap-2.5 transition-all duration-200 active:scale-[0.98] shadow-sm hover:shadow-md text-sm sm:text-base"
-                    >
-                      <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4 sm:h-5 sm:w-5" />
-                      <span>Cancel</span>
-                    </button>
                   </div>
 
                   {/* Helper Text */}
@@ -669,7 +795,6 @@
                     </p>
                   </div>
                 </form>
-              </div>
             </div>
           </div>
         </div>

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faSearch, faCoffee, faEdit, faTrash, faPlus, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from '../Staff/StaffSidebar';
 import LogoutPanel from './LogoutPanel';
 import UpdateItem from './UpdateItem';
+import AddItem from './AddItem';
 import { API_BASE_URL } from '../../config/api';
 
 interface MenuItemSize {
@@ -26,13 +26,13 @@ interface Item {
 }
 
 const ItemList: React.FC = () => {
-  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [items, setItems] = useState<Item[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
   const [selectedAvailability, setSelectedAvailability] = useState('all');
 
@@ -422,7 +422,7 @@ const ItemList: React.FC = () => {
                       
                       <div className="flex items-center gap-3">
                         <button
-                          onClick={() => navigate('/staff/add-item')}
+                          onClick={() => setIsAddModalOpen(true)}
                           className="relative flex items-center gap-2.5 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl transition-all duration-300 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:scale-105 active:scale-95 overflow-hidden group"
                         >
                           <div className="absolute inset-0 bg-gradient-to-t from-orange-500/20 to-transparent"></div>
@@ -562,6 +562,15 @@ const ItemList: React.FC = () => {
               setSelectedItemId(null);
             }}
             itemId={selectedItemId}
+            onSuccess={handleUpdateSuccess}
+          />
+        )}
+
+        {/* Add Item Modal */}
+        {isAddModalOpen && (
+          <AddItem
+            isOpen={isAddModalOpen}
+            onClose={() => setIsAddModalOpen(false)}
             onSuccess={handleUpdateSuccess}
           />
         )}

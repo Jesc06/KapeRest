@@ -40,6 +40,8 @@ const StaffSales: React.FC<StaffSalesProps> = ({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [isGenerating, setIsGenerating] = useState<PeriodFilter | null>(null);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   // Filter sales data - API already filters by period, so we only filter by search
   const filteredSales = useMemo(() => {
@@ -53,9 +55,25 @@ const StaffSales: React.FC<StaffSalesProps> = ({
         (record.fullName ?? '').toLowerCase().includes(searchText.toLowerCase()) ||
         (record.branchName ?? '').toLowerCase().includes(searchText.toLowerCase());
 
-      return matchesSearch;
+      // Date range filtering
+      let matchesDate = true;
+      if (startDate || endDate) {
+        const recordDate = new Date(record.dateTime);
+        if (startDate) {
+          const start = new Date(startDate);
+          start.setHours(0, 0, 0, 0);
+          if (recordDate < start) matchesDate = false;
+        }
+        if (endDate) {
+          const end = new Date(endDate);
+          end.setHours(23, 59, 59, 999);
+          if (recordDate > end) matchesDate = false;
+        }
+      }
+
+      return matchesSearch && matchesDate;
     });
-  }, [salesState, searchText]);
+  }, [salesState, searchText, startDate, endDate]);
 
   // Fetch sales data for current cashier and period
   useEffect(() => {
@@ -426,6 +444,39 @@ const StaffSales: React.FC<StaffSalesProps> = ({
       {/* Main Content Area */}
       <div className="flex flex-1 overflow-hidden flex-col gap-6 px-4 sm:px-6 md:px-8 py-6">
         
+        {/* Date Range Filters */}
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-2 bg-stone-50 dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl px-3 py-2">
+            <label className="text-xs font-semibold text-stone-700 dark:text-stone-300 whitespace-nowrap">From:</label>
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="bg-transparent text-sm text-stone-900 dark:text-white focus:outline-none"
+            />
+          </div>
+          <div className="flex items-center gap-2 bg-stone-50 dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl px-3 py-2">
+            <label className="text-xs font-semibold text-stone-700 dark:text-stone-300 whitespace-nowrap">To:</label>
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="bg-transparent text-sm text-stone-900 dark:text-white focus:outline-none"
+            />
+          </div>
+          {(startDate || endDate) && (
+            <button
+              onClick={() => {
+                setStartDate('');
+                setEndDate('');
+              }}
+              className="px-3 py-2 text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-xl transition-colors"
+            >
+              Clear
+            </button>
+          )}
+        </div>
+
         {/* Premium Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Total Transactions Card */}

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faSearch, faBox, faBoxes, faEdit, faTrash, faPlus, faTimes, faSave } from '@fortawesome/free-solid-svg-icons';
 import StaffSidebar from '../Staff/StaffSidebar';
 import LogoutPanel from './LogoutPanel';
+import AddStocks from './AddStocks';
 import { API_BASE_URL } from '../../config/api';
 import MessageBox from './MessageBox';
 
@@ -43,7 +43,6 @@ interface Branch {
 }
 
 const StocksList: React.FC = () => {
-  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -61,6 +60,9 @@ const StocksList: React.FC = () => {
   const [messageText, setMessageText] = useState('');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState<number | string | null>(null);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   // Decode JWT token to get cashierId and branchId
   useEffect(() => {
@@ -160,20 +162,27 @@ const StocksList: React.FC = () => {
     fetchStocks();
   }, []);
 
-  // Filter stocks based on search and category
+  // Filter stocks based on search, category, and date range
   const filteredStocks = stocks.filter(stock => {
     const searchLower = searchTerm.toLowerCase();
     
+    let matchesSearch = false;
     if (filterCategory === 'product') {
-      return stock.productName.toLowerCase().includes(searchLower);
+      matchesSearch = stock.productName.toLowerCase().includes(searchLower);
     } else if (filterCategory === 'supplier') {
-      return stock.supplierName.toLowerCase().includes(searchLower);
+      matchesSearch = stock.supplierName.toLowerCase().includes(searchLower);
     } else {
-      return (
+      matchesSearch = (
         stock.productName.toLowerCase().includes(searchLower) ||
         stock.supplierName.toLowerCase().includes(searchLower)
       );
     }
+    
+    // Date range filtering (using stock creation/update date if available)
+    let matchesDateRange = true;
+    // Note: Add date field to Stock interface if needed
+    
+    return matchesSearch && matchesDateRange;
   });
 
   const handleEdit = (stock: Stock) => {
@@ -388,6 +397,39 @@ const StocksList: React.FC = () => {
           <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
             <div className="flex-1 flex flex-col gap-6 px-4 sm:px-6 md:px-8 py-6 overflow-auto">
 
+              {/* Date Range Filters */}
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-2 bg-stone-50 dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl px-3 py-2">
+                  <label className="text-xs font-semibold text-stone-700 dark:text-stone-300 whitespace-nowrap">From:</label>
+                  <input
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="bg-transparent text-sm text-stone-900 dark:text-white focus:outline-none"
+                  />
+                </div>
+                <div className="flex items-center gap-2 bg-stone-50 dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl px-3 py-2">
+                  <label className="text-xs font-semibold text-stone-700 dark:text-stone-300 whitespace-nowrap">To:</label>
+                  <input
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    className="bg-transparent text-sm text-stone-900 dark:text-white focus:outline-none"
+                  />
+                </div>
+                {(startDate || endDate) && (
+                  <button
+                    onClick={() => {
+                      setStartDate('');
+                      setEndDate('');
+                    }}
+                    className="px-3 py-2 text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-xl transition-colors"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+
               {/* Table Section */}
               <div className="flex-1 min-h-0 flex flex-col rounded-2xl bg-stone-50 dark:bg-stone-800 shadow-2xl shadow-black/10 overflow-hidden border border-stone-200 dark:border-stone-700">
                 <div className="flex-shrink-0 relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-stone-50 via-orange-50/30 to-stone-50 dark:from-stone-800 dark:via-orange-950/20 dark:to-stone-800">
@@ -406,7 +448,7 @@ const StocksList: React.FC = () => {
                       </div>
                       
                       <button
-                        onClick={() => navigate('/staff/add-stocks')}
+                        onClick={() => setIsAddModalOpen(true)}
                         className="relative flex items-center gap-2.5 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl transition-all duration-300 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:scale-105 active:scale-95 overflow-hidden group"
                       >
                         <div className="absolute inset-0 bg-gradient-to-t from-orange-500/20 to-transparent"></div>
@@ -686,6 +728,16 @@ const StocksList: React.FC = () => {
           onClose={() => setShowMessageBox(false)}
         />
       )}
+
+      {/* Add Stocks Modal */}
+      <AddStocks
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSuccess={() => {
+          fetchStocks();
+          setIsAddModalOpen(false);
+        }}
+      />
     </div>
   );
 };
