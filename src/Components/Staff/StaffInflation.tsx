@@ -10,8 +10,19 @@ import {
   faCalendarWeek,
   faCalendar,
   faSun,
-  faFire
+  faFire,
+  faChartArea
 } from '@fortawesome/free-solid-svg-icons';
+import { 
+  AreaChart, 
+  Area, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  Legend
+} from 'recharts';
 import { API_BASE_URL } from '../../config/api';
 
 interface InflationData {
@@ -276,6 +287,177 @@ const StaffInflation: React.FC = () => {
             )}
           </div>
         )}
+      </div>
+
+      {/* Revenue Trend Chart */}
+      <div className="mb-6 rounded-2xl bg-gradient-to-br from-white to-stone-50 dark:from-stone-800 dark:to-stone-900 shadow-lg border-2 border-orange-200/50 dark:border-orange-900/30 overflow-hidden">
+        <div className="relative overflow-hidden border-b-2 border-orange-500/20 bg-gradient-to-r from-orange-50 via-amber-50/30 to-orange-50 dark:from-orange-950/30 dark:via-amber-950/20 dark:to-orange-950/30">
+          <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-orange-500 to-amber-600"></div>
+          
+          <div className="px-6 sm:px-8 py-5">
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 shadow-lg shadow-orange-500/30">
+                <FontAwesomeIcon icon={faChartArea} className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-xl font-black text-stone-900 dark:text-white tracking-tight">Revenue Trend Analysis</h3>
+                <p className="text-xs font-medium text-stone-600 dark:text-stone-400">Visual comparison of current vs previous revenue</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-6 sm:p-8">
+          {isLoading ? (
+            <div className="flex items-center justify-center py-20">
+              <div className="text-center">
+                <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-orange-500 border-r-transparent"></div>
+                <p className="mt-4 text-sm font-semibold text-stone-600 dark:text-stone-400">Loading chart data...</p>
+              </div>
+            </div>
+          ) : filteredData.length === 0 ? (
+            <div className="flex items-center justify-center py-20">
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-stone-200 dark:bg-stone-700 mb-4">
+                  <FontAwesomeIcon icon={faChartArea} className="h-8 w-8 text-stone-400 dark:text-stone-500" />
+                </div>
+                <p className="text-lg font-bold text-stone-700 dark:text-stone-300">No chart data available</p>
+                <p className="text-sm text-stone-500 dark:text-stone-400 mt-1">Try adjusting your filters</p>
+              </div>
+            </div>
+          ) : (
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart
+                  data={filteredData.slice().reverse()}
+                  margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                >
+                  <defs>
+                    <linearGradient id="colorCurrent" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#f97316" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#f97316" stopOpacity={0.1}/>
+                    </linearGradient>
+                    <linearGradient id="colorPrevious" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#6b7280" stopOpacity={0.6}/>
+                      <stop offset="95%" stopColor="#6b7280" stopOpacity={0.1}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" opacity={0.5} />
+                  <XAxis 
+                    dataKey="period" 
+                    tick={{ fill: '#78716c', fontSize: 12, fontWeight: 600 }}
+                    stroke="#d6d3d1"
+                  />
+                  <YAxis 
+                    tick={{ fill: '#78716c', fontSize: 12, fontWeight: 600 }}
+                    stroke="#d6d3d1"
+                    tickFormatter={(value) => `₱${(value / 1000).toFixed(0)}k`}
+                  />
+                  <Tooltip 
+                    contentStyle={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.98)',
+                      border: '2px solid #fed7aa',
+                      borderRadius: '12px',
+                      boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+                      padding: '12px 16px'
+                    }}
+                    labelStyle={{
+                      color: '#1c1917',
+                      fontWeight: 700,
+                      marginBottom: '8px',
+                      fontSize: '14px'
+                    }}
+                    itemStyle={{
+                      color: '#57534e',
+                      fontWeight: 600,
+                      fontSize: '13px'
+                    }}
+                    formatter={(value: number) => [
+                      `₱${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+                      ''
+                    ]}
+                  />
+                  <Legend 
+                    wrapperStyle={{
+                      paddingTop: '20px',
+                      fontSize: '13px',
+                      fontWeight: 700
+                    }}
+                    iconType="circle"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="currentRevenue"
+                    name="Current Revenue"
+                    stroke="#f97316"
+                    strokeWidth={3}
+                    fillOpacity={1}
+                    fill="url(#colorCurrent)"
+                    animationDuration={1500}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="previousRevenue"
+                    name="Previous Revenue"
+                    stroke="#6b7280"
+                    strokeWidth={2}
+                    strokeDasharray="5 5"
+                    fillOpacity={1}
+                    fill="url(#colorPrevious)"
+                    animationDuration={1500}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          )}
+          
+          {/* Quick Stats */}
+          {!isLoading && filteredData.length > 0 && (
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="rounded-xl bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-950/30 dark:to-emerald-900/20 p-4 border-2 border-emerald-200/50 dark:border-emerald-800/30">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">Avg Growth</p>
+                    <p className="text-2xl font-black text-emerald-900 dark:text-emerald-300 mt-1">
+                      {(filteredData.reduce((acc, item) => acc + item.growthPercent, 0) / filteredData.length).toFixed(2)}%
+                    </p>
+                  </div>
+                  <div className="h-12 w-12 rounded-xl bg-emerald-500 dark:bg-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/30">
+                    <FontAwesomeIcon icon={faArrowUp} className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-xl bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/30 dark:to-orange-900/20 p-4 border-2 border-orange-200/50 dark:border-orange-800/30">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-orange-700 dark:text-orange-400">Avg Revenue</p>
+                    <p className="text-2xl font-black text-orange-900 dark:text-orange-300 mt-1">
+                      ₱{(filteredData.reduce((acc, item) => acc + item.currentRevenue, 0) / filteredData.length / 1000).toFixed(1)}k
+                    </p>
+                  </div>
+                  <div className="h-12 w-12 rounded-xl bg-orange-500 dark:bg-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/30">
+                    <FontAwesomeIcon icon={faChartLine} className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/20 p-4 border-2 border-blue-200/50 dark:border-blue-800/30">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-blue-700 dark:text-blue-400">Total Periods</p>
+                    <p className="text-2xl font-black text-blue-900 dark:text-blue-300 mt-1">
+                      {filteredData.length}
+                    </p>
+                  </div>
+                  <div className="h-12 w-12 rounded-xl bg-blue-500 dark:bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
+                    <FontAwesomeIcon icon={faCalendar} className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Inflation Table */}
