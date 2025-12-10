@@ -7,11 +7,22 @@ import LogoutPanel from '../Shared/LogoutPanel';
 import StaffInflation from './StaffInflation';
 import { API_BASE_URL } from '../../config/api';
 import { useLanguage } from '../../context/LanguageContext';
+import { jwtDecode } from 'jwt-decode';
 
 interface StaffSalesData {
-  date: string;
-  totalSales: number;
-  transactionCount: number;
+  id: number;
+  username: string;
+  fullName: string;
+  email: string;
+  branchName: string;
+  branchLocation: string;
+  menuItemName: string;
+  dateTime: string;
+  subtotal: number;
+  tax: number;
+  discount: number;
+  total: number;
+  status: string;
 }
 
 const StaffPage: React.FC = () => {
@@ -25,33 +36,50 @@ const StaffPage: React.FC = () => {
   const [salesData, setSalesData] = useState<StaffSalesData[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [cashierId, setCashierId] = useState<string | null>(null);
+
+  // Get cashierId from JWT token
+  useEffect(() => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) return;
+      
+      const payload: any = jwtDecode(token);
+      const userId = payload?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"] || 
+                     payload?.uid || 
+                     payload?.sub;
+      
+      setCashierId(userId);
+    } catch (error) {
+      console.error('Error decoding token:', error);
+    }
+  }, []);
 
   // Fetch sales data based on dateRange
   const fetchSalesData = async (range: '1d' | '7d' | '30d' | 'custom', startDate?: string, endDate?: string) => {
+    if (!cashierId) return;
+    
     setLoading(true);
     setError(null);
     try {
       const token = localStorage.getItem('accessToken');
       let endpoint = '';
-      let params = '';
 
       switch (range) {
         case '1d':
-          endpoint = 'Daily';
+          endpoint = 'CashierDailySales';
           break;
         case '7d':
-          endpoint = 'Weekly';
-          break;
         case '30d':
-          endpoint = 'Monthly';
+          endpoint = 'CashierMonthlySales';
           break;
         case 'custom':
-          endpoint = 'Custom';
-          params = `?startDate=${startDate}&endDate=${endDate}`;
+          // For custom range, use monthly as base
+          endpoint = 'CashierMonthlySales';
           break;
       }
 
-      const response = await fetch(`${API_BASE_URL}/StaffSalesReport/${endpoint}${params}`, {
+      const response = await fetch(`${API_BASE_URL}/CashierSalesReport/${endpoint}?cashierId=${cashierId}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -69,12 +97,14 @@ const StaffPage: React.FC = () => {
 
   // Effect to fetch data when dateRange or custom dates change
   useEffect(() => {
+    if (!cashierId) return;
+    
     if (dateRange === 'custom') {
       fetchSalesData('custom', customStartDate, customEndDate);
     } else {
       fetchSalesData(dateRange);
     }
-  }, [dateRange, customStartDate, customEndDate]);
+  }, [dateRange, customStartDate, customEndDate, cashierId]);
 
   // Get current time for greeting
   const getGreeting = () => {
@@ -88,13 +118,21 @@ const StaffPage: React.FC = () => {
   const processSalesData = () => {
     if (salesData.length === 0) return null;
 
-    const chartData = salesData.map(d => d.totalSales);
-    const totalSales = chartData.reduce((sum, val) => sum + val, 0);
-    const totalTransactions = salesData.reduce((sum, d) => sum + d.transactionCount, 0);
+    const totalSales = salesData.reduce((sum, d) => sum + d.total, 0);
+    const totalTransactions = salesData.length;
 
+    // Group by date for chart
+    const salesByDate: { [key: string]: number } = {};
+    salesData.forEach(sale => {
+      const date = new Date(sale.dateTime).toLocaleDateString();
+      salesByDate[date] = (salesByDate[date] || 0) + sale.total;
+    });
+    
+    const chartData = Object.values(salesByDate);
+    
     // Calculate percentage change (trend)
-    const firstValue = chartData[0];
-    const lastValue = chartData[chartData.length - 1];
+    const firstValue = chartData[0] || 0;
+    const lastValue = chartData[chartData.length - 1] || 0;
     const percentChange = firstValue ? ((lastValue - firstValue) / firstValue) * 100 : 0;
     const trend: 'up' | 'down' = percentChange >= 0 ? 'up' : 'down';
 
@@ -112,9 +150,6 @@ const StaffPage: React.FC = () => {
   };
 
   const salesOverview = processSalesData();
-
-  // Quick stats cards - Sales Overview
-  const statsCards = salesOverview ? [salesOverview] : [];
 
   return (
     <div className="min-h-screen w-full relative overflow-hidden bg-white dark:from-stone-950 dark:via-stone-900 dark:to-stone-950">

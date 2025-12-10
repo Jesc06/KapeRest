@@ -24,6 +24,23 @@ import {
   Legend
 } from 'recharts';
 import { API_BASE_URL } from '../../config/api';
+import { jwtDecode } from 'jwt-decode';
+
+interface SalesReportDTO {
+  id: number;
+  username: string;
+  fullName: string;
+  email: string;
+  branchName: string;
+  branchLocation: string;
+  menuItemName: string;
+  dateTime: string;
+  subtotal: number;
+  tax: number;
+  discount: number;
+  total: number;
+  status: string;
+}
 
 interface InflationData {
   id: number;
@@ -46,10 +63,33 @@ const StaffInflation: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [cashierId, setCashierId] = useState<string | null>(null);
+
+  // Get cashierId from JWT token
+  useEffect(() => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) return;
+      
+      const payload: any = jwtDecode(token);
+      const userId = payload?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"] || 
+                     payload?.uid || 
+                     payload?.sub;
+      
+      setCashierId(userId);
+    } catch (error) {
+      console.error('Error decoding token:', error);
+    }
+  }, []);
 
   // Fetch inflation data from API
   useEffect(() => {
     const fetchInflationData = async () => {
+      if (!cashierId) {
+        setIsLoading(false);
+        return;
+      }
+
       setIsLoading(true);
       try {
         const token = localStorage.getItem('accessToken');
@@ -59,9 +99,12 @@ const StaffInflation: React.FC = () => {
           return;
         }
 
-        // For now, generate mock data - replace with actual API call
-        const mockData = generateMockInflationData(selectedPeriod);
-        setInflationData(mockData);
+        // Fetch branch-specific sales data
+        const salesData = await fetchBranchSalesData(selectedPeriod);
+        
+        // Process sales data into inflation format
+        const processedData = processSalesDataToInflation(salesData, selectedPeriod);
+        setInflationData(processedData);
         setIsLoading(false);
       } catch (err) {
         console.error('Error fetching inflation data:', err);
@@ -70,57 +113,104 @@ const StaffInflation: React.FC = () => {
     };
 
     fetchInflationData();
-  }, [selectedPeriod]);
+  }, [selectedPeriod, cashierId]);
 
-  // Generate mock data based on period
-  const generateMockInflationData = (period: PeriodFilter): InflationData[] => {
-    const data: InflationData[] = [];
-    const today = new Date();
+  // Fetch branch-specific sales data based on period
+  const fetchBranchSalesData = async (period: PeriodFilter): Promise<SalesReportDTO[]> => {
+    const token = localStorage.getItem('accessToken');
+    let endpoint = '';
+
+    switch (period) {
+      case 'daily':
+        endpoint = 'CashierDailySales';
+        break;
+      case 'weekly':
+      case 'monthly':
+      case 'yearly':
+        endpoint = 'CashierMonthlySales';
+        break;
+      case 'custom':
+        endpoint = 'CashierMonthlySales';
+        break;
+    }
+
+    const response = await fetch(`${API_BASE_URL}/CashierSalesReport/${endpoint}?cashierId=${cashierId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) throw new Error('Failed to fetch sales data');
+    return await response.json();
+  };
+
+  // Process sales data into inflation format
+  const processSalesDataToInflation = (salesData: SalesReportDTO[], period: PeriodFilter): InflationData[] => {
+    if (salesData.length === 0) return [];
+
+    // Group sales by period
+    const groupedData: { [key: string]: SalesReportDTO[] } = {};
     
-    for (let i = 0; i < 10; i++) {
-      const currentRev = Math.random() * 50000 + 20000;
-      const previousRev = Math.random() * 50000 + 20000;
-      const growth = currentRev - previousRev;
-      const growthPercent = (growth / previousRev) * 100;
-      
-      let periodLabel = '';
-      let start = new Date(today);
-      let end = new Date(today);
+    salesData.forEach(sale => {
+      const date = new Date(sale.dateTime);
+      let key = '';
       
       if (period === 'daily') {
-        start.setDate(today.getDate() - i);
-        end = new Date(start);
-        periodLabel = start.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        key = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
       } else if (period === 'weekly') {
-        start.setDate(today.getDate() - (i * 7));
-        end.setDate(start.getDate() + 6);
-        periodLabel = `Week ${i + 1} (${start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })})`;
+        const weekStart = new Date(date);
+        weekStart.setDate(date.getDate() - date.getDay());
+        key = `Week of ${weekStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
       } else if (period === 'monthly') {
-        start.setMonth(today.getMonth() - i);
-        start.setDate(1);
-        end = new Date(start.getFullYear(), start.getMonth() + 1, 0);
-        periodLabel = start.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        key = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
       } else if (period === 'yearly') {
-        start.setFullYear(today.getFullYear() - i);
-        start.setMonth(0, 1);
-        end.setFullYear(start.getFullYear(), 11, 31);
-        periodLabel = start.getFullYear().toString();
+        key = date.getFullYear().toString();
       }
       
-      data.push({
-        id: i + 1,
-        period: periodLabel,
-        startDate: start.toISOString(),
-        endDate: end.toISOString(),
-        currentRevenue: currentRev,
-        previousRevenue: previousRev,
-        growthAmount: growth,
-        growthPercent: growthPercent,
+      if (!groupedData[key]) {
+        groupedData[key] = [];
+      }
+      groupedData[key].push(sale);
+    });
+
+    // Convert grouped data to inflation format
+    const inflationArray: InflationData[] = [];
+    const periods = Object.keys(groupedData).sort((a, b) => {
+      const dateA = groupedData[a][0].dateTime;
+      const dateB = groupedData[b][0].dateTime;
+      return new Date(dateB).getTime() - new Date(dateA).getTime();
+    });
+
+    periods.forEach((periodKey, index) => {
+      const currentSales = groupedData[periodKey];
+      const currentRevenue = currentSales.reduce((sum, sale) => sum + sale.total, 0);
+      
+      // Get previous period for comparison
+      const previousPeriodKey = periods[index + 1];
+      const previousRevenue = previousPeriodKey 
+        ? groupedData[previousPeriodKey].reduce((sum, sale) => sum + sale.total, 0)
+        : currentRevenue * 0.85; // Default to 85% if no previous data
+      
+      const growthAmount = currentRevenue - previousRevenue;
+      const growthPercent = previousRevenue !== 0 ? (growthAmount / previousRevenue) * 100 : 0;
+      
+      const firstDate = new Date(currentSales[0].dateTime);
+      const lastDate = new Date(currentSales[currentSales.length - 1].dateTime);
+      
+      inflationArray.push({
+        id: index + 1,
+        period: periodKey,
+        startDate: firstDate.toISOString(),
+        endDate: lastDate.toISOString(),
+        currentRevenue,
+        previousRevenue,
+        growthAmount,
+        growthPercent,
         trend: Math.abs(growthPercent) < 1 ? 'stable' : growthPercent > 0 ? 'up' : 'down'
       });
-    }
-    
-    return data;
+    });
+
+    return inflationArray;
   };
 
   // Filter data based on search and custom date range
