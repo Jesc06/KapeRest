@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faSearch, faPlus, faMinus, faTrash, faCheck, faPause, faCreditCard, faBars, faShoppingCart, faChevronDown, faMoneyBill, faBolt, faCheckCircle, faExclamationTriangle, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faSearch, faPlus, faMinus, faTrash, faCheck, faPause, faCreditCard, faBars, faShoppingCart, faChevronDown, faMoneyBill, faBolt, faCheckCircle, faExclamationTriangle, faInfoCircle, faUser } from '@fortawesome/free-solid-svg-icons';
 import LogoutPanel from '../Shared/LogoutPanel';
 import { API_BASE_URL } from '../../config/api';
 
@@ -97,11 +97,31 @@ const MainPanel: React.FC<MainPanelProps> = ({
   const [selectedSizeIdForAdd, setSelectedSizeIdForAdd] = useState<number | null>(null);
   const [selectedPriceForAdd, setSelectedPriceForAdd] = useState<number>(0);
   const [showSugarLevelModal, setShowSugarLevelModal] = useState(false);
-  const [selectedSugarLevel, setSelectedSugarLevel] = useState<string>('100%');
+  const [selectedSugarLevel, setSelectedSugarLevel] = useState<string>('None');
   const [showCashPaymentModal, setShowCashPaymentModal] = useState(false);
   const [amountPaid, setAmountPaid] = useState<string>('');
   const [changeAmount, setChangeAmount] = useState<number>(0);
   const [gcashPaymentStatus, setGcashPaymentStatus] = useState<string>('pending');
+  
+  // Voucher states
+  const [voucherCode, setVoucherCode] = useState<string>('');
+  const [voucherDiscount, setVoucherDiscount] = useState<number>(0);
+  const [voucherMessage, setVoucherMessage] = useState<string>('');
+  const [isValidatingVoucher, setIsValidatingVoucher] = useState(false);
+  const [voucherApplied, setVoucherApplied] = useState(false);
+  const [customerName, setCustomerName] = useState<string>('');
+  
+  // Customer states
+  const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
+  const [customerSearchQuery, setCustomerSearchQuery] = useState<string>('');
+  const [customerSearchResults, setCustomerSearchResults] = useState<any[]>([]);
+  const [isSearchingCustomers, setIsSearchingCustomers] = useState(false);
+  const [showCustomerDropdown, setShowCustomerDropdown] = useState(false);
+  const [showNewCustomerForm, setShowNewCustomerForm] = useState(false);
+  const [newCustomerName, setNewCustomerName] = useState<string>('');
+  const [newCustomerContact, setNewCustomerContact] = useState<string>('');
+  const [newCustomerEmail, setNewCustomerEmail] = useState<string>('');
+  const [isCreatingCustomer, setIsCreatingCustomer] = useState(false);
 
   // Automatic webhook-based payment completion
   // After user authorizes GCash payment, PayMongo webhook automatically completes purchase
@@ -331,6 +351,12 @@ const MainPanel: React.FC<MainPanelProps> = ({
   const handleAddToCartWithSize = () => {
     if (!selectedProduct) return;
     
+    // Set default sugar level based on category
+    const isDrinkOrMilktea = selectedProduct.category?.toLowerCase().includes('drink') || 
+                              selectedProduct.category?.toLowerCase().includes('milk tea') ||
+                              selectedProduct.category?.toLowerCase().includes('milktea');
+    setSelectedSugarLevel(isDrinkOrMilktea ? '100%' : 'None');
+    
     // Close size modal and show sugar level modal
     setShowSizeModal(false);
     setShowSugarLevelModal(true);
@@ -360,7 +386,175 @@ const MainPanel: React.FC<MainPanelProps> = ({
     setSelectedSizeForAdd('');
     setSelectedSizeIdForAdd(null);
     setSelectedPriceForAdd(0);
-    setSelectedSugarLevel('100%'); // Reset to default
+    setSelectedSugarLevel('None'); // Reset to default
+  };
+
+  // Validate voucher code
+  const handleValidateVoucher = async () => {
+    if (!voucherCode.trim()) {
+      setVoucherMessage('Please enter a voucher code');
+      return;
+    }
+
+    // Require customer selection for voucher usage
+    if (!selectedCustomer) {
+      setVoucherMessage('Please select a customer to use voucher');
+      return;
+    }
+
+    setIsValidatingVoucher(true);
+    setVoucherMessage('');
+
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        setVoucherMessage('Authentication required');
+        return;
+      }
+
+      const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
+      const taxRate = 12;
+      const subtotal = cart.reduce((sum, item) => sum + (item.selectedPrice || item.price) * item.quantity, 0);
+      const discount = (subtotal * discountValue) / 100;
+      const tax = (subtotal * taxRate) / 100;
+      const orderAmount = subtotal + tax - discount;
+
+      const response = await fetch(`${API_BASE_URL}/Voucher/Validate`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          code: voucherCode.toUpperCase(),
+          orderAmount: orderAmount
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.isValid) {
+        setVoucherApplied(true);
+        setVoucherDiscount(result.discountPercent);
+        setVoucherMessage(`✓ Voucher applied! ${result.discountPercent}% discount`);
+      } else {
+        setVoucherApplied(false);
+        setVoucherDiscount(0);
+        setVoucherMessage(`✗ ${result.message}`);
+      }
+    } catch (error: any) {
+      console.error('Voucher validation error:', error);
+      setVoucherMessage('Error validating voucher');
+      setVoucherApplied(false);
+      setVoucherDiscount(0);
+    } finally {
+      setIsValidatingVoucher(false);
+    }
+  };
+
+  // Remove voucher
+  const handleRemoveVoucher = () => {
+    setVoucherCode('');
+    setVoucherApplied(false);
+    setVoucherDiscount(0);
+    setVoucherMessage('');
+  };
+  
+  // Search customers
+  const searchCustomers = async (query: string) => {
+    if (query.trim().length < 2) {
+      setCustomerSearchResults([]);
+      return;
+    }
+    
+    setIsSearchingCustomers(true);
+    try {
+      const response = await fetch(`${API_BASE_URL}/Customer/Search?query=${encodeURIComponent(query)}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const results = await response.json();
+        setCustomerSearchResults(results);
+      } else {
+        setCustomerSearchResults([]);
+      }
+    } catch (error) {
+      console.error('Error searching customers:', error);
+      setCustomerSearchResults([]);
+    } finally {
+      setIsSearchingCustomers(false);
+    }
+  };
+  
+  // Handle customer selection
+  const handleSelectCustomer = (customer: any) => {
+    setSelectedCustomer(customer);
+    setCustomerName(customer.name);
+    setCustomerSearchQuery(customer.name);
+    setShowCustomerDropdown(false);
+    setCustomerSearchResults([]);
+    // Clear voucher when changing customer
+    if (voucherApplied) {
+      handleRemoveVoucher();
+    }
+  };
+  
+  // Clear customer selection
+  const handleClearCustomer = () => {
+    setSelectedCustomer(null);
+    setCustomerName('');
+    setCustomerSearchQuery('');
+    setCustomerSearchResults([]);
+    // Clear voucher when clearing customer
+    if (voucherApplied) {
+      handleRemoveVoucher();
+    }
+  };
+  
+  // Create new customer
+  const handleCreateCustomer = async () => {
+    if (!newCustomerName.trim() || !newCustomerContact.trim()) {
+      alert('Name and contact number are required');
+      return;
+    }
+    
+    setIsCreatingCustomer(true);
+    try {
+      const response = await fetch(`${API_BASE_URL}/Customer/Create`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: newCustomerName,
+          contactNumber: newCustomerContact,
+          email: newCustomerEmail
+        }),
+      });
+
+      if (response.ok) {
+        const newCustomer = await response.json();
+        setSelectedCustomer(newCustomer);
+        setCustomerName(newCustomer.name);
+        setCustomerSearchQuery(newCustomer.name);
+        setShowNewCustomerForm(false);
+        setNewCustomerName('');
+        setNewCustomerContact('');
+        setNewCustomerEmail('');
+        alert('Customer created successfully!');
+      } else {
+        const error = await response.json();
+        alert(`Error creating customer: ${error.message || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error creating customer:', error);
+      alert('Error creating customer. Please try again.');
+    } finally {
+      setIsCreatingCustomer(false);
+    }
   };
 
   // Handle hold transaction
@@ -714,7 +908,10 @@ const MainPanel: React.FC<MainPanelProps> = ({
             quantity: Number(item.quantity), // Ensure it's a number
             discountPercent: Number(discountValue), // Ensure it's a number
             tax: Number(taxRate), // Ensure it's a number
-            paymentMethod: String(paymentMethod) // Ensure it's a string
+            paymentMethod: String(paymentMethod), // Ensure it's a string
+            voucherCode: voucherApplied ? voucherCode : null, // Include voucher code if applied
+            customerName: selectedCustomer ? selectedCustomer.name : (customerName || null), // Include customer name
+            CustomerId: selectedCustomer ? selectedCustomer.id : null // Include customer ID (capital C to match backend)
           };
 
           console.log('=== PURCHASE REQUEST START ===');
@@ -834,6 +1031,16 @@ const MainPanel: React.FC<MainPanelProps> = ({
         }
         setPurchaseSuccess(false);
         setSelectedDiscount('');
+        // Reset voucher state
+        setVoucherCode('');
+        setVoucherApplied(false);
+        setVoucherDiscount(0);
+        setVoucherMessage('');
+        setCustomerName('');
+        // Reset customer state
+        setSelectedCustomer(null);
+        setCustomerSearchQuery('');
+        setCustomerSearchResults([]);
       }, 1000);
 
     } catch (err) {
@@ -1469,10 +1676,10 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
       {/* GCash QR Code Modal */}
       {showGCashModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-in fade-in duration-300">
-          <div className="relative w-full max-w-lg mx-4 bg-stone-50 dark:bg-stone-900 rounded-2xl shadow-2xl border-2 border-blue-500 dark:border-blue-600 overflow-hidden animate-in zoom-in duration-300">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-in fade-in duration-300 p-4">
+          <div className="relative w-full max-w-lg bg-stone-50 dark:bg-stone-900 rounded-2xl shadow-2xl border-2 border-blue-500 dark:border-blue-600 overflow-hidden animate-in zoom-in duration-300 flex flex-col max-h-[90vh]">
             {/* Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-5 relative overflow-hidden">
+            <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-5 relative overflow-hidden flex-shrink-0">
               <div className="absolute inset-0 opacity-10">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-3xl -mr-16 -mt-16"></div>
               </div>
@@ -1749,7 +1956,7 @@ const MainPanel: React.FC<MainPanelProps> = ({
               <div className="space-y-3">
                 <p className="text-sm font-bold text-stone-900 dark:text-white">Choose your sugar level:</p>
                 <div className="space-y-2">
-                  {['100%', '75%', '50%', '25%', '0%'].map((level) => (
+                  {['None', '100%', '75%', '50%', '25%', '0%'].map((level) => (
                     <button
                       key={level}
                       onClick={() => setSelectedSugarLevel(level)}
@@ -1766,14 +1973,16 @@ const MainPanel: React.FC<MainPanelProps> = ({
                               ? 'text-orange-600 dark:text-orange-400'
                               : 'text-stone-900 dark:text-white'
                           }`}>
-                            {level === '100%' ? 'Regular (100%)' : 
+                            {level === 'None' ? 'None' :
+                             level === '100%' ? 'Regular (100%)' : 
                              level === '75%' ? 'Less Sweet (75%)' :
                              level === '50%' ? 'Half Sweet (50%)' :
                              level === '25%' ? 'Light Sweet (25%)' :
                              'No Sugar (0%)'}
                           </p>
                           <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">
-                            {level === '100%' ? 'Full sweetness' : 
+                            {level === 'None' ? 'Not applicable' :
+                             level === '100%' ? 'Full sweetness' : 
                              level === '0%' ? 'No added sugar' :
                              `${level} of regular sweetness`}
                           </p>
@@ -1783,7 +1992,9 @@ const MainPanel: React.FC<MainPanelProps> = ({
                             ? 'bg-orange-500 text-white'
                             : 'bg-stone-100 dark:bg-stone-700 text-stone-400'
                         } transition-all duration-200`}>
-                          <span className="text-xl font-black">{level}</span>
+                          <span className={`${
+                            level === 'None' ? 'text-sm' : 'text-xl'
+                          } font-black`}>{level === 'None' ? 'N/A' : level}</span>
                         </div>
                       </div>
                     </button>
@@ -1816,10 +2027,10 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
       {/* Cash Payment Modal */}
       {showCashPaymentModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="relative w-full max-w-lg mx-4 bg-white dark:bg-stone-900 rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-in fade-in duration-200 p-4">
+          <div className="relative w-full max-w-lg bg-white dark:bg-stone-900 rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in duration-200 flex flex-col max-h-[90vh]">
             {/* Header */}
-            <div className="bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 px-8 py-6 relative overflow-hidden">
+            <div className="bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 px-8 py-6 relative overflow-hidden flex-shrink-0">
               <div className="absolute inset-0 opacity-20">
                 <div className="absolute top-0 right-0 w-40 h-40 bg-white rounded-full blur-3xl -mr-20 -mt-20"></div>
                 <div className="absolute bottom-0 left-0 w-32 h-32 bg-orange-300 rounded-full blur-2xl -ml-16 -mb-16"></div>
@@ -1836,7 +2047,172 @@ const MainPanel: React.FC<MainPanelProps> = ({
             </div>
 
             {/* Content */}
-            <div className="px-8 py-6 space-y-5">
+            <div className="px-8 py-6 space-y-5 overflow-y-auto flex-1">
+              {/* Customer Selection Section */}
+              <div className="space-y-3">
+                <label className="text-sm font-bold text-stone-700 dark:text-stone-300 flex items-center gap-2">
+                  <FontAwesomeIcon icon={faUser} className="h-4 w-4 text-orange-500" />
+                  Customer (Optional)
+                </label>
+                
+                {!selectedCustomer ? (
+                  <div className="space-y-2">
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={customerSearchQuery}
+                        onChange={(e) => {
+                          setCustomerSearchQuery(e.target.value);
+                          searchCustomers(e.target.value);
+                          setShowCustomerDropdown(true);
+                        }}
+                        onFocus={() => setShowCustomerDropdown(true)}
+                        placeholder="Search customer by name or phone..."
+                        className="w-full px-4 py-3 rounded-xl border-2 border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white placeholder:text-stone-400 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all"
+                      />
+                      {isSearchingCustomers && (
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                          <div className="animate-spin h-5 w-5 border-2 border-orange-500 border-t-transparent rounded-full"></div>
+                        </div>
+                      )}
+                      
+                      {/* Customer Dropdown */}
+                      {showCustomerDropdown && customerSearchResults.length > 0 && (
+                        <div className="absolute z-10 w-full mt-2 bg-white dark:bg-stone-800 border-2 border-stone-200 dark:border-stone-700 rounded-xl shadow-xl max-h-60 overflow-y-auto">
+                          {customerSearchResults.map((customer) => (
+                            <button
+                              key={customer.id}
+                              onClick={() => handleSelectCustomer(customer)}
+                              className="w-full px-4 py-3 text-left hover:bg-orange-50 dark:hover:bg-orange-950/30 transition-colors border-b border-stone-100 dark:border-stone-700 last:border-b-0"
+                            >
+                              <div className="flex justify-between items-center mb-1">
+                                <div className="font-bold text-stone-900 dark:text-white">{customer.name}</div>
+                                <div className="text-xs font-bold text-orange-600 dark:text-orange-400">{customer.loyaltyPoints}/10 ⭐</div>
+                              </div>
+                              <div className="text-sm text-stone-500 dark:text-stone-400 mb-2">{customer.contactNumber} • {customer.totalPurchases} purchases</div>
+                              {/* Loyalty Progress Bar */}
+                              <div className="w-full bg-stone-200 dark:bg-stone-700 rounded-full h-2 overflow-hidden">
+                                <div 
+                                  className="h-full bg-gradient-to-r from-orange-400 to-amber-500 transition-all duration-300"
+                                  style={{ width: `${customer.loyaltyProgress}%` }}
+                                ></div>
+                              </div>
+                              <div className="text-xs text-stone-400 dark:text-stone-500 mt-1">
+                                {customer.loyaltyProgress}% to free voucher
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    
+                    <button
+                      onClick={() => setShowNewCustomerForm(true)}
+                      className="w-full px-4 py-2.5 rounded-xl border-2 border-dashed border-orange-300 dark:border-orange-700 bg-orange-50/50 dark:bg-orange-950/20 hover:bg-orange-100 dark:hover:bg-orange-950/30 text-orange-600 dark:text-orange-400 font-bold transition-all text-sm"
+                    >
+                      + New Customer
+                    </button>
+                  </div>
+                ) : (
+                  <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20 p-4 border border-orange-200 dark:border-orange-800/30">
+                    <div className="flex items-center justify-between mb-3">
+                      <div>
+                        <div className="font-bold text-stone-900 dark:text-white">{selectedCustomer.name}</div>
+                        <div className="text-sm text-stone-600 dark:text-stone-400">{selectedCustomer.contactNumber}</div>
+                        <div className="text-xs text-orange-600 dark:text-orange-400 mt-1">{selectedCustomer.totalPurchases} previous purchases</div>
+                      </div>
+                      <button
+                        onClick={handleClearCustomer}
+                        className="px-3 py-1.5 rounded-lg bg-red-500 hover:bg-red-600 text-white text-sm font-bold transition-all"
+                      >
+                        Clear
+                      </button>
+                    </div>
+                    
+                    {/* Loyalty Progress Display */}
+                    <div className="mt-3 pt-3 border-t border-orange-200 dark:border-orange-800/30">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-xs font-bold text-stone-600 dark:text-stone-400">Loyalty Progress</span>
+                        <span className="text-xs font-bold text-orange-600 dark:text-orange-400">{selectedCustomer.loyaltyPoints || 0}/10 ⭐</span>
+                      </div>
+                      <div className="w-full bg-white dark:bg-stone-900 rounded-full h-3 overflow-hidden shadow-inner">
+                        <div 
+                          className="h-full bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 transition-all duration-500 shadow-lg"
+                          style={{ width: `${selectedCustomer.loyaltyProgress || 0}%` }}
+                        ></div>
+                      </div>
+                      <div className="text-xs text-center text-stone-500 dark:text-stone-400 mt-2">
+                        {selectedCustomer.loyaltyProgress >= 100 ? (
+                          <span className="text-green-600 dark:text-green-400 font-bold">🎉 Voucher ready!</span>
+                        ) : (
+                          <span>{selectedCustomer.loyaltyProgress || 0}% - {10 - (selectedCustomer.loyaltyPoints || 0)} more purchase{10 - (selectedCustomer.loyaltyPoints || 0) !== 1 ? 's' : ''} to earn free voucher</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Voucher Section */}
+              <div className="space-y-3">
+                <label className="text-sm font-bold text-stone-700 dark:text-stone-300 flex items-center gap-2">
+                  <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-orange-500" />
+                  Voucher Code (Optional)
+                  {!selectedCustomer && (
+                    <span className="text-xs font-normal text-orange-500">- Customer required</span>
+                  )}
+                </label>
+                <div className="space-y-2">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={voucherCode}
+                      onChange={(e) => setVoucherCode(e.target.value.toUpperCase())}
+                      placeholder={selectedCustomer ? "Enter voucher code" : "Select customer first"}
+                      disabled={voucherApplied || !selectedCustomer}
+                      className="flex-1 px-4 py-3 rounded-xl border-2 border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white placeholder:text-stone-400 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    />
+                    {!voucherApplied ? (
+                      <button
+                        onClick={handleValidateVoucher}
+                        disabled={isValidatingVoucher || !voucherCode.trim() || !selectedCustomer}
+                        className="px-6 py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isValidatingVoucher ? 'Validating...' : 'Apply'}
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleRemoveVoucher}
+                        className="px-6 py-3 rounded-xl bg-red-500 hover:bg-red-600 text-white font-bold transition-all"
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                  {voucherMessage && (
+                    <p className={`text-sm font-medium ${
+                      voucherApplied ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+                    }`}>
+                      {voucherMessage}
+                    </p>
+                  )}
+                </div>
+                {voucherApplied && (
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-stone-700 dark:text-stone-300">
+                      Customer Name
+                    </label>
+                    <input
+                      type="text"
+                      value={customerName}
+                      onChange={(e) => setCustomerName(e.target.value)}
+                      placeholder="Enter customer name"
+                      className="w-full px-4 py-3 rounded-xl border-2 border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white placeholder:text-stone-400 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all"
+                    />
+                  </div>
+                )}
+              </div>
+
               {/* Total Amount Card */}
               <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-50 via-amber-50 to-orange-100 dark:from-orange-950/20 dark:via-amber-950/20 dark:to-orange-900/20 p-5 border border-orange-200 dark:border-orange-800/30">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-orange-300/20 rounded-full blur-2xl -mr-12 -mt-12"></div>
@@ -1846,9 +2222,10 @@ const MainPanel: React.FC<MainPanelProps> = ({
                     ₱{(() => {
                       const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
                       const discountAmount = (total * discountValue) / 100;
+                      const voucherDiscountAmount = (total * voucherDiscount) / 100;
                       const taxRate = 12;
                       const taxAmount = (total * taxRate) / 100;
-                      return (total + taxAmount - discountAmount).toFixed(2);
+                      return (total + taxAmount - discountAmount - voucherDiscountAmount).toFixed(2);
                     })()}
                   </p>
                 </div>
@@ -1871,9 +2248,10 @@ const MainPanel: React.FC<MainPanelProps> = ({
                       const paid = parseFloat(value) || 0;
                       const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
                       const discountAmount = (total * discountValue) / 100;
+                      const voucherDiscountAmount = (total * voucherDiscount) / 100;
                       const taxRate = 12;
                       const taxAmount = (total * taxRate) / 100;
-                      const finalTotal = total + taxAmount - discountAmount;
+                      const finalTotal = total + taxAmount - discountAmount - voucherDiscountAmount;
                       const change = paid - finalTotal;
                       setChangeAmount(change > 0 ? change : 0);
                     }}
@@ -1898,9 +2276,10 @@ const MainPanel: React.FC<MainPanelProps> = ({
                         setAmountPaid(amount.toString());
                         const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
                         const discountAmount = (total * discountValue) / 100;
+                        const voucherDiscountAmount = (total * voucherDiscount) / 100;
                         const taxRate = 12;
                         const taxAmount = (total * taxRate) / 100;
-                        const finalTotal = total + taxAmount - discountAmount;
+                        const finalTotal = total + taxAmount - discountAmount - voucherDiscountAmount;
                         const change = amount - finalTotal;
                         setChangeAmount(change > 0 ? change : 0);
                       }}
@@ -1998,6 +2377,98 @@ const MainPanel: React.FC<MainPanelProps> = ({
                   className="flex-1 px-6 py-4 rounded-xl bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 disabled:from-stone-300 disabled:to-stone-400 dark:disabled:from-stone-700 dark:disabled:to-stone-600 text-white font-bold transition-all duration-200 disabled:cursor-not-allowed shadow-lg hover:shadow-xl hover:shadow-orange-500/30 disabled:shadow-none hover:scale-[1.02] active:scale-[0.98] disabled:hover:scale-100"
                 >
                   Complete Purchase
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* New Customer Form Modal */}
+      {showNewCustomerForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="relative w-full max-w-md mx-4 bg-white dark:bg-stone-900 rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in duration-200">
+            {/* Header */}
+            <div className="bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 px-8 py-6 relative overflow-hidden">
+              <div className="absolute inset-0 opacity-20">
+                <div className="absolute top-0 right-0 w-40 h-40 bg-white rounded-full blur-3xl -mr-20 -mt-20"></div>
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-orange-300 rounded-full blur-2xl -ml-16 -mb-16"></div>
+              </div>
+              <div className="relative flex items-center gap-4">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm border-2 border-white/30">
+                  <FontAwesomeIcon icon={faUser} className="h-7 w-7 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-black text-white tracking-tight">New Customer</h3>
+                  <p className="text-sm text-orange-100 mt-0.5">Create customer profile</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="px-8 py-6 space-y-4">
+              {/* Customer Name */}
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-stone-700 dark:text-stone-300">
+                  Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={newCustomerName}
+                  onChange={(e) => setNewCustomerName(e.target.value)}
+                  placeholder="Enter customer name"
+                  className="w-full px-4 py-3 rounded-xl border-2 border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white placeholder:text-stone-400 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all"
+                  autoFocus
+                />
+              </div>
+
+              {/* Contact Number */}
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-stone-700 dark:text-stone-300">
+                  Contact Number <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={newCustomerContact}
+                  onChange={(e) => setNewCustomerContact(e.target.value)}
+                  placeholder="09XXXXXXXXX"
+                  className="w-full px-4 py-3 rounded-xl border-2 border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white placeholder:text-stone-400 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all"
+                />
+              </div>
+
+              {/* Email (Optional) */}
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-stone-700 dark:text-stone-300">
+                  Email (Optional)
+                </label>
+                <input
+                  type="email"
+                  value={newCustomerEmail}
+                  onChange={(e) => setNewCustomerEmail(e.target.value)}
+                  placeholder="customer@example.com"
+                  className="w-full px-4 py-3 rounded-xl border-2 border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white placeholder:text-stone-400 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all"
+                />
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-4">
+                <button
+                  onClick={() => {
+                    setShowNewCustomerForm(false);
+                    setNewCustomerName('');
+                    setNewCustomerContact('');
+                    setNewCustomerEmail('');
+                  }}
+                  className="flex-1 px-6 py-3 rounded-xl border-2 border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 font-bold transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleCreateCustomer}
+                  disabled={isCreatingCustomer || !newCustomerName.trim() || !newCustomerContact.trim()}
+                  className="flex-1 px-6 py-3 rounded-xl bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 text-white font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isCreatingCustomer ? 'Creating...' : 'Create Customer'}
                 </button>
               </div>
             </div>
