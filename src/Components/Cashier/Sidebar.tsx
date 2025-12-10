@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartLine, faShoppingCart, faTimes, faHome, faPause, faReceipt } from '@fortawesome/free-solid-svg-icons';
+import { faChartLine, faShoppingCart, faTimes, faHome, faPause, faReceipt, faTicket } from '@fortawesome/free-solid-svg-icons';
 import KapeRestLogo from '../../assets/KapeRest.png';
 import { useLanguage } from '../../context/LanguageContext';
 
@@ -19,6 +19,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
   const isHomePage = location.pathname === '/cashier';
   const isHoldItemsPage = location.pathname === '/cashier/hold-items';
   const isPurchasesPage = location.pathname === '/cashier/purchases';
+  const isVouchersPage = location.pathname === '/cashier/vouchers';
   
   return (
     <>
@@ -132,6 +133,21 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose, isExpanded = 
           <FontAwesomeIcon icon={faReceipt} className="text-lg flex-shrink-0 w-5 h-5" />
           {isExpanded && (
             <span className="flex-1 text-left font-medium truncate break-words line-clamp-1">{t('cashier.purchases')}</span>
+          )}
+        </Link>
+
+        {/* Vouchers Link */}
+        <Link
+          to="/cashier/vouchers"
+          className={`w-full flex items-center ${isExpanded ? 'justify-start' : 'justify-center'} gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${
+            isVouchersPage
+              ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
+              : "text-stone-700 dark:text-stone-300 hover:bg-orange-50/80 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400"
+          }`}
+        >
+          <FontAwesomeIcon icon={faTicket} className="text-lg flex-shrink-0 w-5 h-5" />
+          {isExpanded && (
+            <span className="flex-1 text-left font-medium truncate break-words line-clamp-1">Vouchers</span>
           )}
         </Link>
       </nav>

@@ -11,6 +11,7 @@ import SalesPage from "../Components/Cashier/SalesPage";
 import ChangePassword from "../Components/Cashier/ChangePassword";
 import HoldItems from "../Components/Cashier/HoldItems";
 import Purchases from "../Components/Cashier/Purchases";
+import Vouchers from "../Components/Cashier/Vouchers";
 import StaffPage from "../Components/Staff/StaffPage";
 import StocksList from "../Components/Shared/StocksList";
 import SupplierList from "../Components/Shared/SupplierList";
@@ -89,6 +90,7 @@ const App: React.FC = () => {
             <Route path="/cashier/change-password" element={<ProtectedRoute allowedRoles={['cashier']}><ChangePassword /></ProtectedRoute>} />
             <Route path="/cashier/hold-items" element={<ProtectedRoute allowedRoles={['cashier']}><HoldItems /></ProtectedRoute>} />
             <Route path="/cashier/purchases" element={<ProtectedRoute allowedRoles={['cashier']}><Purchases /></ProtectedRoute>} />
+            <Route path="/cashier/vouchers" element={<ProtectedRoute allowedRoles={['cashier']}><Vouchers /></ProtectedRoute>} />
             
             {/* Staff routes */}
             <Route path="/staff" element={<ProtectedRoute allowedRoles={['staff']}><StaffPage /></ProtectedRoute>} />
