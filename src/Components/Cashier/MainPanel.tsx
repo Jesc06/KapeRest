@@ -122,6 +122,11 @@ const MainPanel: React.FC<MainPanelProps> = ({
   const [newCustomerContact, setNewCustomerContact] = useState<string>('');
   const [newCustomerEmail, setNewCustomerEmail] = useState<string>('');
   const [isCreatingCustomer, setIsCreatingCustomer] = useState(false);
+  
+  // Loyalty reward celebration state
+  const [showRewardCelebration, setShowRewardCelebration] = useState(false);
+  const [earnedVoucherDetails, setEarnedVoucherDetails] = useState<{discount: number, level: number} | null>(null);
+
 
   // Automatic webhook-based payment completion
   // After user authorizes GCash payment, PayMongo webhook automatically completes purchase
@@ -1022,6 +1027,22 @@ const MainPanel: React.FC<MainPanelProps> = ({
 
       console.log('All purchases completed successfully');
       setPurchaseSuccess(true);
+      
+      // Check if customer earned a voucher (if they were at 9 loyalty points before purchase)
+      if (selectedCustomer && selectedCustomer.loyaltyPoints === 9) {
+        // Customer just completed their 10th purchase and earned a voucher!
+        const newLevel = (selectedCustomer.loyaltyLevel || 0) + 1;
+        const discountEarned = newLevel === 1 ? 10 : newLevel === 2 ? 20 : 30;
+        
+        setEarnedVoucherDetails({ discount: discountEarned, level: newLevel });
+        setShowRewardCelebration(true);
+        
+        // Hide celebration after 5 seconds
+        setTimeout(() => {
+          setShowRewardCelebration(false);
+          setEarnedVoucherDetails(null);
+        }, 5000);
+      }
       
       // Clear cart after successful purchase
       setTimeout(() => {
@@ -2213,21 +2234,79 @@ const MainPanel: React.FC<MainPanelProps> = ({
                 )}
               </div>
 
-              {/* Total Amount Card */}
+              {/* Price Breakdown Card */}
               <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-50 via-amber-50 to-orange-100 dark:from-orange-950/20 dark:via-amber-950/20 dark:to-orange-900/20 p-5 border border-orange-200 dark:border-orange-800/30">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-orange-300/20 rounded-full blur-2xl -mr-12 -mt-12"></div>
-                <div className="relative">
-                  <p className="text-xs font-bold text-orange-700 dark:text-orange-400 uppercase tracking-wider mb-2">Total Amount Due</p>
-                  <p className="text-4xl font-black text-orange-600 dark:text-orange-400 tracking-tight">
-                    ₱{(() => {
-                      const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
-                      const discountAmount = (total * discountValue) / 100;
-                      const voucherDiscountAmount = (total * voucherDiscount) / 100;
-                      const taxRate = 12;
-                      const taxAmount = (total * taxRate) / 100;
-                      return (total + taxAmount - discountAmount - voucherDiscountAmount).toFixed(2);
-                    })()}
-                  </p>
+                <div className="relative space-y-3">
+                  <p className="text-xs font-bold text-orange-700 dark:text-orange-400 uppercase tracking-wider">Price Breakdown</p>
+                  
+                  {/* Subtotal */}
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-stone-600 dark:text-stone-400">Subtotal</span>
+                    <span className="font-bold text-stone-900 dark:text-white">₱{total.toFixed(2)}</span>
+                  </div>
+                  
+                  {/* Tax */}
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-stone-600 dark:text-stone-400">Tax (12%)</span>
+                    <span className="font-bold text-stone-900 dark:text-white">₱{(total * 0.12).toFixed(2)}</span>
+                  </div>
+                  
+                  {/* Regular Discount */}
+                  {(() => {
+                    const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
+                    return discountValue > 0 ? (
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="text-green-600 dark:text-green-400">Discount ({discountValue}%)</span>
+                        <span className="font-bold text-green-600 dark:text-green-400">-₱{(total * discountValue / 100).toFixed(2)}</span>
+                      </div>
+                    ) : null;
+                  })()}
+                  
+                  {/* Voucher Discount */}
+                  {voucherApplied && voucherDiscount > 0 && (
+                    <div className="flex justify-between items-center text-sm bg-green-50 dark:bg-green-950/30 -mx-2 px-2 py-2 rounded-lg border border-green-200 dark:border-green-800/30">
+                      <div className="flex items-center gap-2">
+                        <span className="text-green-700 dark:text-green-400 font-bold">🎉 Voucher ({voucherDiscount}%)</span>
+                      </div>
+                      <span className="font-black text-green-700 dark:text-green-400">-₱{(total * voucherDiscount / 100).toFixed(2)}</span>
+                    </div>
+                  )}
+                  
+                  {/* Divider */}
+                  <div className="border-t-2 border-dashed border-orange-300 dark:border-orange-700 my-2"></div>
+                  
+                  {/* Total */}
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm font-bold text-orange-700 dark:text-orange-400 uppercase tracking-wider">Total Amount Due</p>
+                    <p className="text-3xl font-black text-orange-600 dark:text-orange-400 tracking-tight">
+                      ₱{(() => {
+                        const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
+                        const discountAmount = (total * discountValue) / 100;
+                        const voucherDiscountAmount = (total * voucherDiscount) / 100;
+                        const taxRate = 12;
+                        const taxAmount = (total * taxRate) / 100;
+                        return (total + taxAmount - discountAmount - voucherDiscountAmount).toFixed(2);
+                      })()}
+                    </p>
+                  </div>
+                  
+                  {/* Savings Summary */}
+                  {(voucherApplied || (() => {
+                    const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
+                    return discountValue > 0;
+                  })()) && (
+                    <div className="bg-green-100 dark:bg-green-900/20 -mx-2 px-3 py-2 rounded-lg">
+                      <p className="text-xs text-green-700 dark:text-green-400 font-bold text-center">
+                        💰 Total Savings: ₱{(() => {
+                          const discountValue = typeof selectedDiscount === 'number' ? selectedDiscount : (selectedDiscount ? parseFloat(selectedDiscount as string) : 0);
+                          const discountAmount = (total * discountValue) / 100;
+                          const voucherDiscountAmount = (total * voucherDiscount) / 100;
+                          return (discountAmount + voucherDiscountAmount).toFixed(2);
+                        })()}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -2535,6 +2614,108 @@ const MainPanel: React.FC<MainPanelProps> = ({
                   className="w-full px-6 py-4 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95"
                 >
                   OK
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Loyalty Reward Celebration Modal */}
+      {showRewardCelebration && earnedVoucherDetails && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md animate-in fade-in duration-300">
+          <div className="relative w-full max-w-md mx-4 animate-in zoom-in duration-500">
+            {/* Confetti/Sparkles Background Effect */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              {[...Array(20)].map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute animate-bounce"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                    animationDelay: `${Math.random() * 2}s`,
+                    animationDuration: `${1 + Math.random() * 2}s`
+                  }}
+                >
+                  <span className="text-2xl">
+                    {['🎉', '⭐', '✨', '🎊', '💫'][Math.floor(Math.random() * 5)]}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Celebration Card */}
+            <div className="relative bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 dark:from-orange-950/40 dark:via-amber-950/40 dark:to-yellow-950/40 rounded-3xl shadow-2xl border-4 border-orange-400 dark:border-orange-600 overflow-hidden">
+              {/* Animated background */}
+              <div className="absolute inset-0 overflow-hidden opacity-20">
+                <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-orange-400 to-yellow-400 rounded-full blur-3xl animate-pulse -ml-48 -mt-48"></div>
+                <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-br from-amber-400 to-orange-400 rounded-full blur-3xl animate-pulse -mr-48 -mb-48"></div>
+              </div>
+
+              <div className="relative p-8 text-center space-y-6">
+                {/* Trophy Icon */}
+                <div className="flex justify-center">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-yellow-500 rounded-full blur-2xl opacity-50 animate-pulse"></div>
+                    <div className="relative flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-yellow-900/30 dark:to-orange-900/30 border-4 border-yellow-500 dark:border-yellow-600 shadow-2xl">
+                      <span className="text-6xl animate-bounce">🏆</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Title */}
+                <div className="space-y-2">
+                  <h2 className="text-3xl font-black bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-600 dark:from-orange-400 dark:via-amber-400 dark:to-yellow-400 bg-clip-text text-transparent">
+                    CONGRATULATIONS!
+                  </h2>
+                  <p className="text-lg font-bold text-stone-900 dark:text-white">
+                    You've Earned a Loyalty Reward! 🎊
+                  </p>
+                </div>
+
+                {/* Voucher Details */}
+                <div className="bg-white dark:bg-stone-900 rounded-2xl p-6 border-4 border-dashed border-orange-400 dark:border-orange-600 shadow-lg">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-center gap-2">
+                      <span className="text-4xl">🎫</span>
+                      <p className="text-sm font-bold text-stone-600 dark:text-stone-400 uppercase tracking-wider">
+                        New Voucher Unlocked
+                      </p>
+                    </div>
+                    <div className="bg-gradient-to-r from-orange-100 to-amber-100 dark:from-orange-900/30 dark:to-amber-900/30 rounded-xl p-4 border-2 border-orange-300 dark:border-orange-700">
+                      <p className="text-5xl font-black bg-gradient-to-r from-orange-600 to-amber-600 dark:from-orange-400 dark:to-amber-400 bg-clip-text text-transparent">
+                        {earnedVoucherDetails.discount}% OFF
+                      </p>
+                      <p className="text-xs text-stone-600 dark:text-stone-400 mt-2 font-semibold">
+                        Level {earnedVoucherDetails.level} Loyalty Reward
+                      </p>
+                      <p className="text-xs text-stone-500 dark:text-stone-500 mt-1">
+                        Valid for 3 months
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Message */}
+                <div className="space-y-2">
+                  <p className="text-sm text-stone-700 dark:text-stone-300 font-semibold">
+                    A special voucher has been sent to your account!
+                  </p>
+                  <p className="text-xs text-stone-600 dark:text-stone-400">
+                    Complete 10 more purchases to earn {earnedVoucherDetails.level === 1 ? '20%' : '30%'} discount next time! 🎯
+                  </p>
+                </div>
+
+                {/* Close Button */}
+                <button
+                  onClick={() => {
+                    setShowRewardCelebration(false);
+                    setEarnedVoucherDetails(null);
+                  }}
+                  className="w-full px-6 py-4 bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-600 hover:from-orange-700 hover:via-amber-700 hover:to-yellow-700 text-white font-black rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 text-lg"
+                >
+                  Awesome! ✨
                 </button>
               </div>
             </div>
